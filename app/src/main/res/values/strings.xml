@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">XiuDouFang</string>
+    <string name="auto">自动</string>
+    <string name="input_account">请输入账号</string>
+    <string name="input_password">请输入密码</string>
+    <string name="login_tip">请选择需要登录的服务器</string>
+</resources>

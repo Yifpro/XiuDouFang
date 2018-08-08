@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SimpleEditTextView">
+        <attr name="setv_icon" format="reference" />
+        <attr name="setv_hint" format="string|reference" />
+        <attr name="setv_value" format="string|reference" />
+        <attr name="setv_input_type">
+            <enum name="TYPE_NULL" value="0" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="SimpleToolbar">
+        <attr name="toolbar_title" format="string|reference" />
+        <attr name="left_icon" format="reference" />
+        <attr name="right_icon" format="reference" />
+    </declare-styleable>
+</resources>
