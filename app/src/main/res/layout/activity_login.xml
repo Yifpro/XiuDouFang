@@ -13,28 +13,29 @@
         android:layout_height="160dp"
         android:layout_marginTop="60dp"
         android:layout_centerHorizontal="true"
-        android:background="@mipmap/ic_launcher"/>
-    <com.example.administrator.xiudoufang.widget.SimpleEditTextView
+        android:background="@mipmap/ic_icon"/>
+    <com.example.administrator.xiudoufang.common.widget.SimpleEditTextView
         android:id="@+id/setv_auto"
         android:layout_marginTop="36dp"
         android:layout_below="@id/iv_icon"
-        app:setv_icon="@mipmap/ic_launcher"
+        app:setv_icon="@mipmap/ic_cloud"
         app:setv_value="@string/auto"
         app:setv_input_type="TYPE_NULL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <com.example.administrator.xiudoufang.widget.SimpleEditTextView
+    <com.example.administrator.xiudoufang.common.widget.SimpleEditTextView
         android:id="@+id/setv_account"
         android:layout_below="@id/setv_auto"
-        app:setv_icon="@mipmap/ic_launcher"
+        app:setv_icon="@mipmap/ic_person"
         app:setv_hint="@string/input_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <com.example.administrator.xiudoufang.widget.SimpleEditTextView
+    <com.example.administrator.xiudoufang.common.widget.SimpleEditTextView
         android:id="@+id/setv_password"
         android:layout_below="@id/setv_account"
-        app:setv_icon="@mipmap/ic_launcher"
+        app:setv_icon="@mipmap/ic_lock"
         app:setv_hint="@string/input_password"
+        app:setv_is_password="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <LinearLayout
@@ -43,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:paddingLeft="10dp">
         <ImageView
             android:id="@+id/iv_psd_status"
@@ -63,6 +64,7 @@
         android:gravity="center"
         android:layout_marginTop="10dp"
         android:textColor="@color/white"
+        android:textSize="14dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:layout_marginLeft="10dp"

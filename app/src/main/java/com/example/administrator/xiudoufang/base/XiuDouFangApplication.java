@@ -3,6 +3,7 @@ package com.example.administrator.xiudoufang.base;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +15,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.base.IActivityBase;
-import com.example.administrator.xiudoufang.utils.ScreenUtils;
+import com.example.administrator.xiudoufang.common.utils.ScreenUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -35,6 +35,7 @@ public class XiuDouFangApplication extends Application {
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle bundle) {
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //限制竖屏
                 ScreenUtils.adaptScreen4VerticalSlide(activity, 360);
                 setDarkMode(activity, true);
                 if (activity instanceof IActivityBase) {

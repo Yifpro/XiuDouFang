@@ -1,7 +1,16 @@
 <resources>
-    <string name="app_name">XiuDouFang</string>
+    <string name="app_name">秀逗坊</string>
     <string name="auto">自动</string>
     <string name="input_account">请输入账号</string>
     <string name="input_password">请输入密码</string>
     <string name="login_tip">请选择需要登录的服务器</string>
+    <string name="exit_login">退出登录</string>
+    <string name="confirm_order">确认单据</string>
+    <string name="clear">清空</string>
+    <string name="search">搜索</string>
+    <string name="confirm_bill">确认单据</string>
+    <string name="save_as_draft">存为草稿</string>
+    <string name="give_up">放弃</string>
+    <string name="cancel">取消</string>
+    <string name="search_in_english">Search</string>
 </resources>

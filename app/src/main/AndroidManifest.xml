@@ -4,7 +4,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -17,9 +17,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.MainActivity" >
-
-        </activity>
+        <activity android:name=".base.MainActivity" />
+        <activity android:name=".setting.SettingActivity" />
+        <activity android:name=".purchase.ui.PurchaseActivity" />
+        <activity android:name=".purchase.ui.PurchaseQueryActivity" />
+        <activity android:name=".purchase.ui.PurchaseOrderDetailActivity" />
+        <activity android:name=".stock.StockActivity" />
+        <activity android:name=".stock.StockQueryActivity" />
+        <activity android:name=".transport.TransportNumActivity" />
+        <activity android:name=".transport.TransportOrderQueryActivity" />
+        <activity android:name=".product.ProductActivity" />
+        <activity android:name=".product.ProductQueryActivity" />
+        <activity android:name=".receivables.CustomerListActivity" />
+        <activity android:name=".receivables.ReceivablesActivity" />
+        <activity android:name=".check.CheckOrderActivity" />
+        <activity android:name=".check.OrderQueryActivity" />
+        <activity android:name=".open.OpenBillActivity" />
     </application>
 
 </manifest>

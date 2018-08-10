@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="false"
+            app:siv_is_show_next="false"
+            app:siv_key="客户编号" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="false"
+            app:siv_is_show_next="false"
+            app:siv_key="客户名称" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="false"
+            app:siv_is_show_next="false"
+            app:siv_key="客户全称" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="false"
+            app:siv_is_show_next="false"
+            app:siv_key="欠款金额" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="false"
+            app:siv_is_show_next="false"
+            app:siv_key="账户余额" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="false"
+            app:siv_is_show_next="false"
+            app:siv_key="区域类型" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="false"
+            app:siv_is_show_next="false"
+            app:siv_key="区域" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="false"
+            app:siv_key="会计科目" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="false"
+            app:siv_is_show_next="false"
+            app:siv_key="收付款" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="false"
+            app:siv_key="收款方式" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="false"
+            app:siv_is_show_next="false"
+            app:siv_key="收款人" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="false"
+            app:siv_is_show_next="false"
+            app:siv_key="收款账号" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="true"
+            app:siv_is_show_next="false"
+            app:siv_key="款项金额" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="true"
+            app:siv_is_show_next="false"
+            app:siv_key="优惠金额" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="false"
+            app:siv_key="款项日期" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:textSize="14dp"
+            android:gravity="top"
+            android:hint="备注（请输入少于200字）"
+            android:padding="5dp"
+            android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
+            android:background="@color/white"/>
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

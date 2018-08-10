@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EditText xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_edittext_query_customer_shape"
+    android:hint="@string/search_in_english"
+    android:drawableLeft="@mipmap/ic_query_gray"
+    android:textSize="14dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
+    tools:showIn="@layout/activity_customer_list" />

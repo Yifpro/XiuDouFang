@@ -9,10 +9,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.main.MainActivity;
-import com.example.administrator.xiudoufang.widget.SimpleEditTextView;
+import com.example.administrator.xiudoufang.common.widget.SimpleEditTextView;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 
 public class LoginActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
@@ -21,6 +19,7 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
     private SimpleEditTextView mSetvAccount;
     private SimpleEditTextView mSetvPassword;
     private ImageView mIvPsdStatus;
+    private ServerSelectorDialogFragment mDialogFragment;
 
     @Override
     public int getLayoutId() {
@@ -48,8 +47,9 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
                 mIvPsdStatus.setSelected(!mIvPsdStatus.isSelected());
                 break;
             case R.id.tv_login:
-                final ServerSelectorDialogFragment dialogFragment = new ServerSelectorDialogFragment();
-                dialogFragment.show(getSupportFragmentManager(), "");
+                if (mDialogFragment == null)
+                    mDialogFragment = new ServerSelectorDialogFragment();
+                mDialogFragment.show(getSupportFragmentManager(), "");
                 break;
         }
     }

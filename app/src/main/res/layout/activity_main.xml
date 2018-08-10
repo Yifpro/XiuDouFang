@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".main.MainActivity">
+    tools:context=".base.MainActivity">
 
-    <com.example.administrator.xiudoufang.widget.SimpleToolbar
+    <com.example.administrator.xiudoufang.common.widget.SimpleToolbar
         app:toolbar_title="雅秀"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

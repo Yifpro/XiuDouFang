@@ -12,14 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.bean.ServerItem;
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.ServerSelectorAdapter;
-import com.example.administrator.xiudoufang.main.MainActivity;
-import com.example.administrator.xiudoufang.utils.LogUtils;
+import com.example.administrator.xiudoufang.base.MainActivity;
 
 import java.util.ArrayList;
 

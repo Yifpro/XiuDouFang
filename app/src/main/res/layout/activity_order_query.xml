@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <include layout="@layout/layout_toolbar" />
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            app:siv_key="单号"
+            app:siv_hint="请输入单号"
+            app:isEditable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            app:siv_key="客户"
+            app:siv_hint="请输入客户"
+            app:isEditable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            app:siv_key="开始时间"
+            app:isEditable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            app:siv_key="结束时间"
+            app:isEditable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            app:siv_key="订单类型"
+            app:isEditable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            app:siv_key="货运类型"
+            app:isEditable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            app:siv_key="代发订单"
+            app:isEditable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <include layout="@layout/layout_search_or_clear" />
+</RelativeLayout>

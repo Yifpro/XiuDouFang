@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        tools:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/textview_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="编号："
+        android:layout_marginLeft="8dp"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toRightOf="@id/iv_icon" />
+
+    <TextView
+        android:id="@+id/tv_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toRightOf="@id/textview_1"
+        tools:text="001" />
+
+    <TextView
+        android:id="@+id/textview_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="名称："
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toLeftOf="@id/textview_1"
+        app:layout_constraintTop_toBottomOf="@id/textview_1" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toRightOf="@id/textview_2"
+        app:layout_constraintTop_toBottomOf="@id/tv_id"
+        tools:text="梳子" />
+
+    <TextView
+        android:id="@+id/textview_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="存仓数："
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toLeftOf="@id/textview_1"
+        app:layout_constraintTop_toBottomOf="@id/textview_2" />
+
+    <TextView
+        android:id="@+id/tv_stock_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toRightOf="@id/textview_3"
+        app:layout_constraintTop_toBottomOf="@id/tv_name"
+        tools:text="1" />
+
+    <TextView
+        android:id="@+id/textview_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="自由数："
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toLeftOf="@id/textview_1"
+        app:layout_constraintTop_toBottomOf="@id/textview_3" />
+
+    <TextView
+        android:id="@+id/tv_free_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toRightOf="@id/textview_3"
+        app:layout_constraintTop_toBottomOf="@id/tv_stock_num"
+        tools:text="100" />
+
+    <TextView
+        android:id="@+id/textview_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="分配数："
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_1"
+        app:layout_constraintBottom_toBottomOf="@id/textview_3" />
+
+    <TextView
+        android:id="@+id/tv_allocate_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toRightOf="@id/textview_5"
+        app:layout_constraintBottom_toBottomOf="@id/textview_3"
+        tools:text="100" />
+    <TextView
+        android:id="@+id/textview_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="自由件数："
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_1"
+        app:layout_constraintBottom_toBottomOf="@id/textview_4" />
+
+    <TextView
+        android:id="@+id/tv_freedom_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toRightOf="@id/textview_6"
+        app:layout_constraintTop_toBottomOf="@id/tv_stock_num"
+        tools:text="100" />
+</android.support.constraint.ConstraintLayout>
