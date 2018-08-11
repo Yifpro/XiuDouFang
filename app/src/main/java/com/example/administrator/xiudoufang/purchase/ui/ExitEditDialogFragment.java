@@ -14,7 +14,7 @@ import com.example.administrator.xiudoufang.R;
 
 public class ExitEditDialogFragment extends DialogFragment {
 
-    private OnSubmitClickListener listener;
+    private OnGiveUpClickListener listener;
 
     @Nullable
     @Override
@@ -37,11 +37,11 @@ public class ExitEditDialogFragment extends DialogFragment {
         return view;
     }
 
-    public void setOnSubClickListener(OnSubmitClickListener listener) {
+    public void setOnGiveUpClickListener(OnGiveUpClickListener listener) {
         this.listener = listener;
     }
 
-    interface OnSubmitClickListener {
+    interface OnGiveUpClickListener {
         void onSubmitClick();
     }
 }

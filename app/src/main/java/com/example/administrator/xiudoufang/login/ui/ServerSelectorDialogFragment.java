@@ -1,4 +1,4 @@
-package com.example.administrator.xiudoufang.login;
+package com.example.administrator.xiudoufang.login.ui;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -17,6 +17,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.bean.ServerItem;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.MainActivity;
+import com.example.administrator.xiudoufang.login.adapter.ServerSelectorAdapter;
 
 import java.util.ArrayList;
 

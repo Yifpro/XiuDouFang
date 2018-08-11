@@ -19,7 +19,7 @@
             android:layout_height="wrap_content" />
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             app:siv_key="前结账"
-            app:siv_is_show_next="false"
+            app:siv_isShowNext="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
@@ -64,12 +64,12 @@
         </LinearLayout>
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             app:siv_key="付款金额"
-            app:siv_is_show_next="false"
+            app:siv_isShowNext="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             app:siv_key="优惠金额"
-            app:siv_is_show_next="false"
+            app:siv_isShowNext="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
@@ -82,12 +82,12 @@
             android:layout_height="wrap_content" />
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             app:siv_key="开户人"
-            app:siv_is_show_next="false"
+            app:siv_isShowNext="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             app:siv_key="支付账号"
-            app:siv_is_show_next="false"
+            app:siv_isShowNext="false"
             android:layout_marginBottom="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

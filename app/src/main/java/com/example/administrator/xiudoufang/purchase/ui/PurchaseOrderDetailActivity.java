@@ -45,7 +45,7 @@ public class PurchaseOrderDetailActivity extends AppCompatActivity implements IA
     private void showExitEditDialog() {
         if (mFragment == null) {
             mFragment = new ExitEditDialogFragment();
-            mFragment.setOnSubClickListener(new ExitEditDialogFragment.OnSubmitClickListener() {
+            mFragment.setOnGiveUpClickListener(new ExitEditDialogFragment.OnGiveUpClickListener() {
                 @Override
                 public void onSubmitClick() {
                     PurchaseOrderDetailActivity.this.finish();

@@ -11,22 +11,22 @@
 
     <include layout="@layout/layout_toolbar" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-        app:isEditable="true"
+        app:siv_isEditable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:siv_key="编号、名称或类名" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-        app:isEditable="false"
+        app:siv_isEditable="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:siv_key="供应商" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-        app:isEditable="false"
+        app:siv_isEditable="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:siv_key="类别" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-        app:isEditable="false"
+        app:siv_isEditable="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:siv_key="是否有图片" />

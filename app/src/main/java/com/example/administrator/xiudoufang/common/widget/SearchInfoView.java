@@ -35,13 +35,13 @@ public class SearchInfoView extends LinearLayout {
         EditText etInput = findViewById(R.id.et_input);
         ImageView ivNext = findViewById(R.id.iv_next);
         TypedArray ta=context.obtainStyledAttributes(attrs,R.styleable.SearchInfoView);
-        boolean isEditable = ta.getBoolean(R.styleable.SearchInfoView_isEditable, false);
+        boolean isEditable = ta.getBoolean(R.styleable.SearchInfoView_siv_isEditable, false);
         etInput.setVisibility(isEditable ? VISIBLE : INVISIBLE);
         mRelativeLayout.setVisibility(isEditable ? INVISIBLE : VISIBLE);
         mTvKey.setText(ta.getString(R.styleable.SearchInfoView_siv_key));
         mTvValue.setText(ta.getString(R.styleable.SearchInfoView_siv_value));
         etInput.setHint(ta.getString(R.styleable.SearchInfoView_siv_hint));
-        ivNext.setVisibility(ta.getBoolean(R.styleable.SearchInfoView_siv_is_show_next, true) ? VISIBLE : INVISIBLE);
+        ivNext.setVisibility(ta.getBoolean(R.styleable.SearchInfoView_siv_isShowNext, true) ? VISIBLE : INVISIBLE);
         ta.recycle();
     }
 

@@ -4,10 +4,11 @@
         <attr name="setv_icon" format="reference" />
         <attr name="setv_hint" format="string|reference" />
         <attr name="setv_value" format="string|reference" />
-        <attr name="setv_input_type">
+        <attr name="setv_inputType">
             <enum name="TYPE_NULL" value="0" />
         </attr>
         <attr name="setv_is_password" format="boolean" />
+        <attr name="setv_isEditable" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="SimpleToolbar">
@@ -18,10 +19,10 @@
     </declare-styleable>
 
     <declare-styleable name="SearchInfoView">
-        <attr name="isEditable" format="boolean" />
+        <attr name="siv_isEditable" format="boolean" />
         <attr name="siv_key" format="string|reference" />
         <attr name="siv_value" format="string|reference" />
         <attr name="siv_hint" format="string|reference" />
-        <attr name="siv_is_show_next" format="boolean" />
+        <attr name="siv_isShowNext" format="boolean" />
     </declare-styleable>
 </resources>

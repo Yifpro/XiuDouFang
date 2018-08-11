@@ -14,6 +14,8 @@ import java.util.Set;
 public class PreferencesUtils {
 
     public static final String IS_FIRST = "is_first";
+    public static final String USER_NAME = "user_name";
+    public static final String PASSWORD = "password";
 
     private PreferencesUtils() {}
 

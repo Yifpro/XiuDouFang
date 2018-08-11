@@ -16,9 +16,18 @@ import android.widget.TextView;
 
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.common.utils.ScreenUtils;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheEntity;
+import com.lzy.okgo.cookie.CookieJarImpl;
+import com.lzy.okgo.cookie.store.SPCookieStore;
+import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+
+import okhttp3.OkHttpClient;
 
 public class XiuDouFangApplication extends Application {
 
@@ -32,6 +41,7 @@ public class XiuDouFangApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
+        initOkGo();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle bundle) {
@@ -77,6 +87,26 @@ public class XiuDouFangApplication extends Application {
 
             }
         });
+    }
+
+    private void initOkGo() {
+        try {
+            OkGo.getInstance().init(this);
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor("OkGo");
+            //log打印级别，决定了log显示的详细程度
+            loggingInterceptor.setPrintLevel(HttpLoggingInterceptor.Level.BODY);
+            //log颜色级别，决定了log在控制台显示的颜色
+            loggingInterceptor.setColorLevel(Level.INFO);
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.readTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
+                    .writeTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
+                    .connectTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
+                    .addInterceptor(loggingInterceptor)
+                    .cookieJar(new CookieJarImpl(new SPCookieStore(this)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void setDarkMode(Activity activity, boolean darkmode) {

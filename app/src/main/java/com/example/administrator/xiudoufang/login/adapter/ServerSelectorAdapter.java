@@ -1,4 +1,4 @@
-package com.example.administrator.xiudoufang.login;
+package com.example.administrator.xiudoufang.login.adapter;
 
 import android.support.annotation.Nullable;
 import android.view.View;
