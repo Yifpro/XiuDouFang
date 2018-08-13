@@ -3,18 +3,17 @@ package com.example.administrator.xiudoufang.login.ui;
 import android.content.Context;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.administrator.xiudoufang.Login;
+import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.MainActivity;
-import com.example.administrator.xiudoufang.common.convert.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
@@ -24,8 +23,7 @@ import com.example.administrator.xiudoufang.login.logic.LoginLogic;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
@@ -34,7 +32,7 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
     private SimpleEditTextView mSetvPassword;
     private ImageView mIvPsdStatus;
     private ServerSelectorDialogFragment mDialogFragment;
-    private VerificationCodeDialogFragment mFragment;
+    private VerificatieDialogFragment mFragment;
 
     private LoginLogic mLogic;
 
@@ -65,8 +63,10 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
     @Override
     public void initData() {
         mLogic = new LoginLogic();
-        boolean isFirst = PreferencesUtils.getPreferences().getBoolean(PreferencesUtils.IS_FIRST, true);
-        if (!isFirst) {
+        String userName = PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_NAME, null);
+        boolean isEmpty = TextUtils.isEmpty(userName);
+        mIvPsdStatus.setSelected(!isEmpty);
+        if (!isEmpty) {
             mSetvAccount.setText(PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_NAME, ""));
             mSetvPassword.setText(PreferencesUtils.getPreferences().getString(PreferencesUtils.PASSWORD, ""));
         }
@@ -90,23 +90,20 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
         mLogic.checkVerificationCode(mSetvAccount.getText(), mSetvPassword.getText(), "", new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
-                JSONObject jsonObject;
-                try {
-                    jsonObject = new JSONObject(response.body());
-                    String msg = jsonObject.optString("mesage");
-                    if ("请求成功".equals(msg)) {
-                        String needcheck = jsonObject.optString("needcheck");
-                        if ("0".equals(needcheck)) {
-                            requestLogin();
-                        } else {
-                            //******** 发送验证码 ********
-                            showVerificationCodeDialog(jsonObject.optString("userid"));
-                        }
+                LogUtils.e("检查验证码->" + response.body());
+                JSONObject jsonObject = JSONObject.parseObject(response.body());
+                String msg = jsonObject.getString("mesage");
+                if ("请求成功".equals(msg)) {
+                    String needcheck = jsonObject.getString("needcheck");
+                    if ("0".equals(needcheck)) {
+                        requestLogin("");
                     } else {
-                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        //******** 发送验证码 ********
+                        LoadingViewDialog.getInstance().dismiss();
+                        showVerificationCodeDialog(jsonObject.getString("userid"));
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                } else {
+                    Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -114,37 +111,48 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
 
     private void showVerificationCodeDialog(final String userid) {
         if (mFragment == null) {
-            mFragment = new VerificationCodeDialogFragment();
+            mFragment = new VerificatieDialogFragment();
             mFragment.setUserid(userid);
             mFragment.setLogic(mLogic);
-            mFragment.setOnSubmitClickListener(new VerificationCodeDialogFragment.OnSubmitClickListener() {
+            mFragment.setOnSubmitClickListener(new VerificatieDialogFragment.OnSubmitClickListener() {
                 @Override
-                public void onSubmitClick() {
-                    requestLogin();
+                public void onSubmitClick(String phoneCode) {
+                    LoadingViewDialog.getInstance().show(LoginActivity.this);
+                    requestLogin(phoneCode);
                 }
             });
         }
-        mFragment.show(getSupportFragmentManager(), "VerificationCodeDialogFragment");
+        mFragment.show(getSupportFragmentManager(), "VerificatieDialogFragment");
     }
 
-    private void requestLogin() {
-        mLogic.requestLogin(LoginActivity.this, mSetvAccount.getText(), mSetvPassword.getText(), "", "", "0", new JsonCallback<Login>() {
+    private void requestLogin(String phoneCode) {
+        mLogic.requestLogin(LoginActivity.this, mSetvAccount.getText(), mSetvPassword.getText(), "", phoneCode, "0", new StringCallback() {
             @Override
-            public void onSuccess(Response<Login> response) {
-                LogUtils.e("登录->" + response.body().getBumen());
-                goToMain();
+            public void onSuccess(Response<String> response) {
+                LogUtils.e("登录->" + response.body());
+                JSONObject jsonObject = JSONObject.parseObject(response.body());
+                String messagestr = jsonObject.getString("messagestr");
+                if (!TextUtils.isEmpty(messagestr)) {
+                    mFragment.setEmpty();
+                    LoadingViewDialog.getInstance().dismiss();
+                    Toast.makeText(LoginActivity.this, messagestr, Toast.LENGTH_SHORT).show();
+                } else {
+                    mLogic.cacheLoginInfo(LoginActivity.this, response.body());
+                    if (mIvPsdStatus.isSelected()) {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put(PreferencesUtils.USER_NAME, mSetvAccount.getText());
+                        map.put(PreferencesUtils.PASSWORD, mSetvPassword.getText());
+                        PreferencesUtils.save(map);
+                    } else {
+                        PreferencesUtils.remove(PreferencesUtils.USER_NAME);
+                        PreferencesUtils.remove(PreferencesUtils.PASSWORD);
+                    }
+                    LoadingViewDialog.getInstance().dismiss();
+                    MainActivity.start(LoginActivity.this);
+                    finish();
+                }
             }
         });
-    }
-
-    private void goToMain() {
-        MainActivity.start(LoginActivity.this);
-        if (mIvPsdStatus.isSelected()) {
-            PreferencesUtils.save(PreferencesUtils.USER_NAME, mSetvAccount.getText());
-            PreferencesUtils.save(PreferencesUtils.PASSWORD, mSetvPassword.getText());
-            PreferencesUtils.save(PreferencesUtils.IS_FIRST, false);
-        }
-        finish();
     }
 
     //******** 点击外部区域回缩软键盘 ********

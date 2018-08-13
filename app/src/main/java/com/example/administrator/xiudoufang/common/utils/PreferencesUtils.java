@@ -13,7 +13,6 @@ import java.util.Set;
  */
 public class PreferencesUtils {
 
-    public static final String IS_FIRST = "is_first";
     public static final String USER_NAME = "user_name";
     public static final String PASSWORD = "password";
 
@@ -21,6 +20,10 @@ public class PreferencesUtils {
 
     public static SharedPreferences getPreferences() {
         return XiuDouFangApplication.getContext().getSharedPreferences(XiuDouFangApplication.class.getPackage().getName(), Context.MODE_PRIVATE);
+    }
+
+    public static void remove(String key) {
+        getPreferences().edit().remove(key).apply();
     }
 
     public static void save(String key, Object value) {

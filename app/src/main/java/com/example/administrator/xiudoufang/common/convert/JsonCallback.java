@@ -1,10 +1,8 @@
 package com.example.administrator.xiudoufang.common.convert;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import com.lzy.okgo.callback.AbsCallback;
-import com.lzy.okgo.convert.StringConvert;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -32,17 +30,17 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
     public T convertResponse(Response response) throws Throwable {
         ResponseBody body = response.body();
         if (body == null) return null;
-        T data = null;
-        Gson gson = new Gson();
-        JsonReader jsonReader = new JsonReader(body.charStream());
+        T data;
+        String text = body.string();
+        LogUtils.e("parse before -> "+JSONObject.parseObject(text, String.class));
         if (type != null) {
-            data = gson.fromJson(jsonReader, type);
+            data = JSONObject.parseObject(text, type);
         } else if (clazz != null) {
-            data = gson.fromJson(jsonReader, clazz);
+            data = JSONObject.parseObject(text, clazz);
         } else {
             Type genType = getClass().getGenericSuperclass();
             Type type = ((ParameterizedType) genType).getActualTypeArguments()[0];
-            data = gson.fromJson(jsonReader, type);
+            data = JSONObject.parseObject(text, type);
         }
         return data;
     }

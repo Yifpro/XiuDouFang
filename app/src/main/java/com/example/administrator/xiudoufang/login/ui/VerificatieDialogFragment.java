@@ -11,6 +11,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.administrator.xiudoufang.R;
@@ -21,20 +22,23 @@ import com.lzy.okgo.model.Response;
 
 import java.lang.ref.WeakReference;
 
-public class VerificationCodeDialogFragment extends DialogFragment implements View.OnClickListener {
+public class VerificatieDialogFragment extends DialogFragment implements View.OnClickListener {
+
+    private LoginLogic mLogic;
+    private TextView mTvCode;
+    private EditText mEtInput;
 
     private OnSubmitClickListener listener;
     private MyHandler mHandler;
-    private LoginLogic mLogic;
     private String mUserid;
     private int mCount;
-    private TextView mTvCode;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        View view = inflater.inflate(R.layout.fragment_verification_code, container);
+        View view = inflater.inflate(R.layout.fragment_verificate, container);
+        mEtInput = view.findViewById(R.id.et_code);
         view.findViewById(R.id.tv_cancel).setOnClickListener(this);
         view.findViewById(R.id.tv_submit).setOnClickListener(this);
         mTvCode = view.findViewById(R.id.tv_code);
@@ -44,16 +48,21 @@ public class VerificationCodeDialogFragment extends DialogFragment implements Vi
                 mLogic.requestVerificationCode(mUserid, new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        LogUtils.e("发送验证码");
+                        LogUtils.e("发送验证码->" + response.body());
                         mTvCode.setText("60");
+                        mTvCode.setClickable(false);
                         if (mHandler == null)
-                            mHandler = new MyHandler(VerificationCodeDialogFragment.this);
+                            mHandler = new MyHandler(VerificatieDialogFragment.this);
                         mHandler.sendEmptyMessage(0);
                     }
                 });
             }
         });
         return view;
+    }
+
+    public void setEmpty() {
+        mEtInput.setText("");
     }
 
     @Override
@@ -65,7 +74,8 @@ public class VerificationCodeDialogFragment extends DialogFragment implements Vi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mHandler = null;
+        if (mHandler != null)
+            mHandler.removeCallbacksAndMessages(null);
     }
 
     public void setLogic(LoginLogic logic) {
@@ -88,38 +98,41 @@ public class VerificationCodeDialogFragment extends DialogFragment implements Vi
                 break;
             case R.id.tv_submit:
                 if (listener != null)
-                    listener.onSubmitClick();
+                    listener.onSubmitClick(mEtInput.getText().toString());
                 break;
             case R.id.tv_code:
                 mTvCode.setText(R.string.initial_time);
                 if (mHandler == null)
-                    mHandler = new MyHandler(VerificationCodeDialogFragment.this);
+                    mHandler = new MyHandler(VerificatieDialogFragment.this);
                 mHandler.sendEmptyMessage(0);
                 break;
         }
     }
 
     interface OnSubmitClickListener {
-        void onSubmitClick();
+        void onSubmitClick(String phoneCode);
     }
 
     private static class MyHandler extends Handler {
 
-        private final WeakReference<VerificationCodeDialogFragment> mWeakReference;
+        private final WeakReference<VerificatieDialogFragment> mWeakReference;
 
         @SuppressWarnings("unchecked")
-        private MyHandler(VerificationCodeDialogFragment fragment) {
+        private MyHandler(VerificatieDialogFragment fragment) {
             mWeakReference = new WeakReference(fragment);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            VerificationCodeDialogFragment fragment = mWeakReference.get();
+            VerificatieDialogFragment fragment = mWeakReference.get();
             if (fragment != null) {
                 if (fragment.mCount >= 0) {
                     fragment.mHandler.sendEmptyMessageDelayed(0, 1000);
                     fragment.mTvCode.setText(String.valueOf(fragment.mCount));
                     fragment.mCount--;
+                } else {
+                    fragment.mTvCode.setText("获取验证码");
+                    fragment.mTvCode.setClickable(true);
                 }
             }
         }

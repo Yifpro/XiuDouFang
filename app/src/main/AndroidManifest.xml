@@ -21,6 +21,7 @@
         </activity>
         <activity android:name=".base.MainActivity" />
         <activity android:name=".setting.SettingActivity" />
+        <activity android:name=".setting.StoreSwitchActivity" />
         <activity android:name=".purchase.ui.PurchaseActivity" />
         <activity android:name=".purchase.ui.PurchaseQueryActivity" />
         <activity android:name=".purchase.ui.PurchaseOrderDetailActivity" />

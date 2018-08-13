@@ -8,6 +8,10 @@ public class SettingItem {
     private boolean isShowNext;
     private boolean isToogleButton;
 
+    public SettingItem(String key) {
+        this.key = key;
+    }
+
     public SettingItem(String key, String value) {
         this.key = key;
         this.value = value;
@@ -54,5 +58,22 @@ public class SettingItem {
     public SettingItem setToogleButton(boolean toogleButton) {
         isToogleButton = toogleButton;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof SettingItem) {
+            SettingItem s2 = (SettingItem) obj;
+            return this.key.equals(s2.key);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 37 * result + key.hashCode();
+        result = 37 * result + value.hashCode();
+        return result;
     }
 }

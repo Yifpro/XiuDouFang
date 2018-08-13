@@ -32,7 +32,7 @@ public class ServerSelectorDialogFragment extends DialogFragment {
         ArrayList<ServerItem> serverItems = new ArrayList<>();
         serverItems.add(new ServerItem(0, R.drawable.bg_item_server_selector, "雅秀"));
         serverItems.add(new ServerItem(0, R.drawable.bg_item_server_selector, "新之款"));
-        serverItems.add(new ServerItem(R.color.bg_item_cancel_selector, R.drawable.bg_item_server_selector, "取消"));
+        serverItems.add(new ServerItem(R.color.bg_item_cancel_selector, R.drawable.bg_item_server_selector, "自动"));
         ServerSelectorAdapter adapter = new ServerSelectorAdapter(R.layout.layout_list_item_server_selector, serverItems);
         adapter.bindToRecyclerView(recyclerView);
         View header = View.inflate(getActivity(), R.layout.layout_list_header_server_selector, null);
@@ -45,17 +45,13 @@ public class ServerSelectorDialogFragment extends DialogFragment {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (position) {
                     case 0:
-                        MainActivity.start(getActivity());
-                        getActivity().finish();
                         break;
                     case 1:
-                        MainActivity.start(getActivity());
-                        getActivity().finish();
                         break;
                     case 2:
-                        dismiss();
                         break;
                 }
+                dismiss();
             }
         });
         return view;

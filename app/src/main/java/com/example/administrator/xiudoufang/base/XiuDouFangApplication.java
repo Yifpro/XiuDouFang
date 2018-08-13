@@ -18,6 +18,7 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.common.utils.ScreenUtils;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
+import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.cookie.CookieJarImpl;
 import com.lzy.okgo.cookie.store.SPCookieStore;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
@@ -27,6 +28,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 
 public class XiuDouFangApplication extends Application {
@@ -91,7 +93,7 @@ public class XiuDouFangApplication extends Application {
 
     private void initOkGo() {
         try {
-            OkGo.getInstance().init(this);
+            OkGo.getInstance().init(this).setCacheMode(CacheMode.NO_CACHE);
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor("OkGo");
             //log打印级别，决定了log显示的详细程度
             loggingInterceptor.setPrintLevel(HttpLoggingInterceptor.Level.BODY);

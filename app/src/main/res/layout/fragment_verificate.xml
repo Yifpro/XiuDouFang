@@ -27,6 +27,7 @@
             android:id="@+id/et_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
             android:layout_weight="1"
             android:background="@null"
             android:hint="@string/input_verification_code"
@@ -36,12 +37,11 @@
 
         <TextView
             android:id="@+id/tv_code"
-            android:gravity="center"
             android:layout_width="95dp"
             android:layout_height="36dp"
-            android:background="@color/colorPrimary"
+            android:gravity="center"
             android:text="@string/get_verification_code"
-            android:textColor="@color/white"
+            android:textColor="@color/colorPrimary"
             android:textSize="14dp" />
     </LinearLayout>
 
