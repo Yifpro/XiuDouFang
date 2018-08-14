@@ -32,19 +32,62 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="单号" />
 
+
+    <LinearLayout
+        android:id="@+id/segment_layout"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_2"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_left_segment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_left_segment_selector"
+            android:gravity="center"
+            android:text="收款"
+            android:textColor="@color/bg_segment_text_color_selector"
+            android:textSize="12dp" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/tv_right_segment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_right_segment_selector"
+            android:gravity="center"
+            android:text="付款"
+            android:textColor="@color/bg_segment_text_color_selector"
+            android:textSize="12dp" />
+    </LinearLayout>
+
     <EditText
+        android:visibility="gone"
         android:id="@+id/et_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:theme="@style/SearchInfoEditText"
-        android:textSize="14dp"
         android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
+        android:textSize="14dp"
+        android:theme="@style/SearchInfoEditText"
         app:layout_constraintBottom_toBottomOf="@id/line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline_2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/relative_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -55,17 +98,17 @@
 
         <TextView
             android:id="@+id/tv_value"
-            android:layout_marginLeft="4dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp" />
 
         <ImageView
             android:id="@+id/iv_next"
             android:layout_width="21dp"
             android:layout_height="21dp"
-            android:background="@mipmap/ic_next"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="5dp"
+            android:background="@mipmap/ic_next" />
     </RelativeLayout>
 
     <View

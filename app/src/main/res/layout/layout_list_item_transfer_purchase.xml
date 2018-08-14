@@ -7,7 +7,7 @@
     <TextView
         android:id="@+id/tv"
         android:textSize="14dp"
-        android:textColor="@color/bg_item_server_selector"
+        android:textColor="@color/bg_item_server_text_color_selector"
         android:background="@drawable/bg_item_server_selector"
         android:gravity="center"
         android:paddingTop="8dp"

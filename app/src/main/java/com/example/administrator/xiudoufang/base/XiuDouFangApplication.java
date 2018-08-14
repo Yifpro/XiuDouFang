@@ -15,6 +15,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.example.administrator.xiudoufang.R;
+import com.example.administrator.xiudoufang.common.footer.DefaultFooter;
+import com.example.administrator.xiudoufang.common.header.DefaultHeader;
 import com.example.administrator.xiudoufang.common.utils.ScreenUtils;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
@@ -22,6 +24,12 @@ import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.cookie.CookieJarImpl;
 import com.lzy.okgo.cookie.store.SPCookieStore;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
+import com.scwang.smartrefresh.layout.api.RefreshFooter;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -32,6 +40,21 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 
 public class XiuDouFangApplication extends Application {
+
+    static {
+        SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
+            @Override
+            public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
+                return new DefaultHeader(context);
+            }
+        });
+        SmartRefreshLayout.setDefaultRefreshFooterCreator(new DefaultRefreshFooterCreator() {
+            @Override
+            public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
+                return new DefaultFooter(context);
+            }
+        });
+    }
 
     private static volatile Context mContext;
 

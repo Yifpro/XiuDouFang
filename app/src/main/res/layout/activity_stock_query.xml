@@ -15,7 +15,7 @@
             android:id="@+id/siv_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="true"
+            app:siv_type="TYPE_EDIT"
             app:siv_hint="请输入编号"
             app:siv_key="编号" />
 
@@ -23,7 +23,7 @@
             android:id="@+id/siv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="true"
+            app:siv_type="TYPE_EDIT"
             app:siv_hint="请输入名称"
             app:siv_key="名称" />
 
@@ -31,54 +31,54 @@
             android:id="@+id/siv_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="false"
+            app:siv_type="TYPE_TEXT"
             app:siv_key="类别" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="true"
+            app:siv_type="TYPE_EDIT"
             app:siv_hint="请输入供应商"
             app:siv_key="供应商" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="true"
+            app:siv_type="TYPE_EDIT"
             app:siv_hint="请输入型号"
             app:siv_key="型号" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="true"
+            app:siv_type="TYPE_EDIT"
             app:siv_hint="请输入条形码"
             app:siv_key="条形码" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="true"
+            app:siv_type="TYPE_EDIT"
             app:siv_hint="请输入品牌"
             app:siv_key="品牌" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="true"
+            app:siv_type="TYPE_EDIT"
             app:siv_hint="请输入描述"
             app:siv_key="描述" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="false"
+            app:siv_type="TYPE_TEXT"
             app:siv_key="所属单位" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="false"
+            app:siv_type="TYPE_TEXT"
             app:siv_key="数量" />
 
     </LinearLayout>

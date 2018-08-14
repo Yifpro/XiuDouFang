@@ -31,8 +31,9 @@
         <activity android:name=".transport.TransportOrderQueryActivity" />
         <activity android:name=".product.ProductActivity" />
         <activity android:name=".product.ProductQueryActivity" />
-        <activity android:name=".receivables.CustomerListActivity" />
-        <activity android:name=".receivables.ReceivablesActivity" />
+        <activity android:name=".receivables.CustomerListActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity android:name=".receivables.PaymentActivity" />
         <activity android:name=".check.CheckOrderActivity" />
         <activity android:name=".check.OrderQueryActivity" />
         <activity android:name=".open.OpenBillActivity" />

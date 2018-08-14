@@ -19,10 +19,16 @@
     </declare-styleable>
 
     <declare-styleable name="SearchInfoView">
-        <attr name="siv_isEditable" format="boolean" />
+        <attr name="siv_type">
+            <enum name="TYPE_EDIT" value="0" />
+            <enum name="TYPE_TEXT" value="1" />
+            <enum name="TYPE_SEGMENT" value="2" />
+        </attr>
         <attr name="siv_key" format="string|reference" />
         <attr name="siv_value" format="string|reference" />
         <attr name="siv_hint" format="string|reference" />
         <attr name="siv_isShowNext" format="boolean" />
+        <attr name="siv_leftTitle" format="string|reference" />
+        <attr name="siv_rightTitle" format="string|reference" />
     </declare-styleable>
 </resources>

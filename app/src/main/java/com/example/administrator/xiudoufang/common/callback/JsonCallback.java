@@ -1,7 +1,8 @@
-package com.example.administrator.xiudoufang.common.convert;
+package com.example.administrator.xiudoufang.common.callback;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lzy.okgo.convert.Converter;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
+import com.lzy.okgo.callback.AbsCallback;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -9,19 +10,19 @@ import java.lang.reflect.Type;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class JsonConvert<T> implements Converter<T> {
+public abstract class JsonCallback<T> extends AbsCallback<T> {
 
     private Type type;
     private Class<T> clazz;
 
-    public JsonConvert() {
+    public JsonCallback() {
     }
 
-    public JsonConvert(Type type) {
+    public JsonCallback(Type type) {
         this.type = type;
     }
 
-    public JsonConvert(Class<T> clazz) {
+    public JsonCallback(Class<T> clazz) {
         this.clazz = clazz;
     }
 
@@ -31,6 +32,7 @@ public class JsonConvert<T> implements Converter<T> {
         if (body == null) return null;
         T data;
         String text = body.string();
+        LogUtils.e("parse before -> "+JSONObject.parseObject(text, String.class));
         if (type != null) {
             data = JSONObject.parseObject(text, type);
         } else if (clazz != null) {

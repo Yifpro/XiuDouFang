@@ -10,14 +10,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
-import com.example.administrator.xiudoufang.common.widget.SimpleToolbar;
 
 public class OpenBillActivity extends AppCompatActivity implements IActivityBase {
 
     private PopupWindow mPopupWindow;
+    private TextView mTvSelectCustomer;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, OpenBillActivity.class);
@@ -32,6 +33,7 @@ public class OpenBillActivity extends AppCompatActivity implements IActivityBase
     @Override
     public void initView() {
         setTitle("销售单");
+        mTvSelectCustomer = findViewById(R.id.tv_select_customer);
     }
 
     @Override

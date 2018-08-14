@@ -17,4 +17,5 @@
     <string name="get_verification_code">获取验证码</string>
     <string name="confirm">确认</string>
     <string name="initial_time">60</string>
+    <string name="select_custom">请选择客户</string>
 </resources>

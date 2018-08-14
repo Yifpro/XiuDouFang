@@ -13,33 +13,33 @@
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="true"
+            app:siv_type="TYPE_EDIT"
             app:siv_hint="请输入单号"
             app:siv_key="单号" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="true"
+            app:siv_type="TYPE_EDIT"
             app:siv_hint="请输入客户"
             app:siv_key="客户" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="false"
+            app:siv_type="TYPE_TEXT"
             app:siv_key="开始时间" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="false"
+            app:siv_type="TYPE_TEXT"
             app:siv_key="结束时间" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_isEditable="true"
+            app:siv_type="TYPE_EDIT"
             app:siv_hint="请输入运号"
             app:siv_key="运号" />
 

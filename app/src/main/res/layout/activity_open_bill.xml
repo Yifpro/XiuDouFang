@@ -19,9 +19,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
+            android:id="@+id/tv_select_customer"
             android:textSize="16dp"
             android:textColor="@color/colorPrimary"
-            android:text="请选择客户"
+            android:text="@string/select_custom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>

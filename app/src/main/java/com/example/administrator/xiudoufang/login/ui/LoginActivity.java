@@ -1,6 +1,7 @@
 package com.example.administrator.xiudoufang.login.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -35,6 +36,11 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
     private VerificatieDialogFragment mFragment;
 
     private LoginLogic mLogic;
+
+    public static void start(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     public int getLayoutId() {
@@ -142,6 +148,7 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
                         HashMap<String, String> map = new HashMap<>();
                         map.put(PreferencesUtils.USER_NAME, mSetvAccount.getText());
                         map.put(PreferencesUtils.PASSWORD, mSetvPassword.getText());
+                        map.put(PreferencesUtils.USER_ID, jsonObject.getString("userid"));
                         PreferencesUtils.save(map);
                     } else {
                         PreferencesUtils.remove(PreferencesUtils.USER_NAME);

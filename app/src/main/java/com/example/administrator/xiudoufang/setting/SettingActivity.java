@@ -19,6 +19,7 @@ import com.example.administrator.xiudoufang.common.utils.CacheDiskUtils;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
+import com.example.administrator.xiudoufang.login.ui.LoginActivity;
 
 import java.util.ArrayList;
 
@@ -43,6 +44,8 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
     public void initView() {
         setTitle("设置");
         mRecyclerView = findViewById(R.id.recycler_view);
+
+        findViewById(R.id.tv_exit_login).setOnClickListener(new InnerClickListener());
     }
 
     @Override
@@ -116,5 +119,14 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
             mAdapter.notifyItemChanged(index);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private class InnerClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            SettingActivity.this.finish();
+            LoginActivity.start(SettingActivity.this);
+        }
     }
 }
