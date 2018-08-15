@@ -110,7 +110,7 @@
             android:id="@+id/siv_payment_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:siv_type="TYPE_TEXT"
+            app:siv_type="TYPE_EDIT"
             app:siv_isShowNext="false"
             app:siv_key="款项金额" />
 

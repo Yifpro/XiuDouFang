@@ -1,8 +1,6 @@
 package com.example.administrator.xiudoufang.login.adapter;
 
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;

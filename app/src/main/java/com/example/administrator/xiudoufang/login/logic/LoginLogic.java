@@ -15,18 +15,12 @@ import java.util.HashMap;
 
 public class LoginLogic {
 
-    public void requestLogin(Context context, String username, String password, String logdianid, String phonecode, String changedian, Callback<String> callback) {
-        if (TextUtils.isEmpty(username)) {
+    public void requestLogin(Context context, HashMap<String, String> map, Callback<String> callback) {
+        if (TextUtils.isEmpty(map.get("username"))) {
             Toast.makeText(context, "请输入用户名", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(password)) {
+        } else if (TextUtils.isEmpty(map.get("password"))) {
             Toast.makeText(context, "请输入密码", Toast.LENGTH_SHORT).show();
         } else {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("username", username);
-            map.put("password", password);
-            map.put("logdianid", logdianid);
-            map.put("phonecode", phonecode);
-            map.put("changedian", changedian);
             OkGo.<String>get(StringUtils.getUrl("/Api/products/login_worker?", map))
                     .execute(callback);
         }
@@ -39,11 +33,7 @@ public class LoginLogic {
                 .execute(callback);
     }
 
-    public void checkVerificationCode(String username, String password, String shoujino, Callback<String> callback) {
-        HttpParams httpParams = new HttpParams();
-        httpParams.put("username", username);
-        httpParams.put("password", password);
-        httpParams.put("shoujino", shoujino);
+    public void checkVerificationCode(HttpParams httpParams, Callback<String> callback) {
         OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/UserLogincheck?loginaction=0")
                 .params(httpParams)
                 .execute(callback);

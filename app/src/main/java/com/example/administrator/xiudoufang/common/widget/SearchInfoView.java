@@ -12,12 +12,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.administrator.xiudoufang.R;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 
 public class SearchInfoView extends LinearLayout {
 
-    private RelativeLayout mRelativeLayout;
+    private EditText mEtInput;
     private TextView mTvValue;
     private TextView mTvKey;
+    private RelativeLayout mRelativeLayout;
+    private TextView mTvLeftSegment;
+    private TextView mTvRightSegment;
+
+    private int mType;
 
     public SearchInfoView(Context context) {
         this(context, null);
@@ -34,40 +40,47 @@ public class SearchInfoView extends LinearLayout {
         mTvValue = findViewById(R.id.tv_value);
         mRelativeLayout = findViewById(R.id.relative_layout);
         LinearLayout segmentLayout = findViewById(R.id.segment_layout);
-        EditText etInput = findViewById(R.id.et_input);
+        mEtInput = findViewById(R.id.et_input);
         ImageView ivNext = findViewById(R.id.iv_next);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SearchInfoView);
-        int type = ta.getInt(R.styleable.SearchInfoView_siv_type, 0);
-        if (type == 0) {
-            etInput.setVisibility(VISIBLE);
+        mType = ta.getInt(R.styleable.SearchInfoView_siv_type, 0);
+        if (mType == 0) {
+            mEtInput.setVisibility(VISIBLE);
             mRelativeLayout.setVisibility(INVISIBLE);
             segmentLayout.setVisibility(GONE);
-        } else if (type == 1) {
-            etInput.setVisibility(INVISIBLE);
-            mRelativeLayout.setVisibility(VISIBLE);
-            segmentLayout.setVisibility(GONE);
-        } else if (type == 2) {
-            etInput.setVisibility(INVISIBLE);
-            mRelativeLayout.setVisibility(INVISIBLE);
-            final TextView tvLeftSegment = findViewById(R.id.tv_left_segment);
-            final TextView tvRightSegment = findViewById(R.id.tv_right_segment);
-            tvLeftSegment.setOnClickListener(new OnClickListener() {
+
+            mEtInput.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    tvLeftSegment.setSelected(true);
-                    tvRightSegment.setSelected(false);
+                    mEtInput.setCursorVisible(true);
                 }
             });
-            tvRightSegment.setOnClickListener(new OnClickListener() {
+        } else if (mType == 1) {
+            mEtInput.setVisibility(INVISIBLE);
+            mRelativeLayout.setVisibility(VISIBLE);
+            segmentLayout.setVisibility(GONE);
+        } else if (mType == 2) {
+            mEtInput.setVisibility(INVISIBLE);
+            mRelativeLayout.setVisibility(INVISIBLE);
+            mTvLeftSegment = findViewById(R.id.tv_left_segment);
+            mTvRightSegment = findViewById(R.id.tv_right_segment);
+            mTvLeftSegment.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    tvLeftSegment.setSelected(false);
-                    tvRightSegment.setSelected(true);
+                    mTvLeftSegment.setSelected(true);
+                    mTvRightSegment.setSelected(false);
+                }
+            });
+            mTvRightSegment.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mTvLeftSegment.setSelected(false);
+                    mTvRightSegment.setSelected(true);
                 }
             });
         }
         mTvValue.setText(ta.getString(R.styleable.SearchInfoView_siv_value));
-        etInput.setHint(ta.getString(R.styleable.SearchInfoView_siv_hint));
+        mEtInput.setHint(ta.getString(R.styleable.SearchInfoView_siv_hint));
         if (ta.hasValue(R.styleable.SearchInfoView_siv_isShowNext))
             ivNext.setVisibility(ta.getBoolean(R.styleable.SearchInfoView_siv_isShowNext, true) ? VISIBLE : INVISIBLE);
         mTvKey.setText(ta.getString(R.styleable.SearchInfoView_siv_key));
@@ -82,9 +95,35 @@ public class SearchInfoView extends LinearLayout {
         mTvValue.setText(value);
     }
 
+    public String getValue() {
+        if (mType == 0) {
+            return mEtInput.getText().toString();
+        } else if (mType == 1) {
+            return mTvValue.getText().toString();
+        }
+        return null;
+    }
+
     public void setOnClickListener(OnClickListener listener) {
         if (listener == null)
             return;
         mRelativeLayout.setOnClickListener(listener);
+    }
+
+    public void setLeftSegmentClickable(boolean clickable) {
+        if (mTvLeftSegment != null)
+            mTvLeftSegment.setClickable(clickable);
+    }
+    public void setRightSegmentClickable(boolean clickable) {
+        if (mTvRightSegment != null)
+            mTvRightSegment.setClickable(clickable);
+    }
+
+    public void setLeftSegmentSelected(boolean isSelected) {
+        mTvLeftSegment.setSelected(isSelected);
+    }
+
+    public void setRightSegmentSelected(boolean isSelected) {
+        mTvRightSegment.setSelected(isSelected);
     }
 }

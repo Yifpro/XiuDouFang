@@ -9,5 +9,6 @@
     android:textSize="14dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
+    android:padding="5dp"
     android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
     tools:showIn="@layout/activity_customer_list" />

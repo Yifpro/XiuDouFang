@@ -80,6 +80,7 @@
         android:layout_height="wrap_content"
         android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
         android:textSize="14dp"
+        android:cursorVisible="false"
         android:theme="@style/SearchInfoEditText"
         app:layout_constraintBottom_toBottomOf="@id/line"
         app:layout_constraintEnd_toEndOf="parent"

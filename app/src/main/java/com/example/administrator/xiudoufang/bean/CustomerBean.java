@@ -257,10 +257,11 @@ public class CustomerBean {
             this.freight = freight;
         }
 
-        public static class LianxirenBean {
+        public static class LianxirenBean implements Parcelable {
             /**
              * lianxiren : 18505295858
              */
+
 
             private String lianxiren;
 
@@ -271,9 +272,38 @@ public class CustomerBean {
             public void setLianxiren(String lianxiren) {
                 this.lianxiren = lianxiren;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.lianxiren);
+            }
+
+            public LianxirenBean() {
+            }
+
+            protected LianxirenBean(Parcel in) {
+                this.lianxiren = in.readString();
+            }
+
+            public static final Creator<LianxirenBean> CREATOR = new Creator<LianxirenBean>() {
+                @Override
+                public LianxirenBean createFromParcel(Parcel source) {
+                    return new LianxirenBean(source);
+                }
+
+                @Override
+                public LianxirenBean[] newArray(int size) {
+                    return new LianxirenBean[size];
+                }
+            };
         }
 
-        public static class QqBean {
+        public static class QqBean implements Parcelable {
             /**
              * qq : 18505295858
              */
@@ -287,9 +317,38 @@ public class CustomerBean {
             public void setQq(String qq) {
                 this.qq = qq;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.qq);
+            }
+
+            public QqBean() {
+            }
+
+            protected QqBean(Parcel in) {
+                this.qq = in.readString();
+            }
+
+            public static final Creator<QqBean> CREATOR = new Creator<QqBean>() {
+                @Override
+                public QqBean createFromParcel(Parcel source) {
+                    return new QqBean(source);
+                }
+
+                @Override
+                public QqBean[] newArray(int size) {
+                    return new QqBean[size];
+                }
+            };
         }
 
-        public static class WeixinhaoBean {
+        public static class WeixinhaoBean implements Parcelable {
             /**
              * weixinhao : 18505295858
              */
@@ -303,9 +362,38 @@ public class CustomerBean {
             public void setWeixinhao(String weixinhao) {
                 this.weixinhao = weixinhao;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.weixinhao);
+            }
+
+            public WeixinhaoBean() {
+            }
+
+            protected WeixinhaoBean(Parcel in) {
+                this.weixinhao = in.readString();
+            }
+
+            public static final Creator<WeixinhaoBean> CREATOR = new Creator<WeixinhaoBean>() {
+                @Override
+                public WeixinhaoBean createFromParcel(Parcel source) {
+                    return new WeixinhaoBean(source);
+                }
+
+                @Override
+                public WeixinhaoBean[] newArray(int size) {
+                    return new WeixinhaoBean[size];
+                }
+            };
         }
 
-        public static class DianhuaBean {
+        public static class DianhuaBean implements Parcelable {
             /**
              * dianhua : 18505295858
              */
@@ -319,9 +407,38 @@ public class CustomerBean {
             public void setDianhua(String dianhua) {
                 this.dianhua = dianhua;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.dianhua);
+            }
+
+            public DianhuaBean() {
+            }
+
+            protected DianhuaBean(Parcel in) {
+                this.dianhua = in.readString();
+            }
+
+            public static final Creator<DianhuaBean> CREATOR = new Creator<DianhuaBean>() {
+                @Override
+                public DianhuaBean createFromParcel(Parcel source) {
+                    return new DianhuaBean(source);
+                }
+
+                @Override
+                public DianhuaBean[] newArray(int size) {
+                    return new DianhuaBean[size];
+                }
+            };
         }
 
-        public static class TelephoneBean {
+        public static class TelephoneBean implements Parcelable {
             /**
              * telephone : 18505295858
              */
@@ -335,9 +452,38 @@ public class CustomerBean {
             public void setTelephone(String telephone) {
                 this.telephone = telephone;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.telephone);
+            }
+
+            public TelephoneBean() {
+            }
+
+            protected TelephoneBean(Parcel in) {
+                this.telephone = in.readString();
+            }
+
+            public static final Creator<TelephoneBean> CREATOR = new Creator<TelephoneBean>() {
+                @Override
+                public TelephoneBean createFromParcel(Parcel source) {
+                    return new TelephoneBean(source);
+                }
+
+                @Override
+                public TelephoneBean[] newArray(int size) {
+                    return new TelephoneBean[size];
+                }
+            };
         }
 
-        public static class FahuodizhiBean {
+        public static class FahuodizhiBean implements Parcelable {
             /**
              * fahuodizhi : 闵行区老北翟路4855号
              */
@@ -351,9 +497,38 @@ public class CustomerBean {
             public void setFahuodizhi(String fahuodizhi) {
                 this.fahuodizhi = fahuodizhi;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.fahuodizhi);
+            }
+
+            public FahuodizhiBean() {
+            }
+
+            protected FahuodizhiBean(Parcel in) {
+                this.fahuodizhi = in.readString();
+            }
+
+            public static final Creator<FahuodizhiBean> CREATOR = new Creator<FahuodizhiBean>() {
+                @Override
+                public FahuodizhiBean createFromParcel(Parcel source) {
+                    return new FahuodizhiBean(source);
+                }
+
+                @Override
+                public FahuodizhiBean[] newArray(int size) {
+                    return new FahuodizhiBean[size];
+                }
+            };
         }
 
-        public static class ShouhuodizhiBean {
+        public static class ShouhuodizhiBean implements Parcelable {
             /**
              * shouhuodizhi : 18505295858
              */
@@ -367,9 +542,38 @@ public class CustomerBean {
             public void setShouhuodizhi(String shouhuodizhi) {
                 this.shouhuodizhi = shouhuodizhi;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.shouhuodizhi);
+            }
+
+            public ShouhuodizhiBean() {
+            }
+
+            protected ShouhuodizhiBean(Parcel in) {
+                this.shouhuodizhi = in.readString();
+            }
+
+            public static final Creator<ShouhuodizhiBean> CREATOR = new Creator<ShouhuodizhiBean>() {
+                @Override
+                public ShouhuodizhiBean createFromParcel(Parcel source) {
+                    return new ShouhuodizhiBean(source);
+                }
+
+                @Override
+                public ShouhuodizhiBean[] newArray(int size) {
+                    return new ShouhuodizhiBean[size];
+                }
+            };
         }
 
-        public static class FreightBean {
+        public static class FreightBean implements Parcelable {
             /**
              * freight : 18505295858
              */
@@ -383,6 +587,35 @@ public class CustomerBean {
             public void setFreight(String freight) {
                 this.freight = freight;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.freight);
+            }
+
+            public FreightBean() {
+            }
+
+            protected FreightBean(Parcel in) {
+                this.freight = in.readString();
+            }
+
+            public static final Creator<FreightBean> CREATOR = new Creator<FreightBean>() {
+                @Override
+                public FreightBean createFromParcel(Parcel source) {
+                    return new FreightBean(source);
+                }
+
+                @Override
+                public FreightBean[] newArray(int size) {
+                    return new FreightBean[size];
+                }
+            };
         }
 
         @Override

@@ -18,7 +18,6 @@ import java.util.ArrayList;
 public class PurchaseSubFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
-    private TextView mTv;
 
     public static PurchaseSubFragment newInstance(int type) {
         PurchaseSubFragment fragment = new PurchaseSubFragment();
@@ -47,17 +46,10 @@ public class PurchaseSubFragment extends BaseFragment {
 
     @Override
     protected void lazyLoad() {
-        LogUtils.e("lazyLoad->"+getArguments().getInt("type")+"");
-        if (mTv == null) {
-            mTv.setText("null");
-        } else {
-            mTv.setText(getArguments().getInt("type")+"");
-        }
     }
 
     @Override
     public void initView(View view) {
-        mTv = view.findViewById(R.id.tv);
         mRecyclerView = view.findViewById(R.id.recycler_view);
     }
 

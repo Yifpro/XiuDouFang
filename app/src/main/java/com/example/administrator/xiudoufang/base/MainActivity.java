@@ -9,21 +9,16 @@ import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.check.CheckOrderActivity;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
-import com.example.administrator.xiudoufang.open.OpenBillActivity;
-import com.example.administrator.xiudoufang.product.ProductActivity;
-import com.example.administrator.xiudoufang.receivables.CustomerListActivity;
-import com.example.administrator.xiudoufang.transport.TransportNumActivity;
+import com.example.administrator.xiudoufang.check.ui.CheckOrderActivity;
+import com.example.administrator.xiudoufang.open.ui.OpenBillActivity;
+import com.example.administrator.xiudoufang.product.ui.ProductActivity;
+import com.example.administrator.xiudoufang.receipt.ui.CustomerListActivity;
+import com.example.administrator.xiudoufang.transport.ui.TransportNumActivity;
 import com.example.administrator.xiudoufang.bean.MenuItem;
 import com.example.administrator.xiudoufang.purchase.ui.PurchaseActivity;
-import com.example.administrator.xiudoufang.setting.SettingActivity;
-import com.example.administrator.xiudoufang.stock.StockActivity;
+import com.example.administrator.xiudoufang.setting.ui.SettingActivity;
+import com.example.administrator.xiudoufang.stock.ui.StockActivity;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements IActivityBase {

@@ -22,6 +22,7 @@ import com.example.administrator.xiudoufang.common.widget.SimpleEditTextView;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.login.logic.LoginLogic;
 import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Response;
 
 import java.util.HashMap;
@@ -32,8 +33,8 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
     private SimpleEditTextView mSetvAccount;
     private SimpleEditTextView mSetvPassword;
     private ImageView mIvPsdStatus;
-    private ServerSelectorDialogFragment mDialogFragment;
-    private VerificatieDialogFragment mFragment;
+    private ServerSelectorDialog mServerDialog;
+    private VerificateDialog mVerificateDialog;
 
     private LoginLogic mLogic;
 
@@ -59,9 +60,9 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
         setvServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mDialogFragment == null)
-                    mDialogFragment = new ServerSelectorDialogFragment();
-                mDialogFragment.show(getSupportFragmentManager(), "");
+                if (mServerDialog == null)
+                    mServerDialog = new ServerSelectorDialog();
+                mServerDialog.show(getSupportFragmentManager(), "");
             }
         });
     }
@@ -93,7 +94,11 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
     private void login() {
         LoadingViewDialog.getInstance().show(this);
         //******** 检查是否需要验证码 ********
-        mLogic.checkVerificationCode(mSetvAccount.getText(), mSetvPassword.getText(), "", new StringCallback() {
+        HttpParams httpParams = new HttpParams();
+        httpParams.put("username", mSetvAccount.getText());
+        httpParams.put("password", mSetvPassword.getText());
+        httpParams.put("shoujino", "");
+        mLogic.checkVerificationCode(httpParams, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 LogUtils.e("检查验证码->" + response.body());
@@ -116,30 +121,36 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
     }
 
     private void showVerificationCodeDialog(final String userid) {
-        if (mFragment == null) {
-            mFragment = new VerificatieDialogFragment();
-            mFragment.setUserid(userid);
-            mFragment.setLogic(mLogic);
-            mFragment.setOnSubmitClickListener(new VerificatieDialogFragment.OnSubmitClickListener() {
+        if (mVerificateDialog == null) {
+            mVerificateDialog = new VerificateDialog();
+            mVerificateDialog.setUserid(userid);
+            mVerificateDialog.setLogic(mLogic);
+            mVerificateDialog.setOnSubmitClickListener(new VerificateDialog.OnSubmitClickListener() {
                 @Override
-                public void onSubmitClick(String phoneCode) {
+                public void onClick(String phoneCode) {
                     LoadingViewDialog.getInstance().show(LoginActivity.this);
                     requestLogin(phoneCode);
                 }
             });
         }
-        mFragment.show(getSupportFragmentManager(), "VerificatieDialogFragment");
+        mVerificateDialog.show(getSupportFragmentManager(), "VerificateDialog");
     }
 
     private void requestLogin(String phoneCode) {
-        mLogic.requestLogin(LoginActivity.this, mSetvAccount.getText(), mSetvPassword.getText(), "", phoneCode, "0", new StringCallback() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("username", mSetvAccount.getText());
+        map.put("password", mSetvPassword.getText());
+        map.put("logdianid", "");
+        map.put("phonecode", phoneCode);
+        map.put("changedian", "0");
+        mLogic.requestLogin(LoginActivity.this, map, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 LogUtils.e("登录->" + response.body());
                 JSONObject jsonObject = JSONObject.parseObject(response.body());
                 String messagestr = jsonObject.getString("messagestr");
                 if (!TextUtils.isEmpty(messagestr)) {
-                    mFragment.setEmpty();
+                    mVerificateDialog.setEmpty();
                     LoadingViewDialog.getInstance().dismiss();
                     Toast.makeText(LoginActivity.this, messagestr, Toast.LENGTH_SHORT).show();
                 } else {
@@ -149,6 +160,7 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
                         map.put(PreferencesUtils.USER_NAME, mSetvAccount.getText());
                         map.put(PreferencesUtils.PASSWORD, mSetvPassword.getText());
                         map.put(PreferencesUtils.USER_ID, jsonObject.getString("userid"));
+                        map.put(PreferencesUtils.DIAN_ID, jsonObject.getString("dianid"));
                         PreferencesUtils.save(map);
                     } else {
                         PreferencesUtils.remove(PreferencesUtils.USER_NAME);

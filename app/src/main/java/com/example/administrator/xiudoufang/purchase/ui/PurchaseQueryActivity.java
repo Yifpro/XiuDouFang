@@ -13,6 +13,7 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
+import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 
 import java.text.SimpleDateFormat;
@@ -21,7 +22,7 @@ import java.util.Date;
 
 public class PurchaseQueryActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
-    private TransferPurchaseDialogFragment mDialogFragment;
+    private TransferPurchaseDialog mTransferPurchaseDialog;
     private SearchInfoView mSivTransferPurchase;
     private SearchInfoView mSivStartTime;
     private SearchInfoView mSivEndTime;
@@ -54,121 +55,133 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
         mSivStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPvStartTime = new TimePickerBuilder(PurchaseQueryActivity.this, new OnTimeSelectListener() {
-                    @Override
-                    public void onTimeSelect(Date date, View v) {
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                        mSivStartTime.setValue(format.format(date));
-                    }
-                })
-                        .setLayoutRes(R.layout.layout_pickerview_custom_time, new CustomListener() {
-
-                            @Override
-                            public void customLayout(View v) {
-                                final TextView tvSubmit = v.findViewById(R.id.tv_finish);
-                                TextView tvCancel = v.findViewById(R.id.tv_cancel);
-                                tvSubmit.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        mPvStartTime.returnData();
-                                        mPvStartTime.dismiss();
-                                    }
-                                });
-                                tvCancel.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        mPvStartTime.dismiss();
-                                    }
-                                });
-                            }
-                        })
-                        .setType(new boolean[]{true, true, true, false, false, false})
-                        .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
-                        .setDividerColor(Color.DKGRAY)
-                        .setContentTextSize(20)
-                        .setBackgroundId(0x00000000)
-                        .isDialog(true)
-                        .build();
-                mPvStartTime.show();
+                showStartTimeDialog();
             }
         });
         mSivEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPvEndTime = new TimePickerBuilder(PurchaseQueryActivity.this, new OnTimeSelectListener() {
-                    @Override
-                    public void onTimeSelect(Date date, View v) {
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                        mSivEndTime.setValue(format.format(date));
-                    }
-                })
-                        .setLayoutRes(R.layout.layout_pickerview_custom_time, new CustomListener() {
-
-                            @Override
-                            public void customLayout(View v) {
-                                final TextView tvSubmit = v.findViewById(R.id.tv_finish);
-                                TextView tvCancel = v.findViewById(R.id.tv_cancel);
-                                tvSubmit.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        mPvEndTime.returnData();
-                                        mPvEndTime.dismiss();
-                                    }
-                                });
-                                tvCancel.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        mPvEndTime.dismiss();
-                                    }
-                                });
-                            }
-                        })
-                        .setType(new boolean[]{true, true, true, false, false, false})
-                        .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
-                        .setDividerColor(Color.DKGRAY)
-                        .setContentTextSize(20)
-                        .setBackgroundId(0x00000000)
-                        .isDialog(true)
-                        .build();
-                mPvEndTime.show();
+                showEndTimeDialog();
             }
         });
         mSivTransferPurchase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mDialogFragment == null) {
-                    mDialogFragment = new TransferPurchaseDialogFragment();
-                    mDialogFragment.setOnItemChangedListener(new TransferPurchaseDialogFragment.OnItemChangedListener() {
-                        @Override
-                        public void onItemChanged(int position) {
-                            String result = null;
-                            switch (position) {
-                                case 0:
-                                    result = "全部";
-                                    break;
-                                case 1:
-                                    result = "是";
-                                    break;
-                                case 2:
-                                    result = "否";
-                                    break;
-                            }
-                            mSivTransferPurchase.setValue(result);
-                        }
-                    });
-                }
-                mDialogFragment.show(getSupportFragmentManager(), "TransferPurchaseDialogFragment");
+                showTransferPurchaseDialog();
             }
         });
     }
 
+    private void showTransferPurchaseDialog() {
+        if (mTransferPurchaseDialog == null) {
+            mTransferPurchaseDialog = new TransferPurchaseDialog();
+            mTransferPurchaseDialog.setOnItemChangedListener(new TransferPurchaseDialog.OnItemChangedListener() {
+                @Override
+                public void onItemChanged(int position) {
+                    String result = null;
+                    switch (position) {
+                        case 0:
+                            result = "全部";
+                            break;
+                        case 1:
+                            result = "是";
+                            break;
+                        case 2:
+                            result = "否";
+                            break;
+                    }
+                    mSivTransferPurchase.setValue(result);
+                    mTransferPurchaseDialog.dismiss();
+                }
+            });
+        }
+        mTransferPurchaseDialog.show(getSupportFragmentManager(), "TransferPurchaseDialog");
+    }
+
+    private void showEndTimeDialog() {
+        if (mPvEndTime == null) {
+            TimePickerBuilder builder = new TimePickerBuilder(PurchaseQueryActivity.this, new OnTimeSelectListener() {
+                @Override
+                public void onTimeSelect(Date date, View v) {
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    mSivEndTime.setValue(format.format(date));
+                }
+            })
+                    .setLayoutRes(R.layout.layout_pickerview_custom_time, new CustomListener() {
+
+                        @Override
+                        public void customLayout(View v) {
+                            final TextView tvSubmit = v.findViewById(R.id.tv_finish);
+                            TextView tvCancel = v.findViewById(R.id.tv_cancel);
+                            tvSubmit.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mPvEndTime.returnData();
+                                    mPvEndTime.dismiss();
+                                }
+                            });
+                            tvCancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mPvEndTime.dismiss();
+                                }
+                            });
+                        }
+                    });
+            mPvEndTime = setBuilder(builder);
+        }
+        mPvEndTime.show();
+    }
+
+    private void showStartTimeDialog() {
+        if (mPvStartTime == null) {
+            TimePickerBuilder builder = new TimePickerBuilder(PurchaseQueryActivity.this, new OnTimeSelectListener() {
+                @Override
+                public void onTimeSelect(Date date, View v) {
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    mSivStartTime.setValue(format.format(date));
+                }
+            })
+                    .setLayoutRes(R.layout.layout_pickerview_custom_time, new CustomListener() {
+
+                        @Override
+                        public void customLayout(View v) {
+                            final TextView tvSubmit = v.findViewById(R.id.tv_finish);
+                            TextView tvCancel = v.findViewById(R.id.tv_cancel);
+                            tvSubmit.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mPvStartTime.returnData();
+                                    mPvStartTime.dismiss();
+                                }
+                            });
+                            tvCancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mPvStartTime.dismiss();
+                                }
+                            });
+                        }
+                    });
+            mPvStartTime = setBuilder(builder);
+        }
+        mPvStartTime.show();
+    }
+
+    private TimePickerView setBuilder(TimePickerBuilder builder) {
+        return builder.setType(new boolean[]{true, true, true, false, false, false})
+                .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
+                .setDividerColor(Color.DKGRAY)
+                .setContentTextSize(20)
+                .setBackgroundId(0x00000000)
+                .isDialog(true)
+                .build();
+    }
+
     @Override
     public void initData() {
-        Calendar calendar = Calendar.getInstance();
-        StringBuilder builder = new StringBuilder();
-        builder.append(calendar.get(Calendar.YEAR)).append("-").append(calendar.get(Calendar.MONTH)+1).append("-").append(calendar.get(Calendar.DATE));
-        mSivStartTime.setValue(builder.toString());
-        mSivEndTime.setValue(builder.toString());
+        mSivStartTime.setValue(StringUtils.getCurrentTime());
+        mSivEndTime.setValue(StringUtils.getCurrentTime());
     }
 
     @Override

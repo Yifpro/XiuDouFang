@@ -20,23 +20,23 @@
             </intent-filter>
         </activity>
         <activity android:name=".base.MainActivity" />
-        <activity android:name=".setting.SettingActivity" />
-        <activity android:name=".setting.StoreSwitchActivity" />
+        <activity android:name=".setting.ui.SettingActivity" />
+        <activity android:name=".setting.ui.StoreSwitchActivity" />
         <activity android:name=".purchase.ui.PurchaseActivity" />
         <activity android:name=".purchase.ui.PurchaseQueryActivity" />
         <activity android:name=".purchase.ui.PurchaseOrderDetailActivity" />
-        <activity android:name=".stock.StockActivity" />
-        <activity android:name=".stock.StockQueryActivity" />
-        <activity android:name=".transport.TransportNumActivity" />
-        <activity android:name=".transport.TransportOrderQueryActivity" />
-        <activity android:name=".product.ProductActivity" />
-        <activity android:name=".product.ProductQueryActivity" />
-        <activity android:name=".receivables.CustomerListActivity"
+        <activity android:name=".stock.ui.StockActivity" />
+        <activity android:name=".stock.ui.StockQueryActivity" />
+        <activity android:name=".transport.ui.TransportNumActivity" />
+        <activity android:name=".transport.ui.TransportOrderQueryActivity" />
+        <activity android:name=".product.ui.ProductActivity" />
+        <activity android:name=".product.ui.ProductQueryActivity" />
+        <activity android:name=".receipt.ui.CustomerListActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
-        <activity android:name=".receivables.PaymentActivity" />
-        <activity android:name=".check.CheckOrderActivity" />
-        <activity android:name=".check.OrderQueryActivity" />
-        <activity android:name=".open.OpenBillActivity" />
+        <activity android:name=".receipt.ui.PaymentActivity" />
+        <activity android:name=".check.ui.CheckOrderActivity" />
+        <activity android:name=".check.ui.OrderQueryActivity" />
+        <activity android:name=".open.ui.OpenBillActivity" />
     </application>
 
 </manifest>

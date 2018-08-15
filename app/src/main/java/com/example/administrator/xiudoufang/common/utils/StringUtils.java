@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Map;
 
 public class StringUtils {
@@ -77,5 +78,12 @@ public class StringUtils {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static String getCurrentTime() {
+        Calendar calendar = Calendar.getInstance();
+        StringBuilder builder = new StringBuilder();
+        builder.append(calendar.get(Calendar.YEAR)).append("-").append(calendar.get(Calendar.MONTH)+1).append("-").append(calendar.get(Calendar.DATE));
+        return builder.toString();
     }
 }

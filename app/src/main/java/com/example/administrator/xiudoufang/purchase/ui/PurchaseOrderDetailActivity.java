@@ -11,7 +11,7 @@ import com.example.administrator.xiudoufang.base.IActivityBase;
 
 public class PurchaseOrderDetailActivity extends AppCompatActivity implements IActivityBase {
 
-    private ExitEditDialogFragment mFragment;
+    private ExitEditDialog mExitEditDialog;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, PurchaseOrderDetailActivity.class);
@@ -43,15 +43,16 @@ public class PurchaseOrderDetailActivity extends AppCompatActivity implements IA
     }
 
     private void showExitEditDialog() {
-        if (mFragment == null) {
-            mFragment = new ExitEditDialogFragment();
-            mFragment.setOnGiveUpClickListener(new ExitEditDialogFragment.OnGiveUpClickListener() {
+        if (mExitEditDialog == null) {
+            mExitEditDialog = new ExitEditDialog();
+            mExitEditDialog.setOnSubmitClickListener(new ExitEditDialog.OnSumbitClickListener() {
                 @Override
-                public void onSubmitClick() {
+                public void onClick() {
+                    mExitEditDialog.dismiss();
                     PurchaseOrderDetailActivity.this.finish();
                 }
             });
         }
-        mFragment.show(getSupportFragmentManager(), "ExitEditDialogFragment");
+        mExitEditDialog.show(getSupportFragmentManager(), "ExitEditDialog");
     }
 }
