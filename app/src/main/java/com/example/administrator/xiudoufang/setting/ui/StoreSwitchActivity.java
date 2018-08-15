@@ -80,7 +80,7 @@ public class StoreSwitchActivity extends AppCompatActivity implements IActivityB
 
                 @Override
                 public void onSuccess(Response<String> response) {
-                    StringUtils.cacheLoginInfo(response.body(), StringUtils.LOGIN_INFO);
+                    StringUtils.cacheInfoToFile(response.body(), StringUtils.LOGIN_INFO);
                     LoadingViewDialog.getInstance().dismiss();
                 }
             });

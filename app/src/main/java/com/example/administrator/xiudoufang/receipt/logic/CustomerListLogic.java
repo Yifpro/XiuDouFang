@@ -24,7 +24,7 @@ public class CustomerListLogic {
                 .execute(callback);
     }
 
-    //******** 获取客户列表 ********
+    //******** 获取会计科目列表 ********
     public void requestSubjectList(String action, Callback<SubjectBean> callback) {
         HashMap<String, String> map = new HashMap<>();
         map.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
@@ -34,9 +34,10 @@ public class CustomerListLogic {
                 .execute(callback);
     }
 
+    //******** 获取客户列表 ********
     public void requestCustomerList(HashMap<String, String> map, Callback<String> callback) {
         OkGo.<String>get(StringUtils.getUrl("/Api/products/requset_custlist?", map))
                 .execute(callback);
     }
-    //******** 获取会计科目列表 ********
+
 }

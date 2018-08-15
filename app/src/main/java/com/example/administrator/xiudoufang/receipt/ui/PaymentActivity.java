@@ -283,33 +283,37 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_submit:
-                if (checkNotEmpty()) {
-                    if (mCustomerItem != null) {
-                        SharedPreferences preferences = PreferencesUtils.getPreferences();
-                        HttpParams params = new HttpParams();
-                        params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
-                        params.put("c_id", mCustomerItem.getC_id());
-                        params.put("orderid", "0");
-                        params.put("amt", mSivPaymentAmount.getValue());
-                        params.put("youhui", mSivDiscountAmount.getValue());
-                        params.put("shoukuanid", mPayId);
-                        params.put("memo", mEtTip.getText().toString());
-                        params.put("dqman", preferences.getString(PreferencesUtils.USER_NAME, ""));
-                        params.put("riqi", mSivPaymentDate.getValue());
-                        params.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-                        params.put("accountid", mSubjectId);
-                        params.put("leixing", mDirection);
-                        mLogic.requestReceipt(params, new StringCallback() {
-                            @Override
-                            public void onSuccess(Response<String> response) {
-
-                            }
-                        });
-                    } else {
-                        Toast.makeText(this, "服务器繁忙", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                submitBill();
                 break;
+        }
+    }
+
+    private void submitBill() {
+        if (checkNotEmpty()) {
+            if (mCustomerItem != null) {
+                SharedPreferences preferences = PreferencesUtils.getPreferences();
+                HttpParams params = new HttpParams();
+                params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
+                params.put("c_id", mCustomerItem.getC_id());
+                params.put("orderid", "0");
+                params.put("amt", mSivPaymentAmount.getValue());
+                params.put("youhui", mSivDiscountAmount.getValue());
+                params.put("shoukuanid", mPayId);
+                params.put("memo", mEtTip.getText().toString());
+                params.put("dqman", preferences.getString(PreferencesUtils.USER_NAME, ""));
+                params.put("riqi", mSivPaymentDate.getValue());
+                params.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
+                params.put("accountid", mSubjectId);
+                params.put("leixing", mDirection);
+                mLogic.requestReceipt(params, new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                    }
+                });
+            } else {
+                Toast.makeText(this, "服务器繁忙", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

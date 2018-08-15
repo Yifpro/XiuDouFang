@@ -8,22 +8,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.bean.PayBean;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.receipt.adapter.ReceiptSelectorAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ReceiptSelectorDialog extends DialogFragment {
@@ -36,7 +31,7 @@ public class ReceiptSelectorDialog extends DialogFragment {
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         View view = inflater.inflate(R.layout.fragment_receipt_selector, container);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
-        JSONObject jsonObject = JSONObject.parseObject(StringUtils.readLoginInfo(StringUtils.LOGIN_INFO));
+        JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
         final List<PayBean> list = JSONObject.parseArray(jsonObject.getJSONArray("pay").toJSONString(), PayBean.class);
         ReceiptSelectorAdapter adapter = new ReceiptSelectorAdapter(R.layout.layout_list_item_receipt_selector, list);
         adapter.bindToRecyclerView(recyclerView);

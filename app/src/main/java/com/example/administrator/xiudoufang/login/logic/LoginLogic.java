@@ -15,6 +15,7 @@ import java.util.HashMap;
 
 public class LoginLogic {
 
+    //******** 登录请求 ********
     public void requestLogin(Context context, HashMap<String, String> map, Callback<String> callback) {
         if (TextUtils.isEmpty(map.get("username"))) {
             Toast.makeText(context, "请输入用户名", Toast.LENGTH_SHORT).show();
@@ -26,6 +27,7 @@ public class LoginLogic {
         }
     }
 
+    //******** 获取验证码 ********
     public void requestVerificationCode(String userid, Callback<String> callback) {
         HashMap<String, String> map = new HashMap<>();
         map.put("userid", userid);
@@ -33,6 +35,7 @@ public class LoginLogic {
                 .execute(callback);
     }
 
+    //******** 检查是否需要验证码 ********
     public void checkVerificationCode(HttpParams httpParams, Callback<String> callback) {
         OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/UserLogincheck?loginaction=0")
                 .params(httpParams)
@@ -40,7 +43,7 @@ public class LoginLogic {
     }
 
     public void cacheLoginInfo(Context context, String response) {
-        StringUtils.cacheLoginInfo(response, StringUtils.LOGIN_INFO);
+        StringUtils.cacheInfoToFile(response, StringUtils.LOGIN_INFO);
     }
 
     private static class InnerTask extends ThreadUtils.SimpleTask {
@@ -56,7 +59,7 @@ public class LoginLogic {
         @Nullable
         @Override
         public Void doInBackground() throws Throwable {
-            StringUtils.cacheLoginInfo(mResponse, StringUtils.LOGIN_INFO);
+            StringUtils.cacheInfoToFile(mResponse, StringUtils.LOGIN_INFO);
             return null;
         }
 

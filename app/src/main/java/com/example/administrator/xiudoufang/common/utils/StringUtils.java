@@ -1,10 +1,6 @@
 package com.example.administrator.xiudoufang.common.utils;
 
-import android.content.Context;
-
-import com.example.administrator.xiudoufang.base.MainActivity;
 import com.example.administrator.xiudoufang.base.XiuDouFangApplication;
-import com.lzy.okgo.model.Response;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,7 +30,7 @@ public class StringUtils {
         return builder.toString();
     }
 
-    public static String readLoginInfo(String fileName) {
+    public static String readInfoForFile(String fileName) {
         BufferedReader bufferedReader = null;
         try {
             File file = new File(XiuDouFangApplication.getContext().getCacheDir().getAbsolutePath() + File.separator + fileName);
@@ -58,7 +54,7 @@ public class StringUtils {
         return null;
     }
 
-    public static void cacheLoginInfo(String content, String fileName) {
+    public static void cacheInfoToFile(String content, String fileName) {
         FileOutputStream outStream = null;
         String path = XiuDouFangApplication.getContext().getCacheDir().getAbsolutePath() + File.separator + fileName;
         try {

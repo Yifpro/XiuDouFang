@@ -52,7 +52,7 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
     @Override
     public void initData() {
         LoadingViewDialog.getInstance().show(this);
-        JSONObject jsonObject = JSONObject.parseObject(StringUtils.readLoginInfo(StringUtils.LOGIN_INFO));
+        JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
         JSONArray logindians = jsonObject.getJSONArray("logindian");
         mLoginStores = new ArrayList<>();
         for (int i = 0; i < logindians.size(); i++) {

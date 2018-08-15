@@ -2,7 +2,6 @@ package com.example.administrator.xiudoufang.receipt.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +13,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.CustomerBean;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.receipt.adapter.CustomerListAdapter;
@@ -83,7 +81,7 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        JSONObject jsonObject = JSONObject.parseObject(StringUtils.readLoginInfo(StringUtils.LOGIN_INFO));
+        JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
         String dianid = jsonObject.getString("dianid");
         String dengjiValue = jsonObject.getString("dengji_value");
         String userid = jsonObject.getString("userid");

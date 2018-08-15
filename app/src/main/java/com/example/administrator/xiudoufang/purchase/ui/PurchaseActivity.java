@@ -73,8 +73,9 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         List<Fragment> fragments = new ArrayList<>();
-        for (int i = 0; i < tabTitles.length; i++) {
-            fragments.add(PurchaseSubFragment.newInstance(i));
+        String[] types = {"1", "2", "3", "4", "5", "6", "0"};
+        for (int i = 0; i < types.length; i++) {
+            fragments.add(PurchaseSubFragment.newInstance(types[i]));
         }
         PurchasePagerAdapter mAdapter = new PurchasePagerAdapter(getSupportFragmentManager(), fragments, tabTitles);
         mViewPager.setAdapter(mAdapter);
