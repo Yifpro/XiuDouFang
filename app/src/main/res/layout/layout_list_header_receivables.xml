@@ -1,14 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<EditText xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_edittext_query_customer_shape"
-    android:hint="@string/search_in_english"
-    android:drawableLeft="@mipmap/ic_query_gray"
-    android:textSize="14dp"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    android:padding="5dp"
-    android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
-    tools:showIn="@layout/activity_customer_list" />
+    android:orientation="horizontal">
+
+    <EditText
+        android:id="@+id/et_filter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/bg_edittext_query_customer_shape"
+        android:drawableLeft="@mipmap/ic_query_gray"
+        android:hint="@string/search_in_english"
+        android:padding="5dp"
+        android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_cancel"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:showIn="@layout/activity_customer_list" />
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:visibility="gone"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginRight="3dp"
+        android:background="@mipmap/ic_close"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="@id/et_filter"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:text="@string/cancel"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>

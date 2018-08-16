@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.administrator.xiudoufang.R;
+import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshKernel;
@@ -19,10 +19,17 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class DefaultHeader extends LinearLayout implements RefreshHeader {
 
+    private static String REFRESH_HEADER_FINISH = "刷新完成";
+    private static String REFRESH_HEADER_FAILED = "刷新失败";
+
     private ImageView mIvArrow;
-    private TextView mTvTop;
+    private TextView mTitleText;
     private TextView mTvTime;
     private ProgressBar mProgressView;
 
@@ -40,8 +47,9 @@ public class DefaultHeader extends LinearLayout implements RefreshHeader {
         View view = inflate(context, R.layout.layout_default_header, this);
         mIvArrow = view.findViewById(R.id.iv_arrow);
         mProgressView = view.findViewById(R.id.progress_view);
-        mTvTop = view.findViewById(R.id.tv_top);
+        mTitleText = view.findViewById(R.id.tv_top);
         mTvTime = view.findViewById(R.id.tv_time);
+        mTvTime.setText(PreferencesUtils.getPreferences().getString(PreferencesUtils.TIME_REFRESH, "-"));
         setMinimumHeight(SizeUtils.dp2px(60));
     }
 
@@ -63,7 +71,16 @@ public class DefaultHeader extends LinearLayout implements RefreshHeader {
 
     @Override
     public int onFinish(@NonNull RefreshLayout refreshLayout, boolean success) {
-        return 0;
+        if (success) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+            String time = simpleDateFormat.format(new Date(System.currentTimeMillis()));
+            mTvTime.setText(time);
+            mTitleText.setText(REFRESH_HEADER_FINISH);
+            PreferencesUtils.save(PreferencesUtils.TIME_REFRESH, time);
+        } else {
+            mTitleText.setText(REFRESH_HEADER_FAILED);
+        }
+        return 500;
     }
 
     @Override
@@ -71,18 +88,18 @@ public class DefaultHeader extends LinearLayout implements RefreshHeader {
         switch (newState) {
             case None:
             case PullDownToRefresh:
-                mTvTop.setText("下拉开始刷新");
+                mTitleText.setText("下拉开始刷新");
                 mIvArrow.setVisibility(VISIBLE);
                 mProgressView.setVisibility(GONE);
                 mIvArrow.animate().rotation(0);
                 break;
             case Refreshing:
-                mTvTop.setText("正在刷新...");
+                mTitleText.setText("正在刷新...");
                 mIvArrow.setVisibility(GONE);
                 mProgressView.setVisibility(VISIBLE);
                 break;
             case ReleaseToRefresh:
-                mTvTop.setText("释放立即刷新");
+                mTitleText.setText("释放立即刷新");
                 mIvArrow.animate().rotation(180);
                 break;
         }

@@ -17,6 +17,7 @@ public class PreferencesUtils {
     public static final String PASSWORD = "password";
     public static final String USER_ID = "user_id";
     public static final String DIAN_ID = "dian_id";
+    public static final String TIME_REFRESH = "time_refresh";
 
     private PreferencesUtils() {}
 

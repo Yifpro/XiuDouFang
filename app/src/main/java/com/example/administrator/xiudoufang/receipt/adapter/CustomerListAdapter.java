@@ -1,6 +1,7 @@
 package com.example.administrator.xiudoufang.receipt.adapter;
 
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -17,6 +18,10 @@ public class CustomerListAdapter extends BaseQuickAdapter<CustomerBean.Customerl
 
     @Override
     protected void convert(BaseViewHolder helper, CustomerBean.CustomerlistBean item) {
+        if (!item.isSelected()) {
+            helper.getView(R.id.relative_layout).setVisibility(View.GONE);
+            return;
+        }
         helper.setText(R.id.tv_name, item.getCustomername());
         helper.setText(R.id.tv_id, item.getCustomerno());
         helper.setText(R.id.tv_address, item.getQuyu());

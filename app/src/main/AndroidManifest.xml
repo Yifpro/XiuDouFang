@@ -24,7 +24,8 @@
         <activity android:name=".setting.ui.StoreSwitchActivity" />
         <activity android:name=".purchase.ui.PurchaseActivity" />
         <activity android:name=".purchase.ui.PurchaseQueryActivity" />
-        <activity android:name=".purchase.ui.PurchaseOrderDetailActivity" />
+        <activity android:name=".purchase.ui.PurchaseDetailsActivity" />
+        <activity android:name=".purchase.ui.NewPurchaseOrderActivity" />
         <activity android:name=".stock.ui.StockActivity" />
         <activity android:name=".stock.ui.StockQueryActivity" />
         <activity android:name=".transport.ui.TransportNumActivity" />

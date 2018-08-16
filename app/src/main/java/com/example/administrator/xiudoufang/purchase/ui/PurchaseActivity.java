@@ -94,7 +94,7 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
                 PurchaseQueryActivity.start(this);
                 break;
             case R.id.toolbar_menu:
-                PurchaseOrderDetailActivity.start(this);
+                NewPurchaseOrderActivity.start(this);
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_toolbar" />
+
+        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+            android:id="@+id/siv_order_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:siv_key="采购单号"
+            app:siv_type="TYPE_TEXT" />
+
+        <include layout="@layout/layout_supplier_info_pre" />
+
+        <include
+            layout="@layout/layout_supplier_info_suf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

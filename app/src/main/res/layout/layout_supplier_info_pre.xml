@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:showIn="@layout/activity_new_purchase_order">
+
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_supplier"
+        app:siv_key="供应商"
+        app:siv_type="TYPE_TEXT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_debt"
+        app:siv_key="前结账"
+        app:siv_type="TYPE_TEXT"
+        app:siv_isShowNext="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_setup_order_date"
+        app:siv_key="发单日期"
+        app:siv_type="TYPE_TEXT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_arrival"
+        app:siv_key="预计到货"
+        app:siv_type="TYPE_TEXT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_warehourse"
+        app:siv_key="货仓"
+        app:siv_type="TYPE_TEXT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</merge>

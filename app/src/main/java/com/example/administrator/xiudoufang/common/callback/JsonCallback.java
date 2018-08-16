@@ -1,7 +1,11 @@
 package com.example.administrator.xiudoufang.common.callback;
 
+import android.widget.Toast;
+
 import com.alibaba.fastjson.JSONObject;
+import com.example.administrator.xiudoufang.base.XiuDouFangApplication;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
+import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.lzy.okgo.callback.AbsCallback;
 
 import java.lang.reflect.ParameterizedType;
@@ -43,5 +47,12 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
             data = JSONObject.parseObject(text, type);
         }
         return data;
+    }
+
+    @Override
+    public void onError(com.lzy.okgo.model.Response<T> response) {
+        LoadingViewDialog.getInstance().dismiss();
+        Toast.makeText(XiuDouFangApplication.getContext(), "出错啦！！！", Toast.LENGTH_SHORT).show();
+        super.onError(response);
     }
 }

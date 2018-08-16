@@ -18,7 +18,14 @@ import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 
 public class DefaultFooter extends LinearLayout implements RefreshFooter {
 
-    private TextView mFooterText;
+    public static String REFRESH_FOOTER_FINISH = "加载完成";
+    public static String REFRESH_FOOTER_FAILED = "加载失败";
+    public static String REFRESH_FOOTER_PULLING = "上拉加载更多";
+    public static String REFRESH_FOOTER_NOTHING = "没有更多数据了";
+
+    private TextView mTitleText;
+
+    private boolean mNoMoreData = false;
 
     public DefaultFooter(Context context) {
         this(context, null);
@@ -32,14 +39,9 @@ public class DefaultFooter extends LinearLayout implements RefreshFooter {
         super(context, attrs, defStyleAttr);
 
         setGravity(Gravity.CENTER);
-        mFooterText = new TextView(context);
-        addView(mFooterText, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        mTitleText = new TextView(context);
+        addView(mTitleText, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         setMinimumHeight(SizeUtils.dp2px(60));
-    }
-
-    @Override
-    public boolean setNoMoreData(boolean noMoreData) {
-        return false;
     }
 
     @NonNull
@@ -61,23 +63,37 @@ public class DefaultFooter extends LinearLayout implements RefreshFooter {
 
     @Override
     public int onFinish(@NonNull RefreshLayout refreshLayout, boolean success) {
-        return 0;
+        if (!mNoMoreData) {
+            mTitleText.setText(success ? REFRESH_FOOTER_FINISH : REFRESH_FOOTER_FAILED);
+        }
+        return 500;
+    }
+
+    @Override
+    public boolean setNoMoreData(boolean noMoreData) {
+        if (mNoMoreData != noMoreData) {
+            mNoMoreData = noMoreData;
+            mTitleText.setText(noMoreData ? REFRESH_FOOTER_NOTHING : REFRESH_FOOTER_PULLING);
+        }
+        return true;
     }
 
     @Override
     public void onStateChanged(@NonNull RefreshLayout refreshLayout, @NonNull RefreshState oldState, @NonNull RefreshState newState) {
-        switch (newState) {
-            case None:
-            case PullUpToLoad:
-                mFooterText.setText("上拉开始加载");
-                break;
-            case Loading:
-            case LoadReleased:
-                mFooterText.setText("正在加载...");
-                break;
-            case ReleaseToLoad:
-                mFooterText.setText("释放立即加载");
-                break;
+        if (!mNoMoreData) {
+            switch (newState) {
+                case None:
+                case PullUpToLoad:
+                    mTitleText.setText("上拉开始加载");
+                    break;
+                case Loading:
+                case LoadReleased:
+                    mTitleText.setText("正在加载...");
+                    break;
+                case ReleaseToLoad:
+                    mTitleText.setText("释放立即加载");
+                    break;
+            }
         }
     }
 

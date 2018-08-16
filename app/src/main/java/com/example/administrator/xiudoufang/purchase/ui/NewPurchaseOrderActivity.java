@@ -9,22 +9,23 @@ import android.view.View;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 
-public class PurchaseOrderDetailActivity extends AppCompatActivity implements IActivityBase {
+public class NewPurchaseOrderActivity extends AppCompatActivity implements IActivityBase {
 
     private ExitEditDialog mExitEditDialog;
 
     public static void start(Context context) {
-        Intent intent = new Intent(context, PurchaseOrderDetailActivity.class);
+        Intent intent = new Intent(context, NewPurchaseOrderActivity.class);
         context.startActivity(intent);
     }
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_purchase_order_detail;
+        return R.layout.activity_new_purchase_order;
     }
 
     @Override
     public void initView() {
+        setTitle("采购单详情");
     }
 
     @Override
@@ -48,8 +49,8 @@ public class PurchaseOrderDetailActivity extends AppCompatActivity implements IA
             mExitEditDialog.setOnSubmitClickListener(new ExitEditDialog.OnSumbitClickListener() {
                 @Override
                 public void onClick() {
+                    NewPurchaseOrderActivity.this.finish();
                     mExitEditDialog.dismiss();
-                    PurchaseOrderDetailActivity.this.finish();
                 }
             });
         }

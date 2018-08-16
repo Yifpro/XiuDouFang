@@ -2,6 +2,7 @@ package com.example.administrator.xiudoufang.common.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -12,7 +13,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 
 public class SearchInfoView extends LinearLayout {
 
@@ -21,9 +21,10 @@ public class SearchInfoView extends LinearLayout {
     private TextView mTvKey;
     private RelativeLayout mRelativeLayout;
     private TextView mTvLeftSegment;
+    private LinearLayout mSegmentLayout;
     private TextView mTvRightSegment;
 
-    private int mType;
+    private int mType = -1;
 
     public SearchInfoView(Context context) {
         this(context, null);
@@ -39,15 +40,25 @@ public class SearchInfoView extends LinearLayout {
         mTvKey = findViewById(R.id.tv_key);
         mTvValue = findViewById(R.id.tv_value);
         mRelativeLayout = findViewById(R.id.relative_layout);
-        LinearLayout segmentLayout = findViewById(R.id.segment_layout);
+        mSegmentLayout = findViewById(R.id.segment_layout);
         mEtInput = findViewById(R.id.et_input);
         ImageView ivNext = findViewById(R.id.iv_next);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SearchInfoView);
         mType = ta.getInt(R.styleable.SearchInfoView_siv_type, 0);
+        updateType();
+        mTvValue.setText(ta.getString(R.styleable.SearchInfoView_siv_value));
+        mEtInput.setHint(ta.getString(R.styleable.SearchInfoView_siv_hint));
+        if (ta.hasValue(R.styleable.SearchInfoView_siv_isShowNext))
+            ivNext.setVisibility(ta.getBoolean(R.styleable.SearchInfoView_siv_isShowNext, true) ? VISIBLE : INVISIBLE);
+        mTvKey.setText(ta.getString(R.styleable.SearchInfoView_siv_key));
+        ta.recycle();
+    }
+
+    private void updateType() {
         if (mType == 0) {
             mEtInput.setVisibility(VISIBLE);
             mRelativeLayout.setVisibility(INVISIBLE);
-            segmentLayout.setVisibility(GONE);
+            mSegmentLayout.setVisibility(GONE);
 
             mEtInput.setOnClickListener(new OnClickListener() {
                 @Override
@@ -58,7 +69,7 @@ public class SearchInfoView extends LinearLayout {
         } else if (mType == 1) {
             mEtInput.setVisibility(INVISIBLE);
             mRelativeLayout.setVisibility(VISIBLE);
-            segmentLayout.setVisibility(GONE);
+            mSegmentLayout.setVisibility(GONE);
         } else if (mType == 2) {
             mEtInput.setVisibility(INVISIBLE);
             mRelativeLayout.setVisibility(INVISIBLE);
@@ -79,12 +90,11 @@ public class SearchInfoView extends LinearLayout {
                 }
             });
         }
-        mTvValue.setText(ta.getString(R.styleable.SearchInfoView_siv_value));
-        mEtInput.setHint(ta.getString(R.styleable.SearchInfoView_siv_hint));
-        if (ta.hasValue(R.styleable.SearchInfoView_siv_isShowNext))
-            ivNext.setVisibility(ta.getBoolean(R.styleable.SearchInfoView_siv_isShowNext, true) ? VISIBLE : INVISIBLE);
-        mTvKey.setText(ta.getString(R.styleable.SearchInfoView_siv_key));
-        ta.recycle();
+    }
+
+    public void setType(@ViewType.Type int type) {
+        mType = type;
+        updateType();
     }
 
     public void setKey(CharSequence key) {
@@ -114,6 +124,7 @@ public class SearchInfoView extends LinearLayout {
         if (mTvLeftSegment != null)
             mTvLeftSegment.setClickable(clickable);
     }
+
     public void setRightSegmentClickable(boolean clickable) {
         if (mTvRightSegment != null)
             mTvRightSegment.setClickable(clickable);
@@ -125,5 +136,15 @@ public class SearchInfoView extends LinearLayout {
 
     public void setRightSegmentSelected(boolean isSelected) {
         mTvRightSegment.setSelected(isSelected);
+    }
+
+    public static class ViewType {
+        public static final int TYPE_EDIT = 0;
+        public static final int TYPE_TEXT = 1;
+        public static final int TYPE_SEGMENT = 2;
+
+        @IntDef({TYPE_EDIT, TYPE_TEXT, TYPE_SEGMENT})
+        public @interface Type {
+        }
     }
 }

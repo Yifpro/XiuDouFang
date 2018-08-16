@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -15,6 +16,7 @@ import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.CustomerBean;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
+import com.example.administrator.xiudoufang.receipt.SoftKeyBoardListener;
 import com.example.administrator.xiudoufang.receipt.adapter.CustomerListAdapter;
 import com.example.administrator.xiudoufang.receipt.logic.CustomerListLogic;
 import com.lzy.okgo.callback.StringCallback;
@@ -50,6 +52,15 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
         setTitle("客户列表");
         mRefreshLayout = findViewById(R.id.refresh_layout);
         mRecyclerView = findViewById(R.id.recycler_view);
+        SoftKeyBoardListener.setListener(CustomerListActivity.this, new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
+            @Override
+            public void keyBoardShow(int height) {
+            }
+
+            @Override
+            public void keyBoardHide(int height) {
+            }
+        });
     }
 
     @Override

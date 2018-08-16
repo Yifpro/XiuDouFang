@@ -80,6 +80,15 @@ public class CustomerBean {
         private List<FahuodizhiBean> fahuodizhi;
         private List<ShouhuodizhiBean> shouhuodizhi;
         private List<FreightBean> freight;
+        private boolean isSelected = true;
+
+        public boolean isSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean selected) {
+            isSelected = selected;
+        }
 
         public String getC_id() {
             return c_id;
@@ -618,6 +627,10 @@ public class CustomerBean {
             };
         }
 
+        public CustomerlistBean() {
+        }
+
+
         @Override
         public int describeContents() {
             return 0;
@@ -639,17 +652,15 @@ public class CustomerBean {
             dest.writeString(this.quyuno);
             dest.writeString(this.xinyongedu);
             dest.writeString(this.chaoguoxinyongedushishifouyunxukaidan);
-            dest.writeList(this.lianxiren);
-            dest.writeList(this.qq);
-            dest.writeList(this.weixinhao);
-            dest.writeList(this.dianhua);
-            dest.writeList(this.telephone);
-            dest.writeList(this.fahuodizhi);
-            dest.writeList(this.shouhuodizhi);
-            dest.writeList(this.freight);
-        }
-
-        public CustomerlistBean() {
+            dest.writeTypedList(this.lianxiren);
+            dest.writeTypedList(this.qq);
+            dest.writeTypedList(this.weixinhao);
+            dest.writeTypedList(this.dianhua);
+            dest.writeTypedList(this.telephone);
+            dest.writeTypedList(this.fahuodizhi);
+            dest.writeTypedList(this.shouhuodizhi);
+            dest.writeTypedList(this.freight);
+            dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
         }
 
         protected CustomerlistBean(Parcel in) {
@@ -667,22 +678,15 @@ public class CustomerBean {
             this.quyuno = in.readString();
             this.xinyongedu = in.readString();
             this.chaoguoxinyongedushishifouyunxukaidan = in.readString();
-            this.lianxiren = new ArrayList<LianxirenBean>();
-            in.readList(this.lianxiren, LianxirenBean.class.getClassLoader());
-            this.qq = new ArrayList<QqBean>();
-            in.readList(this.qq, QqBean.class.getClassLoader());
-            this.weixinhao = new ArrayList<WeixinhaoBean>();
-            in.readList(this.weixinhao, WeixinhaoBean.class.getClassLoader());
-            this.dianhua = new ArrayList<DianhuaBean>();
-            in.readList(this.dianhua, DianhuaBean.class.getClassLoader());
-            this.telephone = new ArrayList<TelephoneBean>();
-            in.readList(this.telephone, TelephoneBean.class.getClassLoader());
-            this.fahuodizhi = new ArrayList<FahuodizhiBean>();
-            in.readList(this.fahuodizhi, FahuodizhiBean.class.getClassLoader());
-            this.shouhuodizhi = new ArrayList<ShouhuodizhiBean>();
-            in.readList(this.shouhuodizhi, ShouhuodizhiBean.class.getClassLoader());
-            this.freight = new ArrayList<FreightBean>();
-            in.readList(this.freight, FreightBean.class.getClassLoader());
+            this.lianxiren = in.createTypedArrayList(LianxirenBean.CREATOR);
+            this.qq = in.createTypedArrayList(QqBean.CREATOR);
+            this.weixinhao = in.createTypedArrayList(WeixinhaoBean.CREATOR);
+            this.dianhua = in.createTypedArrayList(DianhuaBean.CREATOR);
+            this.telephone = in.createTypedArrayList(TelephoneBean.CREATOR);
+            this.fahuodizhi = in.createTypedArrayList(FahuodizhiBean.CREATOR);
+            this.shouhuodizhi = in.createTypedArrayList(ShouhuodizhiBean.CREATOR);
+            this.freight = in.createTypedArrayList(FreightBean.CREATOR);
+            this.isSelected = in.readByte() != 0;
         }
 
         public static final Creator<CustomerlistBean> CREATOR = new Creator<CustomerlistBean>() {

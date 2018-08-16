@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:showIn="@layout/activity_new_purchase_order">
+
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_payment_amount"
+        app:siv_key="付款金额"
+        app:siv_isShowNext="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_discount_amount"
+        app:siv_key="优惠金额"
+        app:siv_isShowNext="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_subject"
+        app:siv_key="会计科目"
+        app:siv_type="TYPE_TEXT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_payment_type"
+        app:siv_key="支付方式"
+        app:siv_type="TYPE_TEXT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_account_opening"
+        app:siv_key="开户人"
+        app:siv_type="TYPE_TEXT"
+        app:siv_isShowNext="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_payment_account"
+        app:siv_key="支付账号"
+        app:siv_type="TYPE_TEXT"
+        app:siv_isShowNext="false"
+        android:layout_marginBottom="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:padding="5dp">
+
+        <TextView
+            android:textSize="14dp"
+            android:text="附件"
+            android:layout_marginBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/iv_extra"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray_cccccc"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <EditText
+        android:id="@+id/et_tip"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:textSize="14dp"
+        android:gravity="top"
+        android:hint="备注（请输入少于200字）"
+        android:padding="5dp"
+        android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
+        android:background="@color/white" />
+</merge>
