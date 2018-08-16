@@ -151,6 +151,11 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
         mSivPaymentAmount.setKey(getSpannableString("款项金额*", 4));
         mSivPaymentDate.setValue(StringUtils.getCurrentTime());
 
+        loadSubjectList();
+        loadCustomerList();
+    }
+
+    private void loadSubjectList() {
         mLogic.requestSubjectList("", new JsonCallback<SubjectBean>() {
             @Override
             public void onSuccess(Response<SubjectBean> response) {
@@ -163,8 +168,9 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
                 mSivSubject.setValue(list.get(0).getShow_name());
             }
         });
+    }
 
-        LoadingViewDialog.getInstance().show(this);
+    private void loadCustomerList() {
         CustomerBean.CustomerlistBean bean = getIntent().getParcelableExtra("selected_item");
         HashMap<String, String> map = new HashMap<>();
         map.put("dianid", bean.getDianid());
@@ -174,6 +180,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
         map.put("pagenum", "1");
         map.put("count", "20");
         map.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
+        LoadingViewDialog.getInstance().show(this);
         mLogic.requestCustomerList(map, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {

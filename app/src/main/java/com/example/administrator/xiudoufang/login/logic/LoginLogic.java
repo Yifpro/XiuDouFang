@@ -45,27 +45,4 @@ public class LoginLogic {
     public void cacheLoginInfo(Context context, String response) {
         StringUtils.cacheInfoToFile(response, StringUtils.LOGIN_INFO);
     }
-
-    private static class InnerTask extends ThreadUtils.SimpleTask {
-
-        private Context mContext;
-        private String mResponse;
-
-        InnerTask(Context context, String response) {
-            mContext = context;
-            mResponse = response;
-        }
-
-        @Nullable
-        @Override
-        public Void doInBackground() throws Throwable {
-            StringUtils.cacheInfoToFile(mResponse, StringUtils.LOGIN_INFO);
-            return null;
-        }
-
-        @Override
-        public void onSuccess(@Nullable Object result) {
-
-        }
-    }
 }

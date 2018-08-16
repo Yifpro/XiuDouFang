@@ -1,5 +1,6 @@
 package com.example.administrator.xiudoufang.common.widget;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -84,6 +85,13 @@ public class LoadingViewDialog extends android.support.v4.app.DialogFragment {
         if (!isShow) {
             isShow = true;
             super.show(activity.getSupportFragmentManager(), "LoadingViewDialog");
+        }
+    }
+
+    public void show(Activity activity) {
+        if (!isShow) {
+            isShow = true;
+            super.show(((AppCompatActivity) activity).getSupportFragmentManager(), "LoadingViewDialog");
         }
     }
 

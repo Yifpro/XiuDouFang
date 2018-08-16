@@ -55,7 +55,16 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
     @Override
     public void initData() {
         mLogic = new CustomerListLogic();
-        mAdapter = getAdapter();
+        mAdapter  = new CustomerListAdapter(R.layout.layout_list_item_receivables, mList);
+        mAdapter.bindToRecyclerView(mRecyclerView);
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(CustomerListActivity.this, PaymentActivity.class);
+                intent.putExtra("selected_item", mList.get(position));
+                CustomerListActivity.this.startActivity(intent);
+            }
+        });
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull final RefreshLayout refreshLayout) {
@@ -81,6 +90,10 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        loadCustomerList();
+    }
+
+    private void loadCustomerList() {
         JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
         String dianid = jsonObject.getString("dianid");
         String dengjiValue = jsonObject.getString("dengji_value");
@@ -97,27 +110,11 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
         mLogic.requestCustomerList(map, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
-                CustomerBean customerBean = JSONObject.parseObject(response.body(), CustomerBean.class);
                 LoadingViewDialog.getInstance().dismiss();
+                CustomerBean customerBean = JSONObject.parseObject(response.body(), CustomerBean.class);
                 mList = new ArrayList<>();
-                mList.addAll(customerBean.getCustomerlist());
-                mAdapter = getAdapter();
-                mAdapter.notifyDataSetChanged();
+                mAdapter.addData(customerBean.getCustomerlist());
             }
         });
-    }
-
-    private CustomerListAdapter getAdapter() {
-        CustomerListAdapter adapter = new CustomerListAdapter(R.layout.layout_list_item_receivables, mList);
-        adapter.bindToRecyclerView(mRecyclerView);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(CustomerListActivity.this, PaymentActivity.class);
-                intent.putExtra("selected_item", mList.get(position));
-                CustomerListActivity.this.startActivity(intent);
-            }
-        });
-        return adapter;
     }
 }

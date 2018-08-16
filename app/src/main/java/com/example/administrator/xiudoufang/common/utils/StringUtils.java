@@ -23,8 +23,8 @@ public class StringUtils {
             builder.setLength(0);
         }
         builder.append(BASE_URL).append(url);
-        for (String key : map.keySet()) {
-            builder.append(key).append("=").append(map.get(key)).append("&");
+        for (Map.Entry entry : map.entrySet()) {
+            builder.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
         }
         builder.setLength(builder.length() - 1);
         return builder.toString();

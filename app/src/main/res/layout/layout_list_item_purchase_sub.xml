@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp">
 
     <ImageView
         android:id="@+id/iv_icon"
@@ -58,6 +60,13 @@
         app:layout_constraintRight_toRightOf="parent"
         tools:text="莉莉" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/gray_cccccc"
+        app:layout_constraintTop_toBottomOf="@id/tv_date" />
+
     <TextView
         android:id="@+id/tv_type"
         android:layout_width="wrap_content"
@@ -81,6 +90,7 @@
         android:text="@string/confirm_order"
         android:textColor="@color/white"
         android:textSize="14dp"
+        android:visibility="gone"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_type" />
 
@@ -88,6 +98,7 @@
         android:id="@+id/tv_status_change"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="4dp"
         android:layout_marginTop="2dp"
         android:background="@drawable/bg_textview_confirm_order_shape"
         android:paddingBottom="2dp"
@@ -97,7 +108,7 @@
         android:text="@string/confirm_order"
         android:textColor="@color/white"
         android:textSize="14dp"
-        android:layout_marginRight="4dp"
+        android:visibility="gone"
         app:layout_constraintRight_toLeftOf="@id/tv_confirm_order"
         app:layout_constraintTop_toBottomOf="@id/tv_type" />
 </android.support.constraint.ConstraintLayout>
