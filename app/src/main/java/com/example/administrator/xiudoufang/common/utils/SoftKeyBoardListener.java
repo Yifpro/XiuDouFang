@@ -1,4 +1,4 @@
-package com.example.administrator.xiudoufang.receipt;
+package com.example.administrator.xiudoufang.common.utils;
 
 import android.app.Activity;
 import android.graphics.Rect;

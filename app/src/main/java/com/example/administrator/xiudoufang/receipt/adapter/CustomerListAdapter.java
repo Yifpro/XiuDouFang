@@ -6,18 +6,18 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.bean.CustomerBean;
+import com.example.administrator.xiudoufang.bean.CustomerListBean;
 
 import java.util.List;
 
-public class CustomerListAdapter extends BaseQuickAdapter<CustomerBean.CustomerlistBean, BaseViewHolder> {
+public class CustomerListAdapter extends BaseQuickAdapter<CustomerListBean.CustomerBean, BaseViewHolder> {
 
-    public CustomerListAdapter(int layoutResId, @Nullable List<CustomerBean.CustomerlistBean> data) {
+    public CustomerListAdapter(int layoutResId, @Nullable List<CustomerListBean.CustomerBean> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, CustomerBean.CustomerlistBean item) {
+    protected void convert(BaseViewHolder helper, CustomerListBean.CustomerBean item) {
         if (!item.isSelected()) {
             helper.getView(R.id.relative_layout).setVisibility(View.GONE);
             return;

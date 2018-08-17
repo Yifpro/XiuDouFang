@@ -8,7 +8,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
-import com.example.administrator.xiudoufang.bean.SubjectBean;
+import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -112,12 +112,12 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     }
 
     private void loadSubject(final String accountid) {
-        mCustomerListLogic.requestSubjectList("5", new JsonCallback<SubjectBean>() {
+        mCustomerListLogic.requestSubjectList("5", new JsonCallback<SubjectListBean>() {
             @Override
-            public void onSuccess(Response<SubjectBean> response) {
+            public void onSuccess(Response<SubjectListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
-                List<SubjectBean.AccounttypesBean> accounttypes = response.body().getAccounttypes();
-                for (SubjectBean.AccounttypesBean bean : accounttypes) {
+                List<SubjectListBean.AccounttypesBean> accounttypes = response.body().getAccounttypes();
+                for (SubjectListBean.AccounttypesBean bean : accounttypes) {
                     if (accountid.equals(bean.getAccountid()))
                         mSivSubject.setValue(bean.getShow_name());
                 }

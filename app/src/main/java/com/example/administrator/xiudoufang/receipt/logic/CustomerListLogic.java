@@ -1,10 +1,6 @@
 package com.example.administrator.xiudoufang.receipt.logic;
 
-import android.content.SharedPreferences;
-
-import com.example.administrator.xiudoufang.bean.CustomerBean;
-import com.example.administrator.xiudoufang.bean.SubjectBean;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
+import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.lzy.okgo.OkGo;
@@ -12,8 +8,6 @@ import com.lzy.okgo.callback.Callback;
 import com.lzy.okgo.model.HttpParams;
 
 import java.util.HashMap;
-
-import okhttp3.OkHttpClient;
 
 public class CustomerListLogic {
 
@@ -25,12 +19,12 @@ public class CustomerListLogic {
     }
 
     //******** 获取会计科目列表 ********
-    public void requestSubjectList(String action, Callback<SubjectBean> callback) {
+    public void requestSubjectList(String action, Callback<SubjectListBean> callback) {
         HashMap<String, String> map = new HashMap<>();
         map.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
         map.put("action", action);
         map.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
-        OkGo.<SubjectBean>get(StringUtils.getUrl("/Api/products/requset_accounttype_data?", map))
+        OkGo.<SubjectListBean>get(StringUtils.getUrl("/Api/products/requset_accounttype_data?", map))
                 .execute(callback);
     }
 

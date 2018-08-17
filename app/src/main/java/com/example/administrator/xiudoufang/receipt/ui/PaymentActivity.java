@@ -21,11 +21,10 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
-import com.example.administrator.xiudoufang.bean.CustomerBean;
-import com.example.administrator.xiudoufang.bean.CustomerItem;
-import com.example.administrator.xiudoufang.bean.SubjectBean;
+import com.example.administrator.xiudoufang.bean.CustomerListBean;
+import com.example.administrator.xiudoufang.bean.SingleCustomerItem;
+import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
@@ -63,9 +62,9 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
     private TimePickerView mPvPaymentDate;
 
     private CustomerListLogic mLogic;
-    private ArrayList<SubjectBean.AccounttypesBean> list;
+    private ArrayList<SubjectListBean.AccounttypesBean> list;
     private Animation mShake;
-    private CustomerItem mCustomerItem;
+    private SingleCustomerItem mSingleCustomerItem;
     private String mPayId;
     private String mDirection;
     private String mSubjectId;
@@ -145,10 +144,10 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
     public void initData() {
         mLogic = new CustomerListLogic();
 
-        mSivSubject.setKey(getSpannableString("会计科目*", 4));
-        mSivPayment.setKey(getSpannableString("收付款*", 3));
-        mSivReceiptType.setKey(getSpannableString("收款方式*", 4));
-        mSivPaymentAmount.setKey(getSpannableString("款项金额*", 4));
+        mSivSubject.setKey(StringUtils.getSpannableString("会计科目*", 4));
+        mSivPayment.setKey(StringUtils.getSpannableString("收付款*", 3));
+        mSivReceiptType.setKey(StringUtils.getSpannableString("收款方式*", 4));
+        mSivPaymentAmount.setKey(StringUtils.getSpannableString("款项金额*", 4));
         mSivPaymentDate.setValue(StringUtils.getCurrentTime());
 
         loadSubjectList();
@@ -156,9 +155,9 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
     }
 
     private void loadSubjectList() {
-        mLogic.requestSubjectList("", new JsonCallback<SubjectBean>() {
+        mLogic.requestSubjectList("", new JsonCallback<SubjectListBean>() {
             @Override
-            public void onSuccess(Response<SubjectBean> response) {
+            public void onSuccess(Response<SubjectListBean> response) {
                 if (list == null)
                     list = new ArrayList<>();
                 list.addAll(response.body().getAccounttypes());
@@ -171,7 +170,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
     }
 
     private void loadCustomerList() {
-        CustomerBean.CustomerlistBean bean = getIntent().getParcelableExtra("selected_item");
+        CustomerListBean.CustomerBean bean = getIntent().getParcelableExtra("selected_item");
         HashMap<String, String> map = new HashMap<>();
         map.put("dianid", bean.getDianid());
         map.put("userdengji", bean.getDengji_value());
@@ -186,15 +185,15 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
             public void onSuccess(Response<String> response) {
                 LoadingViewDialog.getInstance().dismiss();
                 JSONObject jsonObject = JSONObject.parseObject(response.body());
-                mCustomerItem = JSONObject.parseObject(jsonObject.getJSONArray("customerlist").getJSONObject(0).toJSONString(), CustomerItem.class);
-                mSivId.setValue(mCustomerItem.getCustomerno());
-                mSivName.setValue(mCustomerItem.getCustomername());
-                mSivTotalName.setValue(mCustomerItem.getQuancheng());
-                mSivDebt.setValue(mCustomerItem.getDebt());
-                mSivBalance.setValue(mCustomerItem.getYue_amt());
-                String country = mCustomerItem.getCountry();
+                mSingleCustomerItem = JSONObject.parseObject(jsonObject.getJSONArray("customerlist").getJSONObject(0).toJSONString(), SingleCustomerItem.class);
+                mSivId.setValue(mSingleCustomerItem.getCustomerno());
+                mSivName.setValue(mSingleCustomerItem.getCustomername());
+                mSivTotalName.setValue(mSingleCustomerItem.getQuancheng());
+                mSivDebt.setValue(mSingleCustomerItem.getDebt());
+                mSivBalance.setValue(mSingleCustomerItem.getYue_amt());
+                String country = mSingleCustomerItem.getCountry();
                 mSivAreaType.setValue("0".equals(country) ? "国内" : "1".equals(country) ? "外销" : "网店");
-                mSivArea.setValue(mCustomerItem.getQuyu());
+                mSivArea.setValue(mSingleCustomerItem.getQuyu());
             }
         });
     }
@@ -279,13 +278,6 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
         mSubjectDialog.show(getSupportFragmentManager(), "SubjectSelectorDialog");
     }
 
-    private SpannableString getSpannableString(String text, int position) {
-        SpannableString spannableString = new SpannableString(text);
-        ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.red));
-        spannableString.setSpan(colorSpan, position, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        return spannableString;
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -297,11 +289,11 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
 
     private void submitBill() {
         if (checkNotEmpty()) {
-            if (mCustomerItem != null) {
+            if (mSingleCustomerItem != null) {
                 SharedPreferences preferences = PreferencesUtils.getPreferences();
                 HttpParams params = new HttpParams();
                 params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
-                params.put("c_id", mCustomerItem.getC_id());
+                params.put("c_id", mSingleCustomerItem.getC_id());
                 params.put("orderid", "0");
                 params.put("amt", mSivPaymentAmount.getValue());
                 params.put("youhui", mSivDiscountAmount.getValue());

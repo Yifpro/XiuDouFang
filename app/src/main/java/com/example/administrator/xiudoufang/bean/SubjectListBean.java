@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import java.util.List;
 
-public class SubjectBean {
+public class SubjectListBean {
 
 
     /**

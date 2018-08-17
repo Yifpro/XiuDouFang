@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.bean.SubjectBean;
+import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.receipt.adapter.SubjectSelectorAdapter;
 
@@ -23,11 +23,11 @@ import java.util.ArrayList;
 public class SubjectSelectorDialog extends DialogFragment {
 
     private OnItemChangedListener mListener;
-    private ArrayList<SubjectBean.AccounttypesBean> list;
+    private ArrayList<SubjectListBean.AccounttypesBean> list;
     private SubjectSelectorAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
-    public static SubjectSelectorDialog newInstance(ArrayList<SubjectBean.AccounttypesBean> list) {
+    public static SubjectSelectorDialog newInstance(ArrayList<SubjectListBean.AccounttypesBean> list) {
         SubjectSelectorDialog fragment = new SubjectSelectorDialog();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("data", list);
@@ -48,7 +48,7 @@ public class SubjectSelectorDialog extends DialogFragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (mListener != null) {
-                    SubjectBean.AccounttypesBean bean = list.get(position);
+                    SubjectListBean.AccounttypesBean bean = list.get(position);
                     mListener.onItemChanged(bean.getAccountid(), bean.getDirection(), bean.getShow_name());
                 }
                 dismiss();

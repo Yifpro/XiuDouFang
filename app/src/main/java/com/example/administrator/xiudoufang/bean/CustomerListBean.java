@@ -3,18 +3,17 @@ package com.example.administrator.xiudoufang.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerBean {
+public class CustomerListBean {
 
     /**
      * status : 1
-     * customerlist : [{"c_id":"13549","customerno":"A000046","customername":"刘涛","quancheng":"刘涛","dengji":"五级","dengji_value":"5","dianid":"45","debt":"-2011.00","yue_amt":"0.00","country":"0","quyu":"","quyuno":"","xinyongedu":"0.00","chaoguoxinyongedushishifouyunxukaidan":"1","lianxiren":[{"lianxiren":"18505295858"},{"lianxiren":"刘涛"}],"qq":[{"qq":"18505295858"}],"weixinhao":[{"weixinhao":"18505295858"}],"dianhua":[{"dianhua":"18505295858"}],"telephone":[{"telephone":"18505295858"}],"fahuodizhi":[{"fahuodizhi":"闵行区老北翟路4855号"}],"shouhuodizhi":[{"shouhuodizhi":"18505295858"}],"freight":[{"freight":"18505295858"}]}]
+     * mCustomerlist : [{"c_id":"13549","customerno":"A000046","customername":"刘涛","quancheng":"刘涛","dengji":"五级","dengji_value":"5","dianid":"45","debt":"-2011.00","yue_amt":"0.00","country":"0","quyu":"","quyuno":"","xinyongedu":"0.00","chaoguoxinyongedushishifouyunxukaidan":"1","lianxiren":[{"lianxiren":"18505295858"},{"lianxiren":"刘涛"}],"qq":[{"qq":"18505295858"}],"weixinhao":[{"weixinhao":"18505295858"}],"dianhua":[{"dianhua":"18505295858"}],"telephone":[{"telephone":"18505295858"}],"fahuodizhi":[{"fahuodizhi":"闵行区老北翟路4855号"}],"shouhuodizhi":[{"shouhuodizhi":"18505295858"}],"freight":[{"freight":"18505295858"}]}]
      */
 
     private String status;
-    private List<CustomerlistBean> customerlist;
+    private List<CustomerBean> mCustomerlist;
 
     public String getStatus() {
         return status;
@@ -24,15 +23,15 @@ public class CustomerBean {
         this.status = status;
     }
 
-    public List<CustomerlistBean> getCustomerlist() {
-        return customerlist;
+    public List<CustomerBean> getCustomerlist() {
+        return mCustomerlist;
     }
 
-    public void setCustomerlist(List<CustomerlistBean> customerlist) {
-        this.customerlist = customerlist;
+    public void setCustomerlist(List<CustomerBean> customerlist) {
+        this.mCustomerlist = customerlist;
     }
 
-    public static class CustomerlistBean implements Parcelable {
+    public static class CustomerBean implements Parcelable {
         /**
          * c_id : 13549
          * customerno : A000046
@@ -627,7 +626,7 @@ public class CustomerBean {
             };
         }
 
-        public CustomerlistBean() {
+        public CustomerBean() {
         }
 
 
@@ -663,7 +662,7 @@ public class CustomerBean {
             dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
         }
 
-        protected CustomerlistBean(Parcel in) {
+        protected CustomerBean(Parcel in) {
             this.c_id = in.readString();
             this.customerno = in.readString();
             this.customername = in.readString();
@@ -689,15 +688,15 @@ public class CustomerBean {
             this.isSelected = in.readByte() != 0;
         }
 
-        public static final Creator<CustomerlistBean> CREATOR = new Creator<CustomerlistBean>() {
+        public static final Creator<CustomerBean> CREATOR = new Creator<CustomerBean>() {
             @Override
-            public CustomerlistBean createFromParcel(Parcel source) {
-                return new CustomerlistBean(source);
+            public CustomerBean createFromParcel(Parcel source) {
+                return new CustomerBean(source);
             }
 
             @Override
-            public CustomerlistBean[] newArray(int size) {
-                return new CustomerlistBean[size];
+            public CustomerBean[] newArray(int size) {
+                return new CustomerBean[size];
             }
         };
     }

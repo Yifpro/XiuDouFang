@@ -102,7 +102,11 @@ public class SearchInfoView extends LinearLayout {
     }
 
     public void setValue(CharSequence value) {
-        mTvValue.setText(value);
+        if (mType == 0) {
+            mEtInput.setText(value);
+        } else if (mType == 1) {
+            mTvValue.setText(value);
+        }
     }
 
     public String getValue() {

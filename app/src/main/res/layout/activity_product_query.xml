@@ -1,35 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_toolbar" />
+    <include layout="@layout/layout_toolbar"/>
+
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-        app:siv_type="TYPE_EDIT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_key="编号、名称或类名" />
+        app:siv_key="编号、名称或类名"
+        app:siv_type="TYPE_EDIT"/>
+
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-        app:siv_type="TYPE_TEXT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_key="供应商" />
+        app:siv_key="供应商"
+        app:siv_type="TYPE_TEXT"/>
+
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-        app:siv_type="TYPE_TEXT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_key="类别" />
+        app:siv_key="类别"
+        app:siv_type="TYPE_TEXT"/>
+
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-        app:siv_type="TYPE_TEXT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_key="是否有图片" />
+        app:siv_key="是否有图片"
+        app:siv_type="TYPE_TEXT"/>
+
+    <include layout="@layout/layout_search_or_clear"/>
 </LinearLayout>
-    <include layout="@layout/layout_search_or_clear" />
-</RelativeLayout>

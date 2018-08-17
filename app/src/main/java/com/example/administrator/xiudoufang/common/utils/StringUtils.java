@@ -1,5 +1,12 @@
 package com.example.administrator.xiudoufang.common.utils;
 
+import android.app.Activity;
+import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+
+import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.XiuDouFangApplication;
 
 import java.io.BufferedReader;
@@ -81,5 +88,12 @@ public class StringUtils {
         StringBuilder builder = new StringBuilder();
         builder.append(calendar.get(Calendar.YEAR)).append("-").append(calendar.get(Calendar.MONTH)+1).append("-").append(calendar.get(Calendar.DATE));
         return builder.toString();
+    }
+
+    public static SpannableString getSpannableString(String text, int position) {
+        SpannableString spannableString = new SpannableString(text);
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(ContextCompat.getColor(XiuDouFangApplication.getContext(), R.color.red));
+        spannableString.setSpan(colorSpan, position, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        return spannableString;
     }
 }

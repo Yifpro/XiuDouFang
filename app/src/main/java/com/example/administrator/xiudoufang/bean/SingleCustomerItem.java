@@ -2,7 +2,7 @@ package com.example.administrator.xiudoufang.bean;
 
 import java.util.List;
 
-public class CustomerItem {
+public class SingleCustomerItem {
 
     /**
      * c_id : 13664
