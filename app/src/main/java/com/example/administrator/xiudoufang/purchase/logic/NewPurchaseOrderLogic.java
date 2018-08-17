@@ -2,8 +2,10 @@ package com.example.administrator.xiudoufang.purchase.logic;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.bean.SupplierListBean;
+import com.example.administrator.xiudoufang.bean.WarehouseListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
+import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.lzy.okgo.OkGo;
 
@@ -30,6 +32,16 @@ public class NewPurchaseOrderLogic {
         OkGo.<SupplierListBean>post(StringUtils.BASE_URL + "/Api/products/requset_suppdata?requset_suppdata=0")
                 .headers("Content-Type", "application/json")
                 .upJson(json)
+                .execute(callback);
+    }
+
+    //******** 获取仓位列表 ********
+    public void requestWarehouseList(JsonCallback<WarehouseListBean> callback) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
+        map.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
+        map.put("house", "0");
+        OkGo.<WarehouseListBean>get(StringUtils.getUrl("/Api/products/Gethouselists?", map))
                 .execute(callback);
     }
 }

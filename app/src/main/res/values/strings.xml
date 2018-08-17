@@ -18,4 +18,5 @@
     <string name="confirm">确认</string>
     <string name="initial_time">60</string>
     <string name="select_custom">请选择客户</string>
+    <string name="sure">确定</string>
 </resources>

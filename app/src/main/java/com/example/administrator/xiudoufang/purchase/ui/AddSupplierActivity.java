@@ -82,7 +82,7 @@ public class AddSupplierActivity extends AppCompatActivity implements IActivityB
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 5) {
+        if (requestCode == 5 && data != null) {
             mSivAreaNo.setValue(data.getStringExtra("area_code"));
             mSivAreaName.setValue(data.getStringExtra("area_name"));
         }

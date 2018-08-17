@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
@@ -51,6 +53,11 @@ public class SearchInfoView extends LinearLayout {
         if (ta.hasValue(R.styleable.SearchInfoView_siv_isShowNext))
             ivNext.setVisibility(ta.getBoolean(R.styleable.SearchInfoView_siv_isShowNext, true) ? VISIBLE : INVISIBLE);
         mTvKey.setText(ta.getString(R.styleable.SearchInfoView_siv_key));
+        if (ta.hasValue(R.styleable.SearchInfoView_siv_input_type)) {
+            if (ta.getInt(R.styleable.SearchInfoView_siv_input_type, 0) == 0) {
+                mEtInput.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            }
+        }
         ta.recycle();
     }
 

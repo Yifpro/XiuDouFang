@@ -24,6 +24,9 @@
             <enum name="TYPE_TEXT" value="1" />
             <enum name="TYPE_SEGMENT" value="2" />
         </attr>
+        <attr name="siv_input_type">
+            <enum name="INPUT_NUMBER" value="0" />
+        </attr>
         <attr name="siv_key" format="string|reference" />
         <attr name="siv_value" format="string|reference" />
         <attr name="siv_hint" format="string|reference" />

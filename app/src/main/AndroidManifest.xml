@@ -26,13 +26,14 @@
         <activity
             android:name=".purchase.ui.SupplierListActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity android:name=".purchase.ui.NewPurchaseOrderActivity"
+                  android:launchMode="singleTask"/>
+        <activity android:name=".purchase.ui.WarehouseListActivity" />
         <activity android:name=".purchase.ui.AddSupplierActivity" />
         <activity android:name=".purchase.ui.AreaListActivity"
                   android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity android:name=".purchase.ui.PurchaseQueryActivity"/>
         <activity android:name=".purchase.ui.PurchaseDetailsActivity"/>
-        <activity android:name=".purchase.ui.NewPurchaseOrderActivity"
-                  android:launchMode="singleTask"/>
         <activity android:name=".stock.ui.StockActivity"/>
         <activity android:name=".stock.ui.StockQueryActivity"/>
         <activity android:name=".transport.ui.TransportNumActivity"/>

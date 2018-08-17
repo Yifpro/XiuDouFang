@@ -3,6 +3,7 @@ package com.example.administrator.xiudoufang.purchase.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.NewSupplier;
+import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 import com.example.administrator.xiudoufang.purchase.logic.NewPurchaseOrderLogic;
 
@@ -100,6 +102,34 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                 showArrivalDialog();
             }
         });
+        mSivWarehourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NewPurchaseOrderActivity.this, WarehouseListActivity.class);
+                startActivityForResult(intent, 10);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 10 && data != null) {
+            mSivWarehourse.setValue(data.getStringExtra("warehouse_name"));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void initData() {
+        ((Toolbar) findViewById(R.id.tool_bar)).setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showExitEditDialog();
+            }
+        });
+        mLogic = new NewPurchaseOrderLogic();
+        mSivSetupOrderDate.setValue(StringUtils.getCurrentTime());
+        mSivArrival.setValue(StringUtils.getCurrentTime());
     }
 
     private void showArrivalDialog() {
@@ -185,17 +215,6 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     @Override
     public void onBackPressed() {
         showExitEditDialog();
-    }
-
-    @Override
-    public void initData() {
-        ((Toolbar) findViewById(R.id.tool_bar)).setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showExitEditDialog();
-            }
-        });
-        mLogic = new NewPurchaseOrderLogic();
     }
 
     private void showExitEditDialog() {

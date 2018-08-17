@@ -70,7 +70,7 @@
         app:siv_type="TYPE_EDIT"/>
 
     <TextView
-        android:id="@+id/tv_confirm"
+        android:id="@+id/tv_sure"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="36dp"
@@ -82,7 +82,7 @@
         android:onClick="onClick"
         android:paddingBottom="4dp"
         android:paddingTop="4dp"
-        android:text="@string/confirm"
+        android:text="@string/sure"
         android:textColor="@color/white"
         android:textSize="14dp"/>
 </LinearLayout>
