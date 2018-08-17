@@ -12,7 +12,6 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseFragment;
 import com.example.administrator.xiudoufang.bean.PurchaseListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.purchase.adapter.PurchaseSubAdapter;
@@ -28,7 +27,7 @@ import java.util.List;
 
 public class PurchaseSubFragment extends BaseFragment {
 
-    private final int PAGE_NUM = 20;
+    private final int COUNT = 20;
 
     private RefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -76,6 +75,7 @@ public class PurchaseSubFragment extends BaseFragment {
                 }, 2000);
             }
         });
+        mRefreshLayout.setEnableLoadMoreWhenContentNotFull(false);
         mAdapter = new PurchaseSubAdapter(R.layout.layout_list_item_purchase_sub, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -89,11 +89,11 @@ public class PurchaseSubFragment extends BaseFragment {
         });
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        LoadingViewDialog.getInstance().show(getActivity());
         loadPurchaseList(false);
     }
 
     private void loadPurchaseList(final boolean isRefresh) {
-        LoadingViewDialog.getInstance().show(getActivity());
         if (isRefresh) {
             mCurrentPage = 1;
         }
@@ -111,18 +111,12 @@ public class PurchaseSubFragment extends BaseFragment {
                         mList = new ArrayList<>();
                     mList = response.body().getResults();
                     mAdapter.addData(mList);
-                    if (mList.size() < PAGE_NUM) {
+                    if (mList.size() < COUNT) {
                         mRefreshLayout.finishLoadMoreWithNoMoreData();
                     } else {
                         mRefreshLayout.finishLoadMore();
                     }
                 }
-            }
-
-            @Override
-            public void onError(Response<PurchaseListBean> response) {
-                LoadingViewDialog.getInstance().dismiss();
-                super.onError(response);
             }
         });
     }
@@ -147,7 +141,7 @@ public class PurchaseSubFragment extends BaseFragment {
         mParams.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
         mParams.put("status_str", mType);
         mParams.put("fromorder", "");
-        mParams.put("count", String.valueOf(PAGE_NUM));
+        mParams.put("count", String.valueOf(COUNT));
     }
 
     @Override
