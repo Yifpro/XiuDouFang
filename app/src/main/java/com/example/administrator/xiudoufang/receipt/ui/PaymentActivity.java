@@ -170,32 +170,34 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
     }
 
     private void loadCustomerList() {
-        CustomerListBean.CustomerBean bean = getIntent().getParcelableExtra("selected_item");
-        HashMap<String, String> map = new HashMap<>();
-        map.put("dianid", bean.getDianid());
-        map.put("userdengji", bean.getDengji_value());
-        map.put("dqc_id", bean.getC_id());
-        map.put("search", "");
-        map.put("pagenum", "1");
-        map.put("count", "20");
-        map.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
-        LoadingViewDialog.getInstance().show(this);
-        mLogic.requestCustomerList(map, new StringCallback() {
-            @Override
-            public void onSuccess(Response<String> response) {
-                LoadingViewDialog.getInstance().dismiss();
-                JSONObject jsonObject = JSONObject.parseObject(response.body());
-                mSingleCustomerItem = JSONObject.parseObject(jsonObject.getJSONArray("customerlist").getJSONObject(0).toJSONString(), SingleCustomerItem.class);
-                mSivId.setValue(mSingleCustomerItem.getCustomerno());
-                mSivName.setValue(mSingleCustomerItem.getCustomername());
-                mSivTotalName.setValue(mSingleCustomerItem.getQuancheng());
-                mSivDebt.setValue(mSingleCustomerItem.getDebt());
-                mSivBalance.setValue(mSingleCustomerItem.getYue_amt());
-                String country = mSingleCustomerItem.getCountry();
-                mSivAreaType.setValue("0".equals(country) ? "国内" : "1".equals(country) ? "外销" : "网店");
-                mSivArea.setValue(mSingleCustomerItem.getQuyu());
-            }
-        });
+        if (getIntent() != null) {
+            CustomerListBean.CustomerBean bean = getIntent().getParcelableExtra(CustomerListActivity.SELECTED_ITEM);
+            HashMap<String, String> map = new HashMap<>();
+            map.put("dianid", bean.getDianid());
+            map.put("userdengji", bean.getDengji_value());
+            map.put("dqc_id", bean.getC_id());
+            map.put("search", "");
+            map.put("pagenum", "1");
+            map.put("count", "20");
+            map.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
+            LoadingViewDialog.getInstance().show(this);
+            mLogic.requestCustomerList(map, new StringCallback() {
+                @Override
+                public void onSuccess(Response<String> response) {
+                    LoadingViewDialog.getInstance().dismiss();
+                    JSONObject jsonObject = JSONObject.parseObject(response.body());
+                    mSingleCustomerItem = JSONObject.parseObject(jsonObject.getJSONArray("customerlist").getJSONObject(0).toJSONString(), SingleCustomerItem.class);
+                    mSivId.setValue(mSingleCustomerItem.getCustomerno());
+                    mSivName.setValue(mSingleCustomerItem.getCustomername());
+                    mSivTotalName.setValue(mSingleCustomerItem.getQuancheng());
+                    mSivDebt.setValue(mSingleCustomerItem.getDebt());
+                    mSivBalance.setValue(mSingleCustomerItem.getYue_amt());
+                    String country = mSingleCustomerItem.getCountry();
+                    mSivAreaType.setValue("0".equals(country) ? "国内" : "1".equals(country) ? "外销" : "网店");
+                    mSivArea.setValue(mSingleCustomerItem.getQuyu());
+                }
+            });
+        }
     }
 
     private void showPaymentDateTimePicker() {

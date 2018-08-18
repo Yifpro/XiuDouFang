@@ -39,6 +39,7 @@ import java.util.List;
 public class CustomerListActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
     private final int COUNT = 20;
+    public static final String SELECTED_ITEM = "selected_item";
 
     private RefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -90,7 +91,7 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(CustomerListActivity.this, PaymentActivity.class);
-                intent.putExtra("selected_item", mList.get(position));
+                intent.putExtra(SELECTED_ITEM, mList.get(position));
                 CustomerListActivity.this.startActivity(intent);
             }
         });

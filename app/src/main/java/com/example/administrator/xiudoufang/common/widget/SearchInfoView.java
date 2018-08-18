@@ -56,6 +56,7 @@ public class SearchInfoView extends LinearLayout {
         if (ta.hasValue(R.styleable.SearchInfoView_siv_input_type)) {
             if (ta.getInt(R.styleable.SearchInfoView_siv_input_type, 0) == 0) {
                 mEtInput.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                mEtInput.setInputType(InputType.TYPE_CLASS_PHONE);
             }
         }
         ta.recycle();

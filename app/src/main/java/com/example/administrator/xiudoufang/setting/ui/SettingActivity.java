@@ -26,6 +26,10 @@ import java.util.ArrayList;
 
 public class SettingActivity extends AppCompatActivity implements IActivityBase {
 
+    private static final int RESULT_SORT_LIST = 1;
+    public static final String STORE_LIST = "store_list";
+    public static final String SELECTED_INDEX = "selected_index";
+
     private RecyclerView mRecyclerView;
     private ArrayList<SettingItem> mList;
     private ArrayList<LoginStore> mLoginStores;
@@ -87,9 +91,9 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
                 switch (position) {
                     case 6:
                         Intent intent = new Intent(SettingActivity.this, StoreSwitchActivity.class);
-                        intent.putParcelableArrayListExtra("store_list", mLoginStores);
-                        intent.putExtra("index", mIndex);
-                        startActivityForResult(intent, 2);
+                        intent.putParcelableArrayListExtra(STORE_LIST, mLoginStores);
+                        intent.putExtra(SELECTED_INDEX, mIndex);
+                        startActivityForResult(intent, RESULT_SORT_LIST);
                         break;
                     case 7:
                         CacheDiskUtils.getInstance().clear();
@@ -109,7 +113,7 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 2) {
+        if (requestCode == RESULT_SORT_LIST) {
             int index = mList.indexOf(new SettingItem("当前店"));
             assert data != null;
             mLoginStores.get(mIndex).setSelected(false);

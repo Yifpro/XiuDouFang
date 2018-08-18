@@ -9,7 +9,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/toolbar_menu"
-        android:icon="@mipmap/ic_menu"
+        android:icon="@mipmap/ic_paper"
         android:title="常用功能"
         android:orderInCategory="0"
         app:showAsAction="always" />

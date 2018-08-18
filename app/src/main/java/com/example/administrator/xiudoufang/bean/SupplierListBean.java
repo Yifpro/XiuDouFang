@@ -1,5 +1,8 @@
 package com.example.administrator.xiudoufang.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -42,7 +45,7 @@ public class SupplierListBean {
         this.supplists = supplists;
     }
 
-    public static class SupplierBean {
+    public static class SupplierBean implements Parcelable {
         /**
          * c_id : 3155
          * customerno : KH17-0007
@@ -276,5 +279,78 @@ public class SupplierListBean {
         public void setFendianid(String fendianid) {
             this.fendianid = fendianid;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.c_id);
+            dest.writeString(this.customerno);
+            dest.writeString(this.customername);
+            dest.writeString(this.quancheng);
+            dest.writeString(this.dengji);
+            dest.writeString(this.dengji_value);
+            dest.writeString(this.dianid);
+            dest.writeString(this.debt);
+            dest.writeString(this.pricecode);
+            dest.writeString(this.country);
+            dest.writeString(this.quyu);
+            dest.writeString(this.quyuno);
+            dest.writeString(this.xinyongedu);
+            dest.writeString(this.chaoguoxinyongedushishifouyunxukaidan);
+            dest.writeString(this.lianxiren);
+            dest.writeString(this.qq);
+            dest.writeString(this.email);
+            dest.writeString(this.weixinhao);
+            dest.writeString(this.dianhua);
+            dest.writeString(this.telephone);
+            dest.writeString(this.address);
+            dest.writeString(this.fax);
+            dest.writeString(this.fendianid);
+        }
+
+        public SupplierBean() {
+        }
+
+        protected SupplierBean(Parcel in) {
+            this.c_id = in.readString();
+            this.customerno = in.readString();
+            this.customername = in.readString();
+            this.quancheng = in.readString();
+            this.dengji = in.readString();
+            this.dengji_value = in.readString();
+            this.dianid = in.readString();
+            this.debt = in.readString();
+            this.pricecode = in.readString();
+            this.country = in.readString();
+            this.quyu = in.readString();
+            this.quyuno = in.readString();
+            this.xinyongedu = in.readString();
+            this.chaoguoxinyongedushishifouyunxukaidan = in.readString();
+            this.lianxiren = in.readString();
+            this.qq = in.readString();
+            this.email = in.readString();
+            this.weixinhao = in.readString();
+            this.dianhua = in.readString();
+            this.telephone = in.readString();
+            this.address = in.readString();
+            this.fax = in.readString();
+            this.fendianid = in.readString();
+        }
+
+        public static final Creator<SupplierBean> CREATOR = new Creator<SupplierBean>() {
+            @Override
+            public SupplierBean createFromParcel(Parcel source) {
+                return new SupplierBean(source);
+            }
+
+            @Override
+            public SupplierBean[] newArray(int size) {
+                return new SupplierBean[size];
+            }
+        };
     }
 }

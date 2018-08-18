@@ -28,6 +28,7 @@ import java.util.List;
 public class PurchaseSubFragment extends BaseFragment {
 
     private final int COUNT = 20;
+    public static final String ORDER_ID = "order_id";
 
     private RefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -52,7 +53,6 @@ public class PurchaseSubFragment extends BaseFragment {
         mLogic = new PurchaseLogic();
         assert getArguments() != null;
         mType = getArguments().getString("type");
-        initParameters();
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull final RefreshLayout refreshLayout) {
@@ -82,7 +82,7 @@ public class PurchaseSubFragment extends BaseFragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(getActivity(), PurchaseDetailsActivity.class);
-                intent.putExtra("order_id", mList.get(position).getIid());
+                intent.putExtra(ORDER_ID, mList.get(position).getIid());
                 assert getActivity() != null;
                 getActivity().startActivity(intent);
             }
@@ -94,9 +94,8 @@ public class PurchaseSubFragment extends BaseFragment {
     }
 
     private void loadPurchaseList(final boolean isRefresh) {
-        if (isRefresh) {
-            mCurrentPage = 1;
-        }
+        if (isRefresh) mCurrentPage = 1;
+        if (mParams == null) initParameters();
         mParams.put("pagenum", String.valueOf(mCurrentPage++));
         mLogic.requestPurchaseList(mParams, new JsonCallback<PurchaseListBean>() {
             @Override

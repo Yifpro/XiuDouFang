@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <include layout="@layout/layout_toolbar" />
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_id"
+        app:siv_key="供应商编号"
+        app:siv_type="TYPE_TEXT"
+        app:siv_isShowNext="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_name"
+        app:siv_key="供应商名称"
+        app:siv_type="TYPE_TEXT"
+        app:siv_isShowNext="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_total_name"
+        app:siv_key="供应商全称"
+        app:siv_type="TYPE_TEXT"
+        app:siv_isShowNext="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_debt"
+        app:siv_key="前结欠"
+        app:siv_type="TYPE_TEXT"
+        app:siv_isShowNext="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_phone_num"
+        app:siv_key="手机号"
+        app:siv_type="TYPE_TEXT"
+        app:siv_isShowNext="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_new_phone_num"
+        app:siv_key="新手机号码"
+        app:siv_hint="请输入新手机号码"
+        app:siv_type="TYPE_EDIT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_new_telephone_num"
+        app:siv_key="新电话号码"
+        app:siv_hint="请输入新电话号码"
+        app:siv_type="TYPE_EDIT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_new_contact"
+        app:siv_key="新增联系人"
+        app:siv_hint="请输入新增联系人"
+        app:siv_type="TYPE_EDIT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_custom_area"
+        app:siv_key="手动选择区域"
+        app:siv_type="TYPE_TEXT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_area_no"
+        app:siv_key="区域编号"
+        app:siv_hint="请输入区域编号"
+        app:siv_type="TYPE_EDIT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_area_name"
+        app:siv_key="区域名称"
+        app:siv_hint="请输入区域名称"
+        app:siv_type="TYPE_EDIT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_sure"
+        android:layout_marginTop="18dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_textview_confirm_order_shape"
+        android:text="@string/sure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

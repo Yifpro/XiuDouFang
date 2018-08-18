@@ -6,14 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Toast;
 
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
-import com.example.administrator.xiudoufang.bean.NewSupplier;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
+import com.example.administrator.xiudoufang.bean.SupplierDetails;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 
@@ -23,12 +20,13 @@ import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 
 public class AddSupplierActivity extends AppCompatActivity implements IActivityBase {
 
+    private static final int RESULT_GET_AREA = 5;
+
     private SearchInfoView mSivName;
     private SearchInfoView mSivTotalName;
     private SearchInfoView mSivPhoneNum;
     private SearchInfoView mSivTelephoneNum;
     private SearchInfoView mSivContact;
-    private SearchInfoView mSivCustomArea;
     private SearchInfoView mSivAreaNo;
     private SearchInfoView mSivAreaName;
 
@@ -50,11 +48,10 @@ public class AddSupplierActivity extends AppCompatActivity implements IActivityB
         mSivPhoneNum = findViewById(R.id.siv_phone_num);
         mSivTelephoneNum = findViewById(R.id.siv_telephone_num);
         mSivContact = findViewById(R.id.siv_contact);
-        mSivCustomArea = findViewById(R.id.siv_custom_area);
         mSivAreaNo = findViewById(R.id.siv_area_no);
         mSivAreaName = findViewById(R.id.siv_area_name);
         mSivName.setKey(StringUtils.getSpannableString("供应商名称*", 5));
-        mSivCustomArea.setOnClickListener(new InnerClickListener());
+        findViewById(R.id.siv_custom_area).setOnClickListener(new InnerClickListener());
     }
 
     @Override
@@ -67,22 +64,22 @@ public class AddSupplierActivity extends AppCompatActivity implements IActivityB
             mSivName.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
         } else {
             Intent intent = new Intent(this, NewPurchaseOrderActivity.class);
-            NewSupplier supplier = new NewSupplier();
+            SupplierDetails supplier = new SupplierDetails();
             supplier.setName(mSivName.getValue());
             supplier.setTotalName(mSivTotalName.getValue());
-            supplier.setPhoneNum(mSivPhoneNum.getValue());
-            supplier.setTelephoneNum(mSivTelephoneNum.getValue());
-            supplier.setContact(mSivContact.getValue());
+            supplier.setNewPhoneNum(mSivPhoneNum.getValue());
+            supplier.setNewTelephoneNum(mSivTelephoneNum.getValue());
+            supplier.setNewContact(mSivContact.getValue());
             supplier.setAreaNo(mSivAreaNo.getValue());
             supplier.setAreaName(mSivAreaName.getValue());
-            intent.putExtra("new_supplier", supplier);
+            intent.putExtra(NewPurchaseOrderActivity.SELECTED_SUPPLIER, supplier);
             startActivity(intent);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 5 && data != null) {
+        if (requestCode == RESULT_GET_AREA && data != null) {
             mSivAreaNo.setValue(data.getStringExtra("area_code"));
             mSivAreaName.setValue(data.getStringExtra("area_name"));
         }
@@ -94,7 +91,7 @@ public class AddSupplierActivity extends AppCompatActivity implements IActivityB
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(AddSupplierActivity.this, AreaListActivity.class);
-            startActivityForResult(intent, 5);
+            startActivityForResult(intent, RESULT_GET_AREA);
         }
     }
 }

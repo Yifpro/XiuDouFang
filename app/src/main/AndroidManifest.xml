@@ -26,8 +26,11 @@
         <activity
             android:name=".purchase.ui.SupplierListActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity android:name=".purchase.ui.SupplierDetailsActivity" />
         <activity android:name=".purchase.ui.NewPurchaseOrderActivity"
                   android:launchMode="singleTask"/>
+        <activity android:name=".purchase.ui.ProductListActivity"
+                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity android:name=".purchase.ui.WarehouseListActivity" />
         <activity android:name=".purchase.ui.AddSupplierActivity" />
         <activity android:name=".purchase.ui.AreaListActivity"
@@ -47,6 +50,7 @@
         <activity android:name=".check.ui.CheckOrderActivity"/>
         <activity android:name=".check.ui.OrderQueryActivity"/>
         <activity android:name=".open.ui.OpenBillActivity"/>
+        <activity android:name=".purchase.ui.SupplierDetailsActivity"/>
     </application>
 
 </manifest>

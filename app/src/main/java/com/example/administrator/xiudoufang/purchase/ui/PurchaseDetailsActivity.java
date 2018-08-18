@@ -75,7 +75,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
 
     private void loadPurchaseDetails() {
         LoadingViewDialog.getInstance().show(this);
-        mPurchaseLogic.requestPurchaseDetails(getIntent().getStringExtra("order_id"), new StringCallback() {
+        mPurchaseLogic.requestPurchaseDetails(getIntent().getStringExtra(PurchaseSubFragment.ORDER_ID), new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 JSONObject result = JSONObject.parseObject(response.body());

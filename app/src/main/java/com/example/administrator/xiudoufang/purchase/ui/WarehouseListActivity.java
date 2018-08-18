@@ -14,6 +14,7 @@ import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.WarehouseListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
+import com.example.administrator.xiudoufang.purchase.adapter.WarehouseListAdapter;
 import com.example.administrator.xiudoufang.purchase.logic.NewPurchaseOrderLogic;
 import com.lzy.okgo.model.Response;
 
@@ -24,6 +25,10 @@ import java.util.List;
  */
 
 public class WarehouseListActivity extends AppCompatActivity implements IActivityBase {
+
+    public static final String SELECTED_INDEX = "selected_index";
+    public static final String WAREHOUSE_ID = "warehouse_id";
+    public static final String WAREHOUSE_NAME = "warehouse_name";
 
     private RecyclerView mRecyclerView;
 
@@ -72,7 +77,7 @@ public class WarehouseListActivity extends AppCompatActivity implements IActivit
             public void onSuccess(Response<WarehouseListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
                 mList = response.body().getHouselists();
-                mList.get(getIntent().getIntExtra("index", 0)).setSelcted(true);
+                mList.get(getIntent().getIntExtra(SELECTED_INDEX, 0)).setSelcted(true);
                 adapter.setNewData(mList);
             }
         });
@@ -80,8 +85,10 @@ public class WarehouseListActivity extends AppCompatActivity implements IActivit
 
     public void onClick(View view) {
         Intent intent = new Intent();
-        intent.putExtra("warehouse_id", mList.get(mLastIndex).getId());
-        intent.putExtra("warehouse_name", mList.get(mLastIndex).getSn());
+        intent.putExtra(SELECTED_INDEX, mLastIndex);
+        intent.putExtra(WAREHOUSE_ID, mList.get(mLastIndex).getId());
+        intent.putExtra(WAREHOUSE_NAME, mList.get(mLastIndex).getSn());
         setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 }

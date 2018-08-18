@@ -42,8 +42,8 @@ public class StoreSwitchActivity extends AppCompatActivity implements IActivityB
 
     @Override
     public void initData() {
-        mStoreList = getIntent().getParcelableArrayListExtra("store_list");
-        mIndex = getIntent().getIntExtra("index", 0);
+        mStoreList = getIntent().getParcelableArrayListExtra(SettingActivity.STORE_LIST);
+        mIndex = getIntent().getIntExtra(SettingActivity.SELECTED_INDEX, 0);
         StoreSwitchAdapter adapter = new StoreSwitchAdapter(R.layout.layout_list_item_store_switch, mStoreList);
         adapter.bindToRecyclerView(mRecyclerView);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -65,7 +65,7 @@ public class StoreSwitchActivity extends AppCompatActivity implements IActivityB
 
     @Override
     public void onBackPressed() {
-        if (getIntent().getIntExtra("index", 0) != mIndex) {
+        if (getIntent().getIntExtra(SettingActivity.SELECTED_INDEX, 0) != mIndex) {
             LoadingViewDialog.getInstance().show(this);
             LoginLogic logic = new LoginLogic();
             String username = PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_NAME, "");

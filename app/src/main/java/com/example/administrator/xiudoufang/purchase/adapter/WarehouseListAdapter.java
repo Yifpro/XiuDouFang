@@ -1,4 +1,4 @@
-package com.example.administrator.xiudoufang.purchase.ui;
+package com.example.administrator.xiudoufang.purchase.adapter;
 
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;

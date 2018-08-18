@@ -1,6 +1,7 @@
 package com.example.administrator.xiudoufang.purchase.logic;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.administrator.xiudoufang.bean.ProductListBean;
 import com.example.administrator.xiudoufang.bean.SupplierListBean;
 import com.example.administrator.xiudoufang.bean.WarehouseListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
@@ -42,6 +43,15 @@ public class NewPurchaseOrderLogic {
         map.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
         map.put("house", "0");
         OkGo.<WarehouseListBean>get(StringUtils.getUrl("/Api/products/Gethouselists?", map))
+                .execute(callback);
+    }
+
+    //******** 获取产品列表 ********
+    public void requestProductList(HashMap<String, String> params, JsonCallback<ProductListBean> callback) {
+        String json = JSONObject.toJSONString(params);
+        OkGo.<ProductListBean>post(StringUtils.BASE_URL + "/Api/products/requset_poproductdata?requset_poproductdata=0")
+                .headers("Content-Type", "application/json")
+                .upJson(json)
                 .execute(callback);
     }
 }
