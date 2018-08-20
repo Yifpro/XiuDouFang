@@ -64,9 +64,7 @@ public class LoadingViewDialog extends android.support.v4.app.DialogFragment {
 
         View view = inflater.inflate(R.layout.layout_loading_view, null);
         mTvTitle = view.findViewById(R.id.tv_title);
-        if (!TextUtils.isEmpty(mTitle)) {
-            mTvTitle.setText(mTitle);
-        }
+        mTvTitle.setText(mTitle);
         return view;
     }
 

@@ -12,6 +12,7 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseFragment;
 import com.example.administrator.xiudoufang.bean.PurchaseListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.purchase.adapter.PurchaseSubAdapter;
@@ -29,6 +30,7 @@ public class PurchaseSubFragment extends BaseFragment {
 
     private final int COUNT = 20;
     public static final String ORDER_ID = "order_id";
+    public static final String ITEM_STATUS = "item_status";
 
     private RefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -37,7 +39,7 @@ public class PurchaseSubFragment extends BaseFragment {
     private PurchaseSubAdapter mAdapter;
     private List<PurchaseListBean.PurchaseBean> mList;
     private HashMap<String, String> mParams;
-    private int mCurrentPage = 1;
+    private int mCurrentPage;
     private String mType;
 
     public static PurchaseSubFragment newInstance(String type) {
@@ -83,6 +85,7 @@ public class PurchaseSubFragment extends BaseFragment {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(getActivity(), PurchaseDetailsActivity.class);
                 intent.putExtra(ORDER_ID, mList.get(position).getIid());
+                intent.putExtra(ITEM_STATUS, mList.get(position).getStatus_str());
                 assert getActivity() != null;
                 getActivity().startActivity(intent);
             }
@@ -90,6 +93,7 @@ public class PurchaseSubFragment extends BaseFragment {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         LoadingViewDialog.getInstance().show(getActivity());
+        mCurrentPage = 1;
         loadPurchaseList(false);
     }
 

@@ -1,4 +1,4 @@
-package com.example.administrator.xiudoufang.transport.ui;
+package com.example.administrator.xiudoufang.transport;
 
 import android.content.Context;
 import android.content.Intent;

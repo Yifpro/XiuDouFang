@@ -17,9 +17,11 @@ import android.widget.TextView;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.common.footer.DefaultFooter;
 import com.example.administrator.xiudoufang.common.header.DefaultHeader;
+import com.example.administrator.xiudoufang.common.utils.PicassoImageLoader;
 import com.example.administrator.xiudoufang.common.utils.ScreenUtils;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.view.CropImageView;
 import com.lzy.okgo.OkGo;
-import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.cookie.CookieJarImpl;
 import com.lzy.okgo.cookie.store.SPCookieStore;
@@ -36,7 +38,6 @@ import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 
 public class XiuDouFangApplication extends Application {
@@ -56,7 +57,7 @@ public class XiuDouFangApplication extends Application {
         });
     }
 
-    private static volatile Context mContext;
+    private static Context mContext;
 
     public static Context getContext() {
         return mContext;
@@ -67,6 +68,7 @@ public class XiuDouFangApplication extends Application {
         super.onCreate();
         mContext = getApplicationContext();
         initOkGo();
+        initImagePicker();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle bundle) {
@@ -112,6 +114,20 @@ public class XiuDouFangApplication extends Application {
 
             }
         });
+    }
+
+    private void initImagePicker() {
+        ImagePicker imagePicker = ImagePicker.getInstance();
+        imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
+        imagePicker.setShowCamera(true);  //显示拍照按钮
+        imagePicker.setCrop(true);        //允许裁剪（单选才有效）
+        imagePicker.setSaveRectangle(true); //是否按矩形区域保存
+        imagePicker.setSelectLimit(1);    //选中数量限制
+        imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
+        imagePicker.setFocusWidth(800);   //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
+        imagePicker.setFocusHeight(800);  //裁剪框的高度。单位像素（圆形自动取宽高最小值）
+        imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
+        imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
     }
 
     private void initOkGo() {
@@ -182,13 +198,11 @@ public class XiuDouFangApplication extends Application {
         return result;
     }
 
-        private void setToolBar(final Activity activity) {
+    private void setToolBar(final Activity activity) {
         Toolbar toolbar = activity.findViewById(R.id.tool_bar);
         if (toolbar != null && ((AppCompatActivity) activity).getSupportActionBar() == null) {
             TextView tvTitle = activity.findViewById(R.id.tv_title);
-            if (!TextUtils.isEmpty(activity.getTitle())) {
-                tvTitle.setText(activity.getTitle());
-            }
+            ((TextView) activity.findViewById(R.id.tv_title)).setText(activity.getTitle());
             ((AppCompatActivity) activity).setSupportActionBar(toolbar);
             ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
             if (actionBar != null) {

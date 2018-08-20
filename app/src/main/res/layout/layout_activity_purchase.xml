@@ -21,7 +21,7 @@
 
     <LinearLayout
         android:id="@+id/left_menu"
-        android:layout_width="120dp"
+        android:layout_width="140dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/white"

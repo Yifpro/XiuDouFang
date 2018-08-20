@@ -1,4 +1,4 @@
-package com.example.administrator.xiudoufang.open.ui;
+package com.example.administrator.xiudoufang.open;
 
 import android.content.Context;
 import android.content.Intent;

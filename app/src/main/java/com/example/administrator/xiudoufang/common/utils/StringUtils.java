@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 
 import com.example.administrator.xiudoufang.R;
@@ -20,6 +21,8 @@ import java.util.Map;
 public class StringUtils {
 
     public static final String BASE_URL = "http://192.168.1.8:83";
+    public static final String PIC_URL = "http://192.168.1.8:81/pic/";
+    public static final String PIC_SMALL_URL = "http://192.168.1.8:81/pic_small/";
     private static StringBuilder builder;
     public static final String LOGIN_INFO = "login_info.txt";
 
@@ -95,5 +98,10 @@ public class StringUtils {
         ForegroundColorSpan colorSpan = new ForegroundColorSpan(ContextCompat.getColor(XiuDouFangApplication.getContext(), R.color.red));
         spannableString.setSpan(colorSpan, position, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         return spannableString;
+    }
+
+    public static String checkEmpty(String value, String defaultValue) {
+        String result = TextUtils.isEmpty(value) ? defaultValue : value;
+        return result;
     }
 }

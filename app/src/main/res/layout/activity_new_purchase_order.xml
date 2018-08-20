@@ -19,71 +19,10 @@
 
         <include layout="@layout/layout_supplier_info_pre" />
 
-        <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/tv_add_product"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="5dp"
-                android:textSize="14dp"
-                android:drawableTop="@mipmap/ic_add"
-                android:textColor="@color/colorPrimary"
-                android:text="添加产品"/>
-            <TextView
-                android:id="@+id/tv_scan_product"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="5dp"
-                android:textSize="14dp"
-                android:drawableTop="@mipmap/ic_scan_blue"
-                android:textColor="@color/colorPrimary"
-                android:text="扫描产品"/>
-        </LinearLayout>
+        <include layout="@layout/layout_supplier_info_infix"/>
 
         <include layout="@layout/layout_supplier_info_suf" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="5dp"
-                android:textSize="14dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/bg_textview_confirm_order_shape"
-                android:textColor="@color/white"
-                android:text="@string/save_as_draft"/>
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="5dp"
-                android:textSize="14dp"
-                android:background="@drawable/bg_textview_confirm_bill_shape"
-                android:textColor="@color/white"
-                android:text="@string/confirm_bill"/>
-        </LinearLayout>
+        <include layout="@layout/layout_bottom_selection" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

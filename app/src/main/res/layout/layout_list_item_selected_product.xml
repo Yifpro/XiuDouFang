@@ -42,7 +42,7 @@
             tools:text="001"/>
 
         <TextView
-            android:id="@+id/tv_amount_company"
+            android:id="@+id/tv_company_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
@@ -52,7 +52,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_price_company"
+        android:id="@+id/tv_unit_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/linear_layout"
@@ -71,7 +71,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_price"
+            android:id="@+id/tv_company_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -100,6 +100,7 @@
                 android:background="@drawable/bg_layout_product_amount_shape">
 
                 <TextView
+                    android:id="@+id/tv_reduce"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -114,6 +115,7 @@
                     android:background="@color/black"/>
 
                 <TextView
+                    android:id="@+id/tv_amount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
@@ -128,6 +130,7 @@
                     android:background="@color/black"/>
 
                 <TextView
+                    android:id="@+id/tv_add"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -139,7 +142,7 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/tv_price_amount"
+            android:id="@+id/tv_total_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -77,7 +78,12 @@ public class WarehouseListActivity extends AppCompatActivity implements IActivit
             public void onSuccess(Response<WarehouseListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
                 mList = response.body().getHouselists();
-                mList.get(getIntent().getIntExtra(SELECTED_INDEX, 0)).setSelcted(true);
+                String warehouseId = getIntent().getStringExtra(WAREHOUSE_ID);
+                if (!TextUtils.isEmpty(warehouseId)) {
+                    mList.get(mList.indexOf(new WarehouseListBean.WarehouseBean(warehouseId))).setSelcted(true);
+                } else {
+                    mList.get(0).setSelcted(true);
+                }
                 adapter.setNewData(mList);
             }
         });
@@ -85,7 +91,6 @@ public class WarehouseListActivity extends AppCompatActivity implements IActivit
 
     public void onClick(View view) {
         Intent intent = new Intent();
-        intent.putExtra(SELECTED_INDEX, mLastIndex);
         intent.putExtra(WAREHOUSE_ID, mList.get(mLastIndex).getId());
         intent.putExtra(WAREHOUSE_NAME, mList.get(mLastIndex).getSn());
         setResult(Activity.RESULT_OK, intent);

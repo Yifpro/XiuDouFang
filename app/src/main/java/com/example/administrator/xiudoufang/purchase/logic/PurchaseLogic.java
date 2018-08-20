@@ -34,6 +34,7 @@ public class PurchaseLogic {
         map.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
         map.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
         String json = JSONObject.toJSONString(map);
+        LogUtils.e("json - > "+json);
         OkGo.<String>post(StringUtils.getUrl("/Api/products/GetSinglepuomstrdata?iid=0", map))
                 .headers("Content-Type", "application/json")
                 .upJson(json)

@@ -9,7 +9,7 @@
     <include layout="@layout/layout_toolbar"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-        android:id="@+id/siv_id"
+        android:id="@+id/siv_customer_no"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:siv_hint="请输入编号"

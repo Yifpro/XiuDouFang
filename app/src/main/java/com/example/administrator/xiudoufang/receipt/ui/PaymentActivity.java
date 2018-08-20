@@ -3,10 +3,7 @@ package com.example.administrator.xiudoufang.receipt.ui;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -77,7 +74,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
     @Override
     public void initView() {
         setTitle("款项");
-        mSivId = findViewById(R.id.siv_id);
+        mSivId = findViewById(R.id.siv_customer_no);
         mSivName = findViewById(R.id.siv_name);
         mSivTotalName = findViewById(R.id.siv_total_name);
         mSivDebt = findViewById(R.id.siv_debt);
@@ -109,7 +106,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
         mSivPaymentDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPaymentDateTimePicker();
+                showPaymentTimePickerDialog();
             }
         });
         findViewById(R.id.tv_submit).setOnClickListener(this);
@@ -200,7 +197,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
         }
     }
 
-    private void showPaymentDateTimePicker() {
+    private void showPaymentTimePickerDialog() {
         if (mPvPaymentDate == null) {
             mPvPaymentDate = new TimePickerBuilder(PaymentActivity.this, new OnTimeSelectListener() {
                 @Override

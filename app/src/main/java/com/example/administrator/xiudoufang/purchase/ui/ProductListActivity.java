@@ -135,7 +135,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
             mParams = new HashMap<>();
             mParams.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
             mParams.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-            mParams.put("c_id", getIntent().getStringExtra(NewPurchaseOrderActivity.SUPPLIER_ID));
+            mParams.put("c_id", "0");
             mParams.put("count", String.valueOf(COUNT));
             mParams.put("saomiao", "0");
             mParams.put("dqcpid", "0");

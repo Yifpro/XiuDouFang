@@ -10,6 +10,7 @@ import android.os.Parcelable;
 public class SupplierDetails implements Parcelable {
 
     private String id;
+    private String customerNo;
     private String name;
     private String totalName;
     private String debt;
@@ -26,6 +27,14 @@ public class SupplierDetails implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getCustomerNo() {
+        return customerNo;
+    }
+
+    public void setCustomerNo(String customerNo) {
+        this.customerNo = customerNo;
     }
 
     public String getName() {
@@ -108,6 +117,7 @@ public class SupplierDetails implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
+        dest.writeString(this.customerNo);
         dest.writeString(this.name);
         dest.writeString(this.totalName);
         dest.writeString(this.debt);
@@ -124,6 +134,7 @@ public class SupplierDetails implements Parcelable {
 
     protected SupplierDetails(Parcel in) {
         this.id = in.readString();
+        this.customerNo = in.readString();
         this.name = in.readString();
         this.totalName = in.readString();
         this.debt = in.readString();

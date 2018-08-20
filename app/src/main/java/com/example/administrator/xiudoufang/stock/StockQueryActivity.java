@@ -1,4 +1,4 @@
-package com.example.administrator.xiudoufang.stock.ui;
+package com.example.administrator.xiudoufang.stock;
 
 import android.support.v7.app.AppCompatActivity;
 

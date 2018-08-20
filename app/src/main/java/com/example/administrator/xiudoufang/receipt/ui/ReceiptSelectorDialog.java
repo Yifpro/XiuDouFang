@@ -56,7 +56,7 @@ public class ReceiptSelectorDialog extends DialogFragment {
         mListener = listener;
     }
 
-    interface OnItemChangedListener {
+    public interface OnItemChangedListener {
         void onItemChanged(String payId, String payName, String number, String content);
     }
 }

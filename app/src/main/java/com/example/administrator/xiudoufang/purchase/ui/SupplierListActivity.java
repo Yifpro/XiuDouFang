@@ -48,6 +48,7 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
 
     private final int COUNT = 20;
     public static final String SELECTED_ITEM = "selected_item";
+    public static final String FROM_CLASS = "from_class";
 
     private RefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -62,11 +63,6 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
     private String mFilterText = "";
     private boolean mIsShowSoftInput;
     private int mCurrentPage = 1;
-
-    public static void start(Context context) {
-        Intent intent = new Intent(context, SupplierListActivity.class);
-        context.startActivity(intent);
-    }
 
     @Override
     public int getLayoutId() {
@@ -100,6 +96,7 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(SupplierListActivity.this, SupplierDetailsActivity.class);
                 intent.putExtra(SELECTED_ITEM, mList.get(position));
+                intent.putExtra(FROM_CLASS, getIntent().getStringExtra(FROM_CLASS));
                 SupplierListActivity.this.startActivity(intent);
             }
         });

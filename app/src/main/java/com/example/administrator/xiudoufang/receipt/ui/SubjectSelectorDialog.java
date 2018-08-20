@@ -69,7 +69,7 @@ public class SubjectSelectorDialog extends DialogFragment {
         this.mListener = listener;
     }
 
-    interface OnItemChangedListener {
+    public interface OnItemChangedListener {
         void onItemChanged(String subjectId, String direction, String item);
     }
 }

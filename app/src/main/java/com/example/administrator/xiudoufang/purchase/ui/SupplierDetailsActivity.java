@@ -19,7 +19,7 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
 
     private static final int RESULT_GET_AREA = 2;
 
-    private SearchInfoView mSivId;
+    private SearchInfoView mSivCustomerNo;
     private SearchInfoView mSivName;
     private SearchInfoView mSivTotalName;
     private SearchInfoView mSivDebt;
@@ -39,7 +39,7 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
     @Override
     public void initView() {
         setTitle("供应商");
-        mSivId = findViewById(R.id.siv_id);
+        mSivCustomerNo = findViewById(R.id.siv_customer_no);
         mSivName = findViewById(R.id.siv_name);
         mSivTotalName = findViewById(R.id.siv_total_name);
         mSivDebt = findViewById(R.id.siv_debt);
@@ -58,7 +58,7 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
     public void initData() {
         if (getIntent() != null) {
             SupplierListBean.SupplierBean bean = getIntent().getParcelableExtra(SupplierListActivity.SELECTED_ITEM);
-            mSivId.setValue(bean.getCustomerno());
+            mSivCustomerNo.setValue(bean.getCustomerno());
             mSivName.setValue(bean.getCustomername());
             mSivTotalName.setValue(bean.getQuancheng());
             mSivDebt.setValue(bean.getDebt());
@@ -79,9 +79,16 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_sure:
-                Intent intent = new Intent(this, NewPurchaseOrderActivity.class);
+                Class clazz;
+                if (getIntent().getStringExtra(SupplierListActivity.FROM_CLASS).equals(NewPurchaseOrderActivity.TAG)) {
+                    clazz = NewPurchaseOrderActivity.class;
+                } else {
+                    clazz = PurchaseDetailsActivity.class;
+                }
+                Intent intent = new Intent(this, clazz);
                 SupplierDetails details = new SupplierDetails();
-                details.setId(mSivId.getValue());
+                details.setId(((SupplierListBean.SupplierBean) getIntent().getParcelableExtra(SupplierListActivity.SELECTED_ITEM)).getC_id());
+                details.setCustomerNo(mSivCustomerNo.getValue());
                 details.setName(mSivName.getValue());
                 details.setTotalName(mSivTotalName.getValue());
                 details.setDebt(mSivDebt.getValue());

@@ -54,4 +54,13 @@ public class NewPurchaseOrderLogic {
                 .upJson(json)
                 .execute(callback);
     }
+
+    //******** 提交订单 ********
+    public void requestSubmitOrder(HashMap<String, String> params, JsonCallback<String> callback) {
+        String json = JSONObject.toJSONString(params);
+        OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/postpoorderall?postpoorder=0")
+                .headers("Content-Type", "application/json")
+                .upJson(json)
+                .execute(callback);
+    }
 }

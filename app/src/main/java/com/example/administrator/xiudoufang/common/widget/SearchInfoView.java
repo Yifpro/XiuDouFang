@@ -25,6 +25,7 @@ public class SearchInfoView extends LinearLayout {
     private TextView mTvLeftSegment;
     private LinearLayout mSegmentLayout;
     private TextView mTvRightSegment;
+    private ImageView mIvNext;
 
     private int mType = -1;
 
@@ -44,14 +45,14 @@ public class SearchInfoView extends LinearLayout {
         mRelativeLayout = findViewById(R.id.relative_layout);
         mSegmentLayout = findViewById(R.id.segment_layout);
         mEtInput = findViewById(R.id.et_input);
-        ImageView ivNext = findViewById(R.id.iv_next);
+        mIvNext = findViewById(R.id.iv_next);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SearchInfoView);
         mType = ta.getInt(R.styleable.SearchInfoView_siv_type, 0);
         updateType();
         mTvValue.setText(ta.getString(R.styleable.SearchInfoView_siv_value));
         mEtInput.setHint(ta.getString(R.styleable.SearchInfoView_siv_hint));
         if (ta.hasValue(R.styleable.SearchInfoView_siv_isShowNext))
-            ivNext.setVisibility(ta.getBoolean(R.styleable.SearchInfoView_siv_isShowNext, true) ? VISIBLE : INVISIBLE);
+            mIvNext.setVisibility(ta.getBoolean(R.styleable.SearchInfoView_siv_isShowNext, true) ? VISIBLE : INVISIBLE);
         mTvKey.setText(ta.getString(R.styleable.SearchInfoView_siv_key));
         if (ta.hasValue(R.styleable.SearchInfoView_siv_input_type)) {
             if (ta.getInt(R.styleable.SearchInfoView_siv_input_type, 0) == 0) {
@@ -60,6 +61,10 @@ public class SearchInfoView extends LinearLayout {
             }
         }
         ta.recycle();
+    }
+
+    public void setShowNext(boolean isShow) {
+        mIvNext.setVisibility(isShow ? VISIBLE : GONE);
     }
 
     private void updateType() {

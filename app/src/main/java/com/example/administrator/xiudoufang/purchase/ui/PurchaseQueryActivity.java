@@ -17,7 +17,6 @@ import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class PurchaseQueryActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
@@ -55,13 +54,13 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
         mSivStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showStartTimeDialog();
+                showStartTimePickerDialog();
             }
         });
         mSivEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showEndTimeDialog();
+                showEndTimePickerDialog();
             }
         });
         mSivTransferPurchase.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +97,7 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
         mTransferPurchaseDialog.show(getSupportFragmentManager(), "TransferPurchaseDialog");
     }
 
-    private void showEndTimeDialog() {
+    private void showEndTimePickerDialog() {
         if (mPvEndTime == null) {
             TimePickerBuilder builder = new TimePickerBuilder(PurchaseQueryActivity.this, new OnTimeSelectListener() {
                 @Override
@@ -133,7 +132,7 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
         mPvEndTime.show();
     }
 
-    private void showStartTimeDialog() {
+    private void showStartTimePickerDialog() {
         if (mPvStartTime == null) {
             TimePickerBuilder builder = new TimePickerBuilder(PurchaseQueryActivity.this, new OnTimeSelectListener() {
                 @Override

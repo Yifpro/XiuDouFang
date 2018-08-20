@@ -56,6 +56,13 @@ public class WarehouseListBean {
         private String fuji;
         private boolean isSelcted;
 
+        public WarehouseBean() {
+        }
+
+        public WarehouseBean(String id) {
+            this.id = id;
+        }
+
         public boolean isSelcted() {
             return isSelcted;
         }
@@ -94,6 +101,22 @@ public class WarehouseListBean {
 
         public void setFuji(String fuji) {
             this.fuji = fuji;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof WarehouseBean) {
+                return ((WarehouseBean) obj).getId().equals(getId());
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = 37;
+            result += 17 * id.hashCode();
+            result += 17 * sn.hashCode();
+            return result;
         }
     }
 }
