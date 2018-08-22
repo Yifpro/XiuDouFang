@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.purchase.adapter.ExtraSelectorAdapter;
+import com.test.jcit.imagepicker.ui.ImageGridActivity;
 
 import java.util.ArrayList;
 
@@ -44,8 +45,13 @@ public class ImageSelectorDialog extends DialogFragment {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (position) {
                     case 0:
+                        Intent intent = new Intent(getActivity(), ImageGridActivity.class);
+                        intent.putExtra(ImageGridActivity.EXTRAS_TAKE_PICKERS,true);
+                        startActivityForResult(intent, 1);
                         break;
                     case 1:
+                        Intent intent2 = new Intent(getActivity(), ImageGridActivity.class);
+                        startActivityForResult(intent2, 1);
                         break;
                 }
                 dismiss();

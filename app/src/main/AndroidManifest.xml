@@ -13,11 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".login.ui.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity android:name=".base.MainActivity"/>
         <activity android:name=".setting.ui.SettingActivity"/>
@@ -28,7 +23,13 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity android:name=".purchase.ui.SupplierDetailsActivity" />
         <activity android:name=".purchase.ui.NewPurchaseOrderActivity"
-                  android:launchMode="singleTask"/>
+                  android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".purchase.ui.ScanActivity" />
         <activity android:name=".purchase.ui.ProductListActivity"
                   android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
