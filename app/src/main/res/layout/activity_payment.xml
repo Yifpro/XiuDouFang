@@ -21,7 +21,7 @@
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_customer_no"
                 app:siv_isShowNext="false"
-                app:siv_key="客户编号"
+                app:siv_key="@string/customer_no"
                 app:siv_type="TYPE_TEXT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -29,7 +29,7 @@
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_name"
                 app:siv_isShowNext="false"
-                app:siv_key="客户名称"
+                app:siv_key="@string/customer_name"
                 app:siv_type="TYPE_TEXT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -37,7 +37,7 @@
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_total_name"
                 app:siv_isShowNext="false"
-                app:siv_key="客户全称"
+                app:siv_key="@string/customer_total_name"
                 app:siv_type="TYPE_TEXT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -45,7 +45,7 @@
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_debt"
                 app:siv_isShowNext="false"
-                app:siv_key="欠款金额"
+                app:siv_key="@string/debt_amount"
                 app:siv_type="TYPE_TEXT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -53,7 +53,7 @@
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_balance"
                 app:siv_isShowNext="false"
-                app:siv_key="账户余额"
+                app:siv_key="@string/account_balance"
                 app:siv_type="TYPE_TEXT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -61,7 +61,7 @@
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_area_type"
                 app:siv_isShowNext="false"
-                app:siv_key="区域类型"
+                app:siv_key="@string/area_type"
                 app:siv_type="TYPE_TEXT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -69,14 +69,14 @@
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_area"
                 app:siv_isShowNext="false"
-                app:siv_key="区域"
+                app:siv_key="@string/area"
                 app:siv_type="TYPE_TEXT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_subject"
-                app:siv_key="会计科目"
+                app:siv_key="@string/subject"
                 app:siv_type="TYPE_TEXT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -84,14 +84,14 @@
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_payment"
                 app:siv_isShowNext="false"
-                app:siv_key="收付款"
+                app:siv_key="@string/payment"
                 app:siv_type="TYPE_SEGMENT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_receipt_type"
-                app:siv_key="收款方式"
+                app:siv_key="@string/receipt_type"
                 app:siv_type="TYPE_TEXT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -99,7 +99,7 @@
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_receipt_person"
                 app:siv_isShowNext="false"
-                app:siv_key="收款人"
+                app:siv_key="@string/receipt_person"
                 app:siv_type="TYPE_TEXT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -107,7 +107,7 @@
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_receipt_account"
                 app:siv_isShowNext="false"
-                app:siv_key="收款账号"
+                app:siv_key="@string/receipt_account"
                 app:siv_type="TYPE_TEXT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -115,7 +115,7 @@
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_payment_amount"
                 app:siv_isShowNext="false"
-                app:siv_key="款项金额"
+                app:siv_key="@string/payment_amount"
                 app:siv_type="TYPE_EDIT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -123,14 +123,14 @@
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_discount_amount"
                 app:siv_isShowNext="false"
-                app:siv_key="优惠金额"
+                app:siv_key="@string/discount_amount"
                 app:siv_type="TYPE_EDIT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_payment_date"
-                app:siv_key="款项日期"
+                app:siv_key="@string/payment_date"
                 app:siv_type="TYPE_TEXT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

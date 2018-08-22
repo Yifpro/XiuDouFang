@@ -7,77 +7,77 @@
     <include layout="@layout/layout_toolbar" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_customer_no"
-        app:siv_key="供应商编号"
+        app:siv_key="@string/supplier_no"
         app:siv_type="TYPE_TEXT"
         app:siv_isShowNext="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_name"
-        app:siv_key="供应商名称"
+        app:siv_key="@string/supplier_name"
         app:siv_type="TYPE_TEXT"
         app:siv_isShowNext="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_total_name"
-        app:siv_key="供应商全称"
+        app:siv_key="@string/supplier_total_name"
         app:siv_type="TYPE_TEXT"
         app:siv_isShowNext="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_debt"
-        app:siv_key="前结欠"
+        app:siv_key="@string/debt"
         app:siv_type="TYPE_TEXT"
         app:siv_isShowNext="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_phone_num"
-        app:siv_key="手机号"
+        app:siv_key="@string/phone_num"
         app:siv_type="TYPE_TEXT"
         app:siv_isShowNext="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_new_phone_num"
-        app:siv_key="新手机号码"
-        app:siv_hint="请输入新手机号码"
+        app:siv_key="@string/new_phone_num"
+        app:siv_hint="@string/input_new_phone_num"
         app:siv_type="TYPE_EDIT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_new_telephone_num"
-        app:siv_key="新电话号码"
-        app:siv_hint="请输入新电话号码"
+        app:siv_key="@string/new_telephone_num"
+        app:siv_hint="@string/input_new_telephone_num"
         app:siv_type="TYPE_EDIT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_new_contact"
-        app:siv_key="新增联系人"
-        app:siv_hint="请输入新增联系人"
+        app:siv_key="@string/add_contact"
+        app:siv_hint="@string/input_add_contact"
         app:siv_type="TYPE_EDIT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_custom_area"
-        app:siv_key="手动选择区域"
+        app:siv_key="@string/custom_area"
         app:siv_type="TYPE_TEXT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_area_no"
-        app:siv_key="区域编号"
-        app:siv_hint="请输入区域编号"
+        app:siv_key="@string/area_no"
+        app:siv_hint="@string/input_area_no"
         app:siv_type="TYPE_EDIT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_area_name"
-        app:siv_key="区域名称"
-        app:siv_hint="请输入区域名称"
+        app:siv_key="@string/area_name"
+        app:siv_hint="@string/input_area_name"
         app:siv_type="TYPE_EDIT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

@@ -11,62 +11,62 @@
         android:id="@+id/siv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_hint="供应商名称"
+        app:siv_hint="@string/supplier_name"
         app:siv_type="TYPE_EDIT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_total_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_hint="请输入全称"
-        app:siv_key="全称"
+        app:siv_hint="@string/input_total_name"
+        app:siv_key="@string/total_name"
         app:siv_type="TYPE_EDIT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_phone_num"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_hint="请输入手机号码"
-        app:siv_key="手机号码"
+        app:siv_hint="@string/input_phone_num"
+        app:siv_key="@string/phone_num"
         app:siv_type="TYPE_EDIT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_telephone_num"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_hint="请输入电话号码"
-        app:siv_key="电话号码"
+        app:siv_hint="@string/input_telephone_num"
+        app:siv_key="@string/telephone_num"
         app:siv_type="TYPE_EDIT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_contact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_hint="请输入联系人"
-        app:siv_key="联系人"
+        app:siv_hint="@string/input_contact"
+        app:siv_key="@string/contact"
         app:siv_type="TYPE_EDIT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_custom_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_key="手动选择区域"
+        app:siv_key="@string/custom_area"
         app:siv_type="TYPE_TEXT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_area_no"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_hint="请输入区域编号"
-        app:siv_key="区域编号"
+        app:siv_hint="@string/input_area_no"
+        app:siv_key="@string/area_no"
         app:siv_type="TYPE_EDIT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_area_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_hint="请输入区域名称"
-        app:siv_key="区域名称"
+        app:siv_hint="@string/input_area_name"
+        app:siv_key="@string/area_name"
         app:siv_type="TYPE_EDIT"/>
 
     <TextView

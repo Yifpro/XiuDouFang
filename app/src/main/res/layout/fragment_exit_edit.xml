@@ -13,7 +13,7 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:paddingTop="10dp"
-        android:text="温馨提示"
+        android:text="@string/warm_reminder"
         android:textColor="@color/black"
         android:textSize="16dp" />
 
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="是否放弃本次编辑"
+        android:text="@string/is_give_up_edit"
         android:textColor="@color/gray_888888"
         android:textSize="14dp" />
 

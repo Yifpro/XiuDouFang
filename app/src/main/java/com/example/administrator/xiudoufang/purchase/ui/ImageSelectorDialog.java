@@ -15,10 +15,7 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.base.XiuDouFangApplication;
 import com.example.administrator.xiudoufang.purchase.adapter.ExtraSelectorAdapter;
-import com.yuyh.library.imgsel.ISNav;
-import com.yuyh.library.imgsel.config.ISCameraConfig;
 
 import java.util.ArrayList;
 

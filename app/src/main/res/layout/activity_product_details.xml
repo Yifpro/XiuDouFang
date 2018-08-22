@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:siv_isShowNext="false"
-                app:siv_key="产品编号"
+                app:siv_key="@string/product_no"
                 app:siv_type="TYPE_TEXT"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:siv_isShowNext="false"
-                app:siv_key="产品名称"
+                app:siv_key="@string/product_name"
                 app:siv_type="TYPE_TEXT"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
@@ -53,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:siv_isShowNext="false"
-                app:siv_key="库存"
+                app:siv_key="@string/stock_amount"
                 app:siv_type="TYPE_TEXT"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:siv_isShowNext="false"
-                app:siv_key="自由数"
+                app:siv_key="@string/free_amount"
                 app:siv_type="TYPE_TEXT"/>
 
             <TextView
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:text="拓展信息"
+                android:text="@string/expand_info"
                 android:textColor="@color/colorPrimary"
                 android:textSize="14dp"/>
 
@@ -86,7 +86,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:siv_isShowNext="false"
-                    app:siv_key="类别"
+                    app:siv_key="@string/type"
                     app:siv_type="TYPE_TEXT"/>
 
                 <com.example.administrator.xiudoufang.common.widget.SearchInfoView
@@ -94,7 +94,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:siv_isShowNext="false"
-                    app:siv_key="品牌"
+                    app:siv_key="@string/brand"
                     app:siv_type="TYPE_TEXT"/>
 
                 <com.example.administrator.xiudoufang.common.widget.SearchInfoView
@@ -102,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:siv_isShowNext="false"
-                    app:siv_key="型号"
+                    app:siv_key="@string/size"
                     app:siv_type="TYPE_TEXT"/>
 
                 <com.example.administrator.xiudoufang.common.widget.SearchInfoView
@@ -110,7 +110,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:siv_isShowNext="false"
-                    app:siv_key="条码"
+                    app:siv_key="@string/bar_code"
                     app:siv_type="TYPE_TEXT"/>
 
                 <com.example.administrator.xiudoufang.common.widget.SearchInfoView
@@ -118,7 +118,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:siv_isShowNext="false"
-                    app:siv_key="详述"
+                    app:siv_key="@string/details"
                     app:siv_type="TYPE_TEXT"/>
 
                 <TextView
@@ -127,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
-                    android:text="隐藏"
+                    android:text="@string/hide"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14dp"/>
             </LinearLayout>
@@ -137,14 +137,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                app:siv_key="采购单位"
+                app:siv_key="@string/purchase_unit"
                 app:siv_type="TYPE_TEXT"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_price_source"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:siv_key="价格来源"
+                app:siv_key="@string/price_source"
                 app:siv_type="TYPE_TEXT"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
@@ -152,37 +152,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:siv_isShowNext="false"
-                app:siv_key="单品价"
+                app:siv_key="@string/single_price"
                 app:siv_type="TYPE_TEXT"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_unit_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:siv_hint="请输入单位价"
-                app:siv_key="单位价"
+                app:siv_hint="@string/input_unit_price"
+                app:siv_key="@string/unit_price"
                 app:siv_type="TYPE_EDIT"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_product_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:siv_key="产品颜色"
+                app:siv_key="@string/product_color"
                 app:siv_type="TYPE_TEXT"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_product_spec"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:siv_key="产品规格"
+                app:siv_key="@string/product_spec"
                 app:siv_type="TYPE_TEXT"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_purchase_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:siv_hint="请输入采购数量"
-                app:siv_key="采购数量"
+                app:siv_hint="@string/input_purchase_amount"
+                app:siv_key="@string/purchase_amount"
                 app:siv_type="TYPE_EDIT"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
@@ -190,7 +190,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:siv_isShowNext="false"
-                app:siv_key="赠品"
+                app:siv_key="@string/git"
                 app:siv_leftTitle="否"
                 app:siv_rightTitle="是"
                 app:siv_type="TYPE_SEGMENT"/>
@@ -199,9 +199,9 @@
                 android:id="@+id/siv_goods_no"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:siv_hint="请输入货号"
+                app:siv_hint="@string/input_goods_no"
                 app:siv_isShowNext="false"
-                app:siv_key="货号"
+                app:siv_key="@string/goods_no"
                 app:siv_type="TYPE_EDIT"/>
 
             <EditText

@@ -14,34 +14,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:siv_type="TYPE_EDIT"
-            app:siv_hint="请输入单号"
-            app:siv_key="单号" />
+            app:siv_hint="@string/input_order_no"
+            app:siv_key="@string/order_no" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:siv_type="TYPE_EDIT"
-            app:siv_hint="请输入客户"
-            app:siv_key="客户" />
+            app:siv_hint="@string/input_customer"
+            app:siv_key="@string/customer" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:siv_type="TYPE_TEXT"
-            app:siv_key="开始时间" />
+            app:siv_key="@string/start_time" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:siv_type="TYPE_TEXT"
-            app:siv_key="结束时间" />
+            app:siv_key="@string/end_time" />
 
         <com.example.administrator.xiudoufang.common.widget.SearchInfoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:siv_type="TYPE_EDIT"
-            app:siv_hint="请输入运号"
-            app:siv_key="运号" />
+            app:siv_hint="@string/input_transportion_no"
+            app:siv_key="@string/transportion_no" />
 
         <TextView
             android:id="@+id/tv_query"

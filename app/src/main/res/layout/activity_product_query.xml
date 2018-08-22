@@ -11,25 +11,25 @@
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_key="编号、名称或类名"
+        app:siv_key="@string/no_name_or_class_name"
         app:siv_type="TYPE_EDIT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_key="供应商"
+        app:siv_key="@string/supplier"
         app:siv_type="TYPE_TEXT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_key="类别"
+        app:siv_key="@string/type"
         app:siv_type="TYPE_TEXT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_key="是否有图片"
+        app:siv_key="@string/already_set_img"
         app:siv_type="TYPE_TEXT"/>
 
     <include layout="@layout/layout_search_or_clear"/>

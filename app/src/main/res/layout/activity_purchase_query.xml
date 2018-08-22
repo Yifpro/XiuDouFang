@@ -13,53 +13,53 @@
         android:id="@+id/siv_order_num"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_hint="请输入单号"
-        app:siv_key="单号"
+        app:siv_hint="@string/input_order_no"
+        app:siv_key="@string/order_no"
         app:siv_type="TYPE_EDIT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_customer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_hint="请输入客户"
-        app:siv_key="客户"
+        app:siv_hint="@string/input_customer"
+        app:siv_key="@string/customer"
         app:siv_type="TYPE_EDIT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_start_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_key="开始时间"
+        app:siv_key="@string/start_time"
         app:siv_type="TYPE_TEXT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_end_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_key="结束时间"
+        app:siv_key="@string/end_time"
         app:siv_type="TYPE_TEXT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_operator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_hint="请输入操作员"
-        app:siv_key="操作员"
+        app:siv_hint="@string/input_operator"
+        app:siv_key="@string/operator"
         app:siv_type="TYPE_EDIT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_hint="请输入采购单备注"
-        app:siv_key="采购单备注"
+        app:siv_hint="@string/input_purchase_order_tip"
+        app:siv_key="@string/purchase_order_tip"
         app:siv_type="TYPE_EDIT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_transfer_purchase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:siv_key="订单转采购"
+        app:siv_key="@string/order_transfer_purchase"
         app:siv_type="TYPE_TEXT"/>
 
     <include layout="@layout/layout_search_or_clear"/>

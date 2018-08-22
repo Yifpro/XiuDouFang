@@ -13,7 +13,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="10dp"
-        android:text="温馨提示"
+        android:text="@string/warm_reminder"
         android:textColor="@color/black"
         android:textSize="16dp" />
 
