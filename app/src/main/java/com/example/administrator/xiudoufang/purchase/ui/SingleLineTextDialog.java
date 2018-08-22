@@ -11,21 +11,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.purchase.adapter.TransferPurchaseAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class TransferPurchaseDialog extends DialogFragment {
+public class SingleLineTextDialog extends DialogFragment {
 
-    private OnItemChangedListener listener;
+    private OnItemClickListener listener;
 
-    public static TransferPurchaseDialog newInstance(ArrayList<String> list) {
-        TransferPurchaseDialog f = new TransferPurchaseDialog();
+    public static SingleLineTextDialog newInstance(ArrayList<String> list) {
+        SingleLineTextDialog f = new SingleLineTextDialog();
         Bundle args = new Bundle();
         args.putStringArrayList("list", list);
         f.setArguments(args);
@@ -41,26 +39,23 @@ public class TransferPurchaseDialog extends DialogFragment {
         ArrayList<String> items = new ArrayList<>(getArguments().getStringArrayList("list"));
         TransferPurchaseAdapter adapter = new TransferPurchaseAdapter(R.layout.layout_list_item_transfer_purchase, items);
         adapter.bindToRecyclerView(recyclerView);
-        View header = View.inflate(getActivity(), R.layout.layout_list_header_transfer_purchase, null);
-        ((TextView) header.findViewById(R.id.tv)).setText("请选择");
-        adapter.addHeaderView(header);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (listener != null)
-                    listener.onItemChanged(position);
+                    listener.onItemClick(position);
             }
         });
         return view;
     }
 
-    public void setOnItemChangedListener(OnItemChangedListener listener) {
+    public void setOnItemChangedListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
-    interface OnItemChangedListener {
-        void onItemChanged(int position);
+    interface OnItemClickListener {
+        void onItemClick(int position);
     }
 }

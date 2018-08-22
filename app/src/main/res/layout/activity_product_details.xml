@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_toolbar"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/gray_cccccc"/>
+
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_product_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:siv_isShowNext="false"
+                app:siv_key="产品编号"
+                app:siv_type="TYPE_TEXT"/>
+
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_product_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:siv_isShowNext="false"
+                app:siv_key="产品名称"
+                app:siv_type="TYPE_TEXT"/>
+
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_stock_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:siv_isShowNext="false"
+                app:siv_key="库存"
+                app:siv_type="TYPE_TEXT"/>
+
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_free_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:siv_isShowNext="false"
+                app:siv_key="自由数"
+                app:siv_type="TYPE_TEXT"/>
+
+            <TextView
+                android:id="@+id/tv_expand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="拓展信息"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14dp"/>
+
+            <LinearLayout
+                android:id="@+id/linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                    android:id="@+id/siv_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:siv_isShowNext="false"
+                    app:siv_key="类别"
+                    app:siv_type="TYPE_TEXT"/>
+
+                <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                    android:id="@+id/siv_brand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:siv_isShowNext="false"
+                    app:siv_key="品牌"
+                    app:siv_type="TYPE_TEXT"/>
+
+                <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                    android:id="@+id/siv_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:siv_isShowNext="false"
+                    app:siv_key="型号"
+                    app:siv_type="TYPE_TEXT"/>
+
+                <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                    android:id="@+id/siv_bar_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:siv_isShowNext="false"
+                    app:siv_key="条码"
+                    app:siv_type="TYPE_TEXT"/>
+
+                <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                    android:id="@+id/siv_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:siv_isShowNext="false"
+                    app:siv_key="详述"
+                    app:siv_type="TYPE_TEXT"/>
+
+                <TextView
+                    android:id="@+id/tv_collapse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:text="隐藏"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14dp"/>
+            </LinearLayout>
+
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_purchase_unit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:siv_key="采购单位"
+                app:siv_type="TYPE_TEXT"/>
+
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_price_source"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:siv_key="价格来源"
+                app:siv_type="TYPE_TEXT"/>
+
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_single_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:siv_isShowNext="false"
+                app:siv_key="单品价"
+                app:siv_type="TYPE_TEXT"/>
+
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_unit_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:siv_hint="请输入单位价"
+                app:siv_key="单位价"
+                app:siv_type="TYPE_EDIT"/>
+
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_product_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:siv_key="产品颜色"
+                app:siv_type="TYPE_TEXT"/>
+
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_product_spec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:siv_key="产品规格"
+                app:siv_type="TYPE_TEXT"/>
+
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_purchase_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:siv_hint="请输入采购数量"
+                app:siv_key="采购数量"
+                app:siv_type="TYPE_EDIT"/>
+
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_gift"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:siv_isShowNext="false"
+                app:siv_key="赠品"
+                app:siv_leftTitle="否"
+                app:siv_rightTitle="是"
+                app:siv_type="TYPE_SEGMENT"/>
+
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_goods_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:siv_hint="请输入货号"
+                app:siv_isShowNext="false"
+                app:siv_key="货号"
+                app:siv_type="TYPE_EDIT"/>
+
+            <EditText
+                android:id="@+id/et_tip"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/white"
+                android:gravity="top"
+                android:hint="备注（请输入少于50字）"
+                android:padding="5dp"
+                android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
+                android:textSize="14dp"/>
+
+            <TextView
+                android:id="@+id/tv_finish_edit"
+                android:text="@string/finish_edit"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_textview_confirm_order_shape"
+                android:textColor="@color/white"
+                android:textSize="14dp"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

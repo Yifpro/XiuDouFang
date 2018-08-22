@@ -11,10 +11,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.bean.PayBean;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.receipt.adapter.ReceiptSelectorAdapter;
@@ -33,12 +36,18 @@ public class ReceiptSelectorDialog extends DialogFragment {
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
         final List<PayBean> list = JSONObject.parseArray(jsonObject.getJSONArray("pay").toJSONString(), PayBean.class);
+        for (PayBean b : list) {
+            LogUtils.e("pay bean ->" + b.getPayname());
+        }
         ReceiptSelectorAdapter adapter = new ReceiptSelectorAdapter(R.layout.layout_list_item_receipt_selector, list);
         adapter.bindToRecyclerView(recyclerView);
-        adapter.setOnItemClickListener(new ReceiptSelectorAdapter.OnItemClickListener() {
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onClick(String payId, String payName, String number, String content) {
-                mListener.onItemChanged(payId, payName, number, content);
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view.getId() == R.id.tv) {
+                    if (mListener != null)
+                        mListener.onItemChanged(list.get(position), ((TextView) adapter.getViewByPosition(position, R.id.tv)).getText().toString());
+                }
             }
         });
         recyclerView.setAdapter(adapter);
@@ -46,17 +55,11 @@ public class ReceiptSelectorDialog extends DialogFragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getDialog().getWindow().setLayout(SizeUtils.dp2px(320), SizeUtils.dp2px(190));
-    }
-
     public void setOnItemChangedListener(OnItemChangedListener listener) {
         mListener = listener;
     }
 
     public interface OnItemChangedListener {
-        void onItemChanged(String payId, String payName, String number, String content);
+        void onItemChanged(PayBean item, String content);
     }
 }

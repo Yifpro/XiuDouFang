@@ -15,11 +15,10 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
+import com.example.administrator.xiudoufang.base.XiuDouFangApplication;
 import com.example.administrator.xiudoufang.purchase.adapter.ExtraSelectorAdapter;
-import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.bean.ImageItem;
-import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.yuyh.library.imgsel.ISNav;
+import com.yuyh.library.imgsel.config.ISCameraConfig;
 
 import java.util.ArrayList;
 
@@ -48,30 +47,13 @@ public class ImageSelectorDialog extends DialogFragment {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (position) {
                     case 0:
-                        Intent intent = new Intent(getActivity(), ImageGridActivity.class);
-                        intent.putExtra(ImageGridActivity.EXTRAS_TAKE_PICKERS,true);
-                        startActivityForResult(intent, 1);
                         break;
                     case 1:
-                        Intent intent2 = new Intent(getActivity(), ImageGridActivity.class);
-                        startActivityForResult(intent2, 1);
                         break;
                 }
                 dismiss();
             }
         });
         return view;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
-            if (data != null) {
-                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                LogUtils.e("相册路径 - > " + images.get(0).path);
-            }
-        }
     }
 }

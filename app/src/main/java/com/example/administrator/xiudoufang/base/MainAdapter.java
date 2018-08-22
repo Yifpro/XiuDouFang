@@ -9,9 +9,9 @@ import com.example.administrator.xiudoufang.bean.MenuItem;
 
 import java.util.List;
 
-public class MenuItemAdapter extends BaseQuickAdapter<MenuItem, BaseViewHolder> {
+public class MainAdapter extends BaseQuickAdapter<MenuItem, BaseViewHolder> {
 
-    public MenuItemAdapter(int layoutResId, @Nullable List<MenuItem> data) {
+    public MainAdapter(int layoutResId, @Nullable List<MenuItem> data) {
         super(layoutResId, data);
     }
 

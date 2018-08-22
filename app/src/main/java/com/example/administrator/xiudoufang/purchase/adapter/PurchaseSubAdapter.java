@@ -64,6 +64,7 @@ public class PurchaseSubAdapter extends BaseQuickAdapter<PurchaseListBean.Purcha
         helper.setText(R.id.tv_date, item.getIssDate());
         helper.setText(R.id.tv_name, item.getCrman());
         helper.setText(R.id.tv_type, item.getWarehouse());
+
         helper.addOnClickListener(R.id.tv_bottom_left);
         helper.addOnClickListener(R.id.tv_bottom_right);
     }

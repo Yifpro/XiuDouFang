@@ -19,6 +19,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.CustomerListBean;
+import com.example.administrator.xiudoufang.bean.PayBean;
 import com.example.administrator.xiudoufang.bean.SingleCustomerItem;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
@@ -243,12 +244,13 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
             mReceiptDialog = new ReceiptSelectorDialog();
             mReceiptDialog.setOnItemChangedListener(new ReceiptSelectorDialog.OnItemChangedListener() {
                 @Override
-                public void onItemChanged(String payId, String payName, String number, String content) {
-                    mPayId = payId;
-                    if ("现金支付".equals(payName))
+                public void onItemChanged(PayBean item, String content) {
+                    mPayId = item.getId();
+                    String number = item.getNumber();
+                    if ("现金支付".equals(item.getPayname()))
                         number = "现金支付";
                     mSivReceiptType.setValue(content);
-                    mSivReceiptPerson.setValue(payName);
+                    mSivReceiptPerson.setValue(item.getPayname());
                     mSivReceiptAccount.setValue(number);
                     mReceiptDialog.dismiss();
                 }

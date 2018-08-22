@@ -28,7 +28,7 @@ public class LoadingViewDialog extends android.support.v4.app.DialogFragment {
 
     private TextView mTvTitle;
 
-    private String mTitle;
+    private String mTitle = "加载中...";
     private boolean isShow;
 
 

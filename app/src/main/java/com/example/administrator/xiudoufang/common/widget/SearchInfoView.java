@@ -28,6 +28,7 @@ public class SearchInfoView extends LinearLayout {
     private ImageView mIvNext;
 
     private int mType = -1;
+    private OnItemChangeListener mListener;
 
     public SearchInfoView(Context context) {
         this(context, null);
@@ -93,6 +94,8 @@ public class SearchInfoView extends LinearLayout {
                 public void onClick(View view) {
                     mTvLeftSegment.setSelected(true);
                     mTvRightSegment.setSelected(false);
+                    if (mListener != null)
+                        mListener.onItemchange(true);
                 }
             });
             mTvRightSegment.setOnClickListener(new OnClickListener() {
@@ -100,9 +103,19 @@ public class SearchInfoView extends LinearLayout {
                 public void onClick(View view) {
                     mTvLeftSegment.setSelected(false);
                     mTvRightSegment.setSelected(true);
+                    if (mListener != null)
+                        mListener.onItemchange(false);
                 }
             });
         }
+    }
+
+    public void setOnItemChangeListener(OnItemChangeListener listener) {
+        mListener = listener;
+    }
+
+    public interface OnItemChangeListener {
+        void onItemchange(boolean isLeft);
     }
 
     public void setType(@ViewType.Type int type) {

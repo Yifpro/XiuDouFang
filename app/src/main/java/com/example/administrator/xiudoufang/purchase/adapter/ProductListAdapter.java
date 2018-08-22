@@ -37,6 +37,7 @@ public class ProductListAdapter extends BaseQuickAdapter<ProductListBean.Product
         }
         helper.setText(R.id.tv_id, item.getStyleno());
         helper.setText(R.id.tv_name, item.getStylename());
+
         helper.addOnClickListener(R.id.iv_select);
     }
 }

@@ -4,11 +4,12 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,10 +18,7 @@ import android.widget.TextView;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.common.footer.DefaultFooter;
 import com.example.administrator.xiudoufang.common.header.DefaultHeader;
-import com.example.administrator.xiudoufang.common.utils.PicassoImageLoader;
 import com.example.administrator.xiudoufang.common.utils.ScreenUtils;
-import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.view.CropImageView;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.cookie.CookieJarImpl;
@@ -32,6 +30,7 @@ import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
 import com.scwang.smartrefresh.layout.api.RefreshFooter;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.yuyh.library.imgsel.config.ISListConfig;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -58,9 +57,14 @@ public class XiuDouFangApplication extends Application {
     }
 
     private static Context mContext;
+    private static ISListConfig mConfig;
 
     public static Context getContext() {
         return mContext;
+    }
+
+    public static ISListConfig getConfig() {
+        return mConfig;
     }
 
     @Override
@@ -117,17 +121,33 @@ public class XiuDouFangApplication extends Application {
     }
 
     private void initImagePicker() {
-        ImagePicker imagePicker = ImagePicker.getInstance();
-        imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
-        imagePicker.setShowCamera(true);  //显示拍照按钮
-        imagePicker.setCrop(true);        //允许裁剪（单选才有效）
-        imagePicker.setSaveRectangle(true); //是否按矩形区域保存
-        imagePicker.setSelectLimit(1);    //选中数量限制
-        imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
-        imagePicker.setFocusWidth(800);   //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
-        imagePicker.setFocusHeight(800);  //裁剪框的高度。单位像素（圆形自动取宽高最小值）
-        imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
-        imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
+        mConfig = new ISListConfig.Builder()
+                // 是否多选, 默认true
+                .multiSelect(false)
+                // 是否记住上次选中记录, 仅当multiSelect为true的时候配置，默认为true
+                .rememberSelected(false)
+                // “确定”按钮背景色
+                .btnBgColor(Color.GRAY)
+                // “确定”按钮文字颜色
+                .btnTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                // 使用沉浸式状态栏
+                .statusBarColor(Color.WHITE)
+                // 返回图标ResId
+                .backResId(R.mipmap.ic_back)
+                // 标题
+                .title("图片")
+                // 标题文字颜色
+                .titleColor(Color.WHITE)
+                // TitleBar背景色
+                .titleBgColor(Color.WHITE)
+                // 裁剪大小。needCrop为true的时候配置
+                //.cropSize(1, 1, 200, 200)
+                //.needCrop(true)
+                // 第一个是否显示相机，默认true
+                .needCamera(false)
+                // 最大选择图片数量，默认9
+                .maxNum(1)
+                .build();
     }
 
     private void initOkGo() {

@@ -9,8 +9,11 @@ import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.HttpHeaders;
+import com.lzy.okgo.model.HttpParams;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2018/8/17
@@ -58,9 +61,15 @@ public class NewPurchaseOrderLogic {
     //******** 提交订单 ********
     public void requestSubmitOrder(HashMap<String, String> params, JsonCallback<String> callback) {
         String json = JSONObject.toJSONString(params);
+        LogUtils.e("订单提交 -> " + json);
+        HttpParams p = new HttpParams();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            p.put(entry.getKey(), entry.getValue());
+        }
         OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/postpoorderall?postpoorder=0")
-                .headers("Content-Type", "application/json")
-                .upJson(json)
+                //.headers("Content-Type", "application/json")
+                //.upJson(json)
+                .params(p)
                 .execute(callback);
     }
 }

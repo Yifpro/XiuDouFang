@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.check.ui.CheckOrderActivity;
+import com.example.administrator.xiudoufang.check.CheckOrderActivity;
 import com.example.administrator.xiudoufang.open.OpenBillActivity;
 import com.example.administrator.xiudoufang.product.ProductActivity;
 import com.example.administrator.xiudoufang.receipt.ui.CustomerListActivity;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements IActivityBase {
         menuItems.add(new MenuItem(R.mipmap.ic_purchase, "采购"));
         menuItems.add(new MenuItem(R.mipmap.ic_setting, "设置"));
         menuItems.add(new MenuItem(0, ""));
-        MenuItemAdapter adapter = new MenuItemAdapter(R.layout.layout_list_item_main, menuItems);
+        MainAdapter adapter = new MainAdapter(R.layout.layout_list_item_main, menuItems);
         adapter.bindToRecyclerView(mRecyclerView);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -86,6 +86,6 @@ public class MainActivity extends AppCompatActivity implements IActivityBase {
         });
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-        mRecyclerView.addItemDecoration(new MyItemDecoration());
+        mRecyclerView.addItemDecoration(new MainDecoration());
     }
 }

@@ -22,7 +22,7 @@ import com.lzy.okgo.model.Response;
 
 import java.lang.ref.WeakReference;
 
-public class VerificateDialog extends DialogFragment implements View.OnClickListener {
+public class VerificateCodeDialog extends DialogFragment implements View.OnClickListener {
 
     private LoginLogic mLogic;
     private TextView mTvCode;
@@ -52,7 +52,7 @@ public class VerificateDialog extends DialogFragment implements View.OnClickList
                         mTvCode.setText("60");
                         mTvCode.setClickable(false);
                         if (mHandler == null)
-                            mHandler = new MyHandler(VerificateDialog.this);
+                            mHandler = new MyHandler(VerificateCodeDialog.this);
                         mHandler.sendEmptyMessage(0);
                     }
                 });
@@ -103,7 +103,7 @@ public class VerificateDialog extends DialogFragment implements View.OnClickList
             case R.id.tv_code:
                 mTvCode.setText(R.string.initial_time);
                 if (mHandler == null)
-                    mHandler = new MyHandler(VerificateDialog.this);
+                    mHandler = new MyHandler(VerificateCodeDialog.this);
                 mHandler.sendEmptyMessage(0);
                 break;
         }
@@ -115,16 +115,16 @@ public class VerificateDialog extends DialogFragment implements View.OnClickList
 
     private static class MyHandler extends Handler {
 
-        private final WeakReference<VerificateDialog> mWeakReference;
+        private final WeakReference<VerificateCodeDialog> mWeakReference;
 
         @SuppressWarnings("unchecked")
-        private MyHandler(VerificateDialog fragment) {
+        private MyHandler(VerificateCodeDialog fragment) {
             mWeakReference = new WeakReference(fragment);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            VerificateDialog fragment = mWeakReference.get();
+            VerificateCodeDialog fragment = mWeakReference.get();
             if (fragment != null) {
                 if (fragment.mCount >= 0) {
                     fragment.mHandler.sendEmptyMessageDelayed(0, 1000);

@@ -2,12 +2,10 @@ package com.example.administrator.xiudoufang.login.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -17,6 +15,7 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.MainActivity;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
+import com.example.administrator.xiudoufang.common.utils.SoftInputHelper;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.common.widget.SimpleEditTextView;
 import com.example.administrator.xiudoufang.base.IActivityBase;
@@ -34,7 +33,7 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
     private SimpleEditTextView mSetvPassword;
     private ImageView mIvPsdStatus;
     private ServerSelectorDialog mServerDialog;
-    private VerificateDialog mVerificateDialog;
+    private VerificateCodeDialog mVerificateCodeDialog;
 
     private LoginLogic mLogic;
 
@@ -62,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
             public void onClick(View view) {
                 if (mServerDialog == null)
                     mServerDialog = new ServerSelectorDialog();
-                mServerDialog.show(getSupportFragmentManager(), "");
+                mServerDialog.show(getSupportFragmentManager(), "ServerSelectorDialog");
             }
         });
     }
@@ -91,17 +90,17 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
         }
     }
 
+    //******** 检查是否需要验证码 ********
     private void login() {
-        LoadingViewDialog.getInstance().show(this);
-        //******** 检查是否需要验证码 ********
         HttpParams httpParams = new HttpParams();
         httpParams.put("username", mSetvAccount.getText());
         httpParams.put("password", mSetvPassword.getText());
         httpParams.put("shoujino", "");
+        LoadingViewDialog.getInstance().show(this);
         mLogic.checkVerificationCode(httpParams, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
-                LogUtils.e("检查验证码->" + response.body());
+                LogUtils.e("是否需要验证码->" + response.body());
                 JSONObject jsonObject = JSONObject.parseObject(response.body());
                 String msg = jsonObject.getString("mesage");
                 if ("请求成功".equals(msg)) {
@@ -109,7 +108,6 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
                     if ("0".equals(needcheck)) {
                         requestLogin("");
                     } else {
-                        //******** 发送验证码 ********
                         LoadingViewDialog.getInstance().dismiss();
                         showVerificationCodeDialog(jsonObject.getString("userid"));
                     }
@@ -120,22 +118,29 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
         });
     }
 
+    //******** 发送验证码 ********
     private void showVerificationCodeDialog(final String userid) {
-        if (mVerificateDialog == null) {
-            mVerificateDialog = new VerificateDialog();
-            mVerificateDialog.setUserid(userid);
-            mVerificateDialog.setLogic(mLogic);
-            mVerificateDialog.setOnSubmitClickListener(new VerificateDialog.OnSubmitClickListener() {
+        if (mVerificateCodeDialog == null) {
+            mVerificateCodeDialog = new VerificateCodeDialog();
+            mVerificateCodeDialog.setUserid(userid);
+            mVerificateCodeDialog.setLogic(mLogic);
+            mVerificateCodeDialog.setOnSubmitClickListener(new VerificateCodeDialog.OnSubmitClickListener() {
                 @Override
                 public void onClick(String phoneCode) {
+                    if (TextUtils.isEmpty(phoneCode)) {
+                        Toast.makeText(LoginActivity.this, "验证码不能为空", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     LoadingViewDialog.getInstance().show(LoginActivity.this);
                     requestLogin(phoneCode);
+                    mVerificateCodeDialog.dismiss();
                 }
             });
         }
-        mVerificateDialog.show(getSupportFragmentManager(), "VerificateDialog");
+        mVerificateCodeDialog.show(getSupportFragmentManager(), "VerificateCodeDialog");
     }
 
+    //******** 请求登录 ********
     private void requestLogin(String phoneCode) {
         HashMap<String, String> map = new HashMap<>();
         map.put("username", mSetvAccount.getText());
@@ -150,8 +155,8 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
                 JSONObject jsonObject = JSONObject.parseObject(response.body());
                 String messagestr = jsonObject.getString("messagestr");
                 if (!TextUtils.isEmpty(messagestr)) {
-                    mVerificateDialog.setEmpty();
                     LoadingViewDialog.getInstance().dismiss();
+                    mVerificateCodeDialog.setEmpty();
                     Toast.makeText(LoginActivity.this, messagestr, Toast.LENGTH_SHORT).show();
                 } else {
                     mLogic.cacheLoginInfo(LoginActivity.this, response.body());
@@ -174,13 +179,13 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
         });
     }
 
-    //******** 点击外部区域回缩软键盘 ********
+    //******** 点击外部区域隐藏软键盘 ********
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
             if (isShouldHideKeyboard(v, ev)) {
-                hideKeyboard(v.getWindowToken());
+                SoftInputHelper.hideSoftInput(this);
             }
         }
         return super.dispatchTouchEvent(ev);
@@ -202,12 +207,5 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
             }
         }
         return false;
-    }
-
-    private void hideKeyboard(IBinder token) {
-        if (token != null) {
-            InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
-        }
     }
 }

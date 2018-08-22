@@ -22,6 +22,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseTextWatcher;
 import com.example.administrator.xiudoufang.base.IActivityBase;
+import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.bean.ProductListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
@@ -44,6 +45,7 @@ import java.util.List;
 
 public class ProductListActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
+    public static final String TAG = ProductListActivity.class.getSimpleName();
     private final int COUNT = 20;
 
     private RefreshLayout mRefreshLayout;
@@ -112,14 +114,16 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                ProductListBean.ProductBean bean = mList.get(position);
-                bean.setSelected(!bean.isSelected());
+                mList.get(position).setSelected(!mList.get(position).isSelected());
                 mAdapter.notifyItemChanged(position);
             }
         });
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(ProductListActivity.this, ProductDetailsActivity.class);
+                intent.putExtra(ProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
+                startActivity(intent);
             }
         });
         mRecyclerView.setItemAnimator(null);
@@ -145,6 +149,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         mLogic.requestProductList(mParams, new JsonCallback<ProductListBean>() {
             @Override
             public void onSuccess(Response<ProductListBean> response) {
+                LoadingViewDialog.getInstance().dismiss();
                 if (mList == null)
                     mList = new ArrayList<>();
                 mList = response.body().getPo_chanpinlist();
@@ -183,7 +188,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
             case R.id.fab_action:
                 mFabAction.setImageResource(mIsShowMenu ? R.mipmap.ic_close_white : R.mipmap.ic_menu);
                 mIsShowMenu = !mIsShowMenu;
-                if (!mIsShowMenu) {
+                if (mIsShowMenu) {
                     mFabComplete.setVisibility(View.VISIBLE);
                     menuAnim.setStartDelay(350);
                     menuAnim.start();
@@ -201,7 +206,37 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
                 break;
             case R.id.fab_complete:
                 Intent intent = new Intent();
+                ArrayList<ProductItem> list = new ArrayList<>();
+                for (ProductListBean.ProductBean bean : mList) {
+                    ProductItem item = new ProductItem();
+                    item.setPhotourl(bean.getPhotourl());
+                    item.setId(bean.getCpid());
+                    item.setProductNo(bean.getStyleno());
+                    item.setStylename(bean.getStylename());
+                    item.setColor("");
+                    item.setSize("");
+                    String factor = "", unit = "";
+                    for (ProductListBean.ProductBean.PacklistBean b : bean.getPacklist()) {
+                        if ("1".equals(b.getCheck())) {
+                            factor = b.getUnit_bilv();
+                            unit = b.getUnitname();
+                        }
+                    }
+                    ProductListBean.ProductBean.LishijialistBean historyBean = bean.getLishijialist().get(bean.getLishijialist().indexOf(new ProductListBean.ProductBean.LishijialistBean(factor, unit)));
+                    item.setFactor(factor);
+                    item.setUnit(unit);
+                    item.setAmount("1");
+                    item.setSinglePrice(historyBean.getPrice());
+                    item.setUnitPrice(historyBean.getPrice());
+                    item.setTip("");
+                    item.setGoodsNo("");
+                    item.setPriceCode(historyBean.getPricecode());
+                    item.setPriceSource("历史价");
+                    list.add(item);
+                }
+                intent.putParcelableArrayListExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT_LIST, list);
                 setResult(Activity.RESULT_OK, intent);
+                finish();
                 break;
         }
     }

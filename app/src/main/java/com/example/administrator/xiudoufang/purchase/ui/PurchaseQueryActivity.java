@@ -13,10 +13,16 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
+import com.example.administrator.xiudoufang.bean.PurchaseListBean;
+import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
+import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
+import com.example.administrator.xiudoufang.purchase.logic.PurchaseLogic;
+import com.lzy.okgo.model.Response;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class PurchaseQueryActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
@@ -27,6 +33,12 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
     private SearchInfoView mSivEndTime;
     private TimePickerView mPvStartTime;
     private TimePickerView mPvEndTime;
+    private SearchInfoView mSivOrderNum;
+    private SearchInfoView mSivCustomer;
+    private SearchInfoView mSivOperator;
+    private SearchInfoView mSivTip;
+
+    private ArrayList<String> mList;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, PurchaseQueryActivity.class);
@@ -41,12 +53,12 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
     @Override
     public void initView() {
         setTitle("采购查询");
-        SearchInfoView sivOrderNum = findViewById(R.id.siv_order_num);
-        SearchInfoView sivCustomer = findViewById(R.id.siv_customer);
+        mSivOrderNum = findViewById(R.id.siv_order_num);
+        mSivCustomer = findViewById(R.id.siv_customer);
         mSivStartTime = findViewById(R.id.siv_start_time);
         mSivEndTime = findViewById(R.id.siv_end_time);
-        SearchInfoView sivOperator = findViewById(R.id.siv_operator);
-        SearchInfoView sivTip = findViewById(R.id.siv_tip);
+        mSivOperator = findViewById(R.id.siv_operator);
+        mSivTip = findViewById(R.id.siv_tip);
         mSivTransferPurchase = findViewById(R.id.siv_transfer_purchase);
 
         findViewById(R.id.tv_query).setOnClickListener(this);
@@ -73,23 +85,15 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
 
     private void showTransferPurchaseDialog() {
         if (mTransferPurchaseDialog == null) {
-            mTransferPurchaseDialog = new TransferPurchaseDialog();
+            mList = new ArrayList<>();
+            mList.add("全部");
+            mList.add("是");
+            mList.add("否");
+            mTransferPurchaseDialog = TransferPurchaseDialog.newInstance(mList);
             mTransferPurchaseDialog.setOnItemChangedListener(new TransferPurchaseDialog.OnItemChangedListener() {
                 @Override
                 public void onItemChanged(int position) {
-                    String result = null;
-                    switch (position) {
-                        case 0:
-                            result = "全部";
-                            break;
-                        case 1:
-                            result = "是";
-                            break;
-                        case 2:
-                            result = "否";
-                            break;
-                    }
-                    mSivTransferPurchase.setValue(result);
+                    mSivTransferPurchase.setValue(mList.get(position));
                     mTransferPurchaseDialog.dismiss();
                 }
             });
@@ -179,8 +183,7 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
 
     @Override
     public void initData() {
-        mSivStartTime.setValue(StringUtils.getCurrentTime());
-        mSivEndTime.setValue(StringUtils.getCurrentTime());
+        initTime();
     }
 
     @Override
@@ -189,8 +192,23 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
             case R.id.tv_query:
                 break;
             case R.id.tv_reset:
+                reset();
                 break;
         }
+    }
+
+    private void reset() {
+        mSivOrderNum.setValue("");
+        mSivCustomer.setValue("");
+        initTime();
+        mSivOperator.setValue("");
+        mSivTip.setValue("");
+        mSivTransferPurchase.setValue(mList.get(0));
+    }
+
+    private void initTime() {
+        mSivStartTime.setValue(StringUtils.getCurrentTime());
+        mSivEndTime.setValue(StringUtils.getCurrentTime());
     }
 
 }

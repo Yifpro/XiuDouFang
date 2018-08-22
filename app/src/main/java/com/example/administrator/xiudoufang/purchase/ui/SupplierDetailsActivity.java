@@ -17,7 +17,7 @@ import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 
 public class SupplierDetailsActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
-    private static final int RESULT_GET_AREA = 2;
+    private static final int RESULT_SELECT_AREA = 102;
 
     private SearchInfoView mSivCustomerNo;
     private SearchInfoView mSivName;
@@ -30,6 +30,7 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
     private SearchInfoView mSivCustomArea;
     private SearchInfoView mSivAreaNo;
     private SearchInfoView mSivAreaName;
+    private SupplierListBean.SupplierBean mBean;
 
     @Override
     public int getLayoutId() {
@@ -50,25 +51,28 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
         mSivCustomArea = findViewById(R.id.siv_custom_area);
         mSivAreaNo = findViewById(R.id.siv_area_no);
         mSivAreaName = findViewById(R.id.siv_area_name);
-        findViewById(R.id.siv_custom_area).setOnClickListener(new InnerClickListener());
+
         findViewById(R.id.tv_sure).setOnClickListener(this);
+        findViewById(R.id.siv_custom_area).setOnClickListener(new InnerClickListener());
     }
 
     @Override
     public void initData() {
         if (getIntent() != null) {
-            SupplierListBean.SupplierBean bean = getIntent().getParcelableExtra(SupplierListActivity.SELECTED_ITEM);
-            mSivCustomerNo.setValue(bean.getCustomerno());
-            mSivName.setValue(bean.getCustomername());
-            mSivTotalName.setValue(bean.getQuancheng());
-            mSivDebt.setValue(bean.getDebt());
-            mSivPhoneNum.setValue(bean.getTelephone());
+            mBean = getIntent().getParcelableExtra(SupplierListActivity.SELECTED_ITEM);
+            mSivCustomerNo.setValue(mBean.getCustomerno());
+            mSivName.setValue(mBean.getCustomername());
+            mSivTotalName.setValue(mBean.getQuancheng());
+            mSivDebt.setValue(mBean.getDebt());
+            mSivPhoneNum.setValue(mBean.getTelephone());
+            mSivAreaNo.setValue(mBean.getQuyuno());
+            mSivAreaName.setValue(mBean.getQuyu());
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == RESULT_GET_AREA && data != null) {
+        if (requestCode == RESULT_SELECT_AREA && data != null) {
             mSivAreaNo.setValue(data.getStringExtra("area_code"));
             mSivAreaName.setValue(data.getStringExtra("area_name"));
         }
@@ -87,17 +91,18 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
                 }
                 Intent intent = new Intent(this, clazz);
                 SupplierDetails details = new SupplierDetails();
-                details.setId(((SupplierListBean.SupplierBean) getIntent().getParcelableExtra(SupplierListActivity.SELECTED_ITEM)).getC_id());
-                details.setCustomerNo(mSivCustomerNo.getValue());
-                details.setName(mSivName.getValue());
-                details.setTotalName(mSivTotalName.getValue());
-                details.setDebt(mSivDebt.getValue());
-                details.setPhoneNum(mSivPhoneNum.getValue());
+                details.setId(mBean.getC_id());
+                details.setCustomerNo(mBean.getCustomerno());
+                details.setName(mBean.getCustomername());
+                details.setTotalName(mBean.getQuancheng());
+                details.setDebt(mBean.getDebt());
+                details.setPhoneNum(mBean.getTelephone());
                 details.setNewPhoneNum(mSivNewPhoneNum.getValue());
                 details.setNewTelephoneNum(mSivNewTelephoneNum.getValue());
                 details.setNewContact(mSivNewContact.getValue());
                 details.setAreaNo(mSivAreaNo.getValue());
                 details.setAreaName(mSivAreaName.getValue());
+                details.setFendianid(mBean.getFendianid());
                 intent.putExtra(NewPurchaseOrderActivity.SELECTED_SUPPLIER, details);
                 startActivity(intent);
                 break;
@@ -109,7 +114,7 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(SupplierDetailsActivity.this, AreaListActivity.class);
-            startActivityForResult(intent, RESULT_GET_AREA);
+            startActivityForResult(intent, RESULT_SELECT_AREA);
         }
     }
 }

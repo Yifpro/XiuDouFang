@@ -23,16 +23,16 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
-import com.example.administrator.xiudoufang.bean.ProductItem;
+import com.example.administrator.xiudoufang.bean.PayBean;
+import com.example.administrator.xiudoufang.bean.ProductListBean;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.bean.SupplierDetails;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
-import com.example.administrator.xiudoufang.purchase.adapter.SelectedProductAdapter;
+import com.example.administrator.xiudoufang.purchase.adapter.SelectedProductAdapter2;
 import com.example.administrator.xiudoufang.purchase.logic.PurchaseLogic;
 import com.example.administrator.xiudoufang.receipt.logic.CustomerListLogic;
 import com.example.administrator.xiudoufang.receipt.ui.ReceiptSelectorDialog;
@@ -46,6 +46,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,7 +54,7 @@ import java.util.List;
 
 public class PurchaseDetailsActivity extends AppCompatActivity implements IActivityBase {
 
-    private static final int RESULT_WAREHOUSE = 4;
+    private static final int RESULT_WAREHOUSE = 104;
     public static final String TAG = PurchaseDetailsActivity.class.getSimpleName();
 
     private SearchInfoView mSivOrderId;
@@ -84,13 +85,13 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     private PurchaseLogic mPurchaseLogic;
     private CustomerListLogic mCustomerListLogic;
     private ArrayList<SubjectListBean.AccounttypesBean> mSubjectList;
-    private List<ProductItem> mList;
+    private List<ProductListBean.ProductBean> mList;
     private String mStatus;
     private String mLastWarehouse;
     private String mDirection;
     private String mSubjectId;
     private String mPayId;
-    private SelectedProductAdapter mAdapter;
+    private SelectedProductAdapter2 mAdapter;
 
     @Override
     public int getLayoutId() {
@@ -276,12 +277,13 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             mPaymentDialog = new ReceiptSelectorDialog();
             mPaymentDialog.setOnItemChangedListener(new ReceiptSelectorDialog.OnItemChangedListener() {
                 @Override
-                public void onItemChanged(String payId, String payName, String number, String content) {
-                    mPayId = payId;
-                    if ("现金支付".equals(payName))
+                public void onItemChanged(PayBean item, String content) {
+                    mPayId = item.getId();
+                    String number = item.getNumber();
+                    if ("现金支付".equals(item.getPayname()))
                         number = "现金支付";
                     mSivPaymentType.setValue(content);
-                    mSivAccountOpening.setValue(payName);
+                    mSivAccountOpening.setValue(item.getPayname());
                     mSivPaymentAccount.setValue(number);
                     mPaymentDialog.dismiss();
                 }
@@ -401,13 +403,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     public void initData() {
         mPurchaseLogic = new PurchaseLogic();
         mCustomerListLogic = new CustomerListLogic();
-        mAdapter = new SelectedProductAdapter(R.layout.layout_list_item_selected_product, mList);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
-            }
-        });
+        mAdapter = new SelectedProductAdapter2(R.layout.layout_list_item_selected_product, mList);
         SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
             @Override
             public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int viewType) {
@@ -421,7 +417,6 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 rightMenu.addMenuItem(item);
             }
         };
-        mRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
         SwipeMenuItemClickListener swipeMenuItemClickListener = new SwipeMenuItemClickListener() {
             @Override
             public void onItemClick(SwipeMenuBridge menuBridge) {
@@ -431,9 +426,46 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 mAdapter.notifyDataSetChanged();
             }
         };
+        View footerView = View.inflate(this, R.layout.layout_list_footer_purchase_details, null);
+        mRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
         mRecyclerView.setSwipeMenuItemClickListener(swipeMenuItemClickListener);
+        mRecyclerView.addFooterView(footerView);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter.bindToRecyclerView(mRecyclerView);
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                TextView tvAmount = (TextView) adapter.getViewByPosition(position, R.id.tv_amount);
+                TextView tvTotalPrice = (TextView) adapter.getViewByPosition(position, R.id.tv_total_price);
+                int i = Integer.parseInt(tvAmount.getText().toString());
+                switch (view.getId()) {
+                    case R.id.tv_reduce:
+                        if (i > 0) {
+                            i--;
+                        }
+                        break;
+                    case R.id.tv_add:
+                        i++;
+                        break;
+                }
+                tvAmount.setText(String.valueOf(i));
+                ProductListBean.ProductBean item = mList.get(position);
+                item.setCp_qty(String.valueOf(i));
+                double totalPrice = Double.parseDouble(item.getS_jiage2()) * Double.parseDouble(mList.get(position).getCp_qty());
+                DecimalFormat mFormat = new DecimalFormat("0.00");
+                tvTotalPrice.setText(mFormat.format(totalPrice));
+                tvAmount.setText(String.valueOf(i));
+            }
+        });
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(PurchaseDetailsActivity.this, ProductDetailsActivity.class);
+                intent.putExtra(ProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
+                startActivity(intent);
+            }
+        });
         loadPurchaseDetails();
     }
 
@@ -456,7 +488,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 if (!TextUtils.isEmpty(jsonObject.getString("remark")))
                     mEtTip.setText(jsonObject.getString("remark"));
                 mLastWarehouse = jsonObject.getString("warehouseid");
-                mList = JSONObject.parseArray(result.getJSONArray("puiasm").toJSONString(), ProductItem.class);
+                mList = JSONObject.parseArray(result.getJSONArray("puiasm").toJSONString(), ProductListBean.ProductBean.class);
                 mAdapter.setNewData(mList);
             }
         });

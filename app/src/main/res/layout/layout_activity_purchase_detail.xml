@@ -1,36 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <include layout="@layout/layout_toolbar"/>
+
+    <android.support.v4.widget.NestedScrollView
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fillViewport="true">
 
-        <include layout="@layout/layout_toolbar"/>
-
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_order_id"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_isShowNext="false"
-            app:siv_key="采购单号"
-            app:siv_type="TYPE_TEXT"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <include layout="@layout/layout_supplier_info_pre"/>
 
-        <include layout="@layout/layout_supplier_info_infix"/>
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_order_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:siv_isShowNext="false"
+                app:siv_key="采购单号"
+                app:siv_type="TYPE_TEXT"/>
 
-        <include
-            layout="@layout/layout_supplier_info_suf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"/>
+            <include layout="@layout/layout_supplier_info_pre"/>
 
-        <include layout="@layout/layout_bottom_selection"/>
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+            <include layout="@layout/layout_supplier_info_infix"/>
+
+            <include
+                layout="@layout/layout_supplier_info_suf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+
+            <include layout="@layout/layout_bottom_selection"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

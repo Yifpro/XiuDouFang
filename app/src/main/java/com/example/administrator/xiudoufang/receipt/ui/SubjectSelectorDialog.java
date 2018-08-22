@@ -59,12 +59,6 @@ public class SubjectSelectorDialog extends DialogFragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getDialog().getWindow().setLayout(SizeUtils.dp2px(320), SizeUtils.dp2px(190));
-    }
-
     public void setOnItemChangedListener(OnItemChangedListener listener) {
         this.mListener = listener;
     }

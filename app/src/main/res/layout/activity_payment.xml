@@ -1,158 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <include layout="@layout/layout_toolbar"/>
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fillViewport="true">
 
-        <include layout="@layout/layout_toolbar" />
-
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_customer_no"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_TEXT"
-            app:siv_isShowNext="false"
-            app:siv_key="客户编号" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_TEXT"
-            app:siv_isShowNext="false"
-            app:siv_key="客户名称" />
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_customer_no"
+                app:siv_isShowNext="false"
+                app:siv_key="客户编号"
+                app:siv_type="TYPE_TEXT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_total_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_TEXT"
-            app:siv_isShowNext="false"
-            app:siv_key="客户全称" />
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_name"
+                app:siv_isShowNext="false"
+                app:siv_key="客户名称"
+                app:siv_type="TYPE_TEXT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_debt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_TEXT"
-            app:siv_isShowNext="false"
-            app:siv_key="欠款金额" />
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_total_name"
+                app:siv_isShowNext="false"
+                app:siv_key="客户全称"
+                app:siv_type="TYPE_TEXT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_balance"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_TEXT"
-            app:siv_isShowNext="false"
-            app:siv_key="账户余额" />
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_debt"
+                app:siv_isShowNext="false"
+                app:siv_key="欠款金额"
+                app:siv_type="TYPE_TEXT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_area_type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_TEXT"
-            app:siv_isShowNext="false"
-            app:siv_key="区域类型" />
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_balance"
+                app:siv_isShowNext="false"
+                app:siv_key="账户余额"
+                app:siv_type="TYPE_TEXT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_area"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_TEXT"
-            app:siv_isShowNext="false"
-            app:siv_key="区域" />
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_area_type"
+                app:siv_isShowNext="false"
+                app:siv_key="区域类型"
+                app:siv_type="TYPE_TEXT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_subject"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_TEXT"
-            app:siv_key="会计科目" />
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_area"
+                app:siv_isShowNext="false"
+                app:siv_key="区域"
+                app:siv_type="TYPE_TEXT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_payment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_SEGMENT"
-            app:siv_isShowNext="false"
-            app:siv_key="收付款" />
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_subject"
+                app:siv_key="会计科目"
+                app:siv_type="TYPE_TEXT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_receipt_type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_TEXT"
-            app:siv_key="收款方式" />
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_payment"
+                app:siv_isShowNext="false"
+                app:siv_key="收付款"
+                app:siv_type="TYPE_SEGMENT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_receipt_person"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_TEXT"
-            app:siv_isShowNext="false"
-            app:siv_key="收款人" />
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_receipt_type"
+                app:siv_key="收款方式"
+                app:siv_type="TYPE_TEXT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_receipt_account"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_TEXT"
-            app:siv_isShowNext="false"
-            app:siv_key="收款账号" />
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_receipt_person"
+                app:siv_isShowNext="false"
+                app:siv_key="收款人"
+                app:siv_type="TYPE_TEXT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_payment_amount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_EDIT"
-            app:siv_isShowNext="false"
-            app:siv_key="款项金额" />
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_receipt_account"
+                app:siv_isShowNext="false"
+                app:siv_key="收款账号"
+                app:siv_type="TYPE_TEXT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_discount_amount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_EDIT"
-            app:siv_isShowNext="false"
-            app:siv_key="优惠金额" />
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_payment_amount"
+                app:siv_isShowNext="false"
+                app:siv_key="款项金额"
+                app:siv_type="TYPE_EDIT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-            android:id="@+id/siv_payment_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:siv_type="TYPE_TEXT"
-            app:siv_key="款项日期" />
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_discount_amount"
+                app:siv_isShowNext="false"
+                app:siv_key="优惠金额"
+                app:siv_type="TYPE_EDIT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <EditText
-            android:id="@+id/et_tip"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:textSize="14dp"
-            android:gravity="top"
-            android:hint="备注（请输入少于200字）"
-            android:padding="5dp"
-            android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
-            android:background="@color/white"/>
+            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+                android:id="@+id/siv_payment_date"
+                app:siv_key="款项日期"
+                app:siv_type="TYPE_TEXT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/tv_submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/bg_textview_confirm_order_shape"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/confirm"
-            android:textColor="@color/white"
-            android:textSize="14dp" />
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+            <EditText
+                android:id="@+id/et_tip"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/white"
+                android:gravity="top"
+                android:hint="备注（请输入少于200字）"
+                android:padding="5dp"
+                android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
+                android:textSize="14dp"/>
+
+            <TextView
+                android:id="@+id/tv_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_textview_confirm_order_shape"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/confirm"
+                android:textColor="@color/white"
+                android:textSize="14dp"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

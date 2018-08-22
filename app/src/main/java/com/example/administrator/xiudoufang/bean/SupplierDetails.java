@@ -20,6 +20,15 @@ public class SupplierDetails implements Parcelable {
     private String newContact;
     private String areaNo;
     private String areaName;
+    private String fendianid = "0";
+
+    public String getFendianid() {
+        return fendianid;
+    }
+
+    public void setFendianid(String fendianid) {
+        this.fendianid = fendianid;
+    }
 
     public String getId() {
         return id;
@@ -109,6 +118,9 @@ public class SupplierDetails implements Parcelable {
         this.areaName = areaName;
     }
 
+    public SupplierDetails() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -127,9 +139,7 @@ public class SupplierDetails implements Parcelable {
         dest.writeString(this.newContact);
         dest.writeString(this.areaNo);
         dest.writeString(this.areaName);
-    }
-
-    public SupplierDetails() {
+        dest.writeString(this.fendianid);
     }
 
     protected SupplierDetails(Parcel in) {
@@ -144,6 +154,7 @@ public class SupplierDetails implements Parcelable {
         this.newContact = in.readString();
         this.areaNo = in.readString();
         this.areaName = in.readString();
+        this.fendianid = in.readString();
     }
 
     public static final Creator<SupplierDetails> CREATOR = new Creator<SupplierDetails>() {

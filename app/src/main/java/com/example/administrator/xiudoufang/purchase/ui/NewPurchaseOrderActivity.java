@@ -16,17 +16,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.CustomListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
+import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.base.IActivityBase;
+import com.example.administrator.xiudoufang.bean.PayBean;
 import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.bean.SupplierDetails;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -50,12 +54,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class NewPurchaseOrderActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
-    private static final int RESULT_WAREHOUSE = 4;
-    public static final int RESULT_PRODUCT_LIST = 3;
+    private static final int RESULT_WAREHOUSE = 104;
+    public static final int RESULT_PRODUCT_LIST = 103;
     public static final String SELECTED_SUPPLIER = "selected_supplier";
+    public static final String SELECTED_PRODUCT = "selected_product";
+    public static final String SELECTED_PRODUCT_LIST = "selected_product_list";
     public static final String TAG = NewPurchaseOrderActivity.class.getSimpleName();
 
     private SearchInfoView mSivSupplier;
@@ -74,23 +81,20 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     private TimePickerView mPvArrivalTime;
     private ExitEditDialog mExitEditDialog;
     private SwipeMenuRecyclerView mRecyclerView;
-    private TextView mTvAddProduct;
-    private TextView mTvScanProduct;
     private ImageView mIvExtra;
-    private TextView mTvBottomLeft;
-    private TextView mTvBottomRight;
     private ImageSelectorDialog mImageDialog;
     private SubjectSelectorDialog mSubjectDialog;
     private ReceiptSelectorDialog mPaymentDialog;
 
     private NewPurchaseOrderLogic mNewPurchaseOrderLogic;
     private CustomerListLogic mCustomerListLogic;
-    private List<ProductItem> mList;
-    private String mLastWarehouse;
-    private String mLastSubjectId;
-    private SupplierDetails mNewSupplier;
     private ArrayList<SubjectListBean.AccounttypesBean> mSubjectList;
-    private String mPayId;
+    private List<ProductItem> mProductItemList;
+    private SupplierDetails mSupplier;
+    private String mWarehouseId = "";
+    private String mSubjectId = "";
+    private String mPayId = "";
+    private SelectedProductAdapter mAdapter;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, NewPurchaseOrderActivity.class);
@@ -106,9 +110,14 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        mNewSupplier = getIntent().getParcelableExtra(SELECTED_SUPPLIER);
-        if (mNewSupplier != null) {
-            mSivSupplier.setValue(mNewSupplier.getName());
+        mSupplier = getIntent().getParcelableExtra(SELECTED_SUPPLIER);
+        ProductItem item = getIntent().getParcelableExtra(SELECTED_PRODUCT);
+        if (mSupplier != null) {
+            mSivSupplier.setValue(mSupplier.getName());
+            mSivDebt.setValue(mSupplier.getDebt());
+        } else if (item != null) {
+            mProductItemList.add(item);
+            mAdapter.setNewData(mProductItemList);
         }
     }
 
@@ -127,115 +136,36 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         mSivAccountOpening = findViewById(R.id.siv_account_opening);
         mSivPaymentAccount = findViewById(R.id.siv_payment_account);
         mRecyclerView = findViewById(R.id.recycler_view);
-        mTvAddProduct = findViewById(R.id.tv_add_product);
-        mTvScanProduct = findViewById(R.id.tv_scan_product);
         mIvExtra = findViewById(R.id.iv_extra);
         mEtTip = findViewById(R.id.et_tip);
-        mTvBottomLeft = findViewById(R.id.tv_bottom_left);
-        mTvBottomRight = findViewById(R.id.tv_bottom_right);
 
+        mSivArrival.setValue(StringUtils.getCurrentTime());
+        mSivSetupOrderDate.setValue(StringUtils.getCurrentTime());
         mSivPaymentAmount.setType(SearchInfoView.ViewType.TYPE_EDIT);
         mSivDiscountAmount.setType(SearchInfoView.ViewType.TYPE_EDIT);
-        mTvBottomLeft.setText("存为草稿");
-        mTvBottomRight.setText("确认单据");
+        ((TextView) findViewById(R.id.tv_bottom_left)).setText("存为草稿");
+        ((TextView) findViewById(R.id.tv_bottom_right)).setText("确认单据");
 
-        mTvAddProduct.setOnClickListener(this);
-        mTvScanProduct.setOnClickListener(this);
         mIvExtra.setOnClickListener(this);
-        mTvBottomLeft.setOnClickListener(this);
-        mTvBottomRight.setOnClickListener(this);
-        mSivSupplier.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(NewPurchaseOrderActivity.this, SupplierListActivity.class);
-                intent.putExtra(SupplierListActivity.FROM_CLASS, TAG);
-                startActivity(intent);
-            }
-        });
-        mSivSetupOrderDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showSetupOrderTimePickerDialog();
-            }
-        });
-        mSivArrival.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showArrivalTimePickerDialog();
-            }
-        });
-        mSivWarehourse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(NewPurchaseOrderActivity.this, WarehouseListActivity.class);
-                intent.putExtra(WarehouseListActivity.WAREHOUSE_ID, mLastWarehouse);
-                startActivityForResult(intent, RESULT_WAREHOUSE);
-            }
-        });
-        mSivSubject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showSubjectDialog();
-            }
-        });
-        mSivPaymentType.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPaymentDialog();
-            }
-        });
-    }
+        findViewById(R.id.tv_add_product).setOnClickListener(this);
+        findViewById(R.id.tv_scan_product).setOnClickListener(this);
+        findViewById(R.id.tv_bottom_left).setOnClickListener(this);
+        findViewById(R.id.tv_bottom_right).setOnClickListener(this);
 
-    private void showPaymentDialog() {
-        if (mPaymentDialog == null) {
-            mPaymentDialog = new ReceiptSelectorDialog();
-            mPaymentDialog.setOnItemChangedListener(new ReceiptSelectorDialog.OnItemChangedListener() {
-                @Override
-                public void onItemChanged(String payId, String payName, String number, String content) {
-                    mPayId = payId;
-                    if ("现金支付".equals(payName))
-                        number = "现金支付";
-                    mSivPaymentType.setValue(content);
-                    mSivAccountOpening.setValue(payName);
-                    mSivPaymentAccount.setValue(number);
-                    mPaymentDialog.dismiss();
-                }
-            });
-        }
-        mPaymentDialog.show(getSupportFragmentManager(), "SubjectSelectorDialog");
-    }
-
-    private void showSubjectDialog() {
-        if (mSubjectList == null) {
-            Toast.makeText(this, "暂无数据", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (mSubjectDialog == null) {
-            mSubjectDialog = SubjectSelectorDialog.newInstance(mSubjectList);
-            mSubjectDialog.setOnItemChangedListener(new SubjectSelectorDialog.OnItemChangedListener() {
-                @Override
-                public void onItemChanged(String subjectId, String direction, String showName) {
-                    mLastSubjectId = subjectId;
-                    mSivSubject.setValue(showName);
-                }
-            });
-        }
-        mSubjectDialog.show(getSupportFragmentManager(), "SubjectSelectorDialog");
+        mSivSupplier.setOnClickListener(new SupplierClickListener());
+        mSivSetupOrderDate.setOnClickListener(new SetupOrderDateClickListener());
+        mSivArrival.setOnClickListener(new ArrivalTimeClickListener());
+        mSivWarehourse.setOnClickListener(new WarehourseClickListener());
+        mSivSubject.setOnClickListener(new SubjectClickListener());
+        mSivPaymentType.setOnClickListener(new PaymentTypeClickListener());
     }
 
     @Override
     public void initData() {
-        ((Toolbar) findViewById(R.id.tool_bar)).setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showExitEditDialog();
-            }
-        });
+        ((Toolbar) findViewById(R.id.tool_bar)).setNavigationOnClickListener(new NavigationClickListener());
         mNewPurchaseOrderLogic = new NewPurchaseOrderLogic();
         mCustomerListLogic = new CustomerListLogic();
-        mSivSetupOrderDate.setValue(StringUtils.getCurrentTime());
-        mSivArrival.setValue(StringUtils.getCurrentTime());
-        final SelectedProductAdapter mAdapter = new SelectedProductAdapter(R.layout.layout_list_item_selected_product, mList);
+        mAdapter = new SelectedProductAdapter(R.layout.layout_list_item_selected_product, mProductItemList);
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -261,7 +191,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             public void onItemClick(SwipeMenuBridge menuBridge) {
                 menuBridge.closeMenu();
                 int adapterPosition = menuBridge.getAdapterPosition();
-                mList.remove(adapterPosition);
+                mProductItemList.remove(adapterPosition);
                 mAdapter.notifyDataSetChanged();
             }
         };
@@ -271,6 +201,45 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         loadSubjectList();
     }
 
+    private void showPaymentDialog() {
+        if (mPaymentDialog == null) {
+            mPaymentDialog = new ReceiptSelectorDialog();
+            mPaymentDialog.setOnItemChangedListener(new ReceiptSelectorDialog.OnItemChangedListener() {
+                @Override
+                public void onItemChanged(PayBean item, String content) {
+                    mPayId = item.getId();
+                    String number = item.getNumber();
+                    if ("现金支付".equals(item.getPayname()))
+                        number = "现金支付";
+                    mSivPaymentType.setValue(content);
+                    mSivAccountOpening.setValue(item.getPayname());
+                    mSivPaymentAccount.setValue(number);
+                    mPaymentDialog.dismiss();
+                }
+            });
+        }
+        mPaymentDialog.show(getSupportFragmentManager(), "SubjectSelectorDialog");
+    }
+
+    private void showSubjectDialog() {
+        if (mSubjectList == null) {
+            Toast.makeText(this, "暂无数据", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (mSubjectDialog == null) {
+            mSubjectDialog = SubjectSelectorDialog.newInstance(mSubjectList);
+            mSubjectDialog.setOnItemChangedListener(new SubjectSelectorDialog.OnItemChangedListener() {
+                @Override
+                public void onItemChanged(String subjectId, String direction, String showName) {
+                    mSubjectId = subjectId;
+                    mSivSubject.setValue(showName);
+                }
+            });
+        }
+        mSubjectDialog.show(getSupportFragmentManager(), "SubjectSelectorDialog");
+    }
+
+    @SuppressWarnings("unchecked")
     private void loadSubjectList() {
         mCustomerListLogic.requestSubjectList("5", new JsonCallback<SubjectListBean>() {
             @Override
@@ -286,8 +255,10 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == RESULT_WAREHOUSE && data != null) {
-            mLastWarehouse = data.getStringExtra(WarehouseListActivity.WAREHOUSE_ID);
+            //******** 仓位返回结果 ********
+            mWarehouseId = data.getStringExtra(WarehouseListActivity.WAREHOUSE_ID);
             mSivWarehourse.setValue(data.getStringExtra(WarehouseListActivity.WAREHOUSE_NAME));
+        } else if (resultCode == RESULT_OK && data != null) {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -307,8 +278,9 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                 ScanActivity.start(this);
                 break;
             case R.id.iv_extra:
-                if (mImageDialog == null)
+                if (mImageDialog == null) {
                     mImageDialog = new ImageSelectorDialog();
+                }
                 mImageDialog.show(getSupportFragmentManager(), "ImageSelectorDialog");
                 break;
             case R.id.tv_bottom_left:
@@ -320,44 +292,69 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         }
     }
 
+    //******** 提交订单 ********
     private void submitOrder(boolean isDraft) {
         SharedPreferences preferences = PreferencesUtils.getPreferences();
-        HashMap<String, String> map = new HashMap<>();
-        map.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
-        map.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-        map.put("c_id", StringUtils.checkEmpty(mNewSupplier.getId(), "0"));
-        map.put("customerno", StringUtils.checkEmpty(mNewSupplier.getCustomerNo(), "0"));
-        map.put("customername", StringUtils.checkEmpty(mNewSupplier.getName(), ""));
-        map.put("telephone", StringUtils.checkEmpty(mNewSupplier.getNewPhoneNum(), ""));
-        map.put("tel", StringUtils.checkEmpty(mNewSupplier.getNewTelephoneNum(), ""));
-        map.put("lianxiren", StringUtils.checkEmpty(mNewSupplier.getNewContact(), ""));
-        map.put("remark", mEtTip.getText().toString());
-        map.put("quyuno", StringUtils.checkEmpty(mNewSupplier.getAreaNo(), ""));
-        map.put("quyu", StringUtils.checkEmpty(mNewSupplier.getAreaName(), ""));
-        map.put("action", "0");
-        map.put("IssDate", mSivSetupOrderDate.getValue());
-        map.put("yuji_jiaohuoriqi", mSivArrival.getValue());
-//        map.put("confirm", );
-//        map.put("fendianid", );
-//        map.put("poprice_mode", );
-//        map.put("cpjsonstr", );
-        map.put("warehouseid", StringUtils.checkEmpty(mLastWarehouse, ""));
-        map.put("benci_amt", mSivPaymentAmount.getValue());
-        map.put("bankid", mPayId);
-        map.put("accountid", mLastSubjectId);
-        mNewPurchaseOrderLogic.requestSubmitOrder(map, new JsonCallback<String>() {
+        JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
+        HashMap<String, String> params = new HashMap<>();
+        params.put("iid", "0");
+        params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
+        params.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
+        params.put("c_id", StringUtils.checkEmpty(mSupplier.getId(), "0"));
+        params.put("customerno", StringUtils.checkEmpty(mSupplier.getCustomerNo(), "0"));
+        params.put("customername", StringUtils.checkEmpty(mSupplier.getName(), ""));
+        params.put("telephone", StringUtils.checkEmpty(mSupplier.getNewPhoneNum(), ""));
+        params.put("tel", StringUtils.checkEmpty(mSupplier.getNewTelephoneNum(), ""));
+        params.put("lianxiren", StringUtils.checkEmpty(mSupplier.getNewContact(), ""));
+        params.put("remark", mEtTip.getText().toString());
+        params.put("quyuno", StringUtils.checkEmpty(mSupplier.getAreaNo(), ""));
+        params.put("quyu", StringUtils.checkEmpty(mSupplier.getAreaName(), ""));
+        params.put("action", "0");
+        params.put("IssDate", mSivSetupOrderDate.getValue());
+        params.put("yuji_jiaohuoriqi", mSivArrival.getValue());
+        params.put("confirm", isDraft ? "0" : "1");
+        params.put("fendianid", mSupplier.getFendianid());
+        params.put("poprice_mode", jsonObject.getString("poprice_mode"));
+        params.put("youhuijine", mSivDiscountAmount.getValue());
+        ArrayList<HashMap<String, String>> maps = new ArrayList<>();
+        if (mProductItemList != null) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("pnid", "0");
+            for (ProductItem item : mProductItemList) {
+                map.put("cpid", item.getProductNo());
+                map.put("yanse", item.getColor());
+                map.put("guige", item.getSize());
+                map.put("factor", item.getFactor());
+                map.put("unitname", item.getUnit());
+                map.put("cp_qty", item.getAmount());
+                map.put("order_prc", item.getSinglePrice());
+                map.put("s_jiage2", item.getUnitPrice());
+                map.put("zengpin", item.isGift() ? "1" : "0");
+                map.put("bz", item.getTip());
+                map.put("huohao", item.getGoodsNo());
+                map.put("pricecode", item.getPriceCode());
+                map.put("jiagelaiyuan", item.getPriceSource());
+            }
+        }
+        params.put("cpjsonstr", JSONObject.toJSONString(maps));
+        params.put("warehouseid", mWarehouseId);
+        params.put("benci_amt", mSivPaymentAmount.getValue());
+        params.put("bankid", mPayId);
+        params.put("accountid", mSubjectId);
+        mNewPurchaseOrderLogic.requestSubmitOrder(params, new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
             }
         });
     }
 
+    //******** 预计到货日期选择器 ********
     private void showArrivalTimePickerDialog() {
         if (mPvArrivalTime == null) {
             TimePickerBuilder builder = new TimePickerBuilder(NewPurchaseOrderActivity.this, new OnTimeSelectListener() {
                 @Override
                 public void onTimeSelect(Date date, View v) {
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
                     mSivArrival.setValue(format.format(date));
                 }
             })
@@ -387,12 +384,13 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         mPvArrivalTime.show();
     }
 
+    //******** 发单日期选择器 ********
     private void showSetupOrderTimePickerDialog() {
         if (mPvSetupOrderTime == null) {
             TimePickerBuilder builder = new TimePickerBuilder(NewPurchaseOrderActivity.this, new OnTimeSelectListener() {
                 @Override
                 public void onTimeSelect(Date date, View v) {
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
                     mSivSetupOrderDate.setValue(format.format(date));
                 }
             })
@@ -441,6 +439,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         }
     }
 
+    //******** 退出编辑弹窗 ********
     private void showExitEditDialog() {
         if (mExitEditDialog == null) {
             mExitEditDialog = new ExitEditDialog();
@@ -453,5 +452,65 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             });
         }
         mExitEditDialog.show(getSupportFragmentManager(), "ExitEditDialog");
+    }
+
+    private class NavigationClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            showExitEditDialog();
+        }
+    }
+
+    private class PaymentTypeClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            showPaymentDialog();
+        }
+    }
+
+    private class SubjectClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            showSubjectDialog();
+        }
+    }
+
+    private class WarehourseClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(NewPurchaseOrderActivity.this, WarehouseListActivity.class);
+            intent.putExtra(WarehouseListActivity.WAREHOUSE_ID, mWarehouseId);
+            startActivityForResult(intent, RESULT_WAREHOUSE);
+        }
+    }
+
+    private class ArrivalTimeClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            showArrivalTimePickerDialog();
+        }
+    }
+
+    private class SetupOrderDateClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            showSetupOrderTimePickerDialog();
+        }
+    }
+
+    private class SupplierClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(NewPurchaseOrderActivity.this, SupplierListActivity.class);
+            intent.putExtra(SupplierListActivity.FROM_CLASS, TAG);
+            startActivity(intent);
+        }
     }
 }

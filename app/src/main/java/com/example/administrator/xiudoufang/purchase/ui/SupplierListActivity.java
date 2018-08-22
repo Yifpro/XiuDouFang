@@ -57,9 +57,9 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
     private TextView mTvCancel;
 
     private NewPurchaseOrderLogic mLogic;
+    private HashMap<String, String> mParams;
     private SupplierListAdapter mAdapter;
     private List<SupplierListBean.SupplierBean> mList;
-    private HashMap<String, String> mParams;
     private String mFilterText = "";
     private boolean mIsShowSoftInput;
     private int mCurrentPage = 1;
@@ -77,6 +77,7 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
         mEtFilter = findViewById(R.id.et_filter);
         mIvClose = findViewById(R.id.iv_close);
         mTvCancel = findViewById(R.id.tv_cancel);
+
         mEtFilter.setOnClickListener(this);
         mIvClose.setOnClickListener(this);
         mTvCancel.setOnClickListener(this);
