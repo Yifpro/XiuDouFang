@@ -95,8 +95,8 @@
     <string name="product_name">产品名称</string>
     <string name="stock_amount">库存</string>
     <string name="free_amount">自由数</string>
-    <string name="expand_info">拓展信息</string>
-    <string name="hide">隐藏</string>
+    <string name="expand_info">∨拓展信息</string>
+    <string name="hide">∧隐藏</string>
     <string name="purchase_unit">采购单位</string>
     <string name="price_source">价格来源</string>
     <string name="single_price">单品价</string>

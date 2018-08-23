@@ -16,8 +16,10 @@ import android.widget.TextView;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.common.footer.DefaultFooter;
 import com.example.administrator.xiudoufang.common.header.DefaultHeader;
-import com.example.administrator.xiudoufang.common.utils.GlideImageLoader;
 import com.example.administrator.xiudoufang.common.utils.ScreenUtils;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.cookie.CookieJarImpl;
@@ -29,8 +31,6 @@ import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
 import com.scwang.smartrefresh.layout.api.RefreshFooter;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.test.jcit.imagepicker.view.CropImageView;
-import com.test.jcit.imagepicker.ImagePicker;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -67,7 +67,6 @@ public class XiuDouFangApplication extends Application {
         super.onCreate();
         mContext = getApplicationContext();
         initOkGo();
-        initImagePicker();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle bundle) {
@@ -113,20 +112,6 @@ public class XiuDouFangApplication extends Application {
 
             }
         });
-    }
-
-    private void initImagePicker() {
-        ImagePicker imagePicker = ImagePicker.getInstance();
-        imagePicker.setImageLoader(new GlideImageLoader());   //设置图片加载器
-        imagePicker.setShowCamera(true);  //显示拍照按钮
-        imagePicker.setCrop(true);        //允许裁剪（单选才有效）
-        imagePicker.setSaveRectangle(true); //是否按矩形区域保存
-        imagePicker.setSelectLimit(9);    //选中数量限制
-        imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
-        imagePicker.setFocusWidth(800);   //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
-        imagePicker.setFocusHeight(800);  //裁剪框的高度。单位像素（圆形自动取宽高最小值）
-        imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
-        imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
     }
 
     private void initOkGo() {

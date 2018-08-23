@@ -86,6 +86,8 @@
                 app:siv_isShowNext="false"
                 app:siv_key="@string/payment"
                 app:siv_type="TYPE_SEGMENT"
+                app:siv_leftTitle="收款"
+                app:siv_rightTitle="付款"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

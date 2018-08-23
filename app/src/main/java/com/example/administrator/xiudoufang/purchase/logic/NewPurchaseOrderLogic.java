@@ -12,6 +12,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +53,7 @@ public class NewPurchaseOrderLogic {
     //******** 获取产品列表 ********
     public void requestProductList(HashMap<String, String> params, JsonCallback<ProductListBean> callback) {
         String json = JSONObject.toJSONString(params);
+        LogUtils.e("产品列表 -> " + json);
         OkGo.<ProductListBean>post(StringUtils.BASE_URL + "/Api/products/requset_poproductdata?requset_poproductdata=0")
                 .headers("Content-Type", "application/json")
                 .upJson(json)
@@ -59,16 +61,16 @@ public class NewPurchaseOrderLogic {
     }
 
     //******** 提交订单 ********
-    public void requestSubmitOrder(HashMap<String, String> params, JsonCallback<String> callback) {
+    public void requestSubmitOrder(HashMap<String, String> params, String path, JsonCallback<String> callback) {
         String json = JSONObject.toJSONString(params);
         LogUtils.e("订单提交 -> " + json);
         HttpParams p = new HttpParams();
         for (Map.Entry<String, String> entry : params.entrySet()) {
             p.put(entry.getKey(), entry.getValue());
         }
+        if (path != null)
+            p.put("fujian", new File(path));
         OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/postpoorderall?postpoorder=0")
-                //.headers("Content-Type", "application/json")
-                //.upJson(json)
                 .params(p)
                 .execute(callback);
     }

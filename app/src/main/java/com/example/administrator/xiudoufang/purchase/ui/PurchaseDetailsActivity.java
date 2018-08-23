@@ -3,6 +3,7 @@ package com.example.administrator.xiudoufang.purchase.ui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -22,12 +23,14 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
+import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.PayBean;
 import com.example.administrator.xiudoufang.bean.ProductListBean;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.bean.SupplierDetails;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
@@ -427,9 +430,9 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             }
         };
         View footerView = View.inflate(this, R.layout.layout_list_footer_purchase_details, null);
+        mAdapter.addFooterView(footerView);
         mRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
         mRecyclerView.setSwipeMenuItemClickListener(swipeMenuItemClickListener);
-        mRecyclerView.addFooterView(footerView);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter.bindToRecyclerView(mRecyclerView);
@@ -462,6 +465,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(PurchaseDetailsActivity.this, ProductDetailsActivity.class);
+                intent.putExtra(ProductDetailsActivity.FROM_CLASS, TAG);
                 intent.putExtra(ProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
                 startActivity(intent);
             }
@@ -479,8 +483,8 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 mSivOrderId.setValue(jsonObject.getString("iid"));
                 mSivSupplier.setValue(jsonObject.getString("customername"));
                 mSivDebt.setValue(jsonObject.getString("debt"));
-                mSivSetupOrderDate.setValue(jsonObject.getString("issDate"));
-                mSivArrival.setValue(jsonObject.getString("etadate"));
+                mSivSetupOrderDate.setValue(jsonObject.getString("issDate").substring(0, 9));
+                mSivArrival.setValue(jsonObject.getString("etadate").substring(0, 9));
                 mSivPaymentAmount.setValue(jsonObject.getString("benci_amt"));
                 mSivDiscountAmount.setValue(jsonObject.getString("youhuijine"));
                 loadSubject(jsonObject.getString("accountid"));
@@ -488,8 +492,16 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 if (!TextUtils.isEmpty(jsonObject.getString("remark")))
                     mEtTip.setText(jsonObject.getString("remark"));
                 mLastWarehouse = jsonObject.getString("warehouseid");
+                mSivWarehourse.setValue(jsonObject.getString("warehouse"));
+                if (!TextUtils.isEmpty(jsonObject.getString("fujian")))
+                    GlideApp.with(PurchaseDetailsActivity.this).load(StringUtils.FILE_URL + jsonObject.getString("fujian")).into(mIvExtra);
                 mList = JSONObject.parseArray(result.getJSONArray("puiasm").toJSONString(), ProductListBean.ProductBean.class);
-                mAdapter.setNewData(mList);
+                if (mList.size() == 0) {
+                    mTvBottomRight.setClickable(false);
+                    mTvBottomRight.setBackgroundColor(ContextCompat.getColor(PurchaseDetailsActivity.this, R.color.gray_888888));
+                } else {
+                    mAdapter.setNewData(mList);
+                }
             }
         });
     }

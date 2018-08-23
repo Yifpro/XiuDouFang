@@ -61,7 +61,16 @@ public class SearchInfoView extends LinearLayout {
                 mEtInput.setInputType(InputType.TYPE_CLASS_PHONE);
             }
         }
+        if (ta.hasValue(R.styleable.SearchInfoView_siv_leftTitle)) {
+            mTvLeftSegment.setText(ta.getString(R.styleable.SearchInfoView_siv_leftTitle));
+            mTvRightSegment.setText(ta.getString(R.styleable.SearchInfoView_siv_rightTitle));
+        }
         ta.recycle();
+    }
+
+    public void setStatus(boolean isLeft) {
+        mTvLeftSegment.setSelected(isLeft);
+        mTvRightSegment.setSelected(!isLeft);
     }
 
     public void setShowNext(boolean isShow) {

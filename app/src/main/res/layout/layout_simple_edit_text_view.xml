@@ -15,9 +15,9 @@
 
         <ImageView
             android:id="@+id/iv_icon"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:background="@mipmap/ic_launcher" />
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:background="@mipmap/ic_icon" />
 
         <EditText
             android:id="@+id/et_input"
@@ -28,7 +28,7 @@
             android:background="@null"
             android:maxLines="1"
             android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
-            android:textSize="14dp" />
+            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/tv_input"
@@ -39,7 +39,7 @@
             android:background="@null"
             android:maxLines="1"
             android:textColor="@color/black"
-            android:textSize="14dp" />
+            android:textSize="16dp" />
     </LinearLayout>
 
     <View

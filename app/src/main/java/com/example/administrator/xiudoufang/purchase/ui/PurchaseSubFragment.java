@@ -1,12 +1,15 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseFragment;
@@ -41,6 +44,7 @@ public class PurchaseSubFragment extends BaseFragment {
     private HashMap<String, String> mParams;
     private int mCurrentPage;
     private String mType;
+    private HashMap<String, String> mMap;
 
     public static PurchaseSubFragment newInstance(String type) {
         PurchaseSubFragment fragment = new PurchaseSubFragment();
@@ -84,10 +88,75 @@ public class PurchaseSubFragment extends BaseFragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(getActivity(), PurchaseDetailsActivity.class);
+                LogUtils.e("iid -> " + mList.get(position).getIid());
                 intent.putExtra(ORDER_ID, mList.get(position).getIid());
                 intent.putExtra(ITEM_STATUS, mList.get(position).getStatus_str());
                 assert getActivity() != null;
                 getActivity().startActivity(intent);
+            }
+        });
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (mMap == null) {
+                    SharedPreferences preferences = PreferencesUtils.getPreferences();
+                    mMap = new HashMap<>();
+                    mMap.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
+                    mMap.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
+                }
+                mMap.put("iid", mList.get(position).getIid());
+                String action = "";
+                switch (view.getId()) {
+                    case R.id.tv_bottom_left:
+                        switch (mType) {
+                            case "1":
+                                break;
+                            case "2":
+                                action = "2";
+                                break;
+                            case "3":
+                                break;
+                            case "4":
+                                action = "2";
+                                break;
+                            case "5":
+                                break;
+                            case "6":
+                                break;
+                        }
+                        break;
+                    case R.id.tv_bottom_right:
+                        switch (mType) {
+                            case "1":
+                                action = "1";
+                                break;
+                            case "2":
+                                action = "3";
+                                break;
+                            case "3":
+                                break;
+                            case "4":
+                                action = "5";
+                                break;
+                            case "5":
+                                action = "6";
+                                break;
+                            case "6":
+                                action = "4";
+                                break;
+                        }
+                        break;
+                }
+                mMap.put("action", action);
+                mLogic.requestActionForOrder(mMap, new JsonCallback<String>() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        JSONObject jsonObject = JSONObject.parseObject(response.body());
+                        if (!"0".equals(jsonObject.getString("status"))) {
+                            Toast.makeText(mActivity, jsonObject.getString("messages"), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
         mRecyclerView.setAdapter(mAdapter);

@@ -23,9 +23,11 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
+import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.PayBean;
 import com.example.administrator.xiudoufang.bean.ProductItem;
+import com.example.administrator.xiudoufang.bean.ProductListBean;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.bean.SupplierDetails;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
@@ -39,6 +41,9 @@ import com.example.administrator.xiudoufang.purchase.logic.NewPurchaseOrderLogic
 import com.example.administrator.xiudoufang.receipt.logic.CustomerListLogic;
 import com.example.administrator.xiudoufang.receipt.ui.ReceiptSelectorDialog;
 import com.example.administrator.xiudoufang.receipt.ui.SubjectSelectorDialog;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.lzy.okgo.model.Response;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
@@ -47,6 +52,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -83,6 +89,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     private ImageSelectorDialog mImageDialog;
     private SubjectSelectorDialog mSubjectDialog;
     private ReceiptSelectorDialog mPaymentDialog;
+    private ImageView mIvClear;
 
     private NewPurchaseOrderLogic mNewPurchaseOrderLogic;
     private CustomerListLogic mCustomerListLogic;
@@ -93,6 +100,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     private String mSubjectId = "";
     private String mPayId = "";
     private SelectedProductAdapter mAdapter;
+    private String mImgPath;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, NewPurchaseOrderActivity.class);
@@ -114,8 +122,12 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             mSivSupplier.setValue(mSupplier.getName());
             mSivDebt.setValue(mSupplier.getDebt());
         } else if (item != null) {
+            if (mProductItemList == null)
+                mProductItemList = new ArrayList<>();
             mProductItemList.add(item);
             mAdapter.setNewData(mProductItemList);
+            mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
+            caculateTotalPrice();
         }
     }
 
@@ -136,6 +148,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         mRecyclerView = findViewById(R.id.recycler_view);
         mIvExtra = findViewById(R.id.iv_extra);
         mEtTip = findViewById(R.id.et_tip);
+        mIvClear = findViewById(R.id.iv_clear);
 
         mSivArrival.setValue(StringUtils.getCurrentTime());
         mSivSetupOrderDate.setValue(StringUtils.getCurrentTime());
@@ -149,6 +162,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         findViewById(R.id.tv_scan_product).setOnClickListener(this);
         findViewById(R.id.tv_bottom_left).setOnClickListener(this);
         findViewById(R.id.tv_bottom_right).setOnClickListener(this);
+        findViewById(R.id.iv_clear).setOnClickListener(this);
 
         mSivSupplier.setOnClickListener(new SupplierClickListener());
         mSivSetupOrderDate.setOnClickListener(new SetupOrderDateClickListener());
@@ -167,7 +181,8 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
+                Intent intent = new Intent(NewPurchaseOrderActivity.this, ProductDetailsActivity.class);
+                startActivity(intent);
             }
         });
         SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
@@ -190,13 +205,57 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                 menuBridge.closeMenu();
                 int adapterPosition = menuBridge.getAdapterPosition();
                 mProductItemList.remove(adapterPosition);
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemChanged(adapterPosition);
+                caculateTotalPrice();
+                if (mAdapter.getItemCount() == 1) {
+                    mAdapter.getFooterLayout().setVisibility(View.GONE);
+                }
             }
         };
         mRecyclerView.setSwipeMenuItemClickListener(swipeMenuItemClickListener);
+        View footerView = View.inflate(this, R.layout.layout_list_footer_purchase_details, null);
+        mAdapter.addFooterView(footerView);
+        mAdapter.getFooterLayout().setVisibility(View.GONE);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter.bindToRecyclerView(mRecyclerView);
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                TextView tvAmount = (TextView) adapter.getViewByPosition(position, R.id.tv_amount);
+                TextView tvTotalPrice = (TextView) adapter.getViewByPosition(position, R.id.tv_total_price);
+                int i = Integer.parseInt(tvAmount.getText().toString());
+                switch (view.getId()) {
+                    case R.id.tv_reduce:
+                        if (i > 0) {
+                            i--;
+                        }
+                        break;
+                    case R.id.tv_add:
+                        i++;
+                        break;
+                }
+                tvAmount.setText(String.valueOf(i));
+                ProductItem item = mProductItemList.get(position);
+                item.setAmount(String.valueOf(i));
+                double totalPrice = Double.parseDouble(item.getUnitPrice()) * Double.parseDouble(mProductItemList.get(position).getAmount());
+                DecimalFormat mFormat = new DecimalFormat("0.00");
+                tvTotalPrice.setText(mFormat.format(totalPrice));
+                tvAmount.setText(String.valueOf(i));
+                caculateTotalPrice();
+            }
+        });
         loadSubjectList();
+    }
+
+    private void caculateTotalPrice() {
+        double result = 0;
+        for (int i = 0; i < mProductItemList.size(); i++) {
+            double totalPrice = Double.parseDouble(mProductItemList.get(i).getUnitPrice()) * Double.parseDouble(mProductItemList.get(i).getAmount());
+            result += totalPrice;
+        }
+        DecimalFormat mFormat = new DecimalFormat("0.00");
+        ((TextView) mAdapter.getFooterLayout().findViewById(R.id.tv)).setText(mFormat.format(result));
     }
 
     private void showPaymentDialog() {
@@ -252,11 +311,25 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == RESULT_WAREHOUSE && data != null) {
-            //******** 仓位返回结果 ********
+        if (requestCode == RESULT_WAREHOUSE && data != null) { //******** 仓位返回结果 ********
             mWarehouseId = data.getStringExtra(WarehouseListActivity.WAREHOUSE_ID);
             mSivWarehourse.setValue(data.getStringExtra(WarehouseListActivity.WAREHOUSE_NAME));
-        } else if (resultCode == RESULT_OK && data != null) {
+        } else if (requestCode == PictureConfig.CHOOSE_REQUEST && resultCode == RESULT_OK && data != null) { //******** 附件返回结果 ********
+            List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+            mImgPath = selectList.get(0).getCompressPath();
+            GlideApp.with(this).load(mImgPath).into(mIvExtra);
+            mIvClear.setVisibility(View.VISIBLE);
+        } else if (requestCode == RESULT_PRODUCT_LIST && data != null) {
+            ArrayList<ProductItem> items = data.getParcelableArrayListExtra(SELECTED_PRODUCT_LIST);
+            if (mProductItemList == null) {
+                mProductItemList = new ArrayList<>();
+            } else {
+                mProductItemList.clear();
+            }
+            mProductItemList.addAll(items);
+            mAdapter.setNewData(items);
+            mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
+            caculateTotalPrice();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -274,6 +347,11 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                 break;
             case R.id.tv_scan_product:
                 ScanActivity.start(this);
+                break;
+            case R.id.iv_clear:
+                mIvExtra.setImageResource(0);
+                mIvClear.setVisibility(View.GONE);
+                mImgPath = null;
                 break;
             case R.id.iv_extra:
                 if (mImageDialog == null) {
@@ -316,9 +394,10 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         params.put("youhuijine", mSivDiscountAmount.getValue());
         ArrayList<HashMap<String, String>> maps = new ArrayList<>();
         if (mProductItemList != null) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("pnid", "0");
+            HashMap<String, String> map;
             for (ProductItem item : mProductItemList) {
+                map = new HashMap<>();
+                map.put("pnid", "0");
                 map.put("cpid", item.getProductNo());
                 map.put("yanse", item.getColor());
                 map.put("guige", item.getSize());
@@ -332,6 +411,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                 map.put("huohao", item.getGoodsNo());
                 map.put("pricecode", item.getPriceCode());
                 map.put("jiagelaiyuan", item.getPriceSource());
+                maps.add(map);
             }
         }
         params.put("cpjsonstr", JSONObject.toJSONString(maps));
@@ -339,7 +419,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         params.put("benci_amt", mSivPaymentAmount.getValue());
         params.put("bankid", mPayId);
         params.put("accountid", mSubjectId);
-        mNewPurchaseOrderLogic.requestSubmitOrder(params, new JsonCallback<String>() {
+        mNewPurchaseOrderLogic.requestSubmitOrder(params, mImgPath, new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
             }
@@ -439,6 +519,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
 
     //******** 退出编辑弹窗 ********
     private void showExitEditDialog() {
+        if (TextUtils.isEmpty(mSivSupplier.getValue())) finish();
         if (mExitEditDialog == null) {
             mExitEditDialog = new ExitEditDialog();
             mExitEditDialog.setOnSubmitClickListener(new ExitEditDialog.OnSumbitClickListener() {

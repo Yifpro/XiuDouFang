@@ -152,8 +152,7 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
                 } else {
                     if (mList == null)
                         mList = new ArrayList<>();
-                    if (temp.size() > 0)
-                        mList.addAll(temp);
+                    mList.addAll(temp);
                     mAdapter.addData(temp);
                     if (temp.size() < COUNT) {
                         mRefreshLayout.finishLoadMoreWithNoMoreData();

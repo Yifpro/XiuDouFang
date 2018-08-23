@@ -65,11 +65,26 @@
             android:text="附件"
             android:textSize="14dp"/>
 
-        <ImageView
-            android:id="@+id/iv_extra"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@mipmap/ic_extra_place"/>
+        <RelativeLayout
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginLeft="18dp">
+
+            <ImageView
+                android:id="@+id/iv_extra"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:background="@mipmap/ic_extra_place"/>
+
+            <ImageView
+                android:id="@+id/iv_clear"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_alignParentRight="true"
+                android:background="@mipmap/ic_close"
+                android:visibility="gone"/>
+        </RelativeLayout>
     </LinearLayout>
 
     <View

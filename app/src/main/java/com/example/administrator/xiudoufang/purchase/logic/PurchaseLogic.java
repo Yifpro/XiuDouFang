@@ -21,6 +21,7 @@ public class PurchaseLogic {
     //******** 获取采购单列表 ********
     public void requestPurchaseList(HashMap<String, String> params, JsonCallback<PurchaseListBean> callback) {
         String json = JSONObject.toJSONString(params);
+        LogUtils.e("采购单列表 -> " + json);
         OkGo.<PurchaseListBean>post(StringUtils.BASE_URL + "/api/products/Getpuomstrlistsdata?Getpuomstrlistsdata=0")
                 .headers("Content-Type", "application/json")
                 .upJson(json)
@@ -36,6 +37,14 @@ public class PurchaseLogic {
         String json = JSONObject.toJSONString(map);
         LogUtils.e("json - > "+json);
         OkGo.<String>post(StringUtils.getUrl("/Api/products/GetSinglepuomstrdata?iid=0", map))
+                .headers("Content-Type", "application/json")
+                .upJson(json)
+                .execute(callback);
+    }
+
+    public void requestActionForOrder(HashMap<String, String> params, JsonCallback<String> callback) {
+        String json = JSONObject.toJSONString(params);
+        OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/Actionfor_poorder?Actionfor_poorder=0")
                 .headers("Content-Type", "application/json")
                 .upJson(json)
                 .execute(callback);

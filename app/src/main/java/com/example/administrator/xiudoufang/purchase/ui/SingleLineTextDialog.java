@@ -46,6 +46,7 @@ public class SingleLineTextDialog extends DialogFragment {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (listener != null)
                     listener.onItemClick(position);
+                dismiss();
             }
         });
         return view;

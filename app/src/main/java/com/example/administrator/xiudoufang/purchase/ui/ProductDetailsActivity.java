@@ -1,6 +1,5 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -10,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.R;
@@ -39,7 +39,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
     private TextView mTvCollapse;
     private EditText mEtTip;
     private LinearLayout mLinearLayout;
-    private TextView mTvFinishEdit;
     private SearchInfoView mSivProductNo;
     private SearchInfoView mSivProductName;
     private SearchInfoView mSivStockAmount;
@@ -61,8 +60,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
     private MoreRateDialog mMoreRateDialog;
     private SingleLineTextDialog mPurchaseUnitDialog;
     private SingleLineTextDialog mPriceSourceDialog;
-    private SingleLineTextDialog mSizeDialog;
+    private SingleLineTextDialog mSpecDialog;
     private SingleLineTextDialog mColorDialog;
+    private TextView mTvBottomLeft;
+    private TextView mTvBottomRight;
 
     private String mCurrentFactor;
     private String mCurrentUnit;
@@ -71,7 +72,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
     private ArrayList<String> mPurchaseUnitList;
     private ArrayList<String> mPriceSourceList;
     private ArrayList<String> mColorList;
-    private ArrayList<String> mSizeList;
+    private ArrayList<String> mSpecList;
     private int mPurchaseUnitPosition;
     private String mColor;
     private String mSize;
@@ -90,7 +91,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
         mTvCollapse = findViewById(R.id.tv_collapse);
         mEtTip = findViewById(R.id.et_tip);
         mLinearLayout = findViewById(R.id.linear_layout);
-        mTvFinishEdit = findViewById(R.id.tv_finish_edit);
         mSivProductNo = findViewById(R.id.siv_product_no);
         mSivProductName = findViewById(R.id.siv_product_name);
         mSivStockAmount = findViewById(R.id.siv_stock_amount);
@@ -109,13 +109,21 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
         mSivPurchaseAmount = findViewById(R.id.siv_purchase_amount);
         mSivGift = findViewById(R.id.siv_gift);
         mSivGoodsNo = findViewById(R.id.siv_goods_no);
+        mTvBottomLeft = findViewById(R.id.tv_bottom_left);
+        mTvBottomRight = findViewById(R.id.tv_bottom_right);
 
+        mSivGift.setStatus(true);
         mSivUnitPrice.setKey(StringUtils.getSpannableString("单位价*", 3));
         mSivPurchaseAmount.setKey(StringUtils.getSpannableString("采购数量*", 4));
+        boolean isFromProductList = getIntent().getStringExtra(FROM_CLASS).equals(ProductListActivity.TAG);
+        mSivPriceSource.setValue("历史价");
+        mTvBottomLeft.setText(isFromProductList ? "添加" : "完成编辑");
+        mTvBottomRight.setVisibility(isFromProductList ? View.GONE : View.VISIBLE);
 
         mTvExpand.setOnClickListener(this);
         mTvCollapse.setOnClickListener(this);
-        mTvFinishEdit.setOnClickListener(this);
+        mTvBottomLeft.setOnClickListener(this);
+        mTvBottomRight.setOnClickListener(this);
 
         mSivPurchaseUnit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,10 +143,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                 showColorDialog();
             }
         });
-        mSivSize.setOnClickListener(new View.OnClickListener() {
+        mSivProductSpec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showSizeDialog();
+                showSpecDialog();
             }
         });
         mSivGift.setOnItemChangeListener(new SearchInfoView.OnItemChangeListener() {
@@ -149,23 +157,23 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
         });
     }
 
-    private void showSizeDialog() {
-        if (mSizeDialog == null) {
-            mSizeList = new ArrayList<>();
+    private void showSpecDialog() {
+        if (mSpecDialog == null) {
+            mSpecList = new ArrayList<>();
             for (ProductListBean.ProductBean.SizxlistBean bean : mProductBean.getSizxlist()) {
-                mSizeList.add(bean.getSizx());
+                mSpecList.add(bean.getSizx());
             }
-            mSizeDialog = SingleLineTextDialog.newInstance(mSizeList);
-            mSizeDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
+            mSpecDialog = SingleLineTextDialog.newInstance(mSpecList);
+            mSpecDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
-                    mSize = mSizeList.get(position);
+                    mSize = mSpecList.get(position);
                     mSivSize.setValue(mSize);
                     mPurchaseUnitDialog.dismiss();
                 }
             });
         }
-        mSizeDialog.show(getSupportFragmentManager(), "SizeDialog");
+        mSpecDialog.show(getSupportFragmentManager(), "SizeDialog");
     }
 
     private void showColorDialog() {
@@ -200,7 +208,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
             mPriceSourceDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
-                    mSivPurchaseUnit.setValue(mPurchaseUnitList.get(position));
+                    mSivPriceSource.setValue(mPriceSourceList.get(position));
                     String singlePrice = null;
                     switch (position) {
                         case 0:
@@ -221,7 +229,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                     }
                     mSivSinglePrice.setValue(singlePrice);
                     mSivUnitPrice.setValue(singlePrice);
-                    mPurchaseUnitDialog.dismiss();
                 }
             });
         }
@@ -278,11 +285,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
             mSivSinglePrice.setValue(b.getPrice());
             mSivUnitPrice.setValue(b.getPrice());
 
-            if (mProductBean.getColorlist().size() > 0) {
-
-            } else {
-
-            }
+            if (mProductBean.getSizxlist().size() == 0) mSivProductSpec.setVisibility(View.GONE);
+            if (mProductBean.getColorlist().size() == 0) mSivProcutColor.setVisibility(View.GONE);
         }
     }
 
@@ -297,12 +301,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                 mLinearLayout.setVisibility(View.GONE);
                 mTvExpand.setVisibility(View.VISIBLE);
                 break;
-            case R.id.tv_finish_edit:
+            case R.id.tv_bottom_right:
+                break;
+            case R.id.tv_bottom_left:
                 if (TextUtils.isEmpty(mSivUnitPrice.getValue())) {
                     mSivUnitPrice.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
                 } else if (TextUtils.isEmpty(mSivPurchaseAmount.getValue())) {
                     mSivPurchaseAmount.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
-                } else {
+                } else if ("0".equals(mSivPurchaseAmount.getValue()) || TextUtils.isEmpty(mSivPurchaseAmount.getValue())) {
+                    Toast.makeText(this, "商品数量不能小于 1", Toast.LENGTH_SHORT).show();
+                }else {
                     double historyPrice = Double.parseDouble(mHistorySinglePrice);
                     if (historyPrice > 0) {
                         DecimalFormat decimalFormat = new DecimalFormat("0.00");
@@ -356,8 +364,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                     item.setPriceSource(mSivPriceSource.getValue());
                     Intent intent = new Intent(ProductDetailsActivity.this, NewPurchaseOrderActivity.class);
                     intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, item);
-                    setResult(Activity.RESULT_OK, intent);
-                    finish();
+                    startActivity(intent);
                 }
                 break;
         }

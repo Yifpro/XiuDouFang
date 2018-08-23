@@ -11,14 +11,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.2"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="72dp"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.4" />
+        app:layout_constraintGuide_percent="0.4"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="144dp"/>
 
     <TextView
         android:id="@+id/tv_key"
@@ -26,11 +30,11 @@
         android:layout_height="wrap_content"
         android:textColor="@color/gray_888888"
         android:textSize="14dp"
-        app:layout_constraintBottom_toBottomOf="@id/line"
-        app:layout_constraintLeft_toLeftOf="@id/guideline_1"
-        app:layout_constraintRight_toRightOf="@id/guideline_1"
+        app:layout_constraintBottom_toBottomOf="@+id/line"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_1"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="单号" />
+        tools:text="单号"
+        app:layout_constraintRight_toLeftOf="@+id/guideline_1"/>
 
 
     <LinearLayout
@@ -39,11 +43,11 @@
         android:layout_height="28dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginRight="10dp"
-        app:layout_constraintBottom_toBottomOf="@id/line"
+        app:layout_constraintBottom_toBottomOf="@+id/line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline_2"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="144dp">
 
         <TextView
             android:id="@+id/tv_left_segment"
@@ -52,7 +56,6 @@
             android:layout_weight="1"
             android:background="@drawable/bg_left_segment_selector"
             android:gravity="center"
-            android:text="收款"
             android:textColor="@color/bg_segment_text_color_selector"
             android:textSize="12dp" />
 
@@ -68,7 +71,6 @@
             android:layout_weight="1"
             android:background="@drawable/bg_right_segment_selector"
             android:gravity="center"
-            android:text="付款"
             android:textColor="@color/bg_segment_text_color_selector"
             android:textSize="12dp" />
     </LinearLayout>
@@ -82,23 +84,25 @@
         android:textSize="14dp"
         android:cursorVisible="false"
         android:theme="@style/SearchInfoEditText"
-        app:layout_constraintBottom_toBottomOf="@id/line"
+        app:layout_constraintBottom_toBottomOf="@+id/line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline_2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="252dp"/>
 
     <RelativeLayout
         android:visibility="gone"
         android:id="@+id/relative_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/line"
+        app:layout_constraintBottom_toBottomOf="@+id/line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline_2"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tv_value"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp" />
@@ -114,8 +118,8 @@
 
     <View
         android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
+        android:layout_width="344dp"
+        android:layout_height="1dp"
         android:background="@color/gray_cccccc"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </android.support.constraint.ConstraintLayout>

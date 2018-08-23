@@ -22,9 +22,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseTextWatcher;
 import com.example.administrator.xiudoufang.base.IActivityBase;
+import com.example.administrator.xiudoufang.bean.CustomerListBean;
 import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.bean.ProductListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SoftInputHelper;
 import com.example.administrator.xiudoufang.common.utils.SoftKeyBoardListener;
@@ -95,7 +97,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
     @Override
     public void initData() {
         mLogic = new NewPurchaseOrderLogic();
-        menuAnim = (AnimatorSet) AnimatorInflater.loadAnimator(this,R.animator.fab_menu_anim);
+        menuAnim = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.fab_menu_anim);
         mRefreshLayout.setEnableRefresh(false);
         mRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -103,7 +105,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
                 mRefreshLayout.getLayout().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        loadProductList();
+                        loadProductList(false);
                     }
                 }, 2000);
             }
@@ -122,6 +124,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(ProductListActivity.this, ProductDetailsActivity.class);
+                intent.putExtra(ProductDetailsActivity.FROM_CLASS, TAG);
                 intent.putExtra(ProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
                 startActivity(intent);
             }
@@ -130,10 +133,10 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         LoadingViewDialog.getInstance().show(this);
-        loadProductList();
+        loadProductList(false);
     }
 
-    private void loadProductList() {
+    private void loadProductList(final boolean isFiltering) {
         if (mParams == null) {
             SharedPreferences preferences = PreferencesUtils.getPreferences();
             mParams = new HashMap<>();
@@ -150,10 +153,17 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
             @Override
             public void onSuccess(Response<ProductListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
-                if (mList == null)
-                    mList = new ArrayList<>();
-                mList = response.body().getPo_chanpinlist();
-                mAdapter.addData(mList);
+                List<ProductListBean.ProductBean> tempList = response.body().getPo_chanpinlist();
+                if (isFiltering) {
+                    mList.clear();
+                    mList.addAll(tempList);
+                    mAdapter.setNewData(mList);
+                } else {
+                    if (mList == null)
+                        mList = new ArrayList<>();
+                    mList.addAll(tempList);
+                    mAdapter.addData(mList);
+                }
                 if (mList.size() < COUNT) {
                     mRefreshLayout.finishLoadMoreWithNoMoreData();
                 } else {
@@ -183,7 +193,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
                 SoftInputHelper.hideSoftInput(this);
                 LoadingViewDialog.getInstance().show(this);
                 mCurrentPage = 1;
-                loadProductList();
+                loadProductList(true);
                 break;
             case R.id.fab_action:
                 mFabAction.setImageResource(mIsShowMenu ? R.mipmap.ic_close_white : R.mipmap.ic_menu);
@@ -208,31 +218,33 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
                 Intent intent = new Intent();
                 ArrayList<ProductItem> list = new ArrayList<>();
                 for (ProductListBean.ProductBean bean : mList) {
-                    ProductItem item = new ProductItem();
-                    item.setPhotourl(bean.getPhotourl());
-                    item.setId(bean.getCpid());
-                    item.setProductNo(bean.getStyleno());
-                    item.setStylename(bean.getStylename());
-                    item.setColor("");
-                    item.setSize("");
-                    String factor = "", unit = "";
-                    for (ProductListBean.ProductBean.PacklistBean b : bean.getPacklist()) {
-                        if ("1".equals(b.getCheck())) {
-                            factor = b.getUnit_bilv();
-                            unit = b.getUnitname();
+                    if (bean.isSelected()) {
+                        ProductItem item = new ProductItem();
+                        item.setPhotourl(bean.getPhotourl());
+                        item.setId(bean.getCpid());
+                        item.setProductNo(bean.getStyleno());
+                        item.setStylename(bean.getStylename());
+                        item.setColor("");
+                        item.setSize("");
+                        String factor = "", unit = "";
+                        for (ProductListBean.ProductBean.PacklistBean b : bean.getPacklist()) {
+                            if ("1".equals(b.getCheck())) {
+                                factor = b.getUnit_bilv();
+                                unit = b.getUnitname();
+                            }
                         }
+                        ProductListBean.ProductBean.LishijialistBean historyBean = bean.getLishijialist().get(bean.getLishijialist().indexOf(new ProductListBean.ProductBean.LishijialistBean(factor, unit)));
+                        item.setFactor(factor);
+                        item.setUnit(unit);
+                        item.setAmount("1");
+                        item.setSinglePrice(historyBean.getPrice());
+                        item.setUnitPrice(historyBean.getPrice());
+                        item.setTip("");
+                        item.setGoodsNo("");
+                        item.setPriceCode(historyBean.getPricecode());
+                        item.setPriceSource("历史价");
+                        list.add(item);
                     }
-                    ProductListBean.ProductBean.LishijialistBean historyBean = bean.getLishijialist().get(bean.getLishijialist().indexOf(new ProductListBean.ProductBean.LishijialistBean(factor, unit)));
-                    item.setFactor(factor);
-                    item.setUnit(unit);
-                    item.setAmount("1");
-                    item.setSinglePrice(historyBean.getPrice());
-                    item.setUnitPrice(historyBean.getPrice());
-                    item.setTip("");
-                    item.setGoodsNo("");
-                    item.setPriceCode(historyBean.getPricecode());
-                    item.setPriceSource("历史价");
-                    list.add(item);
                 }
                 intent.putParcelableArrayListExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT_LIST, list);
                 setResult(Activity.RESULT_OK, intent);
@@ -266,7 +278,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
                 if (mFilterText.length() != 0) {
                     LoadingViewDialog.getInstance().show(ProductListActivity.this);
                     mCurrentPage = 1;
-                    loadProductList();
+                    loadProductList(true);
                     return true;
                 }
             }

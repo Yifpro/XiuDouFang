@@ -3,6 +3,7 @@
           package="com.example.administrator.xiudoufang">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".base.XiuDouFangApplication"
@@ -13,6 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".login.ui.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity android:name=".base.MainActivity"/>
         <activity android:name=".setting.ui.SettingActivity"/>
@@ -23,13 +29,7 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity android:name=".purchase.ui.SupplierDetailsActivity" />
         <activity android:name=".purchase.ui.NewPurchaseOrderActivity"
-                  android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+                  android:launchMode="singleTask" />
         <activity android:name=".purchase.ui.ScanActivity" />
         <activity android:name=".purchase.ui.ProductListActivity"
                   android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />

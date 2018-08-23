@@ -16,8 +16,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/iv_icon"
@@ -160,6 +160,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:siv_hint="@string/input_unit_price"
+                app:siv_input_type="INPUT_NUMBER"
                 app:siv_key="@string/unit_price"
                 app:siv_type="TYPE_EDIT"/>
 
@@ -182,6 +183,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:siv_hint="@string/input_purchase_amount"
+                app:siv_input_type="INPUT_NUMBER"
                 app:siv_key="@string/purchase_amount"
                 app:siv_type="TYPE_EDIT"/>
 
@@ -215,16 +217,7 @@
                 android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
                 android:textSize="14dp"/>
 
-            <TextView
-                android:id="@+id/tv_finish_edit"
-                android:text="@string/finish_edit"
-                android:gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_textview_confirm_order_shape"
-                android:textColor="@color/white"
-                android:textSize="14dp"/>
+            <include layout="@layout/layout_bottom_selection" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

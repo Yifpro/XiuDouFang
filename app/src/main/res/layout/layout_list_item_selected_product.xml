@@ -51,6 +51,16 @@
             android:textColor="@color/black"
             android:textSize="12dp"
             tools:text="1个/个"/>
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"
+            android:textSize="12dp"
+            tools:text="1个/个"/>
     </LinearLayout>
 
     <TextView
@@ -154,6 +164,16 @@
             android:textColor="@color/black"
             android:textSize="12dp"
             tools:text="记:0.62"/>
+
+        <TextView
+            android:id="@+id/tv_receive_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"
+            android:textSize="12dp"
+            tools:text="1个/个"/>
     </LinearLayout>
 
     <View
