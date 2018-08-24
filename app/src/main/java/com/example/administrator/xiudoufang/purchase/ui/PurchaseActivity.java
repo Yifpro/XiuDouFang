@@ -58,9 +58,8 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
     public void initData() {
         String[] titles = {"草稿", "已确认", "收货中", "未提交", "已提交", "已关闭", "全部"};
         mTabs = new ArrayList<>();
-        mTabs.add(new DrawerItem(titles[0], true));
-        for (int i = 1; i < titles.length; i++) {
-            mTabs.add(new DrawerItem(titles[i], false));
+        for (int i = 0; i < titles.length; i++) {
+            mTabs.add(new DrawerItem(titles[i], i == 0));
         }
         PurchaseTabAdapter adapter = new PurchaseTabAdapter(R.layout.layout_list_item_purchase_tab, mTabs);
         adapter.bindToRecyclerView(mRecyclerView);
@@ -107,10 +106,10 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
         @Override
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
             mViewPager.setCurrentItem(position);
-            mDrawerLayout.closeDrawer(mLeftMenu);
             mTabs.get(mLastIndex == -1 ? 0 : mLastIndex).setSelected(false);
             mTabs.get(position).setSelected(true);
             adapter.setNewData(mTabs);
+            mDrawerLayout.closeDrawer(mLeftMenu);
             mLastIndex = position;
         }
     }

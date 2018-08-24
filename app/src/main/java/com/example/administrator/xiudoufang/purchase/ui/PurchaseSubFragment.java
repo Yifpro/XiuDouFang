@@ -79,15 +79,18 @@ public class PurchaseSubFragment extends BaseFragment {
             @Override
             public void onSuccess(Response<PurchaseListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
+                List<PurchaseListBean.PurchaseBean> temp = response.body().getResults();
                 if (isRefresh) {
-                    mAdapter.setNewData(response.body().getResults());
+                    mList.clear();
+                    mList.addAll(temp);
+                    mAdapter.setNewData(mList);
                     mRefreshLayout.finishRefresh();
-                    mRefreshLayout.setNoMoreData(false);
+                    mRefreshLayout.setNoMoreData(mList.size() < COUNT);
                 } else {
                     if (mList == null)
                         mList = new ArrayList<>();
-                    mList = response.body().getResults();
-                    mAdapter.addData(mList);
+                    mList.addAll(temp);
+                    mAdapter.addData(temp);
                     if (mList.size() < COUNT) {
                         mRefreshLayout.finishLoadMoreWithNoMoreData();
                     } else {

@@ -38,53 +38,6 @@ public class PurchaseLogic {
                 .execute(callback);
     }
 
-    //******** 获取对应dongzuo ********
-    public String getAction(int id, String type) {
-        String action = "";
-        switch (id) {
-            case R.id.tv_bottom_left:
-                switch (type) {
-                    case "1":
-                        break;
-                    case "2":
-                        action = "2";
-                        break;
-                    case "3":
-                        break;
-                    case "4":
-                        action = "2";
-                        break;
-                    case "5":
-                        break;
-                    case "6":
-                        break;
-                }
-                break;
-            case R.id.tv_bottom_right:
-                switch (type) {
-                    case "1":
-                        action = "1";
-                        break;
-                    case "2":
-                        action = "3";
-                        break;
-                    case "3":
-                        break;
-                    case "4":
-                        action = "5";
-                        break;
-                    case "5":
-                        action = "6";
-                        break;
-                    case "6":
-                        action = "4";
-                        break;
-                }
-                break;
-        }
-        return action;
-    }
-
     //******** 获取采购单明细 ********
     public void requestPurchaseDetails(String orderId, Callback<String> callback) {
         HashMap<String, String> map = new HashMap<>();
@@ -163,5 +116,52 @@ public class PurchaseLogic {
             list.add(item);
         }
         return list;
+    }
+
+    //******** 获取对应dongzuo ********
+    public String getAction(int id, String type) {
+        String action = "";
+        switch (id) {
+            case R.id.tv_bottom_left:
+                switch (type) {
+                    case "1":
+                        break;
+                    case "2":
+                        action = "2";
+                        break;
+                    case "3":
+                        break;
+                    case "4":
+                        action = "2";
+                        break;
+                    case "5":
+                        break;
+                    case "6":
+                        break;
+                }
+                break;
+            case R.id.tv_bottom_right:
+                switch (type) {
+                    case "1":
+                        action = "1";
+                        break;
+                    case "2":
+                        action = "3";
+                        break;
+                    case "3":
+                        break;
+                    case "4":
+                        action = "5";
+                        break;
+                    case "5":
+                        action = "6";
+                        break;
+                    case "6":
+                        action = "4";
+                        break;
+                }
+                break;
+        }
+        return action;
     }
 }

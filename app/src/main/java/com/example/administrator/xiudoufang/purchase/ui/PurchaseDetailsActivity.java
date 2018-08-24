@@ -480,8 +480,6 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 mSivArrivalDate.setValue(etadate.length() > 8 ? etadate.substring(0, 9) : etadate);
                 mSivPaymentAmount.setValue(result.getString("benci_amt"));
                 mSivDiscountAmount.setValue(result.getString("youhuijine"));
-                loadSubject(result.getString("accountid"));
-                loadPaymentInfo(result.getString("bankid"));
                 mEtTip.setText(result.getString("remark"));
                 mWarehouseId = result.getString("warehouseid");
                 mPayId = result.getString("bankid");
@@ -497,6 +495,8 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 } else {
                     mAdapter.setNewData(mList);
                 }
+                loadSubject(result.getString("accountid"));
+                loadPaymentInfo(result.getString("bankid"));
             }
         });
     }

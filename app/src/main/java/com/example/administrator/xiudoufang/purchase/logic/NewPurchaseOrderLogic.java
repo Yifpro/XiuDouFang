@@ -41,6 +41,7 @@ public class NewPurchaseOrderLogic {
     //******** 获取供应商列表 ********
     public void requestSupplierList(HashMap<String, String> params, JsonCallback<SupplierListBean> callback) {
         String json = JSONObject.toJSONString(params);
+        LogUtils.e("供应商列表 -> " + json);
         OkGo.<SupplierListBean>post(StringUtils.BASE_URL + "/Api/products/requset_suppdata?requset_suppdata=0")
                 .headers("Content-Type", "application/json")
                 .upJson(json)

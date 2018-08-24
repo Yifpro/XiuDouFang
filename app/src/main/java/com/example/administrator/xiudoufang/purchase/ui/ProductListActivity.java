@@ -151,16 +151,16 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
             @Override
             public void onSuccess(Response<ProductListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
-                List<ProductListBean.ProductBean> tempList = response.body().getPo_chanpinlist();
+                List<ProductListBean.ProductBean> temp = response.body().getPo_chanpinlist();
                 if (isFiltering) {
                     mList.clear();
-                    mList.addAll(tempList);
+                    mList.addAll(temp);
                     mAdapter.setNewData(mList);
                 } else {
                     if (mList == null)
                         mList = new ArrayList<>();
-                    mList.addAll(tempList);
-                    mAdapter.addData(mList);
+                    mList.addAll(temp);
+                    mAdapter.addData(temp);
                 }
                 if (mList.size() < COUNT) {
                     mRefreshLayout.finishLoadMoreWithNoMoreData();
