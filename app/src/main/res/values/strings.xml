@@ -123,5 +123,6 @@
     <string name="input_new_telephone_num">请输入新电话号码</string>
     <string name="add_contact">新增联系人</string>
     <string name="input_add_contact">请输入新增联系人</string>
+    <string name="already_receive">已收货：%s个</string>
 
 </resources>

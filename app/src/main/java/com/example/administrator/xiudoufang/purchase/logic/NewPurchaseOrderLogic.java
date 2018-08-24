@@ -23,13 +23,20 @@ import java.util.Map;
 public class NewPurchaseOrderLogic {
 
     //******** 提交采购单 ********
-    public void requestPostPurchaseOrder(HashMap<String, String> params, JsonCallback<String> callback) {
+    public void requestPostPurchaseOrder(HashMap<String, String> params, String path, JsonCallback<String> callback) {
         String json = JSONObject.toJSONString(params);
+        LogUtils.e("采购单提交 -> " + json);
+        HttpParams p = new HttpParams();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            p.put(entry.getKey(), entry.getValue());
+        }
+        if (path != null)
+            p.put("fujian", new File(path));
         OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/postpoorderall?postpoorder=0")
-                .headers("Content-Type", "application/json")
-                .upJson(json)
+                .params(p)
                 .execute(callback);
     }
+
 
     //******** 获取供应商列表 ********
     public void requestSupplierList(HashMap<String, String> params, JsonCallback<SupplierListBean> callback) {
@@ -60,18 +67,4 @@ public class NewPurchaseOrderLogic {
                 .execute(callback);
     }
 
-    //******** 提交订单 ********
-    public void requestSubmitOrder(HashMap<String, String> params, String path, JsonCallback<String> callback) {
-        String json = JSONObject.toJSONString(params);
-        LogUtils.e("订单提交 -> " + json);
-        HttpParams p = new HttpParams();
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            p.put(entry.getKey(), entry.getValue());
-        }
-        if (path != null)
-            p.put("fujian", new File(path));
-        OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/postpoorderall?postpoorder=0")
-                .params(p)
-                .execute(callback);
-    }
 }

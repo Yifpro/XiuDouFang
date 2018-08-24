@@ -4,15 +4,15 @@ package com.example.administrator.xiudoufang.bean;
  * Created by Administrator on 2018/8/20
  */
 
-public class DrawerTab {
+public class DrawerItem {
 
     private String title;
     private boolean isSelected;
 
-    public DrawerTab() {
+    public DrawerItem() {
     }
 
-    public DrawerTab(String title, boolean isSelected) {
+    public DrawerItem(String title, boolean isSelected) {
         this.title = title;
         this.isSelected = isSelected;
     }

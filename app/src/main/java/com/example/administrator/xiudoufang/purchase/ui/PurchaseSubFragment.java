@@ -15,7 +15,6 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseFragment;
 import com.example.administrator.xiudoufang.bean.PurchaseListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.purchase.adapter.PurchaseSubAdapter;
@@ -41,10 +40,10 @@ public class PurchaseSubFragment extends BaseFragment {
     private PurchaseLogic mLogic;
     private PurchaseSubAdapter mAdapter;
     private List<PurchaseListBean.PurchaseBean> mList;
-    private HashMap<String, String> mParams;
-    private int mCurrentPage;
+    private HashMap<String, String> mPurchaseListParams;
+    private HashMap<String, String> mActionParams;
+    private int mCurrentPage = 1;
     private String mType;
-    private HashMap<String, String> mMap;
 
     public static PurchaseSubFragment newInstance(String type) {
         PurchaseSubFragment fragment = new PurchaseSubFragment();
@@ -59,118 +58,24 @@ public class PurchaseSubFragment extends BaseFragment {
         mLogic = new PurchaseLogic();
         assert getArguments() != null;
         mType = getArguments().getString("type");
-        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(@NonNull final RefreshLayout refreshLayout) {
-                mRefreshLayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadPurchaseList(true);
-                    }
-                }, 2000);
-            }
-        });
-        mRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                mRefreshLayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadPurchaseList(false);
-                    }
-                }, 2000);
-            }
-        });
+        mRefreshLayout.setOnRefreshListener(new InnerRefreshListener());
+        mRefreshLayout.setOnLoadMoreListener(new InnerLoadMoreListener());
         mRefreshLayout.setEnableLoadMoreWhenContentNotFull(false);
         mAdapter = new PurchaseSubAdapter(R.layout.layout_list_item_purchase_sub, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(getActivity(), PurchaseDetailsActivity.class);
-                LogUtils.e("iid -> " + mList.get(position).getIid());
-                intent.putExtra(ORDER_ID, mList.get(position).getIid());
-                intent.putExtra(ITEM_STATUS, mList.get(position).getStatus_str());
-                assert getActivity() != null;
-                getActivity().startActivity(intent);
-            }
-        });
-        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if (mMap == null) {
-                    SharedPreferences preferences = PreferencesUtils.getPreferences();
-                    mMap = new HashMap<>();
-                    mMap.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
-                    mMap.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-                }
-                mMap.put("iid", mList.get(position).getIid());
-                String action = "";
-                switch (view.getId()) {
-                    case R.id.tv_bottom_left:
-                        switch (mType) {
-                            case "1":
-                                break;
-                            case "2":
-                                action = "2";
-                                break;
-                            case "3":
-                                break;
-                            case "4":
-                                action = "2";
-                                break;
-                            case "5":
-                                break;
-                            case "6":
-                                break;
-                        }
-                        break;
-                    case R.id.tv_bottom_right:
-                        switch (mType) {
-                            case "1":
-                                action = "1";
-                                break;
-                            case "2":
-                                action = "3";
-                                break;
-                            case "3":
-                                break;
-                            case "4":
-                                action = "5";
-                                break;
-                            case "5":
-                                action = "6";
-                                break;
-                            case "6":
-                                action = "4";
-                                break;
-                        }
-                        break;
-                }
-                mMap.put("action", action);
-                mLogic.requestActionForOrder(mMap, new JsonCallback<String>() {
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        JSONObject jsonObject = JSONObject.parseObject(response.body());
-                        if (!"0".equals(jsonObject.getString("status"))) {
-                            Toast.makeText(mActivity, jsonObject.getString("messages"), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        });
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
+        mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         LoadingViewDialog.getInstance().show(getActivity());
-        mCurrentPage = 1;
         loadPurchaseList(false);
     }
 
     private void loadPurchaseList(final boolean isRefresh) {
         if (isRefresh) mCurrentPage = 1;
-        if (mParams == null) initParameters();
-        mParams.put("pagenum", String.valueOf(mCurrentPage++));
-        mLogic.requestPurchaseList(mParams, new JsonCallback<PurchaseListBean>() {
+        if (mPurchaseListParams == null) initParams();
+        mPurchaseListParams.put("pagenum", String.valueOf(mCurrentPage++));
+        mLogic.requestPurchaseList(mPurchaseListParams, new JsonCallback<PurchaseListBean>() {
             @Override
             public void onSuccess(Response<PurchaseListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
@@ -194,26 +99,26 @@ public class PurchaseSubFragment extends BaseFragment {
     }
 
     @SuppressWarnings("unchecked")
-    private void initParameters() {
-        mParams = new HashMap();
-        mParams.put("iid", "");
-        mParams.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
-        mParams.put("PuOrderNo", "");
-        mParams.put("suppno", "");
-        mParams.put("Suppname", "");
-        mParams.put("starttime", "");
-        mParams.put("endtime", "");
-        mParams.put("etadate", "");
-        mParams.put("crman", "");
-        mParams.put("queren_man", "");
-        mParams.put("quyuno", "");
-        mParams.put("quyu", "");
-        mParams.put("fujia_memo", "");
-        mParams.put("remark", "");
-        mParams.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
-        mParams.put("status_str", mType);
-        mParams.put("fromorder", "");
-        mParams.put("count", String.valueOf(COUNT));
+    private void initParams() {
+        mPurchaseListParams = new HashMap();
+        mPurchaseListParams.put("iid", "");
+        mPurchaseListParams.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
+        mPurchaseListParams.put("PuOrderNo", "");
+        mPurchaseListParams.put("suppno", "");
+        mPurchaseListParams.put("Suppname", "");
+        mPurchaseListParams.put("starttime", "");
+        mPurchaseListParams.put("endtime", "");
+        mPurchaseListParams.put("etadate", "");
+        mPurchaseListParams.put("crman", "");
+        mPurchaseListParams.put("queren_man", "");
+        mPurchaseListParams.put("quyuno", "");
+        mPurchaseListParams.put("quyu", "");
+        mPurchaseListParams.put("fujia_memo", "");
+        mPurchaseListParams.put("remark", "");
+        mPurchaseListParams.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
+        mPurchaseListParams.put("status_str", mType);
+        mPurchaseListParams.put("fromorder", "");
+        mPurchaseListParams.put("count", String.valueOf(COUNT));
     }
 
     @Override
@@ -226,4 +131,67 @@ public class PurchaseSubFragment extends BaseFragment {
     public int getLayoutId() {
         return R.layout.fragment_purchase_sub;
     }
+
+    private class InnerRefreshListener implements OnRefreshListener {
+
+        @Override
+        public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+            mRefreshLayout.getLayout().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadPurchaseList(true);
+                }
+            }, 2000);
+        }
+    }
+
+    private class InnerLoadMoreListener implements OnLoadMoreListener {
+
+        @Override
+        public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+            mRefreshLayout.getLayout().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadPurchaseList(false);
+                }
+            }, 2000);
+        }
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            Intent intent = new Intent(getActivity(), PurchaseDetailsActivity.class);
+            intent.putExtra(ORDER_ID, mList.get(position).getIid());
+            intent.putExtra(ITEM_STATUS, mList.get(position).getStatus_str());
+            assert getActivity() != null;
+            getActivity().startActivity(intent);
+        }
+    }
+
+    private class InnerItemChildClickListener implements BaseQuickAdapter.OnItemChildClickListener {
+
+        @Override
+        public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            if (mActionParams == null) {
+                SharedPreferences preferences = PreferencesUtils.getPreferences();
+                mActionParams = new HashMap<>();
+                mActionParams.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
+                mActionParams.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
+            }
+            mActionParams.put("iid", mList.get(position).getIid());
+            mActionParams.put("action", mLogic.getAction(view.getId(), mType));
+            mLogic.requestActionForOrder(mActionParams, new JsonCallback<String>() {
+                @Override
+                public void onSuccess(Response<String> response) {
+                    JSONObject jsonObject = JSONObject.parseObject(response.body());
+                    if (!"0".equals(jsonObject.getString("status"))) {
+                        Toast.makeText(mActivity, jsonObject.getString("messages"), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
 }

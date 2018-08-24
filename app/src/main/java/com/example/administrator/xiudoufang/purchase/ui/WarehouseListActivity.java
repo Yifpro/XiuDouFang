@@ -27,7 +27,6 @@ import java.util.List;
 
 public class WarehouseListActivity extends AppCompatActivity implements IActivityBase {
 
-    public static final String SELECTED_INDEX = "selected_index";
     public static final String WAREHOUSE_ID = "warehouse_id";
     public static final String WAREHOUSE_NAME = "warehouse_name";
 
@@ -58,18 +57,7 @@ public class WarehouseListActivity extends AppCompatActivity implements IActivit
         mLogic = new NewPurchaseOrderLogic();
         final WarehouseListAdapter adapter = new WarehouseListAdapter(R.layout.layout_list_item_warehouse_list, mList);
         adapter.bindToRecyclerView(mRecyclerView);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (mLastIndex != position) {
-                    mList.get(position).setSelcted(true);
-                    mList.get(mLastIndex).setSelcted(false);
-                    adapter.notifyItemChanged(mLastIndex);
-                    adapter.notifyItemChanged(position);
-                    mLastIndex = position;
-                }
-            }
-        });
+        adapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         LoadingViewDialog.getInstance().show(this);
@@ -80,7 +68,8 @@ public class WarehouseListActivity extends AppCompatActivity implements IActivit
                 mList = response.body().getHouselists();
                 String warehouseId = getIntent().getStringExtra(WAREHOUSE_ID);
                 if (!TextUtils.isEmpty(warehouseId)) {
-                    mList.get(mList.indexOf(new WarehouseListBean.WarehouseBean(warehouseId))).setSelcted(true);
+                    mLastIndex = mList.indexOf(new WarehouseListBean.WarehouseBean(warehouseId));
+                    mList.get(mLastIndex).setSelcted(true);
                 } else {
                     mList.get(0).setSelcted(true);
                 }
@@ -95,5 +84,19 @@ public class WarehouseListActivity extends AppCompatActivity implements IActivit
         intent.putExtra(WAREHOUSE_NAME, mList.get(mLastIndex).getSn());
         setResult(Activity.RESULT_OK, intent);
         finish();
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            if (mLastIndex != position) {
+                mList.get(position).setSelcted(true);
+                mList.get(mLastIndex).setSelcted(false);
+                adapter.notifyItemChanged(mLastIndex);
+                adapter.notifyItemChanged(position);
+                mLastIndex = position;
+            }
+        }
     }
 }

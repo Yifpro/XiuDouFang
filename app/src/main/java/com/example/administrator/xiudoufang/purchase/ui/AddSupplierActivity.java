@@ -10,7 +10,7 @@ import android.view.animation.AnimationUtils;
 
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
-import com.example.administrator.xiudoufang.bean.SupplierDetails;
+import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 
@@ -65,7 +65,7 @@ public class AddSupplierActivity extends AppCompatActivity implements IActivityB
             mSivName.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
         } else {
             Intent intent = new Intent(this, NewPurchaseOrderActivity.class);
-            SupplierDetails supplier = new SupplierDetails();
+            Supplier supplier = new Supplier();
             supplier.setName(mSivName.getValue());
             supplier.setTotalName(mSivTotalName.getValue());
             supplier.setNewPhoneNum(mSivPhoneNum.getValue());

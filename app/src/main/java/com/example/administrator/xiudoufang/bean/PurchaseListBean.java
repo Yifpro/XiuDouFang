@@ -108,13 +108,13 @@ public class PurchaseListBean {
         private String remark;
         private String tijiao_status;
         private String anxutuihuo;
-        private Object benci_amt;
-        private Object bankid;
-        private Object accountid;
-        private Object fromorder_url;
-        private Object debt;
-        private Object pricecode;
-        private Object youhuijine;
+        private String benci_amt;
+        private String bankid;
+        private String accountid;
+        private String fromorder_url;
+        private String debt;
+        private String pricecode;
+        private String youhuijine;
 
         public String getDianid() {
             return dianid;
@@ -348,59 +348,59 @@ public class PurchaseListBean {
             this.anxutuihuo = anxutuihuo;
         }
 
-        public Object getBenci_amt() {
+        public String getBenci_amt() {
             return benci_amt;
         }
 
-        public void setBenci_amt(Object benci_amt) {
+        public void setBenci_amt(String benci_amt) {
             this.benci_amt = benci_amt;
         }
 
-        public Object getBankid() {
+        public String getBankid() {
             return bankid;
         }
 
-        public void setBankid(Object bankid) {
+        public void setBankid(String bankid) {
             this.bankid = bankid;
         }
 
-        public Object getAccountid() {
+        public String getAccountid() {
             return accountid;
         }
 
-        public void setAccountid(Object accountid) {
+        public void setAccountid(String accountid) {
             this.accountid = accountid;
         }
 
-        public Object getFromorder_url() {
+        public String getFromorder_url() {
             return fromorder_url;
         }
 
-        public void setFromorder_url(Object fromorder_url) {
+        public void setFromorder_url(String fromorder_url) {
             this.fromorder_url = fromorder_url;
         }
 
-        public Object getDebt() {
+        public String getDebt() {
             return debt;
         }
 
-        public void setDebt(Object debt) {
+        public void setDebt(String debt) {
             this.debt = debt;
         }
 
-        public Object getPricecode() {
+        public String getPricecode() {
             return pricecode;
         }
 
-        public void setPricecode(Object pricecode) {
+        public void setPricecode(String pricecode) {
             this.pricecode = pricecode;
         }
 
-        public Object getYouhuijine() {
+        public String getYouhuijine() {
             return youhuijine;
         }
 
-        public void setYouhuijine(Object youhuijine) {
+        public void setYouhuijine(String youhuijine) {
             this.youhuijine = youhuijine;
         }
     }

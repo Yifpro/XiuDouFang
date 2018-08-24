@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
-import com.example.administrator.xiudoufang.bean.SupplierDetails;
+import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.bean.SupplierListBean;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 
@@ -90,7 +90,7 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
                     clazz = PurchaseDetailsActivity.class;
                 }
                 Intent intent = new Intent(this, clazz);
-                SupplierDetails details = new SupplierDetails();
+                Supplier details = new Supplier();
                 details.setId(mBean.getC_id());
                 details.setCustomerNo(mBean.getCustomerno());
                 details.setName(mBean.getCustomername());

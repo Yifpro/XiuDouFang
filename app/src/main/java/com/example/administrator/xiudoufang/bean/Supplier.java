@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by Administrator on 2018/8/18
  */
 
-public class SupplierDetails implements Parcelable {
+public class Supplier implements Parcelable {
 
     private String id;
     private String customerNo;
@@ -118,7 +118,7 @@ public class SupplierDetails implements Parcelable {
         this.areaName = areaName;
     }
 
-    public SupplierDetails() {
+    public Supplier() {
     }
 
     @Override
@@ -142,7 +142,7 @@ public class SupplierDetails implements Parcelable {
         dest.writeString(this.fendianid);
     }
 
-    protected SupplierDetails(Parcel in) {
+    protected Supplier(Parcel in) {
         this.id = in.readString();
         this.customerNo = in.readString();
         this.name = in.readString();
@@ -157,15 +157,15 @@ public class SupplierDetails implements Parcelable {
         this.fendianid = in.readString();
     }
 
-    public static final Creator<SupplierDetails> CREATOR = new Creator<SupplierDetails>() {
+    public static final Creator<Supplier> CREATOR = new Creator<Supplier>() {
         @Override
-        public SupplierDetails createFromParcel(Parcel source) {
-            return new SupplierDetails(source);
+        public Supplier createFromParcel(Parcel source) {
+            return new Supplier(source);
         }
 
         @Override
-        public SupplierDetails[] newArray(int size) {
-            return new SupplierDetails[size];
+        public Supplier[] newArray(int size) {
+            return new Supplier[size];
         }
     };
 }

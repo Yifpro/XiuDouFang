@@ -27,16 +27,15 @@ import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.PayBean;
 import com.example.administrator.xiudoufang.bean.ProductItem;
-import com.example.administrator.xiudoufang.bean.ProductListBean;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
-import com.example.administrator.xiudoufang.bean.SupplierDetails;
+import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
-import com.example.administrator.xiudoufang.purchase.adapter.SelectedProductAdapter;
+import com.example.administrator.xiudoufang.purchase.adapter.SelectedProductListAdapter;
 import com.example.administrator.xiudoufang.purchase.logic.NewPurchaseOrderLogic;
 import com.example.administrator.xiudoufang.receipt.logic.CustomerListLogic;
 import com.example.administrator.xiudoufang.receipt.ui.ReceiptSelectorDialog;
@@ -95,11 +94,11 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     private CustomerListLogic mCustomerListLogic;
     private ArrayList<SubjectListBean.AccounttypesBean> mSubjectList;
     private List<ProductItem> mProductItemList;
-    private SupplierDetails mSupplier;
+    private Supplier mSupplier;
     private String mWarehouseId = "";
     private String mSubjectId = "";
     private String mPayId = "";
-    private SelectedProductAdapter mAdapter;
+    private SelectedProductListAdapter mAdapter;
     private String mImgPath;
 
     public static void start(Context context) {
@@ -136,8 +135,8 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         setTitle("采购单详情");
         mSivSupplier = findViewById(R.id.siv_supplier);
         mSivDebt = findViewById(R.id.siv_debt);
-        mSivSetupOrderDate = findViewById(R.id.siv_setup_order_date);
-        mSivArrival = findViewById(R.id.siv_arrival);
+        mSivSetupOrderDate = findViewById(R.id.siv_billing_date);
+        mSivArrival = findViewById(R.id.siv_arrival_date);
         mSivWarehourse = findViewById(R.id.siv_warehourse);
         mSivPaymentAmount = findViewById(R.id.siv_payment_amount);
         mSivDiscountAmount = findViewById(R.id.siv_discount_amount);
@@ -177,14 +176,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         ((Toolbar) findViewById(R.id.tool_bar)).setNavigationOnClickListener(new NavigationClickListener());
         mNewPurchaseOrderLogic = new NewPurchaseOrderLogic();
         mCustomerListLogic = new CustomerListLogic();
-        mAdapter = new SelectedProductAdapter(R.layout.layout_list_item_selected_product, mProductItemList);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(NewPurchaseOrderActivity.this, ProductDetailsActivity.class);
-                startActivity(intent);
-            }
-        });
+        mAdapter = new SelectedProductListAdapter(R.layout.layout_list_item_selected_product, mProductItemList, "1");
         SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
             @Override
             public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int viewType) {
@@ -198,7 +190,6 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                 rightMenu.addMenuItem(item);
             }
         };
-        mRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
         SwipeMenuItemClickListener swipeMenuItemClickListener = new SwipeMenuItemClickListener() {
             @Override
             public void onItemClick(SwipeMenuBridge menuBridge) {
@@ -212,12 +203,13 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                 }
             }
         };
-        mRecyclerView.setSwipeMenuItemClickListener(swipeMenuItemClickListener);
         View footerView = View.inflate(this, R.layout.layout_list_footer_purchase_details, null);
         mAdapter.addFooterView(footerView);
-        mAdapter.getFooterLayout().setVisibility(View.GONE);
+        mRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
+        mRecyclerView.setSwipeMenuItemClickListener(swipeMenuItemClickListener);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter.getFooterLayout().setVisibility(View.GONE);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
@@ -243,6 +235,15 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                 tvTotalPrice.setText(mFormat.format(totalPrice));
                 tvAmount.setText(String.valueOf(i));
                 caculateTotalPrice();
+            }
+        });
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(NewPurchaseOrderActivity.this, ProductDetailsActivity.class);
+                intent.putExtra(ProductDetailsActivity.FROM_CLASS, TAG);
+                intent.putExtra(ProductDetailsActivity.SELECTED_PRODUCT_ITEM, mProductItemList.get(position));
+                startActivity(intent);
             }
         });
         loadSubjectList();
@@ -393,12 +394,12 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         params.put("poprice_mode", jsonObject.getString("poprice_mode"));
         params.put("youhuijine", mSivDiscountAmount.getValue());
         ArrayList<HashMap<String, String>> maps = new ArrayList<>();
-        if (mProductItemList != null) {
+        if (mProductItemList != null && mProductItemList.size() > 0) {
             HashMap<String, String> map;
             for (ProductItem item : mProductItemList) {
                 map = new HashMap<>();
                 map.put("pnid", "0");
-                map.put("cpid", item.getProductNo());
+                map.put("cpid", item.getId());
                 map.put("yanse", item.getColor());
                 map.put("guige", item.getSize());
                 map.put("factor", item.getFactor());
@@ -419,7 +420,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         params.put("benci_amt", mSivPaymentAmount.getValue());
         params.put("bankid", mPayId);
         params.put("accountid", mSubjectId);
-        mNewPurchaseOrderLogic.requestSubmitOrder(params, mImgPath, new JsonCallback<String>() {
+        mNewPurchaseOrderLogic.requestPostPurchaseOrder(params, mImgPath, new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
             }

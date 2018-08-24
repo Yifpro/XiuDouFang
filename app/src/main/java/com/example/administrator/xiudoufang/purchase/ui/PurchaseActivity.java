@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
-import com.example.administrator.xiudoufang.bean.DrawerTab;
+import com.example.administrator.xiudoufang.bean.DrawerItem;
 import com.example.administrator.xiudoufang.purchase.adapter.PurchasePagerAdapter;
 import com.example.administrator.xiudoufang.purchase.adapter.PurchaseTabAdapter;
 import com.example.administrator.xiudoufang.common.widget.CustomViewPager;
@@ -32,8 +32,8 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
     private LinearLayout mLeftMenu;
     private RecyclerView mRecyclerView;
 
-    private int mLastIndex = 1;
-    private boolean mIsFirst;
+    private List<DrawerItem> mTabs;
+    private int mLastIndex = -1;
 
     public static void start(Context context) {
         context.startActivity(new Intent(context, PurchaseActivity.class));
@@ -56,13 +56,13 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
 
     @Override
     public void initData() {
-        String[] tabTitles = {"草稿", "已确认", "收货中", "未提交", "已提交", "已关闭", "全部"};
-        final List<DrawerTab> tabs = new ArrayList<>();
-        tabs.add(new DrawerTab(tabTitles[0], true));
-        for (int i = 1; i < tabTitles.length; i++) {
-            tabs.add(new DrawerTab(tabTitles[i], false));
+        String[] titles = {"草稿", "已确认", "收货中", "未提交", "已提交", "已关闭", "全部"};
+        mTabs = new ArrayList<>();
+        mTabs.add(new DrawerItem(titles[0], true));
+        for (int i = 1; i < titles.length; i++) {
+            mTabs.add(new DrawerItem(titles[i], false));
         }
-        PurchaseTabAdapter adapter = new PurchaseTabAdapter(R.layout.layout_list_item_purchase_tab, tabs);
+        PurchaseTabAdapter adapter = new PurchaseTabAdapter(R.layout.layout_list_item_purchase_tab, mTabs);
         adapter.bindToRecyclerView(mRecyclerView);
         View header = View.inflate(this, R.layout.layout_list_header_server_selector, null);
         TextView tvHeader = header.findViewById(R.id.tv);
@@ -70,28 +70,15 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
         tvHeader.setTextSize(22);
         tvHeader.setText("筛选");
         adapter.addHeaderView(header);
-        mIsFirst = true;
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                LinearLayoutManager layoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-                mViewPager.setCurrentItem(position);
-                mDrawerLayout.closeDrawer(mLeftMenu);
-                tabs.get(mIsFirst ? 0 : mLastIndex).setSelected(false);
-                tabs.get(position).setSelected(true);
-                adapter.setNewData(tabs);
-                mLastIndex = position;
-                mIsFirst = false;
-            }
-        });
+        adapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         List<Fragment> fragments = new ArrayList<>();
         String[] types = {"1", "2", "3", "4", "5", "6", "0"};
-        for (int i = 0; i < types.length; i++) {
-            fragments.add(PurchaseSubFragment.newInstance(types[i]));
+        for (String type : types) {
+            fragments.add(PurchaseSubFragment.newInstance(type));
         }
-        PurchasePagerAdapter mAdapter = new PurchasePagerAdapter(getSupportFragmentManager(), fragments, tabTitles);
+        PurchasePagerAdapter mAdapter = new PurchasePagerAdapter(getSupportFragmentManager(), fragments, titles);
         mViewPager.setAdapter(mAdapter);
     }
 
@@ -114,4 +101,17 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
         return super.onOptionsItemSelected(item);
     }
 
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            mViewPager.setCurrentItem(position);
+            mDrawerLayout.closeDrawer(mLeftMenu);
+            mTabs.get(mLastIndex == -1 ? 0 : mLastIndex).setSelected(false);
+            mTabs.get(position).setSelected(true);
+            adapter.setNewData(mTabs);
+            mLastIndex = position;
+        }
+    }
 }

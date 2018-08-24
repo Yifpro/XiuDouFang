@@ -22,11 +22,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseTextWatcher;
 import com.example.administrator.xiudoufang.base.IActivityBase;
-import com.example.administrator.xiudoufang.bean.CustomerListBean;
 import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.bean.ProductListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SoftInputHelper;
 import com.example.administrator.xiudoufang.common.utils.SoftKeyBoardListener;
@@ -125,7 +123,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(ProductListActivity.this, ProductDetailsActivity.class);
                 intent.putExtra(ProductDetailsActivity.FROM_CLASS, TAG);
-                intent.putExtra(ProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
+                intent.putExtra(ProductDetailsActivity.SELECTED_PRODUCT_BEAN, mList.get(position));
                 startActivity(intent);
             }
         });
