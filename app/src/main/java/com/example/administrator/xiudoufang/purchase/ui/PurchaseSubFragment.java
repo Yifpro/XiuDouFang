@@ -1,5 +1,6 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class PurchaseSubFragment extends BaseFragment {
     private final int COUNT = 20;
     public static final String ORDER_ID = "order_id";
     public static final String ITEM_STATUS = "item_status";
+    public static final int RESULT_FOR_PURCHASE_DETAILS = 111;
 
     private RefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -60,6 +62,13 @@ public class PurchaseSubFragment extends BaseFragment {
         loadPurchaseList(true);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_FOR_PURCHASE_DETAILS && resultCode == Activity.RESULT_OK) {
+            onEvent();
+        }
+    }
 
     @Override
     public void onStart() {
@@ -200,7 +209,7 @@ public class PurchaseSubFragment extends BaseFragment {
             intent.putExtra(ORDER_ID, mList.get(position).getIid());
             intent.putExtra(ITEM_STATUS, mList.get(position).getStatus_str());
             assert getActivity() != null;
-            getActivity().startActivity(intent);
+            startActivityForResult(intent, RESULT_FOR_PURCHASE_DETAILS);
         }
     }
 
@@ -222,6 +231,9 @@ public class PurchaseSubFragment extends BaseFragment {
                     JSONObject jsonObject = JSONObject.parseObject(response.body());
                     if (!"0".equals(jsonObject.getString("status"))) {
                         Toast.makeText(mActivity, jsonObject.getString("messages"), Toast.LENGTH_SHORT).show();
+                    } else {
+                        LoadingViewDialog.getInstance().show(getActivity());
+                        loadPurchaseList(true);
                     }
                 }
             });

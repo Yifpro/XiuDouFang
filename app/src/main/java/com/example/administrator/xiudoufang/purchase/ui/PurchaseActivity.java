@@ -19,6 +19,7 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseFragment;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.DrawerItem;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.purchase.adapter.PurchasePagerAdapter;
 import com.example.administrator.xiudoufang.purchase.adapter.PurchaseTabAdapter;
 import com.example.administrator.xiudoufang.common.widget.CustomViewPager;

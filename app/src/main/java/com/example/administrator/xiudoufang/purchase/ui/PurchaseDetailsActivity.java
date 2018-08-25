@@ -1,5 +1,6 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -46,6 +47,7 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
+import com.yanzhenjie.loading.LoadingView;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
@@ -244,13 +246,17 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             mActionParams.put("iid", getIntent().getStringExtra(PurchaseSubFragment.ORDER_ID));
         }
         mActionParams.put("action", mPurchaseLogic.getAction(viewId, getIntent().getStringExtra(PurchaseSubFragment.ITEM_STATUS)));
+        LoadingViewDialog.getInstance().show(this);
         mPurchaseLogic.requestActionForOrder(mActionParams, new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
+                LoadingViewDialog.getInstance().dismiss();
                 JSONObject jsonObject = JSONObject.parseObject(response.body());
-                if (!"0".equals(jsonObject.getString("status"))) {
+                if (!"1".equals(jsonObject.getString("status"))) {
                     Toast.makeText(PurchaseDetailsActivity.this, jsonObject.getString("messages"), Toast.LENGTH_SHORT).show();
                 }
+                setResult(Activity.RESULT_OK);
+                finish();
             }
         });
     }
@@ -600,9 +606,13 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         params.put("benci_amt", mSivPaymentAmount.getValue());
         params.put("bankid", mPayId);
         params.put("accountid", mSubjectId);
+        LoadingViewDialog.getInstance().show(this);
         new NewPurchaseOrderLogic().requestPostPurchaseOrder(params, mImgPath, new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
+                LoadingViewDialog.getInstance().dismiss();
+                setResult(Activity.RESULT_OK);
+                finish();
             }
         });
     }
