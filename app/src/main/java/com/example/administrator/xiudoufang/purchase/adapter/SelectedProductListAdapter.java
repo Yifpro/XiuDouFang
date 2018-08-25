@@ -58,8 +58,10 @@ public class SelectedProductListAdapter extends BaseItemDraggableAdapter<Product
             } else {
                 helper.getView(R.id.tv_status).setVisibility(View.GONE);
             }
-
             helper.setText(R.id.tv_receive_amount, String.format(mContext.getResources().getString(R.string.already_receive), item.getRcvamt()));
+        } else {
+            helper.getView(R.id.tv_status).setVisibility(View.GONE);
+            helper.getView(R.id.tv_receive_amount).setVisibility(View.GONE);
         }
 
         helper.addOnClickListener(R.id.tv_reduce);

@@ -1,5 +1,6 @@
 package com.example.administrator.xiudoufang.setting.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -111,7 +112,7 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == RESULT_SORT_LIST) {
+        if (requestCode == RESULT_SORT_LIST && resultCode == Activity.RESULT_OK) {
             int index = mItemList.indexOf(new SettingItem("当前店"));
             assert data != null;
             mLoginStores.get(mLogindianIndex).setSelected(false);

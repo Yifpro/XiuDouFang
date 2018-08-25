@@ -27,6 +27,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PurchaseSubFragment extends BaseFragment {
 
@@ -59,6 +60,28 @@ public class PurchaseSubFragment extends BaseFragment {
         loadPurchaseList(true);
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        HashMap<String, String> params = ((PurchaseActivity) getActivity()).mParams;
+        if (params != null) {
+            mType = getArguments().getString("type");
+            mLogic = new PurchaseLogic();
+            mList = new ArrayList<>();
+            initParams();
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                mPurchaseListParams.put(entry.getKey(), entry.getValue());
+            }
+            mAdapter = new PurchaseSubAdapter(R.layout.layout_list_item_purchase_sub, mList);
+            mAdapter.bindToRecyclerView(mRecyclerView);
+            mAdapter.setOnItemClickListener(new InnerItemClickListener());
+            mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
+            LoadingViewDialog.getInstance().show(getActivity());
+            loadPurchaseList(true);
+        }
+    }
+
     @Override
     protected void lazyLoad() {
         mLogic = new PurchaseLogic();
@@ -73,8 +96,10 @@ public class PurchaseSubFragment extends BaseFragment {
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        LoadingViewDialog.getInstance().show(getActivity());
-        loadPurchaseList(false);
+        if (((PurchaseActivity) getActivity()).mParams == null) {
+            LoadingViewDialog.getInstance().show(getActivity());
+            loadPurchaseList(false);
+        }
     }
 
     private void loadPurchaseList(final boolean isRefresh) {

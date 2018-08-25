@@ -25,11 +25,14 @@ import com.example.administrator.xiudoufang.common.widget.CustomViewPager;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PurchaseActivity extends AppCompatActivity implements IActivityBase {
 
     private static final int RESULT_FOR_NEW_PURCHASE_ORDER = 110;
+    private static final int RESULT_FOR_FILTER_LIST = 111;
+    public static final String FILTER_LIST = "filter_list";
 
     private DrawerLayout mDrawerLayout;
     private CustomViewPager mViewPager;
@@ -39,6 +42,7 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
     private List<DrawerItem> mTabs;
     private int mLastIndex = -1;
     private List<BaseFragment> mFragments;
+    public HashMap<String, String> mParams;
 
     public static void start(Context context) {
         context.startActivity(new Intent(context, PurchaseActivity.class));
@@ -92,6 +96,15 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
         if (requestCode == RESULT_FOR_NEW_PURCHASE_ORDER && resultCode == Activity.RESULT_OK) {
             int currentItem = mViewPager.getCurrentItem();
             mFragments.get(currentItem).onEvent();
+        } else if (requestCode == RESULT_FOR_FILTER_LIST && resultCode == Activity.RESULT_OK) {
+            String[] keys = {"PuOrderNo", "Suppname", "starttime", "endtime", "crman", "remark", "fromorder"};
+            if (mParams == null) {
+                mParams = new HashMap<>();
+                ArrayList<String> list = data.getStringArrayListExtra(FILTER_LIST);
+                for (int i = 0; i < list.size(); i++) {
+                    mParams.put(keys[i], list.get(i));
+                }
+            }
         }
     }
 
@@ -105,7 +118,8 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toolbar_search:
-                PurchaseQueryActivity.start(this);
+                Intent i = new Intent(this, PurchaseQueryActivity.class);
+                startActivityForResult(i, RESULT_FOR_FILTER_LIST);
                 break;
             case R.id.toolbar_menu:
                 Intent intent = new Intent(this, NewPurchaseOrderActivity.class);

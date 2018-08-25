@@ -75,7 +75,7 @@
     <string name="sure">确定</string>
     <string name="finish_edit">完成编辑</string>
     <string name="keep_on">继续</string>
-    <string name="high_price_tip">您填写的单位价格超出历史价格%s%，是否继续？</string>
+    <string name="high_price_tip">您填写的单位价格超出历史价格 %s%%，是否继续？</string>
     <string name="supplier_name">供应商名称</string>
     <string name="input_total_name">请输入全称</string>
     <string name="total_name">全称</string>

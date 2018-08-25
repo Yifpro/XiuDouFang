@@ -128,7 +128,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
         mTvBottomRight.setOnClickListener(this);
         mSivPurchaseUnit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {showPurchaseUnitDialog();
+            public void onClick(View view) {
+                showPurchaseUnitDialog();
             }
         });
         mSivPriceSource.setOnClickListener(new View.OnClickListener() {
@@ -203,16 +204,20 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                     String singlePrice = null;
                     switch (position) {
                         case 0:
-                            singlePrice = mProductBean.getLishijialist().get(mPurchaseUnitPosition).getPrice();
+                            singlePrice = mProductItem == null ? mProductBean.getLishijialist().get(mPurchaseUnitPosition).getPrice() :
+                                    mProductItem.getLishijialist().get(mPurchaseUnitPosition).getPrice();
                             break;
                         case 1:
-                            singlePrice = mProductBean.getChengbenjialist().get(mPurchaseUnitPosition).getPrice();
+                            singlePrice = mProductItem == null ? mProductBean.getChengbenjialist().get(mPurchaseUnitPosition).getPrice() :
+                                    mProductItem.getChengbenjialist().get(mPurchaseUnitPosition).getPrice();
                             break;
                         case 2:
-                            singlePrice = mProductBean.getChuchangjialist().get(mPurchaseUnitPosition).getPrice();
+                            singlePrice = mProductItem == null ? mProductBean.getChuchangjialist().get(mPurchaseUnitPosition).getPrice() :
+                                    mProductItem.getChuchangjialist().get(mPurchaseUnitPosition).getPrice();
                             break;
                         case 3:
-                            singlePrice = mProductBean.getCankaoshoujialist().get(mPurchaseUnitPosition).getPrice();
+                            singlePrice = mProductItem == null ? mProductBean.getCankaoshoujialist().get(mPurchaseUnitPosition).getPrice() :
+                                    mProductItem.getCankaoshoujialist().get(mPurchaseUnitPosition).getPrice();
                             break;
                         case 4:
                             singlePrice = "";
@@ -265,31 +270,36 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                 isNotGift = !mProductItem.isGift();
                 goodsNo = mProductItem.getGoodsNo();
                 tip = mProductItem.getTip();
-                for (int i = 0; i < mProductItem.getPacklist().size(); i++) {
-                    ProductItem.PacklistBean bean = mProductItem.getPacklist().get(i);
-                    if ("1".equals(bean.getCheck())) {
-                        mFactor = bean.getUnit_bilv();
-                        mUnit = bean.getUnitname();
-                        mPurchaseUnitPosition = i;
+                if (mProductItem.getPacklist() != null) {
+                    for (int i = 0; i < mProductItem.getPacklist().size(); i++) {
+                        ProductItem.PacklistBean bean = mProductItem.getPacklist().get(i);
+                        if ("1".equals(bean.getCheck())) {
+                            mFactor = bean.getUnit_bilv();
+                            mUnit = bean.getUnitname();
+                            mPurchaseUnitPosition = i;
+                        }
+                        mPurchaseUnitList.add(bean.getUnit_bilv() + bean.getUnitname());
                     }
-                    mPurchaseUnitList.add(bean.getUnit_bilv() + bean.getUnitname());
                 }
-                for (ProductItem.LishijialistBean bean : mProductItem.getLishijialist()) {
-                    if (mFactor.equals(bean.getUnit_bilv()) && mUnit.equals(bean.getUnitname()))
-                        singlePrice = bean.getPrice();
-                    if ("1".equals(bean.getUnit_bilv())) mHistoryPrice = bean.getPrice();
+                if (mProductItem.getLishijialist() != null) {
+                    for (ProductItem.LishijialistBean bean : mProductItem.getLishijialist()) {
+                        if (mFactor.equals(bean.getUnit_bilv()) && mUnit.equals(bean.getUnitname()))
+                            singlePrice = bean.getPrice();
+                        if ("1".equals(bean.getUnit_bilv())) mHistoryPrice = bean.getPrice();
+                    }
                 }
-
-                if (mProductItem.getSizxlist().size() == 0) {
+                if (mProductItem.getSizxlist() != null && mProductItem.getSizxlist().size() == 0) {
                     mSivSize.setVisibility(View.GONE);
                 } else {
+                    mSpecList = new ArrayList<>();
                     for (ProductItem.SizxlistBean bean : mProductItem.getSizxlist()) {
                         mSpecList.add(bean.getSizx());
                     }
                 }
-                if (mProductItem.getColorlist().size() == 0) {
+                if (mProductItem.getColorlist() != null && mProductItem.getColorlist().size() == 0) {
                     mSivProcutColor.setVisibility(View.GONE);
                 } else {
+                    mColorList = new ArrayList<>();
                     mColorList.add("无");
                     for (ProductItem.ColorlistBean bean : mProductItem.getColorlist()) {
                         mColorList.add(bean.getColor());
@@ -307,32 +317,40 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                 model = mProductBean.getXinghao();
                 barCode = mProductBean.getBarcode();
                 details = mProductBean.getDetail();
-                for (int i = 0; i < mProductBean.getPacklist().size(); i++) {
-                    ProductListBean.ProductBean.PacklistBean bean = mProductBean.getPacklist().get(i);
-                    if ("1".equals(bean.getCheck())) {
-                        mFactor = bean.getUnit_bilv();
-                        mUnit = bean.getUnitname();
-                        mPurchaseUnitPosition = i;
+                if (mProductBean.getPacklist() != null) {
+                    for (int i = 0; i < mProductBean.getPacklist().size(); i++) {
+                        ProductListBean.ProductBean.PacklistBean bean = mProductBean.getPacklist().get(i);
+                        if ("1".equals(bean.getCheck())) {
+                            mFactor = bean.getUnit_bilv();
+                            mUnit = bean.getUnitname();
+                            mPurchaseUnitPosition = i;
+                        }
+                        mPurchaseUnitList.add(bean.getUnit_bilv() + bean.getUnitname());
                     }
-                    mPurchaseUnitList.add(bean.getUnit_bilv() + bean.getUnitname());
                 }
-                for (ProductListBean.ProductBean.LishijialistBean bean : mProductBean.getLishijialist()) {
-                    if (mFactor.equals(bean.getUnit_bilv()) && mUnit.equals(bean.getUnitname()))
-                        singlePrice = bean.getPrice();
-                    if ("1".equals(bean.getUnit_bilv()))
-                        mHistoryPrice = bean.getPrice();
+                if (mProductBean.getLishijialist() != null) {
+                    for (ProductListBean.ProductBean.LishijialistBean bean : mProductBean.getLishijialist()) {
+                        if (mFactor.equals(bean.getUnit_bilv()) && mUnit.equals(bean.getUnitname())) {
+                            singlePrice = bean.getPrice();
+                        }
+                        if ("1".equals(bean.getUnit_bilv())) {
+                            mHistoryPrice = bean.getPrice();
+                        }
+                    }
                 }
 
-                if (mProductBean.getSizxlist().size() == 0) {
+                if (mProductBean.getSizxlist() != null && mProductBean.getSizxlist().size() == 0) {
                     mSivSize.setVisibility(View.GONE);
                 } else {
+                    mSpecList = new ArrayList<>();
                     for (ProductListBean.ProductBean.SizxlistBean bean : mProductBean.getSizxlist()) {
                         mSpecList.add(bean.getSizx());
                     }
                 }
-                if (mProductBean.getColorlist().size() == 0) {
+                if (mProductBean.getColorlist() != null && mProductBean.getColorlist().size() == 0) {
                     mSivProcutColor.setVisibility(View.GONE);
                 } else {
+                    mColorList = new ArrayList<>();
                     mColorList.add("无");
                     for (ProductListBean.ProductBean.ColorlistBean bean : mProductBean.getColorlist()) {
                         mColorList.add(bean.getColor());
@@ -388,7 +406,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                     if (historyPrice > 0) {
                         DecimalFormat decimalFormat = new DecimalFormat("0.00");
                         double unitPrice = Double.parseDouble(mSivUnitPrice.getValue());
-                        double v = (unitPrice - historyPrice) / historyPrice;
+                        double v = (unitPrice - historyPrice) / historyPrice * 100;
                         String format = decimalFormat.format(v);
                         if (mMoreRateDialog == null) {
                             mMoreRateDialog = MoreRateDialog.newInstance(format);
@@ -400,8 +418,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                             });
                         }
                         mMoreRateDialog.show(getSupportFragmentManager(), "MoreRateDialog");
+                    } else {
+                        addProduct();
                     }
-                    addProduct();
                 }
                 break;
         }
@@ -415,8 +434,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
 
     private void addProduct() {
         ProductItem item = new ProductItem();
-        item.setId(mProductBean.getCpid());
-        item.setPhotourl(mProductBean.getPhotourl());
+        item.setId(mProductItem == null ? mProductBean.getCpid() : mProductItem.getId());
+        item.setPhotourl(mProductItem == null ? mProductBean.getPhotourl() : mProductItem.getPhotourl());
         item.setProductNo(mSivProductNo.getValue());
         item.setStylename(mSivProductName.getValue());
         item.setStockAmount(mSivStockAmount.getValue());

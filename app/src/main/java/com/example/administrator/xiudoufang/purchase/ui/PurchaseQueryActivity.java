@@ -1,5 +1,6 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,10 +14,8 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
-import com.example.administrator.xiudoufang.bean.PurchaseListBean;
-import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
-import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 import com.example.administrator.xiudoufang.purchase.logic.PurchaseLogic;
 import com.lzy.okgo.model.Response;
@@ -24,8 +23,11 @@ import com.lzy.okgo.model.Response;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class PurchaseQueryActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
+
+    private final int COUNT = 20;
 
     private TransferPurchaseDialog mTransferPurchaseDialog;
     private SearchInfoView mSivTransferPurchase;
@@ -38,12 +40,9 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
     private SearchInfoView mSivOperator;
     private SearchInfoView mSivTip;
 
+    private PurchaseLogic mLogic;
     private ArrayList<String> mList;
-
-    public static void start(Context context) {
-        Intent intent = new Intent(context, PurchaseQueryActivity.class);
-        context.startActivity(intent);
-    }
+    private String mTransferPurchase;
 
     @Override
     public int getLayoutId() {
@@ -61,6 +60,7 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
         mSivTip = findViewById(R.id.siv_tip);
         mSivTransferPurchase = findViewById(R.id.siv_transfer_purchase);
 
+        mTransferPurchase = "全部";
         findViewById(R.id.tv_query).setOnClickListener(this);
         findViewById(R.id.tv_reset).setOnClickListener(this);
         mSivStartTime.setOnClickListener(new InnerStartTimeClickListener());
@@ -74,7 +74,8 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
             mTransferPurchaseDialog.setOnItemChangedListener(new TransferPurchaseDialog.OnItemChangedListener() {
                 @Override
                 public void onItemChanged(int position) {
-                    mSivTransferPurchase.setValue(mList.get(position));
+                    mTransferPurchase = mList.get(position);
+                    mSivTransferPurchase.setValue(mTransferPurchase);
                     mTransferPurchaseDialog.dismiss();
                 }
             });
@@ -175,11 +176,27 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_query:
+                queryOrder();
                 break;
             case R.id.tv_reset:
                 reset();
                 break;
         }
+    }
+
+    private void queryOrder() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add(mSivOrderNum.getValue());
+        list.add(mSivCustomer.getValue());
+        list.add(mSivStartTime.getValue());
+        list.add(mSivEndTime.getValue());
+        list.add(mSivOperator.getValue());
+        list.add(mSivTip.getValue());
+        list.add("全部".equals(mTransferPurchase) ? "" : "不是".equals(mTransferPurchase) ? "0" : "1");
+        Intent intent = new Intent();
+        intent.putStringArrayListExtra(PurchaseActivity.FILTER_LIST, list);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 
     private void reset() {
