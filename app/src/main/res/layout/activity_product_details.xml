@@ -98,7 +98,7 @@
                     app:siv_type="TYPE_TEXT"/>
 
                 <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                    android:id="@+id/siv_size"
+                    android:id="@+id/siv_model"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:siv_isShowNext="false"
@@ -145,7 +145,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:siv_key="@string/price_source"
-                app:siv_type="TYPE_TEXT"/>
+                app:siv_type="TYPE_TEXT"
+                app:siv_value="历史价"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_single_price"
@@ -172,7 +173,7 @@
                 app:siv_type="TYPE_TEXT"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_product_spec"
+                android:id="@+id/siv_size"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:siv_key="@string/product_spec"

@@ -54,6 +54,12 @@ public class PurchaseSubFragment extends BaseFragment {
     }
 
     @Override
+    public void onEvent() {
+        LoadingViewDialog.getInstance().show(getActivity());
+        loadPurchaseList(true);
+    }
+
+    @Override
     protected void lazyLoad() {
         mLogic = new PurchaseLogic();
         assert getArguments() != null;

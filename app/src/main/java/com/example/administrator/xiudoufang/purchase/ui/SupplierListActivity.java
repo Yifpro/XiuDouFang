@@ -57,8 +57,8 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
     private TextView mTvCancel;
 
     private NewPurchaseOrderLogic mLogic;
-    private HashMap<String, String> mParams;
     private SupplierListAdapter mAdapter;
+    private HashMap<String, String> mParams;
     private List<SupplierListBean.SupplierBean> mList;
     private String mFilterText = "";
     private boolean mIsShowSoftInput;
@@ -92,37 +92,9 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
         mLogic = new NewPurchaseOrderLogic();
         mAdapter = new SupplierListAdapter(R.layout.layout_list_item_supplier_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(SupplierListActivity.this, SupplierDetailsActivity.class);
-                intent.putExtra(SELECTED_ITEM, mList.get(position));
-                intent.putExtra(FROM_CLASS, getIntent().getStringExtra(FROM_CLASS));
-                SupplierListActivity.this.startActivity(intent);
-            }
-        });
-        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(@NonNull final RefreshLayout refreshLayout) {
-                mRefreshLayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadSupplierList(true);
-                    }
-                }, 2000);
-            }
-        });
-        mRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(@NonNull final RefreshLayout refreshLayout) {
-                mRefreshLayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadSupplierList(false);
-                    }
-                }, 2000);
-            }
-        });
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
+        mRefreshLayout.setOnRefreshListener(new InnerRefreshListener());
+        mRefreshLayout.setOnLoadMoreListener(new InnerLoadMoreListener());
         mRefreshLayout.setEnableLoadMoreWhenContentNotFull(false);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -247,6 +219,43 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
             mFilterText = editable.toString().trim();
             int length = editable.toString().trim().length();
             mIvClose.setVisibility(length > 0 ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            Intent intent = new Intent(SupplierListActivity.this, SupplierDetailsActivity.class);
+            intent.putExtra(SELECTED_ITEM, mList.get(position));
+            intent.putExtra(FROM_CLASS, getIntent().getStringExtra(FROM_CLASS));
+            SupplierListActivity.this.startActivity(intent);
+        }
+    }
+
+    private class InnerLoadMoreListener implements OnLoadMoreListener {
+
+        @Override
+        public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+            mRefreshLayout.getLayout().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadSupplierList(false);
+                }
+            }, 2000);
+        }
+    }
+
+    private class InnerRefreshListener implements OnRefreshListener {
+
+        @Override
+        public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+            mRefreshLayout.getLayout().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadSupplierList(true);
+                }
+            }, 2000);
         }
     }
 }

@@ -19,7 +19,6 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseTextWatcher;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.QuYuBean;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SoftInputHelper;
 import com.example.administrator.xiudoufang.common.utils.SoftKeyBoardListener;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -72,17 +71,7 @@ public class AreaListActivity extends AppCompatActivity implements IActivityBase
         mList = JSONObject.parseArray(jsonObject.getJSONArray("quyu").toJSONString(), QuYuBean.class);
         mAdapter = new AreaListAdapter(R.layout.layout_list_item_are_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(AreaListActivity.this, AddSupplierActivity.class);
-                QuYuBean quYuBean = mIsFiltering ? mTempList.get(position) : mList.get(position);
-                intent.putExtra("area_code", quYuBean.getCode());
-                intent.putExtra("area_name", quYuBean.getName());
-                setResult(Activity.RESULT_OK, intent);
-                finish();
-            }
-        });
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -160,6 +149,19 @@ public class AreaListActivity extends AppCompatActivity implements IActivityBase
             mFilterText = editable.toString().trim();
             int length = editable.toString().trim().length();
             mIvClose.setVisibility(length > 0 ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            Intent intent = new Intent(AreaListActivity.this, AddSupplierActivity.class);
+            QuYuBean quYuBean = mIsFiltering ? mTempList.get(position) : mList.get(position);
+            intent.putExtra("area_code", quYuBean.getCode());
+            intent.putExtra("area_name", quYuBean.getName());
+            setResult(Activity.RESULT_OK, intent);
+            finish();
         }
     }
 }

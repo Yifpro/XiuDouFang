@@ -66,6 +66,7 @@ public class AddSupplierActivity extends AppCompatActivity implements IActivityB
         } else {
             Intent intent = new Intent(this, NewPurchaseOrderActivity.class);
             Supplier supplier = new Supplier();
+            supplier.setId("0");
             supplier.setName(mSivName.getValue());
             supplier.setTotalName(mSivTotalName.getValue());
             supplier.setNewPhoneNum(mSivPhoneNum.getValue());

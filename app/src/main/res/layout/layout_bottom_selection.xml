@@ -16,8 +16,8 @@
         android:layout_weight="1"
         android:background="@drawable/bg_textview_confirm_order_shape"
         android:gravity="center"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
         android:textColor="@color/white"
         android:textSize="14dp"/>
 
@@ -29,8 +29,8 @@
         android:layout_weight="1"
         android:background="@drawable/bg_textview_confirm_order_shape"
         android:gravity="center"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
         android:textColor="@color/white"
         android:textSize="14dp"/>
 </LinearLayout>

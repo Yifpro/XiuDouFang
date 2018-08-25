@@ -60,7 +60,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:siv_key="@string/order_transfer_purchase"
-        app:siv_type="TYPE_TEXT"/>
+        app:siv_type="TYPE_TEXT"
+        app:siv_value="全部"/>
 
     <include layout="@layout/layout_search_or_clear"/>
 </LinearLayout>

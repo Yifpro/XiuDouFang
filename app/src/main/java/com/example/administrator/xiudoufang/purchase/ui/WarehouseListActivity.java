@@ -33,6 +33,7 @@ public class WarehouseListActivity extends AppCompatActivity implements IActivit
     private RecyclerView mRecyclerView;
 
     private NewPurchaseOrderLogic mLogic;
+    private WarehouseListAdapter mAdapter;
     private List<WarehouseListBean.WarehouseBean> mList;
     private int mLastIndex;
 
@@ -55,12 +56,16 @@ public class WarehouseListActivity extends AppCompatActivity implements IActivit
     @Override
     public void initData() {
         mLogic = new NewPurchaseOrderLogic();
-        final WarehouseListAdapter adapter = new WarehouseListAdapter(R.layout.layout_list_item_warehouse_list, mList);
-        adapter.bindToRecyclerView(mRecyclerView);
-        adapter.setOnItemClickListener(new InnerItemClickListener());
-        mRecyclerView.setAdapter(adapter);
+        mAdapter = new WarehouseListAdapter(R.layout.layout_list_item_warehouse_list, mList);
+        mAdapter.bindToRecyclerView(mRecyclerView);
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
+        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         LoadingViewDialog.getInstance().show(this);
+        loadWarehouseList();
+    }
+
+    private void loadWarehouseList() {
         mLogic.requestWarehouseList(new JsonCallback<WarehouseListBean>() {
             @Override
             public void onSuccess(Response<WarehouseListBean> response) {
@@ -73,7 +78,7 @@ public class WarehouseListActivity extends AppCompatActivity implements IActivit
                 } else {
                     mList.get(0).setSelcted(true);
                 }
-                adapter.setNewData(mList);
+                mAdapter.setNewData(mList);
             }
         });
     }

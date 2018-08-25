@@ -63,32 +63,13 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
 
         findViewById(R.id.tv_query).setOnClickListener(this);
         findViewById(R.id.tv_reset).setOnClickListener(this);
-        mSivStartTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showStartTimePickerDialog();
-            }
-        });
-        mSivEndTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showEndTimePickerDialog();
-            }
-        });
-        mSivTransferPurchase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTransferPurchaseDialog();
-            }
-        });
+        mSivStartTime.setOnClickListener(new InnerStartTimeClickListener());
+        mSivEndTime.setOnClickListener(new InnerEndTimeClickListener());
+        mSivTransferPurchase.setOnClickListener(new InnerTransferPurchaseClickListener());
     }
 
     private void showTransferPurchaseDialog() {
         if (mTransferPurchaseDialog == null) {
-            mList = new ArrayList<>();
-            mList.add("全部");
-            mList.add("是");
-            mList.add("否");
             mTransferPurchaseDialog = TransferPurchaseDialog.newInstance(mList);
             mTransferPurchaseDialog.setOnItemChangedListener(new TransferPurchaseDialog.OnItemChangedListener() {
                 @Override
@@ -183,6 +164,10 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
 
     @Override
     public void initData() {
+        mList = new ArrayList<>();
+        mList.add("全部");
+        mList.add("是");
+        mList.add("否");
         initTime();
     }
 
@@ -211,4 +196,27 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
         mSivEndTime.setValue(StringUtils.getCurrentTime());
     }
 
+    private class InnerStartTimeClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            showStartTimePickerDialog();
+        }
+    }
+
+    private class InnerEndTimeClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            showEndTimePickerDialog();
+        }
+    }
+
+    private class InnerTransferPurchaseClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            showTransferPurchaseDialog();
+        }
+    }
 }

@@ -3,7 +3,6 @@ package com.example.administrator.xiudoufang.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,16 +27,15 @@ public class ProductItem implements Parcelable {
     private String priceSource;
     private String photourl;
     private String stylename;
+    private String stockAmount;
+    private String freeAmount;
+    private String brand;
+    private String details;
+    private String type;
+    private String model;
 
     private String dianid;
-    private String classname;
     private String pounitname;
-    private String barcode;
-    private String xinghao;
-    private String pinpai;
-    private String detail;
-    private String stop_produce;
-    private String stop_sales;
     private String iid;
     private String pnid;
     private String puOrderNo;
@@ -47,11 +45,11 @@ public class ProductItem implements Parcelable {
     private String rcvqty;
     private String zhuancaigou_pnid;
     private String fujian;
-    private String kucunqty;
-    private String ziyouqty;
     private String buttonstatus_str;
     private String status;
     private String rcvamt;
+    private boolean isStopProduce;
+    private boolean isStopSales;
     private List<ColorlistBean> colorlist;
     private List<PacklistBean> packlist;
     private List<SizxlistBean> sizxlist;
@@ -60,6 +58,14 @@ public class ProductItem implements Parcelable {
     private List<ChengbenjialistBean> chengbenjialist;
     private List<CankaoshoujialistBean> cankaoshoujialist;
     private List<ChuchangjialistBean> chuchangjialist;
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
 
     public static class ColorlistBean implements Parcelable {
         /**
@@ -758,6 +764,26 @@ public class ProductItem implements Parcelable {
         isGift = gift;
     }
 
+    public boolean isStopProduce() {
+        return isStopProduce;
+    }
+
+    public void setStopProduce(boolean stopProduce) {
+        isStopProduce = stopProduce;
+    }
+
+    public boolean isStopSales() {
+        return isStopSales;
+    }
+
+    public void setStopSales(boolean stopSales) {
+        isStopSales = stopSales;
+    }
+
+    public static Creator<ProductItem> getCREATOR() {
+        return CREATOR;
+    }
+
     public String getTip() {
         return tip;
     }
@@ -814,13 +840,6 @@ public class ProductItem implements Parcelable {
         this.dianid = dianid;
     }
 
-    public String getClassname() {
-        return classname;
-    }
-
-    public void setClassname(String classname) {
-        this.classname = classname;
-    }
 
     public String getPounitname() {
         return pounitname;
@@ -828,54 +847,6 @@ public class ProductItem implements Parcelable {
 
     public void setPounitname(String pounitname) {
         this.pounitname = pounitname;
-    }
-
-    public String getBarcode() {
-        return barcode;
-    }
-
-    public void setBarcode(String barcode) {
-        this.barcode = barcode;
-    }
-
-    public String getXinghao() {
-        return xinghao;
-    }
-
-    public void setXinghao(String xinghao) {
-        this.xinghao = xinghao;
-    }
-
-    public String getPinpai() {
-        return pinpai;
-    }
-
-    public void setPinpai(String pinpai) {
-        this.pinpai = pinpai;
-    }
-
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
-
-    public String getStop_produce() {
-        return stop_produce;
-    }
-
-    public void setStop_produce(String stop_produce) {
-        this.stop_produce = stop_produce;
-    }
-
-    public String getStop_sales() {
-        return stop_sales;
-    }
-
-    public void setStop_sales(String stop_sales) {
-        this.stop_sales = stop_sales;
     }
 
     public String getIid() {
@@ -948,22 +919,6 @@ public class ProductItem implements Parcelable {
 
     public void setFujian(String fujian) {
         this.fujian = fujian;
-    }
-
-    public String getKucunqty() {
-        return kucunqty;
-    }
-
-    public void setKucunqty(String kucunqty) {
-        this.kucunqty = kucunqty;
-    }
-
-    public String getZiyouqty() {
-        return ziyouqty;
-    }
-
-    public void setZiyouqty(String ziyouqty) {
-        this.ziyouqty = ziyouqty;
     }
 
     public String getButtonstatus_str() {
@@ -1054,6 +1009,46 @@ public class ProductItem implements Parcelable {
         this.chuchangjialist = chuchangjialist;
     }
 
+    public String getStockAmount() {
+        return stockAmount;
+    }
+
+    public void setStockAmount(String stockAmount) {
+        this.stockAmount = stockAmount;
+    }
+
+    public String getFreeAmount() {
+        return freeAmount;
+    }
+
+    public void setFreeAmount(String freeAmount) {
+        this.freeAmount = freeAmount;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1071,21 +1066,22 @@ public class ProductItem implements Parcelable {
         dest.writeString(this.singlePrice);
         dest.writeString(this.unitPrice);
         dest.writeByte(this.isGift ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isStopProduce ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isStopSales ? (byte) 1 : (byte) 0);
         dest.writeString(this.tip);
         dest.writeString(this.goodsNo);
         dest.writeString(this.priceCode);
         dest.writeString(this.priceSource);
         dest.writeString(this.photourl);
         dest.writeString(this.stylename);
+        dest.writeString(this.stockAmount);
+        dest.writeString(this.freeAmount);
+        dest.writeString(this.brand);
+        dest.writeString(this.details);
+        dest.writeString(this.type);
+        dest.writeString(this.model);
         dest.writeString(this.dianid);
-        dest.writeString(this.classname);
         dest.writeString(this.pounitname);
-        dest.writeString(this.barcode);
-        dest.writeString(this.xinghao);
-        dest.writeString(this.pinpai);
-        dest.writeString(this.detail);
-        dest.writeString(this.stop_produce);
-        dest.writeString(this.stop_sales);
         dest.writeString(this.iid);
         dest.writeString(this.pnid);
         dest.writeString(this.puOrderNo);
@@ -1095,8 +1091,6 @@ public class ProductItem implements Parcelable {
         dest.writeString(this.rcvqty);
         dest.writeString(this.zhuancaigou_pnid);
         dest.writeString(this.fujian);
-        dest.writeString(this.kucunqty);
-        dest.writeString(this.ziyouqty);
         dest.writeString(this.buttonstatus_str);
         dest.writeString(this.status);
         dest.writeString(this.rcvamt);
@@ -1124,21 +1118,22 @@ public class ProductItem implements Parcelable {
         this.singlePrice = in.readString();
         this.unitPrice = in.readString();
         this.isGift = in.readByte() != 0;
+        this.isStopProduce = in.readByte() != 0;
+        this.isStopSales = in.readByte() != 0;
         this.tip = in.readString();
         this.goodsNo = in.readString();
         this.priceCode = in.readString();
         this.priceSource = in.readString();
         this.photourl = in.readString();
         this.stylename = in.readString();
+        this.stockAmount = in.readString();
+        this.freeAmount = in.readString();
+        this.brand = in.readString();
+        this.details = in.readString();
+        this.type = in.readString();
+        this.model = in.readString();
         this.dianid = in.readString();
-        this.classname = in.readString();
         this.pounitname = in.readString();
-        this.barcode = in.readString();
-        this.xinghao = in.readString();
-        this.pinpai = in.readString();
-        this.detail = in.readString();
-        this.stop_produce = in.readString();
-        this.stop_sales = in.readString();
         this.iid = in.readString();
         this.pnid = in.readString();
         this.puOrderNo = in.readString();
@@ -1148,8 +1143,6 @@ public class ProductItem implements Parcelable {
         this.rcvqty = in.readString();
         this.zhuancaigou_pnid = in.readString();
         this.fujian = in.readString();
-        this.kucunqty = in.readString();
-        this.ziyouqty = in.readString();
         this.buttonstatus_str = in.readString();
         this.status = in.readString();
         this.rcvamt = in.readString();

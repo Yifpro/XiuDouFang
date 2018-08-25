@@ -1,5 +1,7 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,6 +46,8 @@ import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.lzy.okgo.model.Response;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
@@ -58,6 +62,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import io.reactivex.functions.Consumer;
 
 public class NewPurchaseOrderActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
@@ -100,11 +106,6 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     private String mPayId = "";
     private SelectedProductListAdapter mAdapter;
     private String mImgPath;
-
-    public static void start(Context context) {
-        Intent intent = new Intent(context, NewPurchaseOrderActivity.class);
-        context.startActivity(intent);
-    }
 
     @Override
     public int getLayoutId() {
@@ -344,10 +345,22 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                     return;
                 }
                 Intent intent = new Intent(this, ProductListActivity.class);
+                intent.putExtra(ProductListActivity.SUPPLIER_ID, mSupplier.getId());
                 startActivityForResult(intent, RESULT_PRODUCT_LIST);
                 break;
             case R.id.tv_scan_product:
-                ScanActivity.start(this);
+                new RxPermissions(this)
+                        .requestEach(Manifest.permission.CAMERA)
+                        .subscribe(new Consumer<Permission>() {
+                            @Override
+                            public void accept(Permission permission) throws Exception {
+                                if (permission.granted) {
+                                    ScanActivity.start(NewPurchaseOrderActivity.this);
+                                } else {
+                                    Toast.makeText(NewPurchaseOrderActivity.this, "请开启权限后重新尝试", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                 break;
             case R.id.iv_clear:
                 mIvExtra.setImageResource(0);
@@ -420,9 +433,13 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         params.put("benci_amt", mSivPaymentAmount.getValue());
         params.put("bankid", mPayId);
         params.put("accountid", mSubjectId);
+        LoadingViewDialog.getInstance().show(this);
         mNewPurchaseOrderLogic.requestPostPurchaseOrder(params, mImgPath, new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
+                LoadingViewDialog.getInstance().dismiss();
+                setResult(Activity.RESULT_OK);
+                finish();
             }
         });
     }

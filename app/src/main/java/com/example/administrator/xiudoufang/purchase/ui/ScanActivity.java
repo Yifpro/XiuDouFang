@@ -28,7 +28,7 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
     private QRCodeView mQRCodeView;
     private TextView mTvFlash;
 
-    private SensorManager sensorManager;
+    private SensorManager mSensorManager;
     private boolean mIsOpen;
 
     public static void start(Context context) {
@@ -53,10 +53,10 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
     @Override
     public void initData() {
         mQRCodeView.startSpot();
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        assert sensorManager != null;
-        Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        sensorManager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_UI);
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        assert mSensorManager != null;
+        Sensor sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        mSensorManager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_UI);
 
         mTvFlash.setText("轻点打开");
         mTvFlash.setTextColor(Color.WHITE);
@@ -112,8 +112,8 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
     @Override
     protected void onDestroy() {
         mQRCodeView.onDestroy();
-        if (sensorManager != null) {
-            sensorManager.unregisterListener(listener);
+        if (mSensorManager != null) {
+            mSensorManager.unregisterListener(listener);
         }
         super.onDestroy();
     }
@@ -127,7 +127,7 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
         @Override
         public void onSensorChanged(SensorEvent event) {
             float value = event.values[0];
-            if (value < 10) {
+            if (value < 7) {
                 mTvFlash.setVisibility(View.VISIBLE);
             }
         }

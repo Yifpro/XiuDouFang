@@ -33,7 +33,7 @@ public class SelectedProductListAdapter extends BaseItemDraggableAdapter<Product
     @Override
     protected void convert(final BaseViewHolder helper, final ProductItem item) {
         Glide.with(mContext)
-                .load(StringUtils.PIC_SMALL_URL + item.getPhotourl())
+                .load(StringUtils.PIC_URL + item.getPhotourl())
                 .into((ImageView) helper.getView(R.id.iv_icon));
         helper.setText(R.id.tv_id, item.getProductNo());
         helper.setText(R.id.tv_name, item.getStylename());

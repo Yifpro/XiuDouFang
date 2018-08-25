@@ -17,6 +17,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
@@ -28,12 +29,14 @@ import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SoftInputHelper;
 import com.example.administrator.xiudoufang.common.utils.SoftKeyBoardListener;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.purchase.adapter.ProductListAdapter;
 import com.example.administrator.xiudoufang.purchase.logic.NewPurchaseOrderLogic;
 import com.lzy.okgo.model.Response;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,8 +48,9 @@ import java.util.List;
 
 public class ProductListActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
-    public static final String TAG = ProductListActivity.class.getSimpleName();
     private final int COUNT = 20;
+    public static final String TAG = ProductListActivity.class.getSimpleName();
+    public static final String SUPPLIER_ID = "supplier_id";
 
     private RefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -97,36 +101,12 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         mLogic = new NewPurchaseOrderLogic();
         menuAnim = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.fab_menu_anim);
         mRefreshLayout.setEnableRefresh(false);
-        mRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                mRefreshLayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadProductList(false);
-                    }
-                }, 2000);
-            }
-        });
+        mRefreshLayout.setOnLoadMoreListener(new InnerLoadMoreListener());
         mRefreshLayout.setEnableLoadMoreWhenContentNotFull(false);
         mAdapter = new ProductListAdapter(R.layout.layout_list_item_product_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
-        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                mList.get(position).setSelected(!mList.get(position).isSelected());
-                mAdapter.notifyItemChanged(position);
-            }
-        });
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(ProductListActivity.this, ProductDetailsActivity.class);
-                intent.putExtra(ProductDetailsActivity.FROM_CLASS, TAG);
-                intent.putExtra(ProductDetailsActivity.SELECTED_PRODUCT_BEAN, mList.get(position));
-                startActivity(intent);
-            }
-        });
+        mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -140,7 +120,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
             mParams = new HashMap<>();
             mParams.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
             mParams.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-            mParams.put("c_id", "0");
+            mParams.put("c_id", getIntent().getStringExtra(SUPPLIER_ID));
             mParams.put("count", String.valueOf(COUNT));
             mParams.put("saomiao", "0");
             mParams.put("dqcpid", "0");
@@ -291,6 +271,43 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
             mFilterText = editable.toString().trim();
             int length = editable.toString().trim().length();
             mIvClose.setVisibility(length > 0 ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private class InnerLoadMoreListener implements OnLoadMoreListener {
+
+        @Override
+        public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+            mRefreshLayout.getLayout().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadProductList(false);
+                }
+            }, 2000);
+        }
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            if ("1".equals(mList.get(position).getStop_sales())) {
+                ToastUtils.show(ProductListActivity.this, "该产品已停售");
+                return;
+            }
+            Intent intent = new Intent(ProductListActivity.this, ProductDetailsActivity.class);
+            intent.putExtra(ProductDetailsActivity.FROM_CLASS, TAG);
+            intent.putExtra(ProductDetailsActivity.SELECTED_PRODUCT_BEAN, mList.get(position));
+            startActivity(intent);
+        }
+    }
+
+    private class InnerItemChildClickListener implements BaseQuickAdapter.OnItemChildClickListener {
+
+        @Override
+        public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            mList.get(position).setSelected(!mList.get(position).isSelected());
+            mAdapter.notifyItemChanged(position);
         }
     }
 }

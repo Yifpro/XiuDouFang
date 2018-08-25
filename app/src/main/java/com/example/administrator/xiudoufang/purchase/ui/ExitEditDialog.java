@@ -19,6 +19,7 @@ public class ExitEditDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        assert getDialog().getWindow() != null;
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         View view = inflater.inflate(R.layout.fragment_exit_edit, container);
         view.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {

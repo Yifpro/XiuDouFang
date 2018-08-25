@@ -124,5 +124,6 @@
     <string name="add_contact">新增联系人</string>
     <string name="input_add_contact">请输入新增联系人</string>
     <string name="already_receive">已收货：%s个</string>
+    <string name="stop_produce_tip">当前商品已停止生产，请选择其他商品</string>
 
 </resources>

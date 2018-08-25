@@ -84,7 +84,7 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
         switch (view.getId()) {
             case R.id.tv_sure:
                 Class clazz;
-                if (getIntent().getStringExtra(SupplierListActivity.FROM_CLASS).equals(NewPurchaseOrderActivity.TAG)) {
+                if (NewPurchaseOrderActivity.TAG.equals(getIntent().getStringExtra(SupplierListActivity.FROM_CLASS))) {
                     clazz = NewPurchaseOrderActivity.class;
                 } else {
                     clazz = PurchaseDetailsActivity.class;

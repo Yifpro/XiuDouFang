@@ -35,24 +35,19 @@ public class TransferPurchaseDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        assert getDialog().getWindow() != null;
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         View view = inflater.inflate(R.layout.fragment_transfer_purchase_selector, container);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         ArrayList<String> items = new ArrayList<>(getArguments().getStringArrayList("list"));
         TransferPurchaseAdapter adapter = new TransferPurchaseAdapter(R.layout.layout_list_item_transfer_purchase, items);
         adapter.bindToRecyclerView(recyclerView);
+        adapter.setOnItemClickListener(new InnerItemClickListener());
         View header = View.inflate(getActivity(), R.layout.layout_list_header_transfer_purchase, null);
         ((TextView) header.findViewById(R.id.tv)).setText("请选择");
         adapter.addHeaderView(header);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (listener != null)
-                    listener.onItemChanged(position);
-            }
-        });
         return view;
     }
 
@@ -62,5 +57,14 @@ public class TransferPurchaseDialog extends DialogFragment {
 
     interface OnItemChangedListener {
         void onItemChanged(int position);
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            if (listener != null)
+                listener.onItemChanged(position);
+        }
     }
 }

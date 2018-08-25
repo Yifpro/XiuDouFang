@@ -1,8 +1,9 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
+import com.example.administrator.xiudoufang.base.BaseFragment;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.DrawerItem;
 import com.example.administrator.xiudoufang.purchase.adapter.PurchasePagerAdapter;
@@ -27,6 +29,8 @@ import java.util.List;
 
 public class PurchaseActivity extends AppCompatActivity implements IActivityBase {
 
+    private static final int RESULT_FOR_NEW_PURCHASE_ORDER = 110;
+
     private DrawerLayout mDrawerLayout;
     private CustomViewPager mViewPager;
     private LinearLayout mLeftMenu;
@@ -34,6 +38,7 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
 
     private List<DrawerItem> mTabs;
     private int mLastIndex = -1;
+    private List<BaseFragment> mFragments;
 
     public static void start(Context context) {
         context.startActivity(new Intent(context, PurchaseActivity.class));
@@ -72,13 +77,22 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
         adapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        List<Fragment> fragments = new ArrayList<>();
+        mFragments = new ArrayList<>();
         String[] types = {"1", "2", "3", "4", "5", "6", "0"};
         for (String type : types) {
-            fragments.add(PurchaseSubFragment.newInstance(type));
+            mFragments.add(PurchaseSubFragment.newInstance(type));
         }
-        PurchasePagerAdapter mAdapter = new PurchasePagerAdapter(getSupportFragmentManager(), fragments, titles);
+        PurchasePagerAdapter mAdapter = new PurchasePagerAdapter(getSupportFragmentManager(), mFragments, titles);
         mViewPager.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_FOR_NEW_PURCHASE_ORDER && resultCode == Activity.RESULT_OK) {
+            int currentItem = mViewPager.getCurrentItem();
+            mFragments.get(currentItem).onEvent();
+        }
     }
 
     @Override
@@ -94,7 +108,8 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
                 PurchaseQueryActivity.start(this);
                 break;
             case R.id.toolbar_menu:
-                NewPurchaseOrderActivity.start(this);
+                Intent intent = new Intent(this, NewPurchaseOrderActivity.class);
+                startActivityForResult(intent, RESULT_FOR_NEW_PURCHASE_ORDER);
                 break;
         }
         return super.onOptionsItemSelected(item);

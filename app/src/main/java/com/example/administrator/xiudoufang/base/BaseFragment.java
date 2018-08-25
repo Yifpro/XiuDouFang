@@ -74,4 +74,6 @@ public abstract class BaseFragment extends Fragment {
     public abstract void initView(View view);
 
     public abstract int getLayoutId();
+
+    public void onEvent() {}
 }

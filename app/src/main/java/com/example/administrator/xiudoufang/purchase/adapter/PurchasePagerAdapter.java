@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.administrator.xiudoufang.base.BaseFragment;
+
 import java.util.List;
 
 /**
@@ -12,10 +14,10 @@ import java.util.List;
 
 public class PurchasePagerAdapter extends FragmentPagerAdapter {
 
-    private List<Fragment> mFragments;
+    private List<BaseFragment> mFragments;
     private String[] titles;
 
-    public PurchasePagerAdapter(FragmentManager fm, List<Fragment> fragments, String[] titles) {
+    public PurchasePagerAdapter(FragmentManager fm, List<BaseFragment> fragments, String[] titles) {
         super(fm);
         this.mFragments = fragments;
         this.titles = titles;
