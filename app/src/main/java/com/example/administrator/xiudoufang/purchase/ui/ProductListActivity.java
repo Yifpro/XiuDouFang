@@ -99,6 +99,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
     @Override
     public void initData() {
         mLogic = new NewPurchaseOrderLogic();
+        mList = new ArrayList<>();
         menuAnim = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.fab_menu_anim);
         mRefreshLayout.setEnableRefresh(false);
         mRefreshLayout.setOnLoadMoreListener(new InnerLoadMoreListener());
@@ -111,7 +112,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         LoadingViewDialog.getInstance().show(this);
-        loadProductList(false);
+        loadProductList(true);
     }
 
     private void loadProductList(final boolean isFiltering) {
@@ -137,8 +138,6 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
                     mList.addAll(temp);
                     mAdapter.setNewData(mList);
                 } else {
-                    if (mList == null)
-                        mList = new ArrayList<>();
                     mList.addAll(temp);
                     mAdapter.addData(temp);
                 }

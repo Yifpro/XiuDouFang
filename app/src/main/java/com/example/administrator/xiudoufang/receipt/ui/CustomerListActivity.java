@@ -85,6 +85,7 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
     @Override
     public void initData() {
         mLogic = new CustomerListLogic();
+        mList = new ArrayList<>();
         mAdapter = new CustomerListAdapter(R.layout.layout_list_item_customer_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -121,7 +122,7 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         LoadingViewDialog.getInstance().show(this);
-        loadCustomerList(false);
+        loadCustomerList(true);
     }
 
     private void loadCustomerList(final boolean isRefresh) {
@@ -150,8 +151,6 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
                     mRefreshLayout.finishRefresh();
                     mRefreshLayout.setNoMoreData(mList.size() < COUNT);
                 } else {
-                    if (mList == null)
-                        mList = new ArrayList<>();
                     mList.addAll(temp);
                     mAdapter.addData(temp);
                     if (temp.size() < COUNT) {

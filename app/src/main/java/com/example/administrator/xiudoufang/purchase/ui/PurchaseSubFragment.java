@@ -16,6 +16,7 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseFragment;
 import com.example.administrator.xiudoufang.bean.PurchaseListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.purchase.adapter.PurchaseSubAdapter;
@@ -95,6 +96,7 @@ public class PurchaseSubFragment extends BaseFragment {
     @Override
     protected void lazyLoad() {
         mLogic = new PurchaseLogic();
+        mList = new ArrayList<>();
         assert getArguments() != null;
         mType = getArguments().getString("type");
         mRefreshLayout.setOnRefreshListener(new InnerRefreshListener());
@@ -108,7 +110,7 @@ public class PurchaseSubFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         if (((PurchaseActivity) getActivity()).mParams == null) {
             LoadingViewDialog.getInstance().show(getActivity());
-            loadPurchaseList(false);
+            loadPurchaseList(true);
         }
     }
 
@@ -128,8 +130,6 @@ public class PurchaseSubFragment extends BaseFragment {
                     mRefreshLayout.finishRefresh();
                     mRefreshLayout.setNoMoreData(mList.size() < COUNT);
                 } else {
-                    if (mList == null)
-                        mList = new ArrayList<>();
                     mList.addAll(temp);
                     mAdapter.addData(temp);
                     if (mList.size() < COUNT) {
