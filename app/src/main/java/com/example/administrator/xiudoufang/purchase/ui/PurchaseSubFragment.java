@@ -61,6 +61,7 @@ public class PurchaseSubFragment extends BaseFragment {
     }
 
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -220,8 +221,10 @@ public class PurchaseSubFragment extends BaseFragment {
                 @Override
                 public void onSuccess(Response<String> response) {
                     JSONObject jsonObject = JSONObject.parseObject(response.body());
-                    if (!"0".equals(jsonObject.getString("status"))) {
+                    if (!"1".equals(jsonObject.getString("status"))) {
                         Toast.makeText(mActivity, jsonObject.getString("messages"), Toast.LENGTH_SHORT).show();
+                    } else {
+                        loadPurchaseList(true);
                     }
                 }
             });

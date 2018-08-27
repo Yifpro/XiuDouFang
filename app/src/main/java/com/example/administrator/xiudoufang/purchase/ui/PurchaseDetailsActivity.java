@@ -1,5 +1,6 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -248,9 +249,11 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             @Override
             public void onSuccess(Response<String> response) {
                 JSONObject jsonObject = JSONObject.parseObject(response.body());
-                if (!"0".equals(jsonObject.getString("status"))) {
+                if (!"1".equals(jsonObject.getString("status"))) {
                     Toast.makeText(PurchaseDetailsActivity.this, jsonObject.getString("messages"), Toast.LENGTH_SHORT).show();
                 }
+                setResult(Activity.RESULT_OK);
+                finish();
             }
         });
     }
@@ -603,6 +606,8 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         new NewPurchaseOrderLogic().requestPostPurchaseOrder(params, mImgPath, new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
+                setResult(Activity.RESULT_OK);
+                finish();
             }
         });
     }

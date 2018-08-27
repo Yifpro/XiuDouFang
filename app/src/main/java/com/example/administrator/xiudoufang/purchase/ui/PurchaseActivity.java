@@ -19,6 +19,7 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseFragment;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.DrawerItem;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.purchase.adapter.PurchasePagerAdapter;
 import com.example.administrator.xiudoufang.purchase.adapter.PurchaseTabAdapter;
 import com.example.administrator.xiudoufang.common.widget.CustomViewPager;
@@ -93,7 +94,9 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        LogUtils.e("go here");
         if (requestCode == RESULT_FOR_NEW_PURCHASE_ORDER && resultCode == Activity.RESULT_OK) {
+            LogUtils.e("go here2");
             int currentItem = mViewPager.getCurrentItem();
             mFragments.get(currentItem).onEvent();
         } else if (requestCode == RESULT_FOR_FILTER_LIST && resultCode == Activity.RESULT_OK) {
