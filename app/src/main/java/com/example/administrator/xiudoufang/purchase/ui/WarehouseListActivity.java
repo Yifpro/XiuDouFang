@@ -74,9 +74,9 @@ public class WarehouseListActivity extends AppCompatActivity implements IActivit
                 String warehouseId = getIntent().getStringExtra(WAREHOUSE_ID);
                 if (!TextUtils.isEmpty(warehouseId)) {
                     mLastIndex = mList.indexOf(new WarehouseListBean.WarehouseBean(warehouseId));
-                    mList.get(mLastIndex).setSelcted(true);
+                    mList.get(mLastIndex).setSelected(true);
                 } else {
-                    mList.get(0).setSelcted(true);
+                    mList.get(0).setSelected(true);
                 }
                 mAdapter.setNewData(mList);
             }
@@ -96,8 +96,8 @@ public class WarehouseListActivity extends AppCompatActivity implements IActivit
         @Override
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
             if (mLastIndex != position) {
-                mList.get(position).setSelcted(true);
-                mList.get(mLastIndex).setSelcted(false);
+                mList.get(position).setSelected(true);
+                mList.get(mLastIndex).setSelected(false);
                 adapter.notifyItemChanged(mLastIndex);
                 adapter.notifyItemChanged(position);
                 mLastIndex = position;

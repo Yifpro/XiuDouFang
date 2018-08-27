@@ -21,6 +21,7 @@ import com.example.administrator.xiudoufang.bean.ProductListBean;
 import com.example.administrator.xiudoufang.common.utils.ExpressionUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
+import com.example.administrator.xiudoufang.common.widget.SingleLineTextDialog;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

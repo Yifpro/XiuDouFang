@@ -90,7 +90,6 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
     @Override
     public void initData() {
         mLogic = new NewPurchaseOrderLogic();
-        mList = new ArrayList<>();
         mAdapter = new SupplierListAdapter(R.layout.layout_list_item_supplier_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
@@ -99,6 +98,7 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
         mRefreshLayout.setEnableLoadMoreWhenContentNotFull(false);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mList = new ArrayList<>();
         LoadingViewDialog.getInstance().show(this);
         loadSupplierList(true);
     }

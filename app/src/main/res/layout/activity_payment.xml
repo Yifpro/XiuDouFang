@@ -19,7 +19,7 @@
             android:orientation="vertical">
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_customer_no"
+                android:id="@+id/siv_no"
                 app:siv_isShowNext="false"
                 app:siv_key="@string/customer_no"
                 app:siv_type="TYPE_TEXT"

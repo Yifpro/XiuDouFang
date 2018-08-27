@@ -17,7 +17,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
@@ -36,7 +35,6 @@ import com.example.administrator.xiudoufang.purchase.logic.NewPurchaseOrderLogic
 import com.lzy.okgo.model.Response;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,7 +97,6 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
     @Override
     public void initData() {
         mLogic = new NewPurchaseOrderLogic();
-        mList = new ArrayList<>();
         menuAnim = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.fab_menu_anim);
         mRefreshLayout.setEnableRefresh(false);
         mRefreshLayout.setOnLoadMoreListener(new InnerLoadMoreListener());
@@ -111,6 +108,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mList = new ArrayList<>();
         LoadingViewDialog.getInstance().show(this);
         loadProductList(true);
     }
@@ -173,7 +171,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
                 loadProductList(true);
                 break;
             case R.id.fab_action:
-                mFabAction.setImageResource(mIsShowMenu ? R.mipmap.ic_close_white : R.mipmap.ic_menu);
+                mFabAction.setImageResource(mIsShowMenu ? R.mipmap.ic_close_white : R.mipmap.ic_menu_white);
                 mIsShowMenu = !mIsShowMenu;
                 if (mIsShowMenu) {
                     mFabComplete.setVisibility(View.VISIBLE);

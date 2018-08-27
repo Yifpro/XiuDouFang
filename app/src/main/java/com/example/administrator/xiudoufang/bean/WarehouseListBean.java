@@ -54,7 +54,7 @@ public class WarehouseListBean {
         private String sn;
         private String dianid;
         private String fuji;
-        private boolean isSelcted;
+        private boolean isSelected;
 
         public WarehouseBean() {
         }
@@ -63,12 +63,12 @@ public class WarehouseListBean {
             this.id = id;
         }
 
-        public boolean isSelcted() {
-            return isSelcted;
+        public boolean isSelected() {
+            return isSelected;
         }
 
-        public void setSelcted(boolean selcted) {
-            isSelcted = selcted;
+        public void setSelected(boolean selected) {
+            isSelected = selected;
         }
 
         public String getId() {

@@ -75,7 +75,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
     @Override
     public void initView() {
         setTitle("款项");
-        mSivId = findViewById(R.id.siv_customer_no);
+        mSivId = findViewById(R.id.siv_no);
         mSivName = findViewById(R.id.siv_name);
         mSivTotalName = findViewById(R.id.siv_total_name);
         mSivDebt = findViewById(R.id.siv_debt);

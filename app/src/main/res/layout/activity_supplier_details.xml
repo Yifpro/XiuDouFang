@@ -6,7 +6,7 @@
               android:layout_height="match_parent">
     <include layout="@layout/layout_toolbar" />
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-        android:id="@+id/siv_customer_no"
+        android:id="@+id/siv_no"
         app:siv_key="@string/supplier_no"
         app:siv_type="TYPE_TEXT"
         app:siv_isShowNext="false"

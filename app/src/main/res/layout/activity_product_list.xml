@@ -46,7 +46,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         app:fabSize="mini"
-        android:src="@mipmap/ic_menu"
+        android:src="@mipmap/ic_menu_white"
         app:backgroundTint="@color/colorPrimary"/>
 
 </RelativeLayout>

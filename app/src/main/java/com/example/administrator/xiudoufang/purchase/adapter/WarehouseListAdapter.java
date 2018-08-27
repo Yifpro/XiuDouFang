@@ -22,7 +22,7 @@ public class WarehouseListAdapter extends BaseQuickAdapter<WarehouseListBean.War
 
     @Override
     protected void convert(BaseViewHolder helper, WarehouseListBean.WarehouseBean item) {
-        helper.getView(R.id.iv_select).setSelected(item.isSelcted());
+        helper.getView(R.id.iv_select).setSelected(item.isSelected());
         helper.setText(R.id.tv_title, item.getSn());
     }
 }

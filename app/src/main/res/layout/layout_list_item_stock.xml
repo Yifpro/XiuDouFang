@@ -17,7 +17,7 @@
         android:id="@+id/iv_icon"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        tools:src="@mipmap/ic_launcher" />
+        tools:src="@mipmap/ic_icon" />
 
     <TextView
         android:id="@+id/textview_1"

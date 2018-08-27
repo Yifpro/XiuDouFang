@@ -85,7 +85,6 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
     @Override
     public void initData() {
         mLogic = new CustomerListLogic();
-        mList = new ArrayList<>();
         mAdapter = new CustomerListAdapter(R.layout.layout_list_item_customer_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -121,6 +120,7 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
         mRefreshLayout.setEnableLoadMoreWhenContentNotFull(false);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mList = new ArrayList<>();
         LoadingViewDialog.getInstance().show(this);
         loadCustomerList(true);
     }

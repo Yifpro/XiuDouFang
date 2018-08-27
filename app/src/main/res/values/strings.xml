@@ -11,24 +11,6 @@
     <string name="transportion_no">运号</string>
     <string name="input_transportion_no">请输入运号</string>
     <string name="clear">清空</string>
-    <!--库存-->
-    <string name="input_no">请输入编号</string>
-    <string name="no">编号</string>
-    <string name="input_name">请输入名称</string>
-    <string name="name">名称</string>
-    <string name="type">类别</string>
-    <string name="input_supplier">请输入供应商</string>
-    <string name="supplier">供应商</string>
-    <string name="input_size">请输入型号</string>
-    <string name="size">型号</string>
-    <string name="bar_code">条形码</string>
-    <string name="input_bar_code">请输入条形码</string>
-    <string name="input_brand">请输入品牌</string>
-    <string name="brand">品牌</string>
-    <string name="input_details">请输入描述</string>
-    <string name="details">描述</string>
-    <string name="belong_unit">所属单位</string>
-    <string name="amount">数量</string>
     <!--设置-->
     <string name="exit_login">退出登录</string>
     <!--收款-->
@@ -125,5 +107,23 @@
     <string name="input_add_contact">请输入新增联系人</string>
     <string name="already_receive">已收货：%s个</string>
     <string name="stop_produce_tip">当前商品已停止生产，请选择其他商品</string>
-
+    <!--库存-->
+    <string name="input_no">请输入编号</string>
+    <string name="no">编号</string>
+    <string name="input_name">请输入名称</string>
+    <string name="name">名称</string>
+    <string name="type">类别</string>
+    <string name="input_supplier">请输入供应商</string>
+    <string name="supplier">供应商</string>
+    <string name="input_size">请输入型号</string>
+    <string name="size">型号</string>
+    <string name="bar_code">条形码</string>
+    <string name="input_bar_code">请输入条形码</string>
+    <string name="input_brand">请输入品牌</string>
+    <string name="brand">品牌</string>
+    <string name="input_details">请输入描述</string>
+    <string name="details">描述</string>
+    <string name="belong_unit">所属单位</string>
+    <string name="amount">数量</string>
+    <string name="include_subclass">包含子类</string>
 </resources>

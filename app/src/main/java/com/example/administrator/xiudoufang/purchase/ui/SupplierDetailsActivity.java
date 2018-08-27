@@ -40,7 +40,7 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
     @Override
     public void initView() {
         setTitle("供应商");
-        mSivCustomerNo = findViewById(R.id.siv_customer_no);
+        mSivCustomerNo = findViewById(R.id.siv_no);
         mSivName = findViewById(R.id.siv_name);
         mSivTotalName = findViewById(R.id.siv_total_name);
         mSivDebt = findViewById(R.id.siv_debt);

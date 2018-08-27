@@ -1,4 +1,4 @@
-package com.example.administrator.xiudoufang.purchase.ui;
+package com.example.administrator.xiudoufang.common.widget;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -57,7 +57,7 @@ public class SingleLineTextDialog extends DialogFragment {
         this.listener = listener;
     }
 
-    interface OnItemClickListener {
+    public interface OnItemClickListener {
         void onItemClick(int position);
     }
 }

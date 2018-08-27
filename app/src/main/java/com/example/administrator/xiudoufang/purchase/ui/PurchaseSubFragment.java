@@ -96,7 +96,6 @@ public class PurchaseSubFragment extends BaseFragment {
     @Override
     protected void lazyLoad() {
         mLogic = new PurchaseLogic();
-        mList = new ArrayList<>();
         assert getArguments() != null;
         mType = getArguments().getString("type");
         mRefreshLayout.setOnRefreshListener(new InnerRefreshListener());
@@ -108,6 +107,7 @@ public class PurchaseSubFragment extends BaseFragment {
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        mList = new ArrayList<>();
         if (((PurchaseActivity) getActivity()).mParams == null) {
             LoadingViewDialog.getInstance().show(getActivity());
             loadPurchaseList(true);

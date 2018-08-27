@@ -17,7 +17,7 @@ import com.example.administrator.xiudoufang.transport.TransportNumActivity;
 import com.example.administrator.xiudoufang.bean.MenuItem;
 import com.example.administrator.xiudoufang.purchase.ui.PurchaseActivity;
 import com.example.administrator.xiudoufang.setting.ui.SettingActivity;
-import com.example.administrator.xiudoufang.stock.StockActivity;
+import com.example.administrator.xiudoufang.stock.ui.StockActivity;
 
 import java.util.ArrayList;
 
