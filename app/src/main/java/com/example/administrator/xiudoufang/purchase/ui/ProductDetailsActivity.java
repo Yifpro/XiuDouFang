@@ -288,7 +288,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                         if ("1".equals(bean.getUnit_bilv())) mHistoryPrice = bean.getPrice();
                     }
                 }
-                if (mProductItem.getSizxlist() != null && mProductItem.getSizxlist().size() == 0) {
+                if (mProductItem.getSizxlist() == null || mProductItem.getSizxlist().size() == 0) {
                     mSivSize.setVisibility(View.GONE);
                 } else {
                     mSpecList = new ArrayList<>();
@@ -296,7 +296,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                         mSpecList.add(bean.getSizx());
                     }
                 }
-                if (mProductItem.getColorlist() != null && mProductItem.getColorlist().size() == 0) {
+                if (mProductItem.getColorlist() == null || mProductItem.getColorlist().size() == 0) {
                     mSivProcutColor.setVisibility(View.GONE);
                 } else {
                     mColorList = new ArrayList<>();
@@ -407,17 +407,21 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                         DecimalFormat decimalFormat = new DecimalFormat("0.00");
                         double unitPrice = Double.parseDouble(mSivUnitPrice.getValue());
                         double v = (unitPrice - historyPrice) / historyPrice * 100;
-                        String format = decimalFormat.format(v);
-                        if (mMoreRateDialog == null) {
-                            mMoreRateDialog = MoreRateDialog.newInstance(format);
-                            mMoreRateDialog.setOnSubmitClickListener(new MoreRateDialog.OnSumbitClickListener() {
-                                @Override
-                                public void onClick() {
-                                    addProduct();
-                                }
-                            });
+                        if (v > 0) {
+                            String format = decimalFormat.format(v);
+                            if (mMoreRateDialog == null) {
+                                mMoreRateDialog = MoreRateDialog.newInstance(format);
+                                mMoreRateDialog.setOnSubmitClickListener(new MoreRateDialog.OnSumbitClickListener() {
+                                    @Override
+                                    public void onClick() {
+                                        addProduct();
+                                    }
+                                });
+                            }
+                            mMoreRateDialog.show(getSupportFragmentManager(), "MoreRateDialog");
+                        } else {
+                            addProduct();
                         }
-                        mMoreRateDialog.show(getSupportFragmentManager(), "MoreRateDialog");
                     } else {
                         addProduct();
                     }

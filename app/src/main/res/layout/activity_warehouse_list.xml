@@ -24,8 +24,8 @@
         android:clickable="true"
         android:gravity="center"
         android:onClick="onClick"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
         android:text="@string/sure"
         android:textColor="@color/white"
         android:textSize="14dp"/>

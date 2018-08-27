@@ -252,7 +252,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             public void onSuccess(Response<String> response) {
                 LoadingViewDialog.getInstance().dismiss();
                 JSONObject jsonObject = JSONObject.parseObject(response.body());
-                if (!"1".equals(jsonObject.getString("status"))) {
+                if (!"1".equals(jsonObject.getString("messages"))) {
                     Toast.makeText(PurchaseDetailsActivity.this, jsonObject.getString("messages"), Toast.LENGTH_SHORT).show();
                 }
                 setResult(Activity.RESULT_OK);

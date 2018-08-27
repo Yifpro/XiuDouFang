@@ -74,8 +74,9 @@
                 android:id="@+id/iv_extra"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:scaleType="fitXY"
                 android:layout_alignParentBottom="true"
-                android:background="@mipmap/ic_extra_place"/>
+                android:src="@mipmap/ic_extra_place"/>
 
             <ImageView
                 android:id="@+id/iv_clear"

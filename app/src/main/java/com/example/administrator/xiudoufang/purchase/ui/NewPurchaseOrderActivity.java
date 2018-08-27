@@ -32,6 +32,7 @@ import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -116,11 +117,12 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        mSupplier = getIntent().getParcelableExtra(SELECTED_SUPPLIER);
+        Supplier supplier = getIntent().getParcelableExtra(SELECTED_SUPPLIER);
         ProductItem item = getIntent().getParcelableExtra(SELECTED_PRODUCT);
-        if (mSupplier != null) {
-            mSivSupplier.setValue(mSupplier.getName());
-            mSivDebt.setValue(mSupplier.getDebt());
+        if (supplier != null) {
+            mSivSupplier.setValue(supplier.getName());
+            mSivDebt.setValue(supplier.getDebt());
+            mSupplier = supplier;
         } else if (item != null) {
             if (mProductItemList == null)
                 mProductItemList = new ArrayList<>();
@@ -363,7 +365,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                         });
                 break;
             case R.id.iv_clear:
-                mIvExtra.setImageResource(0);
+                mIvExtra.setImageResource(R.mipmap.ic_extra_place);
                 mIvClear.setVisibility(View.GONE);
                 mImgPath = null;
                 break;
