@@ -24,6 +24,12 @@ public class StringUtils {
     public static final String PIC_URL = "http://192.168.1.8:81/pic/";
     public static final String PIC_SMALL_URL = "http://192.168.1.8:81/pic_small/";
     public static final String FILE_URL = "http://192.168.1.8:81/file/";
+
+//    public static final String BASE_URL = "http://aoxing.pro:83";
+//    public static final String PIC_URL = "http://aoxing.pro:81/pic/";
+//    public static final String PIC_SMALL_URL = "http://aoxing.pro:81/pic_small/";
+//    public static final String FILE_URL = "http://aoxing.pro:81/file/";
+
     private static StringBuilder builder;
     public static final String LOGIN_INFO = "login_info.txt";
 
