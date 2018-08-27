@@ -69,10 +69,10 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
     @Override
     public void initData() {
         mLogic = new LoginLogic();
-        String userName = PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_NAME, null);
-        boolean isEmpty = TextUtils.isEmpty(userName);
-        mIvPsdStatus.setSelected(!isEmpty);
-        if (!isEmpty) {
+        boolean isSaved = PreferencesUtils.getPreferences().getBoolean(PreferencesUtils.IS_SAVED_ACCOUNT, false);
+        mIvPsdStatus.setSelected(isSaved);
+        mSetvAccount.setText(PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_NAME, ""));
+        if (isSaved) {
             mSetvAccount.setText(PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_NAME, ""));
             mSetvPassword.setText(PreferencesUtils.getPreferences().getString(PreferencesUtils.PASSWORD, ""));
         }
@@ -161,15 +161,16 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
                 } else {
                     mLogic.cacheLoginInfo(LoginActivity.this, response.body());
                     if (mIvPsdStatus.isSelected()) {
-                        HashMap<String, String> map = new HashMap<>();
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put(PreferencesUtils.IS_SAVED_ACCOUNT, true);
                         map.put(PreferencesUtils.USER_NAME, mSetvAccount.getText());
                         map.put(PreferencesUtils.PASSWORD, mSetvPassword.getText());
                         map.put(PreferencesUtils.USER_ID, jsonObject.getString("userid"));
                         map.put(PreferencesUtils.DIAN_ID, jsonObject.getString("dianid"));
                         PreferencesUtils.save(map);
                     } else {
-                        PreferencesUtils.remove(PreferencesUtils.USER_NAME);
-                        PreferencesUtils.remove(PreferencesUtils.PASSWORD);
+                        PreferencesUtils.save(PreferencesUtils.IS_SAVED_ACCOUNT, false);
+                        PreferencesUtils.save(PreferencesUtils.USER_NAME, mSetvAccount.getText());
                     }
                     LoadingViewDialog.getInstance().dismiss();
                     MainActivity.start(LoginActivity.this);

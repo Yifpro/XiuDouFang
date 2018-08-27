@@ -40,6 +40,8 @@ public class SimpleEditTextView extends LinearLayout {
         if (!mIsEditable) {
             mEtInput.setVisibility(GONE);
             mTvInput.setText(ta.getString(R.styleable.SimpleEditTextView_setv_value));
+        } else {
+            mTvInput.setVisibility(GONE);
         }
         if (ta.hasValue(R.styleable.SimpleEditTextView_setv_inputType)) {
             mEtInput.setInputType(ta.getInt(R.styleable.SimpleEditTextView_setv_inputType, 0));

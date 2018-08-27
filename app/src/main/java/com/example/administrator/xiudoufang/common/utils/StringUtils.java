@@ -1,6 +1,5 @@
 package com.example.administrator.xiudoufang.common.utils;
 
-import android.app.Activity;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
