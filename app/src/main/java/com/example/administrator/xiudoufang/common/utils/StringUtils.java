@@ -95,7 +95,11 @@ public class StringUtils {
     public static String getCurrentTime() {
         Calendar calendar = Calendar.getInstance();
         StringBuilder builder = new StringBuilder();
-        builder.append(calendar.get(Calendar.YEAR)).append("-").append(calendar.get(Calendar.MONTH)+1).append("-").append(calendar.get(Calendar.DATE));
+        String tempMonth = String.valueOf(calendar.get(Calendar.MONTH)+1);
+        String month = tempMonth.length() == 1 ? "0" + tempMonth : tempMonth;
+        String tempDate = String.valueOf(calendar.get(Calendar.DATE));
+        String date = tempDate.length() == 1 ? "0" + tempDate : tempDate;
+        builder.append(calendar.get(Calendar.YEAR)).append("-").append(month).append("-").append(calendar.get(Calendar.DATE));
         return builder.toString();
     }
 

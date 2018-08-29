@@ -23,7 +23,7 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseTextWatcher;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.ProductItem;
-import com.example.administrator.xiudoufang.bean.ProductListBean;
+import com.example.administrator.xiudoufang.bean.SupplierProductListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SoftInputHelper;
@@ -44,10 +44,10 @@ import java.util.List;
  * Created by Administrator on 2018/8/18
  */
 
-public class ProductListActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
+public class SupplierProductListActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
     private final int COUNT = 20;
-    public static final String TAG = ProductListActivity.class.getSimpleName();
+    public static final String TAG = SupplierProductListActivity.class.getSimpleName();
     public static final String SUPPLIER_ID = "supplier_id";
 
     private RefreshLayout mRefreshLayout;
@@ -61,7 +61,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
     private AnimatorSet menuAnim;
     private NewPurchaseOrderLogic mLogic;
     private ProductListAdapter mAdapter;
-    private List<ProductListBean.ProductBean> mList;
+    private List<SupplierProductListBean.SupplierProductBean> mList;
     private HashMap<String, String> mParams;
     private String mFilterText = "";
     private boolean mIsShowSoftInput;
@@ -70,7 +70,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_product_list;
+        return R.layout.activity_supplier_product_list;
     }
 
     @Override
@@ -91,7 +91,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         mEtFilter.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         mEtFilter.addTextChangedListener(new InnerTextWatcher());
         mEtFilter.setOnEditorActionListener(new InnerEditActionListener());
-        SoftKeyBoardListener.setListener(ProductListActivity.this, new InnerSoftKeyBoardChangeListener());
+        SoftKeyBoardListener.setListener(SupplierProductListActivity.this, new InnerSoftKeyBoardChangeListener());
     }
 
     @Override
@@ -126,11 +126,11 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         }
         mParams.put("serchitem", mFilterText);
         mParams.put("pagenum", String.valueOf(mCurrentPage++));
-        mLogic.requestProductList(mParams, new JsonCallback<ProductListBean>() {
+        mLogic.requestProductList(mParams, new JsonCallback<SupplierProductListBean>() {
             @Override
-            public void onSuccess(Response<ProductListBean> response) {
+            public void onSuccess(Response<SupplierProductListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
-                List<ProductListBean.ProductBean> temp = response.body().getPo_chanpinlist();
+                List<SupplierProductListBean.SupplierProductBean> temp = response.body().getPo_chanpinlist();
                 if (isFiltering) {
                     mList.clear();
                     mList.addAll(temp);
@@ -177,13 +177,13 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
                     mFabComplete.setVisibility(View.VISIBLE);
                     menuAnim.setStartDelay(350);
                     menuAnim.start();
-                    for (ProductListBean.ProductBean bean : mList) {
+                    for (SupplierProductListBean.SupplierProductBean bean : mList) {
                         bean.setShowSelect(true);
                     }
                     mAdapter.setNewData(mList);
                 } else {
                     mFabComplete.setVisibility(View.GONE);
-                    for (ProductListBean.ProductBean bean : mList) {
+                    for (SupplierProductListBean.SupplierProductBean bean : mList) {
                         bean.setShowSelect(false);
                     }
                     mAdapter.setNewData(mList);
@@ -192,7 +192,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
             case R.id.fab_complete:
                 Intent intent = new Intent();
                 ArrayList<ProductItem> list = new ArrayList<>();
-                for (ProductListBean.ProductBean bean : mList) {
+                for (SupplierProductListBean.SupplierProductBean bean : mList) {
                     if (bean.isSelected()) {
                         ProductItem item = new ProductItem();
                         item.setPhotourl(bean.getPhotourl());
@@ -202,13 +202,13 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
                         item.setColor("");
                         item.setSize("");
                         String factor = "", unit = "";
-                        for (ProductListBean.ProductBean.PacklistBean b : bean.getPacklist()) {
+                        for (SupplierProductListBean.SupplierProductBean.PacklistBean b : bean.getPacklist()) {
                             if ("1".equals(b.getCheck())) {
                                 factor = b.getUnit_bilv();
                                 unit = b.getUnitname();
                             }
                         }
-                        ProductListBean.ProductBean.LishijialistBean historyBean = bean.getLishijialist().get(bean.getLishijialist().indexOf(new ProductListBean.ProductBean.LishijialistBean(factor, unit)));
+                        SupplierProductListBean.SupplierProductBean.LishijialistBean historyBean = bean.getLishijialist().get(bean.getLishijialist().indexOf(new SupplierProductListBean.SupplierProductBean.LishijialistBean(factor, unit)));
                         item.setFactor(factor);
                         item.setUnit(unit);
                         item.setAmount("1");
@@ -251,7 +251,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
                     || actionId == EditorInfo.IME_ACTION_DONE
                     || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
                 if (mFilterText.length() != 0) {
-                    LoadingViewDialog.getInstance().show(ProductListActivity.this);
+                    LoadingViewDialog.getInstance().show(SupplierProductListActivity.this);
                     mCurrentPage = 1;
                     loadProductList(true);
                     return true;
@@ -289,12 +289,12 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         @Override
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
             if ("1".equals(mList.get(position).getStop_sales())) {
-                ToastUtils.show(ProductListActivity.this, "该产品已停售");
+                ToastUtils.show(SupplierProductListActivity.this, "该产品已停售");
                 return;
             }
-            Intent intent = new Intent(ProductListActivity.this, ProductDetailsActivity.class);
-            intent.putExtra(ProductDetailsActivity.FROM_CLASS, TAG);
-            intent.putExtra(ProductDetailsActivity.SELECTED_PRODUCT_BEAN, mList.get(position));
+            Intent intent = new Intent(SupplierProductListActivity.this, SupplierProductDetailsActivity.class);
+            intent.putExtra(SupplierProductDetailsActivity.FROM_CLASS, TAG);
+            intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_BEAN, mList.get(position));
             startActivity(intent);
         }
     }

@@ -33,7 +33,7 @@
         <activity android:name=".purchase.ui.NewPurchaseOrderActivity"
                   android:launchMode="singleTask" />
         <activity android:name=".purchase.ui.ScanActivity" />
-        <activity android:name=".purchase.ui.ProductListActivity"
+        <activity android:name=".purchase.ui.SupplierProductListActivity"
                   android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity android:name=".purchase.ui.WarehouseListActivity" />
         <activity android:name=".purchase.ui.AddSupplierActivity" />
@@ -42,14 +42,16 @@
         <activity android:name=".purchase.ui.PurchaseQueryActivity"/>
         <activity android:name=".purchase.ui.PurchaseDetailsActivity"
                   android:launchMode="singleTask"/>
-        <activity android:name=".purchase.ui.ProductDetailsActivity" />
+        <activity android:name=".purchase.ui.SupplierProductDetailsActivity" />
         <activity android:name=".stock.ui.StockActivity"
                   android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity android:name=".stock.ui.StockQueryActivity"/>
-        <activity android:name=".transport.TransportNumActivity"/>
-        <activity android:name=".transport.TransportOrderQueryActivity"/>
-        <activity android:name=".product.ProductActivity"/>
-        <activity android:name=".product.ProductQueryActivity"/>
+        <activity android:name=".transport.ui.InvoiceListActivity"/>
+        <activity android:name=".transport.ui.InvoiceQueryActivity"/>
+        <activity android:name=".product.ui.ProductListActivity"/>
+        <activity android:name=".product.ui.ProductQueryActivity"
+                  android:launchMode="singleTask" />
+        <activity android:name=".product.ui.ProductEditActivity" />
         <activity
             android:name=".receipt.ui.CustomerListActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
@@ -58,6 +60,8 @@
         <activity android:name=".check.OrderQueryActivity"/>
         <activity android:name=".open.OpenBillActivity"/>
         <activity android:name=".stock.ui.TypeListActivity" />
+        <activity android:name=".product.ui.ProductDetailsActivity"/>
+        <activity android:name=".transport.ui.InvoiceDetailsActivity" />
     </application>
 
 </manifest>

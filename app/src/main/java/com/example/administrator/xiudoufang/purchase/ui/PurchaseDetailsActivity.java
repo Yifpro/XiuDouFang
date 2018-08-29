@@ -47,7 +47,6 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
-import com.yanzhenjie.loading.LoadingView;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
@@ -265,7 +264,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        mSupplier = getIntent().getParcelableExtra(NewPurchaseOrderActivity.SELECTED_SUPPLIER);
+        mSupplier = getIntent().getParcelableExtra(SupplierDetailsActivity.SELECTED_SUPPLIER);
         ProductItem item = getIntent().getParcelableExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT);
         if (mSupplier != null) {
             mSivSupplier.setValue(mSupplier.getName());
@@ -651,9 +650,9 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
 
         @Override
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-            Intent intent = new Intent(PurchaseDetailsActivity.this, ProductDetailsActivity.class);
-            intent.putExtra(ProductDetailsActivity.FROM_CLASS, TAG);
-            intent.putExtra(ProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
+            Intent intent = new Intent(PurchaseDetailsActivity.this, SupplierProductDetailsActivity.class);
+            intent.putExtra(SupplierProductDetailsActivity.FROM_CLASS, TAG);
+            intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
             startActivity(intent);
         }
     }

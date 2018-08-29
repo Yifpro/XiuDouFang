@@ -52,7 +52,7 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
     @Override
     public void onError(com.lzy.okgo.model.Response<T> response) {
         LoadingViewDialog.getInstance().dismiss();
-        Toast.makeText(XiuDouFangApplication.getContext(), "出错啦！！！", Toast.LENGTH_SHORT).show();
+        Toast.makeText(XiuDouFangApplication.getContext(), "出错啦！！！"+response.body(), Toast.LENGTH_SHORT).show();
         super.onError(response);
     }
 }

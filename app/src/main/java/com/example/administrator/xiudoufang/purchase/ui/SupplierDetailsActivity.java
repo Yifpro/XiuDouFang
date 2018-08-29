@@ -10,6 +10,7 @@ import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.bean.SupplierListBean;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
+import com.example.administrator.xiudoufang.product.ui.ProductQueryActivity;
 
 /**
  * Created by Administrator on 2018/8/18
@@ -18,6 +19,7 @@ import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 public class SupplierDetailsActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
     private static final int RESULT_SELECT_AREA = 102;
+    public static final String SELECTED_SUPPLIER = "selected_supplier";
 
     private SearchInfoView mSivCustomerNo;
     private SearchInfoView mSivName;
@@ -83,11 +85,14 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_sure:
+                String tag = getIntent().getStringExtra(SupplierListActivity.FROM_CLASS);
                 Class clazz;
-                if (NewPurchaseOrderActivity.TAG.equals(getIntent().getStringExtra(SupplierListActivity.FROM_CLASS))) {
+                if (NewPurchaseOrderActivity.TAG.equals(tag)) {
                     clazz = NewPurchaseOrderActivity.class;
-                } else {
+                } else if (PurchaseDetailsActivity.TAG.equals(tag)) {
                     clazz = PurchaseDetailsActivity.class;
+                } else {
+                    clazz = ProductQueryActivity.class;
                 }
                 Intent intent = new Intent(this, clazz);
                 Supplier details = new Supplier();
@@ -103,7 +108,7 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
                 details.setAreaNo(mSivAreaNo.getValue());
                 details.setAreaName(mSivAreaName.getValue());
                 details.setFendianid(mBean.getFendianid());
-                intent.putExtra(NewPurchaseOrderActivity.SELECTED_SUPPLIER, details);
+                intent.putExtra(SELECTED_SUPPLIER, details);
                 startActivity(intent);
                 break;
         }

@@ -1,224 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fillViewport="true">
 
-    <include layout="@layout/layout_toolbar"/>
-
-    <android.support.v4.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <include layout="@layout/layout_toolbar"/>
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_base_info"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/gray_888888"/>
 
-            <ImageView
-                android:id="@+id/iv_icon"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/black"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/gray_cccccc"/>
+        <TextView
+            android:id="@+id/tv_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="拓展信息∨"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14dp"/>
 
-            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_product_no"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:siv_isShowNext="false"
-                app:siv_key="@string/product_no"
-                app:siv_type="TYPE_TEXT"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_supplier"
+            android:background="@color/gray_888888"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_product_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:siv_isShowNext="false"
-                app:siv_key="@string/product_name"
-                app:siv_type="TYPE_TEXT"/>
-
-            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_stock_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:siv_isShowNext="false"
-                app:siv_key="@string/stock_amount"
-                app:siv_type="TYPE_TEXT"/>
-
-            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_free_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:siv_isShowNext="false"
-                app:siv_key="@string/free_amount"
-                app:siv_type="TYPE_TEXT"/>
-
-            <TextView
-                android:id="@+id/tv_expand"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:text="@string/expand_info"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14dp"/>
-
-            <LinearLayout
-                android:id="@+id/linear_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                    android:id="@+id/siv_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:siv_isShowNext="false"
-                    app:siv_key="@string/type"
-                    app:siv_type="TYPE_TEXT"/>
-
-                <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                    android:id="@+id/siv_brand"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:siv_isShowNext="false"
-                    app:siv_key="@string/brand"
-                    app:siv_type="TYPE_TEXT"/>
-
-                <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                    android:id="@+id/siv_model"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:siv_isShowNext="false"
-                    app:siv_key="@string/size"
-                    app:siv_type="TYPE_TEXT"/>
-
-                <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                    android:id="@+id/siv_bar_code"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:siv_isShowNext="false"
-                    app:siv_key="@string/bar_code"
-                    app:siv_type="TYPE_TEXT"/>
-
-                <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                    android:id="@+id/siv_details"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:siv_isShowNext="false"
-                    app:siv_key="@string/details"
-                    app:siv_type="TYPE_TEXT"/>
-
-                <TextView
-                    android:id="@+id/tv_collapse"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/hide"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14dp"/>
-            </LinearLayout>
-
-            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_purchase_unit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:siv_key="@string/purchase_unit"
-                app:siv_type="TYPE_TEXT"/>
-
-            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_price_source"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:siv_key="@string/price_source"
-                app:siv_type="TYPE_TEXT"
-                app:siv_value="历史价"/>
-
-            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_single_price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:siv_isShowNext="false"
-                app:siv_key="@string/single_price"
-                app:siv_type="TYPE_TEXT"/>
-
-            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_unit_price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:siv_hint="@string/input_unit_price"
-                app:siv_input_type="INPUT_NUMBER"
-                app:siv_key="@string/unit_price"
-                app:siv_type="TYPE_EDIT"/>
-
-            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_product_color"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:siv_key="@string/product_color"
-                app:siv_type="TYPE_TEXT"/>
-
-            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_size"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:siv_key="@string/product_spec"
-                app:siv_type="TYPE_TEXT"/>
-
-            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_purchase_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:siv_hint="@string/input_purchase_amount"
-                app:siv_input_type="INPUT_NUMBER"
-                app:siv_key="@string/purchase_amount"
-                app:siv_type="TYPE_EDIT"/>
-
-            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_gift"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:siv_isShowNext="false"
-                app:siv_key="@string/git"
-                app:siv_leftTitle="否"
-                app:siv_rightTitle="是"
-                app:siv_type="TYPE_SEGMENT"/>
-
-            <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-                android:id="@+id/siv_goods_no"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:siv_hint="@string/input_goods_no"
-                app:siv_isShowNext="false"
-                app:siv_key="@string/goods_no"
-                app:siv_type="TYPE_EDIT"/>
-
-            <EditText
-                android:id="@+id/et_tip"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/white"
-                android:gravity="top"
-                android:hint="备注（请输入少于50字）"
-                android:padding="5dp"
-                android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
-                android:textSize="14dp"/>
-
-            <include layout="@layout/layout_bottom_selection" />
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
-</LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_level_price"
+            android:background="@color/gray_888888"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

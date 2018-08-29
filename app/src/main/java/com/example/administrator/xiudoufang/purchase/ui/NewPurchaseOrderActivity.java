@@ -2,7 +2,6 @@ package com.example.administrator.xiudoufang.purchase.ui;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -32,7 +31,6 @@ import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -70,7 +68,6 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
 
     private static final int RESULT_WAREHOUSE = 104;
     public static final int RESULT_PRODUCT_LIST = 103;
-    public static final String SELECTED_SUPPLIER = "selected_supplier";
     public static final String SELECTED_PRODUCT = "selected_product";
     public static final String SELECTED_PRODUCT_LIST = "selected_product_list";
     public static final String TAG = NewPurchaseOrderActivity.class.getSimpleName();
@@ -117,7 +114,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        Supplier supplier = getIntent().getParcelableExtra(SELECTED_SUPPLIER);
+        Supplier supplier = getIntent().getParcelableExtra(SupplierDetailsActivity.SELECTED_SUPPLIER);
         ProductItem item = getIntent().getParcelableExtra(SELECTED_PRODUCT);
         if (supplier != null) {
             mSivSupplier.setValue(supplier.getName());
@@ -243,9 +240,9 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(NewPurchaseOrderActivity.this, ProductDetailsActivity.class);
-                intent.putExtra(ProductDetailsActivity.FROM_CLASS, TAG);
-                intent.putExtra(ProductDetailsActivity.SELECTED_PRODUCT_ITEM, mProductItemList.get(position));
+                Intent intent = new Intent(NewPurchaseOrderActivity.this, SupplierProductDetailsActivity.class);
+                intent.putExtra(SupplierProductDetailsActivity.FROM_CLASS, TAG);
+                intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM, mProductItemList.get(position));
                 startActivity(intent);
             }
         });
@@ -346,8 +343,8 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                     Toast.makeText(this, "请先选择供应商", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Intent intent = new Intent(this, ProductListActivity.class);
-                intent.putExtra(ProductListActivity.SUPPLIER_ID, mSupplier.getId());
+                Intent intent = new Intent(this, SupplierProductListActivity.class);
+                intent.putExtra(SupplierProductListActivity.SUPPLIER_ID, mSupplier.getId());
                 startActivityForResult(intent, RESULT_PRODUCT_LIST);
                 break;
             case R.id.tv_scan_product:

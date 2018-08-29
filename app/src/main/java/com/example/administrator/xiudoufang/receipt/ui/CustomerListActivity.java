@@ -134,10 +134,10 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
             mParams.put("userdengji", jsonObject.getString("dengji_value"));
             mParams.put("userid", jsonObject.getString("userid"));
             mParams.put("dqc_id", "0");
+            mParams.put("count", String.valueOf(COUNT));
         }
         mParams.put("search", mFilterText);
         mParams.put("pagenum", String.valueOf(mCurrentPage++));
-        mParams.put("count", String.valueOf(COUNT));
         mLogic.requestCustomerList(mParams, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {

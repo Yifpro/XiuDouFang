@@ -17,7 +17,7 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.ProductItem;
-import com.example.administrator.xiudoufang.bean.ProductListBean;
+import com.example.administrator.xiudoufang.bean.SupplierProductListBean;
 import com.example.administrator.xiudoufang.common.utils.ExpressionUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
@@ -31,7 +31,7 @@ import java.util.StringTokenizer;
  * Created by Administrator on 2018/8/21
  */
 
-public class ProductDetailsActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
+public class SupplierProductDetailsActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
     public static final String FROM_CLASS = "from_class";
     public static final String SELECTED_PRODUCT_ITEM = "selected_product_item";
@@ -71,7 +71,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
     private String mFactor;
     private String mUnit;
     private String mHistoryPrice;
-    private ProductListBean.ProductBean mProductBean;
+    private SupplierProductListBean.SupplierProductBean mSupplierProductBean;
     private ProductItem mProductItem;
     private ArrayList<String> mPurchaseUnitList;
     private ArrayList<String> mPriceSourceList;
@@ -84,7 +84,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_product_details;
+        return R.layout.activity_supplier_product_details;
     }
 
     @Override
@@ -118,7 +118,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
         mSivGift.setStatus(true);
         mSivUnitPrice.setKey(StringUtils.getSpannableString("单位价*", 3));
         mSivPurchaseAmount.setKey(StringUtils.getSpannableString("采购数量*", 4));
-        boolean isFromProductList = ProductListActivity.TAG.equals(getIntent().getStringExtra(FROM_CLASS));
+        boolean isFromProductList = SupplierProductListActivity.TAG.equals(getIntent().getStringExtra(FROM_CLASS));
         mSivPriceSource.setValue("历史价");
         mTvBottomLeft.setText(isFromProductList ? "添加" : "完成编辑");
         mTvBottomRight.setVisibility(isFromProductList ? View.GONE : View.VISIBLE);
@@ -205,19 +205,19 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                     String singlePrice = null;
                     switch (position) {
                         case 0:
-                            singlePrice = mProductItem == null ? mProductBean.getLishijialist().get(mPurchaseUnitPosition).getPrice() :
+                            singlePrice = mProductItem == null ? mSupplierProductBean.getLishijialist().get(mPurchaseUnitPosition).getPrice() :
                                     mProductItem.getLishijialist().get(mPurchaseUnitPosition).getPrice();
                             break;
                         case 1:
-                            singlePrice = mProductItem == null ? mProductBean.getChengbenjialist().get(mPurchaseUnitPosition).getPrice() :
+                            singlePrice = mProductItem == null ? mSupplierProductBean.getChengbenjialist().get(mPurchaseUnitPosition).getPrice() :
                                     mProductItem.getChengbenjialist().get(mPurchaseUnitPosition).getPrice();
                             break;
                         case 2:
-                            singlePrice = mProductItem == null ? mProductBean.getChuchangjialist().get(mPurchaseUnitPosition).getPrice() :
+                            singlePrice = mProductItem == null ? mSupplierProductBean.getChuchangjialist().get(mPurchaseUnitPosition).getPrice() :
                                     mProductItem.getChuchangjialist().get(mPurchaseUnitPosition).getPrice();
                             break;
                         case 3:
-                            singlePrice = mProductItem == null ? mProductBean.getCankaoshoujialist().get(mPurchaseUnitPosition).getPrice() :
+                            singlePrice = mProductItem == null ? mSupplierProductBean.getCankaoshoujialist().get(mPurchaseUnitPosition).getPrice() :
                                     mProductItem.getCankaoshoujialist().get(mPurchaseUnitPosition).getPrice();
                             break;
                         case 4:
@@ -307,20 +307,20 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                     }
                 }
             } else {
-                mProductBean = getIntent().getParcelableExtra(SELECTED_PRODUCT_BEAN);
-                photoUrl = StringUtils.PIC_URL + mProductBean.getPhotourl();
-                productNo = mProductBean.getStyleno();
-                productName = mProductBean.getStylename();
-                stockAmount = mProductBean.getKucunqty();
-                freeAmount = mProductBean.getZiyouqty();
-                type = mProductBean.getClassname();
-                brand = mProductBean.getPinpai();
-                model = mProductBean.getXinghao();
-                barCode = mProductBean.getBarcode();
-                details = mProductBean.getDetail();
-                if (mProductBean.getPacklist() != null) {
-                    for (int i = 0; i < mProductBean.getPacklist().size(); i++) {
-                        ProductListBean.ProductBean.PacklistBean bean = mProductBean.getPacklist().get(i);
+                mSupplierProductBean = getIntent().getParcelableExtra(SELECTED_PRODUCT_BEAN);
+                photoUrl = StringUtils.PIC_URL + mSupplierProductBean.getPhotourl();
+                productNo = mSupplierProductBean.getStyleno();
+                productName = mSupplierProductBean.getStylename();
+                stockAmount = mSupplierProductBean.getKucunqty();
+                freeAmount = mSupplierProductBean.getZiyouqty();
+                type = mSupplierProductBean.getClassname();
+                brand = mSupplierProductBean.getPinpai();
+                model = mSupplierProductBean.getXinghao();
+                barCode = mSupplierProductBean.getBarcode();
+                details = mSupplierProductBean.getDetail();
+                if (mSupplierProductBean.getPacklist() != null) {
+                    for (int i = 0; i < mSupplierProductBean.getPacklist().size(); i++) {
+                        SupplierProductListBean.SupplierProductBean.PacklistBean bean = mSupplierProductBean.getPacklist().get(i);
                         if ("1".equals(bean.getCheck())) {
                             mFactor = bean.getUnit_bilv();
                             mUnit = bean.getUnitname();
@@ -329,8 +329,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                         mPurchaseUnitList.add(bean.getUnit_bilv() + bean.getUnitname());
                     }
                 }
-                if (mProductBean.getLishijialist() != null) {
-                    for (ProductListBean.ProductBean.LishijialistBean bean : mProductBean.getLishijialist()) {
+                if (mSupplierProductBean.getLishijialist() != null) {
+                    for (SupplierProductListBean.SupplierProductBean.LishijialistBean bean : mSupplierProductBean.getLishijialist()) {
                         if (mFactor.equals(bean.getUnit_bilv()) && mUnit.equals(bean.getUnitname())) {
                             singlePrice = bean.getPrice();
                         }
@@ -340,20 +340,20 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                     }
                 }
 
-                if (mProductBean.getSizxlist() != null && mProductBean.getSizxlist().size() == 0) {
+                if (mSupplierProductBean.getSizxlist() != null && mSupplierProductBean.getSizxlist().size() == 0) {
                     mSivSize.setVisibility(View.GONE);
                 } else {
                     mSpecList = new ArrayList<>();
-                    for (ProductListBean.ProductBean.SizxlistBean bean : mProductBean.getSizxlist()) {
+                    for (SupplierProductListBean.SupplierProductBean.SizxlistBean bean : mSupplierProductBean.getSizxlist()) {
                         mSpecList.add(bean.getSizx());
                     }
                 }
-                if (mProductBean.getColorlist() != null && mProductBean.getColorlist().size() == 0) {
+                if (mSupplierProductBean.getColorlist() != null && mSupplierProductBean.getColorlist().size() == 0) {
                     mSivProcutColor.setVisibility(View.GONE);
                 } else {
                     mColorList = new ArrayList<>();
                     mColorList.add("无");
-                    for (ProductListBean.ProductBean.ColorlistBean bean : mProductBean.getColorlist()) {
+                    for (SupplierProductListBean.SupplierProductBean.ColorlistBean bean : mSupplierProductBean.getColorlist()) {
                         mColorList.add(bean.getColor());
                     }
                 }
@@ -432,15 +432,15 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
     }
 
     private boolean checkStopProduce() {
-        if (mProductItem == null && "1".equals(mProductBean.getStop_produce())) return true;
-        if (mProductBean == null && mProductItem.isStopProduce()) return true;
+        if (mProductItem == null && "1".equals(mSupplierProductBean.getStop_produce())) return true;
+        if (mSupplierProductBean == null && mProductItem.isStopProduce()) return true;
         return false;
     }
 
     private void addProduct() {
         ProductItem item = new ProductItem();
-        item.setId(mProductItem == null ? mProductBean.getCpid() : mProductItem.getId());
-        item.setPhotourl(mProductItem == null ? mProductBean.getPhotourl() : mProductItem.getPhotourl());
+        item.setId(mProductItem == null ? mSupplierProductBean.getCpid() : mProductItem.getId());
+        item.setPhotourl(mProductItem == null ? mSupplierProductBean.getPhotourl() : mProductItem.getPhotourl());
         item.setProductNo(mSivProductNo.getValue());
         item.setStylename(mSivProductName.getValue());
         item.setStockAmount(mSivStockAmount.getValue());
@@ -478,7 +478,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
         }
         item.setPriceCode(ExpressionUtils.getInstance().caculate(builder.toString()));
         item.setPriceSource(mSivPriceSource.getValue());
-        Intent intent = new Intent(ProductDetailsActivity.this, NewPurchaseOrderActivity.class);
+        Intent intent = new Intent(SupplierProductDetailsActivity.this, NewPurchaseOrderActivity.class);
         intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, item);
         startActivity(intent);
     }

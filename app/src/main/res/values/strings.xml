@@ -1,16 +1,5 @@
 <resources>
     <string name="app_name">秀逗坊</string>
-    <!--运号-->
-    <string name="search">搜索</string>
-    <string name="customer">客户</string>
-    <string name="input_customer">请输入客户</string>
-    <string name="order_no">单号</string>
-    <string name="input_order_no">请输入单号</string>
-    <string name="start_time">开始时间</string>
-    <string name="end_time">结束时间</string>
-    <string name="transportion_no">运号</string>
-    <string name="input_transportion_no">请输入运号</string>
-    <string name="clear">清空</string>
     <!--设置-->
     <string name="exit_login">退出登录</string>
     <!--收款-->
@@ -126,4 +115,19 @@
     <string name="belong_unit">所属单位</string>
     <string name="amount">数量</string>
     <string name="include_subclass">包含子类</string>
+    <string name="filter">筛选</string>
+    <!--运号-->
+    <string name="search">搜索</string>
+    <string name="customer">客户</string>
+    <string name="input_customer">请输入客户</string>
+    <string name="order_no">单号</string>
+    <string name="input_order_no">请输入单号</string>
+    <string name="start_time">开始时间</string>
+    <string name="end_time">结束时间</string>
+    <string name="transportion_no">运号</string>
+    <string name="input_transportion_no">请输入运号</string>
+    <string name="clear">清空</string>
+    <string name="select_pic">相册/拍照</string>
+    <string name="submit">提交</string>
+    <string name="clear_transport_num">清除运号</string>
 </resources>

@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/iv_icon"
@@ -22,7 +23,7 @@
         android:singleLine="true"
         android:textColor="@color/black"
         android:textSize="14dp"
-        tools:text="哈哈哈" />
+        tools:text="中号杯" />
 
     <TextView
         android:id="@+id/tv_id"
@@ -34,5 +35,5 @@
         android:singleLine="true"
         android:textColor="@color/black"
         android:textSize="14dp"
-        tools:text="哈哈哈" />
+        tools:text="1002444" />
 </LinearLayout>

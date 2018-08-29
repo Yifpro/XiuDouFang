@@ -74,7 +74,7 @@ public class AddSupplierActivity extends AppCompatActivity implements IActivityB
             supplier.setNewContact(mSivContact.getValue());
             supplier.setAreaNo(mSivAreaNo.getValue());
             supplier.setAreaName(mSivAreaName.getValue());
-            intent.putExtra(NewPurchaseOrderActivity.SELECTED_SUPPLIER, supplier);
+            intent.putExtra(SupplierDetailsActivity.SELECTED_SUPPLIER, supplier);
             startActivity(intent);
         }
     }

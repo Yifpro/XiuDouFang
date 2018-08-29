@@ -9,24 +9,28 @@
     <include layout="@layout/layout_toolbar"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:siv_key="@string/no_name_or_class_name"
         app:siv_type="TYPE_EDIT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_supplier"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:siv_key="@string/supplier"
         app:siv_type="TYPE_TEXT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:siv_key="@string/type"
         app:siv_type="TYPE_TEXT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_pic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:siv_key="@string/already_set_img"

@@ -11,9 +11,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.check.CheckOrderActivity;
 import com.example.administrator.xiudoufang.open.OpenBillActivity;
-import com.example.administrator.xiudoufang.product.ProductActivity;
+import com.example.administrator.xiudoufang.product.ui.ProductListActivity;
 import com.example.administrator.xiudoufang.receipt.ui.CustomerListActivity;
-import com.example.administrator.xiudoufang.transport.TransportNumActivity;
+import com.example.administrator.xiudoufang.transport.ui.InvoiceListActivity;
 import com.example.administrator.xiudoufang.bean.MenuItem;
 import com.example.administrator.xiudoufang.purchase.ui.PurchaseActivity;
 import com.example.administrator.xiudoufang.setting.ui.SettingActivity;
@@ -67,10 +67,10 @@ public class MainActivity extends AppCompatActivity implements IActivityBase {
                         CustomerListActivity.start(MainActivity.this);
                         break;
                     case 3:
-                        ProductActivity.start(MainActivity.this);
+                        ProductListActivity.start(MainActivity.this);
                         break;
                     case 4:
-                        TransportNumActivity.start(MainActivity.this);
+                        InvoiceListActivity.start(MainActivity.this);
                         break;
                     case 5:
                         StockActivity.start(MainActivity.this);
