@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/toolbar_filter"
-        android:title="筛选"
+        android:icon="@mipmap/ic_query_blue"
         android:orderInCategory="0"
         app:showAsAction="always" />
 </menu>

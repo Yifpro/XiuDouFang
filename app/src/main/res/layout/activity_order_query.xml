@@ -9,6 +9,7 @@
     <include layout="@layout/layout_toolbar"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_no"
         app:siv_hint="请输入单号"
         app:siv_key="单号"
         app:siv_type="TYPE_EDIT"
@@ -16,6 +17,7 @@
         android:layout_height="wrap_content"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_customer"
         app:siv_hint="请输入客户"
         app:siv_key="客户"
         app:siv_type="TYPE_EDIT"
@@ -23,30 +25,35 @@
         android:layout_height="wrap_content"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_start_time"
         app:siv_key="开始时间"
         app:siv_type="TYPE_TEXT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_end_time"
         app:siv_key="结束时间"
         app:siv_type="TYPE_TEXT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_order_type"
         app:siv_key="订单类型"
         app:siv_type="TYPE_TEXT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_transport_type"
         app:siv_key="货运类型"
         app:siv_type="TYPE_TEXT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_proxy_order"
         app:siv_key="代发订单"
         app:siv_type="TYPE_TEXT"
         android:layout_width="match_parent"

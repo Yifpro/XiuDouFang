@@ -130,4 +130,6 @@
     <string name="select_pic">相册/拍照</string>
     <string name="submit">提交</string>
     <string name="clear_transport_num">清除运号</string>
+    <!--查单-->
+    <string name="amt_format">¥ %s</string>
 </resources>

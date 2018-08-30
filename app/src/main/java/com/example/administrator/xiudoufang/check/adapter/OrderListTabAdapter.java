@@ -1,17 +1,19 @@
-package com.example.administrator.xiudoufang.check;
+package com.example.administrator.xiudoufang.check.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.administrator.xiudoufang.base.BaseFragment;
+
 import java.util.List;
 
-class CheckOrderTabAdapter extends FragmentPagerAdapter {
+public class OrderListTabAdapter extends FragmentPagerAdapter {
 
-    private List<Fragment> mFragments;
+    private List<BaseFragment> mFragments;
     private String[] titles;
 
-    public CheckOrderTabAdapter(FragmentManager fm, List<Fragment> fragments, String[] titles) {
+    public OrderListTabAdapter(FragmentManager fm, List<BaseFragment> fragments, String[] titles) {
         super(fm);
         this.mFragments = fragments;
         this.titles = titles;

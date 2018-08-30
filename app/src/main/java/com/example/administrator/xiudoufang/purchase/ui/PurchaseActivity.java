@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.annotation.Px;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,8 +20,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseFragment;
 import com.example.administrator.xiudoufang.base.IActivityBase;
+import com.example.administrator.xiudoufang.base.OnEventListener;
 import com.example.administrator.xiudoufang.bean.DrawerItem;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.purchase.adapter.PurchasePagerAdapter;
 import com.example.administrator.xiudoufang.purchase.adapter.PurchaseTabAdapter;
 import com.example.administrator.xiudoufang.common.widget.CustomViewPager;
@@ -89,16 +91,32 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
         }
         PurchasePagerAdapter mAdapter = new PurchasePagerAdapter(getSupportFragmentManager(), mFragments, titles);
         mViewPager.setAdapter(mAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, @Px int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if (mParams != null) {
+                    mFragments.get(i).onRefresh();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        LogUtils.e("go here");
         if (requestCode == RESULT_FOR_NEW_PURCHASE_ORDER && resultCode == Activity.RESULT_OK) {
-            LogUtils.e("go here2");
             int currentItem = mViewPager.getCurrentItem();
-            mFragments.get(currentItem).onEvent();
+            ((OnEventListener) mFragments.get(currentItem)).onEvent();
         } else if (requestCode == RESULT_FOR_FILTER_LIST && resultCode == Activity.RESULT_OK) {
             String[] keys = {"PuOrderNo", "Suppname", "starttime", "endtime", "crman", "remark", "fromorder"};
             if (mParams == null) {
@@ -108,6 +126,7 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
                     mParams.put(keys[i], list.get(i));
                 }
             }
+            mFragments.get(mViewPager.getCurrentItem()).onRefresh();
         }
     }
 
