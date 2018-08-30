@@ -75,9 +75,9 @@ public class OrderListSubFragment extends BaseFragment {
     public void onRefresh() {
         OrderFilter filter = ((OrderListActivity) getActivity()).mOrderFilter;
         mType = getArguments().getInt("type");
+        mList = new ArrayList<>();
         mOrderListLogic = new OrderListLogic();
         mPurchaseLogic = new PurchaseLogic();
-        mList = new ArrayList<>();
         initParams();
         mParams.put("iid", TextUtils.isEmpty(filter.getNo()) ? "0" : filter.getNo());
         mParams.put("customername", filter.getCustomer());
