@@ -58,15 +58,30 @@ public class PurchaseSubFragment extends BaseFragment implements OnEventListener
         return fragment;
     }
 
+    //******** 新开采购单后刷新页面 ********
     @Override
     public void onEvent() {
         LoadingViewDialog.getInstance().show(getActivity());
         loadPurchaseList(true);
     }
 
+    //******** 设置过滤条件后刷新数据 ********
     @Override
     public void onRefresh() {
-        LogUtils.e("emmm"+mType+", "+mList.size());
+        HashMap<String, String> params = ((PurchaseActivity) getActivity()).mParams;
+        mType = getArguments().getString("type");
+        mLogic = new PurchaseLogic();
+        mList = new ArrayList<>();
+        initParams();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            mPurchaseListParams.put(entry.getKey(), entry.getValue());
+        }
+        mAdapter = new PurchaseSubAdapter(R.layout.layout_list_item_purchase_sub, mList);
+        mAdapter.bindToRecyclerView(mRecyclerView);
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
+        mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
+        LoadingViewDialog.getInstance().show(getActivity());
+        loadPurchaseList(true);
     }
 
 
@@ -76,28 +91,6 @@ public class PurchaseSubFragment extends BaseFragment implements OnEventListener
         if (requestCode == RESULT_FOR_PURCHASE_DETAILS && resultCode == Activity.RESULT_OK) {
             onEvent();
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-//        HashMap<String, String> params = ((PurchaseActivity) getActivity()).mParams;
-//        if (params != null) {
-//            mType = getArguments().getString("type");
-//            LogUtils.e("type -"+mType);
-//            mLogic = new PurchaseLogic();
-//            mList = new ArrayList<>();
-//            initParams();
-//            for (Map.Entry<String, String> entry : params.entrySet()) {
-//                mPurchaseListParams.put(entry.getKey(), entry.getValue());
-//            }
-//            mAdapter = new PurchaseSubAdapter(R.layout.layout_list_item_purchase_sub, mList);
-//            mAdapter.bindToRecyclerView(mRecyclerView);
-//            mAdapter.setOnItemClickListener(new InnerItemClickListener());
-//            mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
-//            LoadingViewDialog.getInstance().show(getActivity());
-//            loadPurchaseList(true);
-//        }
     }
 
     @Override
@@ -122,7 +115,7 @@ public class PurchaseSubFragment extends BaseFragment implements OnEventListener
     }
 
     private void loadPurchaseList(final boolean isRefresh) {
-        LogUtils.e("load "+mType);
+        LogUtils.e("load " + mType);
         if (isRefresh) mCurrentPage = 1;
         if (mPurchaseListParams == null) initParams();
         mPurchaseListParams.put("pagenum", String.valueOf(mCurrentPage++));

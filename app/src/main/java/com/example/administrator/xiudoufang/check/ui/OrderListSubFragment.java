@@ -72,29 +72,26 @@ public class OrderListSubFragment extends BaseFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onRefresh() {
         OrderFilter filter = ((OrderListActivity) getActivity()).mOrderFilter;
-        if (filter != null) {
-            mType = getArguments().getInt("type");
-            mOrderListLogic = new OrderListLogic();
-            mPurchaseLogic = new PurchaseLogic();
-            mList = new ArrayList<>();
-            initParams();
-            mParams.put("iid", TextUtils.isEmpty(filter.getNo()) ? "0" : filter.getNo());
-            mParams.put("customername", filter.getCustomer());
-            mParams.put("starttime", filter.getStartTime());
-            mParams.put("endtime", filter.getEndTime());
-            mParams.put("dingdanleixing", filter.getOrderType());
-            mParams.put("huoyunleixing", "无".equals(filter.getTransportType()) ? "" : filter.getTransportType());
-            mParams.put("daifa", filter.getProxyOrder());
-            mAdapter = new OrderListAdapter(R.layout.layout_list_item_purchase_sub, mList);
-            mAdapter.bindToRecyclerView(mRecyclerView);
-            mAdapter.setOnItemClickListener(new InnerItemClickListener());
-            mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
-            LoadingViewDialog.getInstance().show(getActivity());
-            loadOrderList(true);
-        }
+        mType = getArguments().getInt("type");
+        mOrderListLogic = new OrderListLogic();
+        mPurchaseLogic = new PurchaseLogic();
+        mList = new ArrayList<>();
+        initParams();
+        mParams.put("iid", TextUtils.isEmpty(filter.getNo()) ? "0" : filter.getNo());
+        mParams.put("customername", filter.getCustomer());
+        mParams.put("starttime", filter.getStartTime());
+        mParams.put("endtime", filter.getEndTime());
+        mParams.put("dingdanleixing", filter.getOrderType());
+        mParams.put("huoyunleixing", "无".equals(filter.getTransportType()) ? "" : filter.getTransportType());
+        mParams.put("daifa", filter.getProxyOrder());
+        mAdapter = new OrderListAdapter(R.layout.layout_list_item_purchase_sub, mList);
+        mAdapter.bindToRecyclerView(mRecyclerView);
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
+        mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
+        LoadingViewDialog.getInstance().show(getActivity());
+        loadOrderList(true);
     }
 
     @Override

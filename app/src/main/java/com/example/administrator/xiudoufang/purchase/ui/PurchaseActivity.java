@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseFragment;
+import com.example.administrator.xiudoufang.base.BasePageChangeListener;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.base.OnEventListener;
 import com.example.administrator.xiudoufang.bean.DrawerItem;
@@ -91,24 +92,7 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
         }
         PurchasePagerAdapter mAdapter = new PurchasePagerAdapter(getSupportFragmentManager(), mFragments, titles);
         mViewPager.setAdapter(mAdapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, @Px int i1) {
-
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                if (mParams != null) {
-                    mFragments.get(i).onRefresh();
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
-        });
+        mViewPager.addOnPageChangeListener(new InnerPageChangeListener());
     }
 
     @Override
@@ -162,6 +146,16 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
             adapter.setNewData(mTabs);
             mDrawerLayout.closeDrawer(mLeftMenu);
             mLastIndex = position;
+        }
+    }
+
+    private class InnerPageChangeListener extends BasePageChangeListener {
+
+        @Override
+        public void onPageSelected(int i) {
+            if (mParams != null) {
+                mFragments.get(i).onRefresh();
+            }
         }
     }
 }

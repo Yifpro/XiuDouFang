@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseFragment;
+import com.example.administrator.xiudoufang.base.BasePageChangeListener;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.OrderFilter;
 import com.example.administrator.xiudoufang.check.adapter.OrderListTabAdapter;
@@ -30,6 +31,7 @@ public class OrderListActivity extends AppCompatActivity implements IActivityBas
     public CustomViewPager mViewPager;
 
     public OrderFilter mOrderFilter;
+    private ArrayList<BaseFragment> mFragments;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, OrderListActivity.class);
@@ -62,19 +64,21 @@ public class OrderListActivity extends AppCompatActivity implements IActivityBas
             mOrderFilter.setOrderType(filter.getOrderType());
             mOrderFilter.setTransportType(filter.getTransportType());
             mOrderFilter.setProxyOrder(filter.getProxyOrder());
+            mFragments.get(mViewPager.getCurrentItem()).onRefresh();
         }
     }
 
     @Override
     public void initData() {
         String[] tabTitles = {"草稿", "未配货", "配货中", "已完成", "全部"};
-        final ArrayList<BaseFragment> fragments = new ArrayList<>();
+        mFragments = new ArrayList<>();
         for (int i = 0; i < tabTitles.length; i++) {
-            fragments.add(OrderListSubFragment.newInstance(i));
+            mFragments.add(OrderListSubFragment.newInstance(i));
         }
-        OrderListTabAdapter mAdapter = new OrderListTabAdapter(getSupportFragmentManager(), fragments, tabTitles);
+        OrderListTabAdapter mAdapter = new OrderListTabAdapter(getSupportFragmentManager(), mFragments, tabTitles);
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.setAdapter(mAdapter);
+        mViewPager.addOnPageChangeListener(new InnerPageChangeListener());
     }
 
     @Override
@@ -93,5 +97,15 @@ public class OrderListActivity extends AppCompatActivity implements IActivityBas
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class InnerPageChangeListener extends BasePageChangeListener {
+
+        @Override
+        public void onPageSelected(int i) {
+            if (mOrderFilter != null) {
+                mFragments.get(i).onRefresh();
+            }
+        }
     }
 }
