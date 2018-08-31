@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.utils.ThreadUtils;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.Callback;
 import com.lzy.okgo.model.HttpParams;
@@ -18,9 +19,9 @@ public class LoginLogic {
     //******** 登录请求 ********
     public void requestLogin(Context context, HashMap<String, String> map, Callback<String> callback) {
         if (TextUtils.isEmpty(map.get("username"))) {
-            Toast.makeText(context, "请输入用户名", Toast.LENGTH_SHORT).show();
+            ToastUtils.show(context, "请输入用户名");
         } else if (TextUtils.isEmpty(map.get("password"))) {
-            Toast.makeText(context, "请输入密码", Toast.LENGTH_SHORT).show();
+            ToastUtils.show(context, "请输入密码");
         } else {
             OkGo.<String>get(StringUtils.getUrl("/Api/products/login_worker?", map))
                     .execute(callback);

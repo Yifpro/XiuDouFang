@@ -17,6 +17,12 @@ public class SettingItem {
         this.value = value;
     }
 
+    public SettingItem(String key, String value, boolean isShowLine) {
+        this.key = key;
+        this.value = value;
+        this.isShowLine = isShowLine;
+    }
+
     public String getKey() {
         return key;
     }

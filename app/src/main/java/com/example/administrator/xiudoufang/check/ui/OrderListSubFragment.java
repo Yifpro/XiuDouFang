@@ -20,16 +20,16 @@ import com.example.administrator.xiudoufang.bean.OrderListBean;
 import com.example.administrator.xiudoufang.check.adapter.OrderListAdapter;
 import com.example.administrator.xiudoufang.check.logic.OrderListLogic;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
-import com.example.administrator.xiudoufang.purchase.logic.PurchaseLogic;
 import com.lzy.okgo.model.Response;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,13 +37,13 @@ import java.util.List;
 public class OrderListSubFragment extends BaseFragment {
 
     private final int COUNT = 20;
+    public static final String SELECTED_ITEM = "selected_item";
 
     private RefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
     private TextView mTvTotalValue;
 
     private OrderListLogic mOrderListLogic;
-    private PurchaseLogic mPurchaseLogic;
     private HashMap<String, String> mParams;
     private HashMap<String, String> mActionParams;
     private OrderListAdapter mAdapter;
@@ -61,7 +61,7 @@ public class OrderListSubFragment extends BaseFragment {
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_check_order_sub;
+        return R.layout.fragment_order_list_sub;
     }
 
     @Override
@@ -77,7 +77,6 @@ public class OrderListSubFragment extends BaseFragment {
         mType = getArguments().getInt("type");
         mList = new ArrayList<>();
         mOrderListLogic = new OrderListLogic();
-        mPurchaseLogic = new PurchaseLogic();
         initParams();
         mParams.put("iid", TextUtils.isEmpty(filter.getNo()) ? "0" : filter.getNo());
         mParams.put("customername", filter.getCustomer());
@@ -98,7 +97,6 @@ public class OrderListSubFragment extends BaseFragment {
     protected void lazyLoad() {
         mType = getArguments().getInt("type");
         mOrderListLogic = new OrderListLogic();
-        mPurchaseLogic = new PurchaseLogic();
         mRefreshLayout.setOnRefreshListener(new InnerRefreshListener());
         mRefreshLayout.setOnLoadMoreListener(new InnerLoadMoreListener());
         mRefreshLayout.setEnableLoadMoreWhenContentNotFull(false);
@@ -139,8 +137,23 @@ public class OrderListSubFragment extends BaseFragment {
                         mRefreshLayout.finishLoadMore();
                     }
                 }
+                setTotalValue();
             }
         });
+    }
+
+    private void setTotalValue() {
+        if (mList.size() > 0) {
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            double value = 0;
+            for (OrderListBean.OrderBean bean : mList) {
+                value += Double.valueOf(bean.getYingshou_amt());
+            }
+            decimalFormat.format(value);
+            mTvTotalValue.setText(String.format(getString(R.string.amt_format), decimalFormat.format(value)));
+        } else {
+            mTvTotalValue.setText("");
+        }
     }
 
     private void initParams() {
@@ -192,6 +205,7 @@ public class OrderListSubFragment extends BaseFragment {
         @Override
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
             Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
+            intent.putExtra(SELECTED_ITEM, mList.get(position));
             startActivity(intent);
         }
     }
@@ -200,8 +214,7 @@ public class OrderListSubFragment extends BaseFragment {
 
         @Override
         public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-            LogUtils.e("list size -> " + mList.size());
-            /*if (mActionParams == null) {
+            if (mActionParams == null) {
                 SharedPreferences preferences = PreferencesUtils.getPreferences();
                 mActionParams = new HashMap<>();
                 mActionParams.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
@@ -209,18 +222,18 @@ public class OrderListSubFragment extends BaseFragment {
             }
             mActionParams.put("iid", mList.get(position).getIid());
             mActionParams.put("action", mType == 0 ? "1" : "2");
-            mPurchaseLogic.requestActionForOrder(mActionParams, new JsonCallback<String>() {
+            mOrderListLogic.requestActionForOrder(mActionParams, new JsonCallback<String>() {
                 @Override
                 public void onSuccess(Response<String> response) {
                     JSONObject jsonObject = JSONObject.parseObject(response.body());
                     if (!"1".equals(jsonObject.getString("messages"))) {
-                        Toast.makeText(mActivity, jsonObject.getString("messages"), Toast.LENGTH_SHORT).show();
+                        ToastUtils.show(mActivity, jsonObject.getString("messages"));
                     } else {
                         LoadingViewDialog.getInstance().show(getActivity());
                         loadOrderList(true);
                     }
                 }
-            });*/
+            });
         }
     }
 }

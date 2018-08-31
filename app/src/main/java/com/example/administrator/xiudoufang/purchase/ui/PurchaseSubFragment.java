@@ -19,6 +19,7 @@ import com.example.administrator.xiudoufang.bean.PurchaseListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.purchase.adapter.PurchaseSubAdapter;
 import com.example.administrator.xiudoufang.purchase.logic.PurchaseLogic;
@@ -232,7 +233,7 @@ public class PurchaseSubFragment extends BaseFragment implements OnEventListener
                 public void onSuccess(Response<String> response) {
                     JSONObject jsonObject = JSONObject.parseObject(response.body());
                     if (!"1".equals(jsonObject.getString("messages"))) {
-                        Toast.makeText(mActivity, jsonObject.getString("messages"), Toast.LENGTH_SHORT).show();
+                        ToastUtils.show(mActivity, jsonObject.getString("messages"));
                     } else {
                         LoadingViewDialog.getInstance().show(getActivity());
                         loadPurchaseList(true);

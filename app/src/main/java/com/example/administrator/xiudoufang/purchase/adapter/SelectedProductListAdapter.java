@@ -46,21 +46,21 @@ public class SelectedProductListAdapter extends BaseItemDraggableAdapter<Product
         if (!"1".equals(mStatus)) {
             String statusstr = item.getStatus();
             if (!TextUtils.isEmpty(statusstr)) {
-                helper.getView(R.id.tv_status).setVisibility(View.VISIBLE);
-                helper.setText(R.id.tv_status, statusstr);
+                helper.getView(R.id.tv_discount_sums).setVisibility(View.VISIBLE);
+                helper.setText(R.id.tv_discount_sums, statusstr);
                 if ("未收货".equals(statusstr)) {
-                    helper.setTextColor(R.id.tv_status, ContextCompat.getColor(mContext, R.color.red));
+                    helper.setTextColor(R.id.tv_discount_sums, ContextCompat.getColor(mContext, R.color.red));
                 } else if ("已收货".equals(statusstr)) {
-                    helper.setTextColor(R.id.tv_status, ContextCompat.getColor(mContext, R.color.orange_ffae33));
+                    helper.setTextColor(R.id.tv_discount_sums, ContextCompat.getColor(mContext, R.color.orange_ffae33));
                 } else if ("关闭".equals(statusstr)) {
-                    helper.setTextColor(R.id.tv_status, ContextCompat.getColor(mContext, R.color.green_40ff00));
+                    helper.setTextColor(R.id.tv_discount_sums, ContextCompat.getColor(mContext, R.color.green_40ff00));
                 }
             } else {
-                helper.getView(R.id.tv_status).setVisibility(View.GONE);
+                helper.getView(R.id.tv_discount_sums).setVisibility(View.GONE);
             }
             helper.setText(R.id.tv_receive_amount, String.format(mContext.getResources().getString(R.string.already_receive), item.getRcvamt()));
         } else {
-            helper.getView(R.id.tv_status).setVisibility(View.GONE);
+            helper.getView(R.id.tv_discount_sums).setVisibility(View.GONE);
             helper.getView(R.id.tv_receive_amount).setVisibility(View.GONE);
         }
 

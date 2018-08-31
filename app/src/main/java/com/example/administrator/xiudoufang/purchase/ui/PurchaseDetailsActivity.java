@@ -34,6 +34,7 @@ import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 import com.example.administrator.xiudoufang.purchase.adapter.SelectedProductListAdapter;
@@ -252,7 +253,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 LoadingViewDialog.getInstance().dismiss();
                 JSONObject jsonObject = JSONObject.parseObject(response.body());
                 if (!"1".equals(jsonObject.getString("messages"))) {
-                    Toast.makeText(PurchaseDetailsActivity.this, jsonObject.getString("messages"), Toast.LENGTH_SHORT).show();
+                    ToastUtils.show(PurchaseDetailsActivity.this, jsonObject.getString("messages"));
                 }
                 setResult(Activity.RESULT_OK);
                 finish();
@@ -344,7 +345,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
 
     private void showSubjectDialog() {
         if (mSubjectList == null) {
-            Toast.makeText(this, "暂无数据", Toast.LENGTH_SHORT).show();
+            ToastUtils.show(this, "暂无数据");
             return;
         }
         if (mSubjectDialog == null) {

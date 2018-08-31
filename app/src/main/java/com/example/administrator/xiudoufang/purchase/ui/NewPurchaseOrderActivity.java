@@ -34,6 +34,7 @@ import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 import com.example.administrator.xiudoufang.purchase.adapter.SelectedProductListAdapter;
@@ -281,7 +282,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
 
     private void showSubjectDialog() {
         if (mSubjectList == null) {
-            Toast.makeText(this, "暂无数据", Toast.LENGTH_SHORT).show();
+            ToastUtils.show(this, "暂无数据");
             return;
         }
         if (mSubjectDialog == null) {
@@ -340,7 +341,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         switch (view.getId()) {
             case R.id.tv_add_product:
                 if (TextUtils.isEmpty(mSivSupplier.getValue())) {
-                    Toast.makeText(this, "请先选择供应商", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show(this, "请先选择供应商");
                     return;
                 }
                 Intent intent = new Intent(this, SupplierProductListActivity.class);
@@ -356,7 +357,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                                 if (permission.granted) {
                                     ScanActivity.start(NewPurchaseOrderActivity.this);
                                 } else {
-                                    Toast.makeText(NewPurchaseOrderActivity.this, "请开启权限后重新尝试", Toast.LENGTH_SHORT).show();
+                                    ToastUtils.show(NewPurchaseOrderActivity.this, "请开启权限后重新尝试");
                                 }
                             }
                         });

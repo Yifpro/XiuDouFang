@@ -1,5 +1,8 @@
 package com.example.administrator.xiudoufang.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -43,7 +46,7 @@ public class OrderListBean {
         this.fx_ordermainlists = fx_ordermainlists;
     }
 
-    public static class OrderBean {
+    public static class OrderBean implements Parcelable {
         /**
          * iid : 34431
          * dianid : 45
@@ -147,5 +150,52 @@ public class OrderListBean {
         public void setPeihuo_status(String peihuo_status) {
             this.peihuo_status = peihuo_status;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.iid);
+            dest.writeString(this.dianid);
+            dest.writeString(this.c_id);
+            dest.writeString(this.customername);
+            dest.writeString(this.sno);
+            dest.writeString(this.xiadanriqi);
+            dest.writeString(this.yingshou_amt);
+            dest.writeString(this.queren_status);
+            dest.writeString(this.shipstatus);
+            dest.writeString(this.peihuo_status);
+        }
+
+        public OrderBean() {
+        }
+
+        protected OrderBean(Parcel in) {
+            this.iid = in.readString();
+            this.dianid = in.readString();
+            this.c_id = in.readString();
+            this.customername = in.readString();
+            this.sno = in.readString();
+            this.xiadanriqi = in.readString();
+            this.yingshou_amt = in.readString();
+            this.queren_status = in.readString();
+            this.shipstatus = in.readString();
+            this.peihuo_status = in.readString();
+        }
+
+        public static final Creator<OrderBean> CREATOR = new Creator<OrderBean>() {
+            @Override
+            public OrderBean createFromParcel(Parcel source) {
+                return new OrderBean(source);
+            }
+
+            @Override
+            public OrderBean[] newArray(int size) {
+                return new OrderBean[size];
+            }
+        };
     }
 }

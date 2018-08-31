@@ -48,7 +48,7 @@ public class DefaultHeader extends LinearLayout implements RefreshHeader {
         mIvArrow = view.findViewById(R.id.iv_arrow);
         mProgressView = view.findViewById(R.id.progress_view);
         mTitleText = view.findViewById(R.id.tv_top);
-        mTvTime = view.findViewById(R.id.tv_time);
+        mTvTime = view.findViewById(R.id.tv_this_collection);
         mTvTime.setText(PreferencesUtils.getPreferences().getString(PreferencesUtils.TIME_REFRESH, "-"));
         setMinimumHeight(SizeUtils.dp2px(60));
     }

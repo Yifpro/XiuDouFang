@@ -20,6 +20,7 @@ import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.bean.SupplierProductListBean;
 import com.example.administrator.xiudoufang.common.utils.ExpressionUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 import com.example.administrator.xiudoufang.common.widget.SingleLineTextDialog;
 
@@ -397,7 +398,7 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
                 } else if (TextUtils.isEmpty(mSivPurchaseAmount.getValue())) {
                     mSivPurchaseAmount.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
                 } else if ("0".equals(mSivPurchaseAmount.getValue()) || TextUtils.isEmpty(mSivPurchaseAmount.getValue())) {
-                    Toast.makeText(this, "商品数量不能小于 1", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show(this, "商品数量不能小于 1");
                 } else if (checkStopProduce()) {
                     if (mStopProduceDialog == null)
                         mStopProduceDialog = new StopProduceDialog();

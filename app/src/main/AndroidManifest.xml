@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".base.XiuDouFangApplication"
@@ -30,6 +31,7 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity android:name=".purchase.ui.SupplierDetailsActivity" />
         <activity android:name=".stock.ui.StockDetailsActivity" />
+        <activity android:name=".check.ui.WebActivity" />
         <activity android:name=".purchase.ui.NewPurchaseOrderActivity"
                   android:launchMode="singleTask" />
         <activity android:name=".purchase.ui.ScanActivity" />

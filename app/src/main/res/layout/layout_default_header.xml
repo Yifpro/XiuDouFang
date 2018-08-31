@@ -54,7 +54,7 @@
                 android:textSize="12dp" />
 
             <TextView
-                android:id="@+id/tv_time"
+                android:id="@+id/tv_this_collection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="今天 14:41"

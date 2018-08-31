@@ -132,4 +132,16 @@
     <string name="clear_transport_num">清除运号</string>
     <!--查单-->
     <string name="amt_format">¥ %s</string>
+    <string name="ph_amt_format">配货数：%s</string>
+    <string name="sum_format">小计：%s</string>
+    <string name="order_sums">本单金额：</string>
+    <string name="should_collected">本单应收：</string>
+    <string name="discount_sums">优惠金额：</string>
+    <string name="this_collection">本次收款：</string>
+    <string name="customer_1">客户：</string>
+    <string name="order_no_1">单号：</string>
+    <string name="status_1">状态：</string>
+    <string name="time_1">时间：</string>
+    <string name="detail">详情</string>
+    <string name="look_over_print_format">查看打印格式</string>
 </resources>

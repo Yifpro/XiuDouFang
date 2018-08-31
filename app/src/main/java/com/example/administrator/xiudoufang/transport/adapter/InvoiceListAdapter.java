@@ -24,8 +24,8 @@ public class InvoiceListAdapter extends BaseQuickAdapter<InvoiceListBean.Invoice
     @Override
     protected void convert(BaseViewHolder helper, InvoiceListBean.InvoiceBean item) {
         helper.setText(R.id.tv_invoice_no, item.getIssdocref());
-        helper.setText(R.id.tv_customer, item.getShipto());
-        helper.setText(R.id.tv_time, item.getIssDate());
+        helper.setText(R.id.tv_order_sums, item.getShipto());
+        helper.setText(R.id.tv_this_collection, item.getIssDate());
         helper.setText(R.id.tv_transport_num, item.getYunhao());
         helper.setVisible(R.id.iv_icon, !TextUtils.isEmpty(item.getKuaidi_pic()));
     }

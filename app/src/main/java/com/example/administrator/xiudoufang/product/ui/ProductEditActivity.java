@@ -17,6 +17,7 @@ import com.example.administrator.xiudoufang.bean.PicBean;
 import com.example.administrator.xiudoufang.bean.ProductListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.product.adapter.ProductEditAdapter;
 import com.example.administrator.xiudoufang.product.logic.ProductLogic;
@@ -102,7 +103,7 @@ public class ProductEditActivity extends AppCompatActivity implements IActivityB
                 LoadingViewDialog.getInstance().dismiss();
                 JSONObject jsonObject = JSONObject.parseObject(response.body());
                 if (!"1".equals(jsonObject.getString("messagestr"))) {
-                    Toast.makeText(ProductEditActivity.this, jsonObject.getString("messagestr"), Toast.LENGTH_SHORT).show();
+                    ToastUtils.show(ProductEditActivity.this, jsonObject.getString("messagestr"));
                 }
                 finish();
             }

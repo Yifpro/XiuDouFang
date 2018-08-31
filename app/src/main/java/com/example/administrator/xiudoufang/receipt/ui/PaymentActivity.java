@@ -25,6 +25,7 @@ import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 import com.example.administrator.xiudoufang.receipt.logic.CustomerListLogic;
@@ -261,7 +262,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
 
     private void showSubjectDialog() {
         if (list == null) {
-            Toast.makeText(this, "暂无数据", Toast.LENGTH_SHORT).show();
+            ToastUtils.show(this, "暂无数据");
             return;
         }
         if (mSubjectDialog == null) {
@@ -312,7 +313,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
                     }
                 });
             } else {
-                Toast.makeText(this, "服务器繁忙", Toast.LENGTH_SHORT).show();
+                ToastUtils.show(this, "服务器繁忙");
             }
         }
     }

@@ -16,6 +16,7 @@ import com.example.administrator.xiudoufang.base.MainActivity;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SoftInputHelper;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.common.widget.SimpleEditTextView;
 import com.example.administrator.xiudoufang.base.IActivityBase;
@@ -112,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
                         showVerificationCodeDialog(jsonObject.getString("userid"));
                     }
                 } else {
-                    Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    ToastUtils.show(LoginActivity.this, msg);
                 }
             }
         });
@@ -128,7 +129,7 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
                 @Override
                 public void onClick(String phoneCode) {
                     if (TextUtils.isEmpty(phoneCode)) {
-                        Toast.makeText(LoginActivity.this, "验证码不能为空", Toast.LENGTH_SHORT).show();
+                        ToastUtils.show(LoginActivity.this, "验证码不能为空");
                         return;
                     }
                     LoadingViewDialog.getInstance().show(LoginActivity.this);
@@ -157,7 +158,7 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
                 if (!TextUtils.isEmpty(messagestr)) {
                     LoadingViewDialog.getInstance().dismiss();
                     mVerificateCodeDialog.setEmpty();
-                    Toast.makeText(LoginActivity.this, messagestr, Toast.LENGTH_SHORT).show();
+                    ToastUtils.show(LoginActivity.this, messagestr);
                 } else {
                     mLogic.cacheLoginInfo(LoginActivity.this, response.body());
                     if (mIvPsdStatus.isSelected()) {
