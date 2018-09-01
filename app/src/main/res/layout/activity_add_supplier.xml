@@ -23,19 +23,19 @@
         app:siv_type="TYPE_EDIT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
+        android:id="@+id/siv_mobile_phone_num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:siv_hint="@string/input_mobile_phone_num"
+        app:siv_key="@string/mobile_phone_num"
+        app:siv_type="TYPE_EDIT"/>
+
+    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_phone_num"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:siv_hint="@string/input_phone_num"
         app:siv_key="@string/phone_num"
-        app:siv_type="TYPE_EDIT"/>
-
-    <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-        android:id="@+id/siv_telephone_num"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:siv_hint="@string/input_telephone_num"
-        app:siv_key="@string/telephone_num"
         app:siv_type="TYPE_EDIT"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView

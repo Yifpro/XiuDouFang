@@ -80,6 +80,69 @@ public class CustomerListBean {
         private List<ShouhuodizhiBean> shouhuodizhi;
         private List<FreightBean> freight;
         private boolean isSelected = true;
+        private String defaultMobilePhoneNum;
+        private String newMobilePhoneNum;
+        private String newPhoneNum;
+        private String addContact;
+        private String addCollectGoodsAddress;
+        private String addDeliverGoodsAddress;
+        private String addCargoTerminal;
+
+        public String getDefaultMobilePhoneNum() {
+            return defaultMobilePhoneNum;
+        }
+
+        public void setDefaultMobilePhoneNum(String defaultMobilePhoneNum) {
+            this.defaultMobilePhoneNum = defaultMobilePhoneNum;
+        }
+
+        public String getNewMobilePhoneNum() {
+            return newMobilePhoneNum;
+        }
+
+        public void setNewMobilePhoneNum(String newMobilePhoneNum) {
+            this.newMobilePhoneNum = newMobilePhoneNum;
+        }
+
+        public String getNewPhoneNum() {
+            return newPhoneNum;
+        }
+
+        public void setNewPhoneNum(String newPhoneNum) {
+            this.newPhoneNum = newPhoneNum;
+        }
+
+        public String getAddContact() {
+            return addContact;
+        }
+
+        public void setAddContact(String addContact) {
+            this.addContact = addContact;
+        }
+
+        public String getAddCollectGoodsAddress() {
+            return addCollectGoodsAddress;
+        }
+
+        public void setAddCollectGoodsAddress(String addCollectGoodsAddress) {
+            this.addCollectGoodsAddress = addCollectGoodsAddress;
+        }
+
+        public String getAddDeliverGoodsAddress() {
+            return addDeliverGoodsAddress;
+        }
+
+        public void setAddDeliverGoodsAddress(String addDeliverGoodsAddress) {
+            this.addDeliverGoodsAddress = addDeliverGoodsAddress;
+        }
+
+        public String getAddCargoTerminal() {
+            return addCargoTerminal;
+        }
+
+        public void setAddCargoTerminal(String addCargoTerminal) {
+            this.addCargoTerminal = addCargoTerminal;
+        }
 
         public boolean isSelected() {
             return isSelected;
@@ -326,6 +389,10 @@ public class CustomerListBean {
                 this.qq = qq;
             }
 
+            public QqBean(String qq) {
+                this.qq = qq;
+            }
+
             @Override
             public int describeContents() {
                 return 0;
@@ -357,6 +424,11 @@ public class CustomerListBean {
         }
 
         public static class WeixinhaoBean implements Parcelable {
+
+            public WeixinhaoBean(String weixinhao) {
+                this.weixinhao = weixinhao;
+            }
+
             /**
              * weixinhao : 18505295858
              */
@@ -492,9 +564,14 @@ public class CustomerListBean {
         }
 
         public static class FahuodizhiBean implements Parcelable {
+            public FahuodizhiBean(String fahuodizhi) {
+                this.fahuodizhi = fahuodizhi;
+            }
+
             /**
              * fahuodizhi : 闵行区老北翟路4855号
              */
+
 
             private String fahuodizhi;
 
@@ -542,6 +619,10 @@ public class CustomerListBean {
              */
 
             private String shouhuodizhi;
+
+            public ShouhuodizhiBean(String shouhuodizhi) {
+                this.shouhuodizhi = shouhuodizhi;
+            }
 
             public String getShouhuodizhi() {
                 return shouhuodizhi;
@@ -629,7 +710,6 @@ public class CustomerListBean {
         public CustomerBean() {
         }
 
-
         @Override
         public int describeContents() {
             return 0;
@@ -660,6 +740,13 @@ public class CustomerListBean {
             dest.writeTypedList(this.shouhuodizhi);
             dest.writeTypedList(this.freight);
             dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
+            dest.writeString(this.defaultMobilePhoneNum);
+            dest.writeString(this.newMobilePhoneNum);
+            dest.writeString(this.newPhoneNum);
+            dest.writeString(this.addContact);
+            dest.writeString(this.addCollectGoodsAddress);
+            dest.writeString(this.addDeliverGoodsAddress);
+            dest.writeString(this.addCargoTerminal);
         }
 
         protected CustomerBean(Parcel in) {
@@ -686,6 +773,13 @@ public class CustomerListBean {
             this.shouhuodizhi = in.createTypedArrayList(ShouhuodizhiBean.CREATOR);
             this.freight = in.createTypedArrayList(FreightBean.CREATOR);
             this.isSelected = in.readByte() != 0;
+            this.defaultMobilePhoneNum = in.readString();
+            this.newMobilePhoneNum = in.readString();
+            this.newPhoneNum = in.readString();
+            this.addContact = in.readString();
+            this.addCollectGoodsAddress = in.readString();
+            this.addDeliverGoodsAddress = in.readString();
+            this.addCargoTerminal = in.readString();
         }
 
         public static final Creator<CustomerBean> CREATOR = new Creator<CustomerBean>() {

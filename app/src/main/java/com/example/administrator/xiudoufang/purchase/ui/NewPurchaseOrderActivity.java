@@ -247,6 +247,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                 startActivity(intent);
             }
         });
+        LoadingViewDialog.getInstance().show(this);
         loadSubjectList();
     }
 

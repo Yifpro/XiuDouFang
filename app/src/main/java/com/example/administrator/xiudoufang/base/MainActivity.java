@@ -10,7 +10,7 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.check.ui.OrderListActivity;
-import com.example.administrator.xiudoufang.open.OpenBillActivity;
+import com.example.administrator.xiudoufang.open.ui.SalesOrderActivity;
 import com.example.administrator.xiudoufang.product.ui.ProductListActivity;
 import com.example.administrator.xiudoufang.receipt.ui.CustomerListActivity;
 import com.example.administrator.xiudoufang.transport.ui.InvoiceListActivity;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements IActivityBase {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (position) {
                     case 0:
-                        OpenBillActivity.start(MainActivity.this);
+                        SalesOrderActivity.start(MainActivity.this);
                         break;
                     case 1:
                         OrderListActivity.start(MainActivity.this);

@@ -8,6 +8,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -20,10 +23,14 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseTextWatcher;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.CustomerListBean;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SoftInputHelper;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
+import com.example.administrator.xiudoufang.common.widget.CustomPopWindow;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.common.utils.SoftKeyBoardListener;
+import com.example.administrator.xiudoufang.open.ui.AddCustomerActivity;
+import com.example.administrator.xiudoufang.open.ui.SalesOrderActivity;
 import com.example.administrator.xiudoufang.receipt.adapter.CustomerListAdapter;
 import com.example.administrator.xiudoufang.receipt.logic.CustomerListLogic;
 import com.lzy.okgo.callback.StringCallback;
@@ -40,6 +47,7 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
 
     private final int COUNT = 20;
     public static final String SELECTED_ITEM = "selected_item";
+    public static final String FROM_CLASS = "from_class";
 
     private RefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -87,36 +95,9 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
         mLogic = new CustomerListLogic();
         mAdapter = new CustomerListAdapter(R.layout.layout_list_item_customer_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(CustomerListActivity.this, PaymentActivity.class);
-                intent.putExtra(SELECTED_ITEM, mList.get(position));
-                CustomerListActivity.this.startActivity(intent);
-            }
-        });
-        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(@NonNull final RefreshLayout refreshLayout) {
-                mRefreshLayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadCustomerList(true);
-                    }
-                }, 2000);
-            }
-        });
-        mRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(@NonNull final RefreshLayout refreshLayout) {
-                mRefreshLayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadCustomerList(false);
-                    }
-                }, 2000);
-            }
-        });
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
+        mRefreshLayout.setOnRefreshListener(new InnerRefreshListener());
+        mRefreshLayout.setOnLoadMoreListener(new InnerLoadMoreListener());
         mRefreshLayout.setEnableLoadMoreWhenContentNotFull(false);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -141,6 +122,7 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
         mLogic.requestCustomerList(mParams, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
+                LogUtils.e("客户列表 -> " + response.body());
                 LoadingViewDialog.getInstance().dismiss();
                 CustomerListBean customerListBean = JSONObject.parseObject(response.body(), CustomerListBean.class);
                 List<CustomerListBean.CustomerBean> temp = customerListBean.getCustomerlist();
@@ -161,6 +143,23 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (SalesOrderActivity.TAG.equals(getIntent().getStringExtra(FROM_CLASS)))
+            getMenuInflater().inflate(R.menu.menu_customer_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.toolbar_customer:
+                AddCustomerActivity.start(CustomerListActivity.this);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -226,6 +225,46 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
             mFilterText = editable.toString().trim();
             int length = editable.toString().trim().length();
             mIvClose.setVisibility(length > 0 ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            Class clazz = PaymentActivity.class;
+            if (SalesOrderActivity.TAG.equals(getIntent().getStringExtra(FROM_CLASS))) {
+                clazz = CustomerDetailsActivity.class;
+            }
+            Intent intent = new Intent(CustomerListActivity.this, clazz);
+            intent.putExtra(SELECTED_ITEM, mList.get(position));
+            CustomerListActivity.this.startActivity(intent);
+        }
+    }
+
+    private class InnerRefreshListener implements OnRefreshListener {
+
+        @Override
+        public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+            mRefreshLayout.getLayout().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadCustomerList(true);
+                }
+            }, 2000);
+        }
+    }
+
+    private class InnerLoadMoreListener implements OnLoadMoreListener {
+
+        @Override
+        public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+            mRefreshLayout.getLayout().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadCustomerList(false);
+                }
+            }, 2000);
         }
     }
 }

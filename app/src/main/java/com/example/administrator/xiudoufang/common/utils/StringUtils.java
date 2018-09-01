@@ -44,6 +44,7 @@ public class StringUtils {
             builder.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
         }
         builder.setLength(builder.length() - 1);
+        LogUtils.e("url -> " + builder.toString());
         return builder.toString();
     }
 
@@ -100,7 +101,7 @@ public class StringUtils {
         String month = tempMonth.length() == 1 ? "0" + tempMonth : tempMonth;
         String tempDate = String.valueOf(calendar.get(Calendar.DATE));
         String date = tempDate.length() == 1 ? "0" + tempDate : tempDate;
-        builder.append(calendar.get(Calendar.YEAR)).append("-").append(month).append("-").append(calendar.get(Calendar.DATE));
+        builder.append(calendar.get(Calendar.YEAR)).append("-").append(month).append("-").append(date);
         return builder.toString();
     }
 

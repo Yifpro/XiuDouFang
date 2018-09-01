@@ -60,11 +60,17 @@
         <activity android:name=".receipt.ui.PaymentActivity"/>
         <activity android:name=".check.ui.OrderListActivity"/>
         <activity android:name=".check.ui.OrderQueryActivity"/>
-        <activity android:name=".open.OpenBillActivity"/>
+        <activity android:name=".open.ui.SalesOrderActivity"
+                  android:launchMode="singleTask"
+                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity android:name=".stock.ui.TypeListActivity" />
         <activity android:name=".product.ui.ProductDetailsActivity"/>
         <activity android:name=".transport.ui.InvoiceDetailsActivity" />
         <activity android:name=".check.ui.OrderDetailsActivity" />
+        <activity android:name=".open.ui.SalesProductListActivity"/>
+        <activity android:name=".receipt.ui.CustomerDetailsActivity" />
+        <activity android:name=".open.ui.SalesProductDetailsActivity" />
+        <activity android:name=".open.ui.AddCustomerActivity" />
     </application>
 
 </manifest>

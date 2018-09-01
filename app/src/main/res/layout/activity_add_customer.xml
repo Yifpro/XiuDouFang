@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_toolbar"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray_cccccc"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="18dp"
+                android:background="@color/gray_cccccc"
+                app:layout_constraintTop_toBottomOf="@id/tv_key"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:civ_hint="客户名称(必填)"
+                app:civ_key="客户名称"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_mobile_phone_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:civ_hint="手机号码(选填)"
+                app:civ_key="手机号码"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_total_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:civ_hint="客户全称(选填)"
+                app:civ_key="客户全称"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:civ_hint="客户编号(选填)"
+                app:civ_key="客户编号"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:civ_hint="联系人(选填)"
+                app:civ_key="联系人"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_phone_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:civ_hint="电话号码(选填)"
+                app:civ_key="电话号码"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_qq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:civ_hint="QQ(选填)"
+                app:civ_key="QQ"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_wechat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:civ_hint="微信(选填)"
+                app:civ_key="微信"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_deliver_goods_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:civ_hint="发货地址(选填)"
+                app:civ_key="发货地址"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_collect_goods_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:civ_hint="收货地址(选填)"
+                app:civ_key="收货地址"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_cargo_terminal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:civ_hint="货运站(选填)"
+                app:civ_key="货运站"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_area_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:civ_hint="区域类型(选填)"
+                app:civ_key="区域类型"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_custom_define_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:onClick="onChoose"
+                app:civ_isShowNext="true"
+                app:civ_key="手动选择区域编号类型"
+                app:civ_keyColor="@color/colorPrimary"
+                app:civ_type="TYPE_TEXT"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_area_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:civ_hint="区域编号(选填)"
+                app:civ_key="区域编号"/>
+
+            <com.example.administrator.xiudoufang.common.widget.CustomerInfoView
+                android:id="@+id/civ_area_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:civ_hint="区域名称(选填)"
+                app:civ_key="区域名称"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

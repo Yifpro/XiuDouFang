@@ -25,9 +25,9 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
     private SearchInfoView mSivName;
     private SearchInfoView mSivTotalName;
     private SearchInfoView mSivDebt;
-    private SearchInfoView mSivPhoneNum;
+    private SearchInfoView mSivMobilePhoneNum;
+    private SearchInfoView mSivNewMobilePhoneNum;
     private SearchInfoView mSivNewPhoneNum;
-    private SearchInfoView mSivNewTelephoneNum;
     private SearchInfoView mSivNewContact;
     private SearchInfoView mSivCustomArea;
     private SearchInfoView mSivAreaNo;
@@ -46,9 +46,9 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
         mSivName = findViewById(R.id.siv_name);
         mSivTotalName = findViewById(R.id.siv_total_name);
         mSivDebt = findViewById(R.id.siv_debt);
-        mSivPhoneNum = findViewById(R.id.siv_phone_num);
+        mSivMobilePhoneNum = findViewById(R.id.siv_mobile_phone_num);
+        mSivNewMobilePhoneNum = findViewById(R.id.siv_new_mobile_phone_num);
         mSivNewPhoneNum = findViewById(R.id.siv_new_phone_num);
-        mSivNewTelephoneNum = findViewById(R.id.siv_new_telephone_num);
         mSivNewContact = findViewById(R.id.siv_new_contact);
         mSivCustomArea = findViewById(R.id.siv_custom_area);
         mSivAreaNo = findViewById(R.id.siv_area_no);
@@ -66,7 +66,7 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
             mSivName.setValue(mBean.getCustomername());
             mSivTotalName.setValue(mBean.getQuancheng());
             mSivDebt.setValue(mBean.getDebt());
-            mSivPhoneNum.setValue(mBean.getTelephone());
+            mSivMobilePhoneNum.setValue(mBean.getTelephone());
             mSivAreaNo.setValue(mBean.getQuyuno());
             mSivAreaName.setValue(mBean.getQuyu());
         }
@@ -102,8 +102,8 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
                 details.setTotalName(mBean.getQuancheng());
                 details.setDebt(mBean.getDebt());
                 details.setPhoneNum(mBean.getTelephone());
-                details.setNewPhoneNum(mSivNewPhoneNum.getValue());
-                details.setNewTelephoneNum(mSivNewTelephoneNum.getValue());
+                details.setNewPhoneNum(mSivNewMobilePhoneNum.getValue());
+                details.setNewTelephoneNum(mSivNewPhoneNum.getValue());
                 details.setNewContact(mSivNewContact.getValue());
                 details.setAreaNo(mSivAreaNo.getValue());
                 details.setAreaName(mSivAreaName.getValue());

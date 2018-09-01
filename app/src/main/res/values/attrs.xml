@@ -34,4 +34,16 @@
         <attr name="siv_leftTitle" format="string|reference" />
         <attr name="siv_rightTitle" format="string|reference" />
     </declare-styleable>
+
+    <declare-styleable name="CustomerInfoView">
+        <attr name="civ_type">
+            <enum name="TYPE_EDIT" value="0" />
+            <enum name="TYPE_TEXT" value="1" />
+        </attr>
+        <attr name="civ_key" format="string|reference" />
+        <attr name="civ_value" format="string|reference" />
+        <attr name="civ_hint" format="string|reference" />
+        <attr name="civ_isShowNext" format="boolean" />
+        <attr name="civ_keyColor" format="color" />
+    </declare-styleable>
 </resources>

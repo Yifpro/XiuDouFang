@@ -24,8 +24,8 @@ public class AddSupplierActivity extends AppCompatActivity implements IActivityB
 
     private SearchInfoView mSivName;
     private SearchInfoView mSivTotalName;
+    private SearchInfoView mSivMobilePhoneNum;
     private SearchInfoView mSivPhoneNum;
-    private SearchInfoView mSivTelephoneNum;
     private SearchInfoView mSivContact;
     private SearchInfoView mSivAreaNo;
     private SearchInfoView mSivAreaName;
@@ -45,8 +45,8 @@ public class AddSupplierActivity extends AppCompatActivity implements IActivityB
         setTitle("新增供应商");
         mSivName = findViewById(R.id.siv_name);
         mSivTotalName = findViewById(R.id.siv_total_name);
+        mSivMobilePhoneNum = findViewById(R.id.siv_mobile_phone_num);
         mSivPhoneNum = findViewById(R.id.siv_phone_num);
-        mSivTelephoneNum = findViewById(R.id.siv_telephone_num);
         mSivContact = findViewById(R.id.siv_contact);
         mSivAreaNo = findViewById(R.id.siv_area_no);
         mSivAreaName = findViewById(R.id.siv_area_name);
@@ -69,8 +69,8 @@ public class AddSupplierActivity extends AppCompatActivity implements IActivityB
             supplier.setId("0");
             supplier.setName(mSivName.getValue());
             supplier.setTotalName(mSivTotalName.getValue());
-            supplier.setNewPhoneNum(mSivPhoneNum.getValue());
-            supplier.setNewTelephoneNum(mSivTelephoneNum.getValue());
+            supplier.setNewPhoneNum(mSivMobilePhoneNum.getValue());
+            supplier.setNewTelephoneNum(mSivPhoneNum.getValue());
             supplier.setNewContact(mSivContact.getValue());
             supplier.setAreaNo(mSivAreaNo.getValue());
             supplier.setAreaName(mSivAreaName.getValue());

@@ -23,6 +23,7 @@ import com.example.administrator.xiudoufang.check.adapter.PopupOperateAdapter;
 import com.example.administrator.xiudoufang.check.logic.OrderListLogic;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
+import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.CustomPopWindow;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
@@ -141,7 +142,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements IActivity
                     .setOutsideTouchable(true)
                     .create();
         }
-        mPopupWindow.showAsDropDown(getWindow().getDecorView().findViewById(R.id.toolbar_operate), 0, 0);
+        mPopupWindow.showAsDropDown(findViewById(R.id.toolbar_operate), -80, 0);
     }
 
     private void loadOrderDetails() {
