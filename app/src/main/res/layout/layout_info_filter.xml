@@ -19,7 +19,7 @@
         android:hint="@string/search_in_english"
         android:singleLine="true"
         android:padding="5dp"
-        android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
+        android:textCursorDrawable="@drawable/bg_edit_text_cursor_shape"
         android:textSize="14dp"
         android:imeOptions="actionSearch"
         app:layout_constraintBottom_toBottomOf="parent"

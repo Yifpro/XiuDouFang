@@ -112,7 +112,7 @@ public final class SizeUtils {
     }
 
     /**
-     * Converts an unpacked complex data value holding a dimension to its final floating
+     * Converts an unpacked complex data value holding bg_segment_text_color_selector dimension to its final floating
      * point value. The two parameters <var>unit</var> and <var>value</var>
      * are as in {@link TypedValue#TYPE_DIMENSION}.
      *
@@ -126,7 +126,7 @@ public final class SizeUtils {
     }
 
     /**
-     * Converts an unpacked complex data value holding a dimension to its final floating
+     * Converts an unpacked complex data value holding bg_segment_text_color_selector dimension to its final floating
      * point value. The two parameters <var>unit</var> and <var>value</var>
      * are as in {@link TypedValue#TYPE_DIMENSION}.
      *

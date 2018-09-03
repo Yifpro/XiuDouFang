@@ -26,10 +26,7 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseTextWatcher;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
-import com.example.administrator.xiudoufang.bean.ProductItem;
-import com.example.administrator.xiudoufang.bean.SupplierProductListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SoftInputHelper;
 import com.example.administrator.xiudoufang.common.utils.SoftKeyBoardListener;
@@ -37,7 +34,6 @@ import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.open.adapter.SalesProductListAdapter;
 import com.example.administrator.xiudoufang.open.logic.SalesOrderLogic;
-import com.example.administrator.xiudoufang.purchase.ui.NewPurchaseOrderActivity;
 import com.lzy.okgo.model.Response;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -55,6 +51,7 @@ public class SalesProductListActivity extends AppCompatActivity implements IActi
     private final int COUNT = 20;
     public static final String TAG = SalesProductListActivity.class.getSimpleName();
     public static final String SELECTED_PRODUCT_LIST = "selected_product_list";
+    public static final String SELECTED_ITEM = "selected_item";
 
     private RefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -136,10 +133,16 @@ public class SalesProductListActivity extends AppCompatActivity implements IActi
         mLogic.requestProductList(mParams, new JsonCallback<SalesProductListBean>() {
             @Override
             public void onSuccess(Response<SalesProductListBean> response) {
-                LogUtils.e("产品列表 -> " + response.body());
                 LoadingViewDialog.getInstance().dismiss();
                 List<SalesProductListBean.SalesProductBean> temp = response.body().getChanpinlist();
-                LogUtils.e("temp size " + temp.size());
+                for (SalesProductListBean.SalesProductBean bean : temp) {
+                    for (SalesProductListBean.SalesProductBean.PacklistBean b: bean.getPacklist()) {
+                        if ("1".equals(b.getCheck())) {
+                            bean.setFactor(b.getUnit_bilv());
+                            bean.setUnitname(b.getUnitname());
+                        }
+                    }
+                }
                 if (isFiltering) {
                     mList.clear();
                     mList.addAll(temp);
@@ -275,14 +278,10 @@ public class SalesProductListActivity extends AppCompatActivity implements IActi
 
         @Override
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-           /* if ("1".equals(mList.get(position).getStop_sales())) {
-                ToastUtils.show(com.example.administrator.xiudoufang.purchase.ui.SupplierProductListActivity.this, "该产品已停售");
-                return;
-            }
-            Intent intent = new Intent(com.example.administrator.xiudoufang.purchase.ui.SupplierProductListActivity.this, SupplierProductDetailsActivity.class);
-            intent.putExtra(SupplierProductDetailsActivity.FROM_CLASS, TAG);
-            intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_BEAN, mList.get(position));
-            startActivity(intent);*/
+            Intent intent = new Intent(SalesProductListActivity.this, SalesProductDetailsActivity.class);
+            intent.putExtra(SELECTED_ITEM, mList.get(position));
+            intent.putExtra(SalesProductDetailsActivity.FROM_CLASS, TAG);
+            startActivity(intent);
         }
     }
 

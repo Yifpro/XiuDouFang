@@ -21,7 +21,7 @@
         android:id="@+id/tv_total_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10"
+        android:text="0"
         android:textColor="@color/black"
         android:textSize="14dp"
         app:layout_constraintLeft_toRightOf="@id/textview_1"/>
@@ -73,21 +73,15 @@
         app:layout_constraintTop_toBottomOf="@id/textview_2"/>
 
     <TextView
-        android:id="@+id/textview_3"
+        android:id="@+id/tv_debt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="欠："
+        android:text="欠：-"
         android:textColor="@color/black"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="@id/tv_reopen"
         app:layout_constraintLeft_toRightOf="@id/tv_reopen"
         app:layout_constraintRight_toLeftOf="@id/tv_create_order"
         app:layout_constraintTop_toTopOf="@id/tv_reopen"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="14dp"/>
 
 </android.support.constraint.ConstraintLayout>

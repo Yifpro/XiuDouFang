@@ -45,6 +45,7 @@
         android:layout_height="28dp"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline_2"
@@ -58,7 +59,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_left_segment_selector"
             android:gravity="center"
-            android:textColor="@color/bg_segment_text_color_selector"
+            android:textColor="@drawable/bg_segment_text_color_selector"
             android:textSize="12dp"/>
 
         <View
@@ -73,7 +74,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_right_segment_selector"
             android:gravity="center"
-            android:textColor="@color/bg_segment_text_color_selector"
+            android:textColor="@drawable/bg_segment_text_color_selector"
             android:textSize="12dp"/>
     </LinearLayout>
 
@@ -82,7 +83,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:cursorVisible="false"
-        android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
+        android:textCursorDrawable="@drawable/bg_edit_text_cursor_shape"
         android:textSize="14dp"
         android:theme="@style/SearchInfoEditText"
         android:visibility="gone"

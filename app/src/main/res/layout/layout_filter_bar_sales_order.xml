@@ -30,7 +30,7 @@
         android:imeOptions="actionSearch"
         android:padding="3dp"
         android:singleLine="true"
-        android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
+        android:textCursorDrawable="@drawable/bg_edit_text_cursor_shape"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -85,7 +85,7 @@ public class SalesProductListBean {
         private List<PifajiaBean> pifajia;
         private boolean isSelected;
         private boolean isShowSelect;
-        private String pnid;
+        private String pnid = "0";
         private String yanse;
         private String guige;
         private String factor;
@@ -94,12 +94,12 @@ public class SalesProductListBean {
         private String order_prc;
         private String s_jiage2;
         private String zengpin;
-        private String zhekou;
+        private String zhekou = "1";
         private String bz;
-        private String action;
+        private String action = "";
         private String jiagelaiyuan;
         private String huohao;
-        private String iscx;
+        private String iscx = "0";
 
         public String getIscx() {
             return iscx;
@@ -795,6 +795,7 @@ public class SalesProductListBean {
             dest.writeTypedList(this.pifajia);
             dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
             dest.writeByte(this.isShowSelect ? (byte) 1 : (byte) 0);
+            dest.writeString(this.pnid);
             dest.writeString(this.yanse);
             dest.writeString(this.guige);
             dest.writeString(this.factor);
@@ -806,7 +807,6 @@ public class SalesProductListBean {
             dest.writeString(this.zhekou);
             dest.writeString(this.bz);
             dest.writeString(this.action);
-            dest.writeString(this.pnid);
             dest.writeString(this.jiagelaiyuan);
             dest.writeString(this.huohao);
             dest.writeString(this.iscx);
@@ -840,6 +840,7 @@ public class SalesProductListBean {
             this.pifajia = in.createTypedArrayList(PifajiaBean.CREATOR);
             this.isSelected = in.readByte() != 0;
             this.isShowSelect = in.readByte() != 0;
+            this.pnid = in.readString();
             this.yanse = in.readString();
             this.guige = in.readString();
             this.factor = in.readString();
@@ -851,7 +852,6 @@ public class SalesProductListBean {
             this.zhekou = in.readString();
             this.bz = in.readString();
             this.action = in.readString();
-            this.pnid = in.readString();
             this.jiagelaiyuan = in.readString();
             this.huohao = in.readString();
             this.iscx = in.readString();

@@ -27,7 +27,7 @@
             android:layout_weight="1"
             android:background="@null"
             android:maxLines="1"
-            android:textCursorDrawable="@drawable/bg_simple_edit_text_cursor_shape"
+            android:textCursorDrawable="@drawable/bg_edit_text_cursor_shape"
             android:textSize="16dp" />
 
         <TextView

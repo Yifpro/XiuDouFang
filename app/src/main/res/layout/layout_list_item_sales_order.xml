@@ -15,7 +15,7 @@
         android:layout_height="64dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
         tools:src="@mipmap/ic_icon"/>
 
     <TextView
@@ -57,6 +57,18 @@
         tools:text="1个/个"/>
 
     <TextView
+        android:id="@+id/tv_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toRightOf="@+id/tv_unit"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_unit"
+        tools:text="颜色"/>
+
+    <TextView
         android:id="@+id/tv_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -69,13 +81,13 @@
 
     <TextView
         android:id="@+id/tv_reduce"
-        android:layout_width="18dp"
+        android:layout_width="24dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@drawable/bg_textview_reduce_shape"
         android:gravity="center"
-        android:paddingLeft="6dp"
-        android:paddingRight="6dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
         android:text="-"
         android:textColor="@color/black"
         android:textSize="14dp"
@@ -98,13 +110,13 @@
 
     <TextView
         android:id="@+id/tv_add"
-        android:layout_width="18dp"
+        android:layout_width="24dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@drawable/bg_textview_add_shape"
         android:gravity="center"
-        android:paddingLeft="6dp"
-        android:paddingRight="6dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
         android:text="+"
         android:textColor="@color/black"
         android:textSize="14dp"
