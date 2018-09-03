@@ -109,6 +109,7 @@ public class AddCustomerActivity extends AppCompatActivity implements IActivityB
                     mCivName.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
                 } else {
                     CustomerListBean.CustomerBean bean = new CustomerListBean.CustomerBean();
+                    bean.setC_id("0");
                     bean.setCustomername(mCivName.getValue());
                     bean.setNewMobilePhoneNum(mCivMobilePhoneNum.getValue());
                     bean.setQuancheng(mCivTotalName.getValue());

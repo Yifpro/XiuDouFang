@@ -96,7 +96,7 @@ public class SalesProductListBean {
         private String zengpin;
         private String zhekou = "1";
         private String bz;
-        private String action = "";
+        private String action;
         private String jiagelaiyuan;
         private String huohao;
         private String iscx = "0";

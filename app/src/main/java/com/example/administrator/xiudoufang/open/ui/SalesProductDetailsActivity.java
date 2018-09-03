@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
@@ -164,9 +166,13 @@ public class SalesProductDetailsActivity extends AppCompatActivity implements IA
 
     private void submitProduct() {
         SalesProductDetailsItem_2 colorItem = (SalesProductDetailsItem_2) mList.get(9);
-        mProductBean.setYanse(isHaveColor ? "无".equals(colorItem.getValue()) ? "" : colorItem.getValue() : "");
+        if (isHaveColor && !"无".equals(colorItem.getValue())) {
+            mProductBean.setYanse(colorItem.getValue());
+        }
         SalesProductDetailsItem_2 sizeItem = (SalesProductDetailsItem_2) mList.get(10);
-        mProductBean.setGuige(isHaveSize ? "无".equals(sizeItem.getValue()) ? "" : sizeItem.getValue() : "");
+        if (isHaveSize && !"无".equals(sizeItem.getValue())) {
+            mProductBean.setGuige(sizeItem.getValue());
+        }
         StringBuilder factorBuilder = new StringBuilder();
         StringBuilder unitBuilder = new StringBuilder();
         SalesProductDetailsItem_2 unitItem = (SalesProductDetailsItem_2) mList.get(8);
@@ -185,9 +191,9 @@ public class SalesProductDetailsActivity extends AppCompatActivity implements IA
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         mProductBean.setS_jiage2(decimalFormat.format(Double.parseDouble(unitPriceItem.getValue())));
         SalesProductDetailsItem_2 discountItem = (SalesProductDetailsItem_2) mList.get(14);
-        mProductBean.setZhekou(discountItem.getValue());
+        mProductBean.setZhekou(TextUtils.isEmpty(discountItem.getValue()) ? "0" : discountItem.getValue());
         SalesProductDetailsItem_3 giftItem = (SalesProductDetailsItem_3) mList.get(15);
-        mProductBean.setZengpin(giftItem.getValue());
+        mProductBean.setZengpin("否".equals(giftItem.getValue()) ? "0" : "1");
         SalesProductDetailsItem_3 priceSourceItem = (SalesProductDetailsItem_3) mList.get(16);
         mProductBean.setJiagelaiyuan(priceSourceItem.getValue());
         SalesProductDetailsItem_4 bzItem = (SalesProductDetailsItem_4) mList.get(17);
