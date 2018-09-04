@@ -38,6 +38,7 @@ import com.lzy.okgo.model.Response;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -138,10 +139,15 @@ public class SalesProductListActivity extends AppCompatActivity implements IActi
                 for (SalesProductListBean.SalesProductBean bean : temp) {
                     for (SalesProductListBean.SalesProductBean.PacklistBean b: bean.getPacklist()) {
                         if ("1".equals(b.getCheck())) {
+                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                            String price = decimalFormat.format(Double.parseDouble(b.getDengji_price()));
+                            bean.setOrder_prc(price);
+                            bean.setS_jiage2(price);
                             bean.setFactor(b.getUnit_bilv());
                             bean.setUnitname(b.getUnitname());
                         }
                     }
+
                 }
                 if (isFiltering) {
                     mList.clear();

@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +25,6 @@ import com.example.administrator.xiudoufang.bean.CustomerListBean;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SoftInputHelper;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
-import com.example.administrator.xiudoufang.common.widget.CustomPopWindow;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.common.utils.SoftKeyBoardListener;
 import com.example.administrator.xiudoufang.open.ui.AddCustomerActivity;
@@ -81,6 +79,7 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
         mEtFilter = findViewById(R.id.et_filter);
         mIvClose = findViewById(R.id.iv_close);
         mTvCancel = findViewById(R.id.tv_cancel);
+
         mEtFilter.setOnClickListener(this);
         mIvClose.setOnClickListener(this);
         mTvCancel.setOnClickListener(this);
@@ -106,6 +105,7 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
         loadCustomerList(true);
     }
 
+    //******** 加载客户列表 ********
     private void loadCustomerList(final boolean isRefresh) {
         if (isRefresh) mCurrentPage = 1;
         if (mParams == null) {

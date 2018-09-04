@@ -83,19 +83,11 @@ public class SalesProductDetailsActivity extends AppCompatActivity implements IA
         mList.add(new SalesProductDetailsItem_1("品牌", mProductBean.getPinpai()));
         mList.add(new SalesProductDetailsItem_1("条形码", mProductBean.getBarcode()));
         mUnits = new ArrayList<>();
-        int unitIndex = 0;
         for (int i = 0; i < mProductBean.getPacklist().size(); i++) {
             SalesProductListBean.SalesProductBean.PacklistBean bean = mProductBean.getPacklist().get(i);
-            if ("1".equals(bean.getCheck())) {
-                DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                String price = decimalFormat.format(Double.parseDouble(bean.getDengji_price()));
-                mProductBean.setOrder_prc(price);
-                mProductBean.setS_jiage2(price);
-                unitIndex = i;
-            }
             mUnits.add(bean.getUnit_bilv() + bean.getUnitname());
         }
-        mList.add(new SalesProductDetailsItem_2("销售单位", mUnits.get(unitIndex), mUnits, true, new InnerUnitClickListener()));
+        mList.add(new SalesProductDetailsItem_2("销售单位", mProductBean.getFactor() + mProductBean.getUnitname(), mUnits, true, new InnerUnitClickListener()));
         if (mProductBean.getColorlist() != null && mProductBean.getColorlist().size() > 0) {
             mColors = new ArrayList<>();
             mColors.add("无");
