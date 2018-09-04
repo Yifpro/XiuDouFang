@@ -3,7 +3,6 @@ package com.example.administrator.xiudoufang.open.ui;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.Nullable;
@@ -25,16 +24,11 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.CustomerListBean;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
-import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.CustomPopWindow;
-import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.open.adapter.SalesOrderAdapter;
 import com.example.administrator.xiudoufang.open.logic.SalesOrderLogic;
-import com.example.administrator.xiudoufang.purchase.ui.SupplierProductDetailsActivity;
-import com.example.administrator.xiudoufang.purchase.ui.SupplierProductListActivity;
 import com.example.administrator.xiudoufang.receipt.ui.CustomerListActivity;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
@@ -45,33 +39,33 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class SalesOrderActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
     public static final String TAG = SalesOrderActivity.class.getSimpleName();
+    public static final String C_ID = "c_id";
     public static final String SEARCH_ITEM = "search_item";
     public static final String CUSTOMER_DETAILS = "customer_details";
-    public static final String C_ID = "c_id";
+    public static final String SUBMIT_CUSTOMER = "submit_customer";
+    public static final String SUBMIT_PRODUCT_LIST = "submit_product_list";
     private static final int RESULT_FOR_SALES_PRODUCT_LIST = 117;
 
     private CustomPopWindow mPopupWindow;
-    private TextView mTvSelectCustomer;
+    private TextView mTvCustomer;
     private TextView mTvTotalAmount;
     private TextView mTvTotalPrice;
     private EditText mEtFilter;
     private SwipeMenuRecyclerView mRecyclerView;
 
     private SalesOrderLogic mLogic;
+    private SalesOrderAdapter mAdapter;
     private ArrayList<SalesProductListBean.SalesProductBean> mList;
-    private CustomerListBean.CustomerBean mCustomerDetailsBean;
+    private CustomerListBean.CustomerBean mCustomerBean;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, SalesOrderActivity.class);
         context.startActivity(intent);
     }
-
-    private SalesOrderAdapter mAdapter;
 
     @Override
     public int getLayoutId() {
@@ -81,19 +75,19 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
     @Override
     public void initView() {
         setTitle("销售单");
-        mTvSelectCustomer = findViewById(R.id.tv_select_customer);
+        mTvCustomer = findViewById(R.id.tv_customer);
         mTvTotalAmount = findViewById(R.id.tv_total_amount);
         mTvTotalPrice = findViewById(R.id.tv_total_price);
         mEtFilter = findViewById(R.id.et_filter);
         mRecyclerView = findViewById(R.id.recycler_view);
 
         mEtFilter.setOnClickListener(this);
-        mEtFilter.setOnEditorActionListener(new InnerEditActionListener());
-        mTvSelectCustomer.setOnClickListener(this);
+        mTvCustomer.setOnClickListener(this);
         findViewById(R.id.iv_scan).setOnClickListener(this);
         findViewById(R.id.tv_search).setOnClickListener(this);
         findViewById(R.id.tv_reopen).setOnClickListener(this);
         findViewById(R.id.tv_create_order).setOnClickListener(this);
+        mEtFilter.setOnEditorActionListener(new InnerEditActionListener());
     }
 
     @Override
@@ -119,10 +113,10 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
         CustomerListBean.CustomerBean bean = getIntent().getParcelableExtra(CUSTOMER_DETAILS);
         SalesProductListBean.SalesProductBean item = getIntent().getParcelableExtra(SalesProductDetailsActivity.SELECTED_ITEM);
         if (bean != null) {
-            mTvSelectCustomer.setText(bean.getCustomername());
+            mTvCustomer.setText(bean.getCustomername());
             TextView tvDebt = findViewById(R.id.tv_debt);
             tvDebt.setText(String.format(getString(R.string.debt_format), bean.getDebt()));
-            mCustomerDetailsBean = bean;
+            mCustomerBean = bean;
         } else if (item != null) {
             if (mList == null)
                 mList = new ArrayList<>();
@@ -229,58 +223,20 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
                     mEtFilter.setCursorVisible(true);
                 break;
             case R.id.tv_search:
-                if (mCustomerDetailsBean == null) {
+                if (mCustomerBean == null) {
                     ToastUtils.show(this, "请先选择购买产品的客户");
                 } else {
                     Intent i = new Intent(this, SalesProductListActivity.class);
                     i.putExtra(SEARCH_ITEM, mEtFilter.getText().toString());
-                    i.putExtra(C_ID, TextUtils.isEmpty(mCustomerDetailsBean.getC_id()) ? "0" : mCustomerDetailsBean.getC_id());
+                    i.putExtra(C_ID, TextUtils.isEmpty(mCustomerBean.getC_id()) ? "0" : mCustomerBean.getC_id());
                     startActivityForResult(i, RESULT_FOR_SALES_PRODUCT_LIST);
                 }
                 break;
             case R.id.tv_create_order:
-                SharedPreferences preferences = PreferencesUtils.getPreferences();
-                HashMap<String, String> params = new HashMap<>();
-                params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, "")); //店id
-                params.put("iid", "0"); //订单id
-                params.put("c_id", mCustomerDetailsBean.getC_id()); //客户id
-                params.put("customerno", mCustomerDetailsBean.setCustomerno()); //客户编号
-                params.put("customername", mCustomerDetailsBean.getCustomername()); //客户名称
-                params.put("telephone", mCustomerDetailsBean.getNewMobilePhoneNum()); //客户手机
-                params.put("tel", mCustomerDetailsBean.); //客户电话
-                params.put("QQ", mCustomerDetailsBean.getQq().get(0).getQq()); //客户qq
-                params.put("lianxiren", mCustomerDetailsBean.getAddContact()); //联系人
-                params.put("weixinhao", mCustomerDetailsBean.getWeixinhao().get(0).getWeixinhao()); //微信
-                params.put("fahuodizhi", mCustomerDetailsBean.getFahuodizhi().get(0).getFahuodizhi()); //发货地址
-                params.put("shouhuodizhi", mCustomerDetailsBean.getShouhuodizhi().get(0).getShouhuodizhi()); //收货地址
-                params.put("shishou_amt", ); //实收
-                params.put("yingshou_amt", ); //应收
-                params.put("userid", ); //用户id
-                params.put("remark", ); //备注
-                params.put("free", ); //优惠金额
-                params.put("allname", mCustomerDetailsBean.getQuancheng()); //全称
-                params.put("freight", ); //货运站
-                params.put("shoukuanid", ); //收款id
-                params.put("operatorid", ); //经办人
-                params.put("country", mCustomerDetailsBean.getCountry()); //区域类型
-                params.put("quyu", mCustomerDetailsBean.getQuyu()); //区域
-                params.put("quyuno", mCustomerDetailsBean.getQuyuno()); //区域id
-                params.put("action", ); //动作
-                params.put("ordertype", ); //订单类型
-                params.put("huoyunleixing", ); //货运类型
-                params.put("fahuodian", ); //发货店
-                params.put("xiadanriqi", ); //下单日期
-                params.put("jiaohuoriqi", ); //交货日期
-                params.put("yuji_jiaohuoriqi", ); //预计交货日期
-                params.put("teshu", ); //特殊订单
-                params.put("fujia_memo", ); //附加说明
-                params.put("kuaidiid", ); //快递id
-                params.put("feiyong", ); //费用
-                params.put("songhuo_time", ); //最佳送货
-                params.put("cust_orderno", ); //客户合同
-                params.put("confirm", ); //是否确认订单
-                params.put("pay_yueamt", ); //余额支付金额
-                params.put("cpjsonstr", ); //产品json
+                Intent i = new Intent(this, CreateOrderActivity.class);
+                i.putExtra(SUBMIT_CUSTOMER, mCustomerBean);
+                i.putExtra(SUBMIT_PRODUCT_LIST, mList);
+                startActivity(i);
                 break;
         }
     }
@@ -293,13 +249,13 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
                     || actionId == EditorInfo.IME_ACTION_SEND
                     || actionId == EditorInfo.IME_ACTION_DONE
                     || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
-                if (mCustomerDetailsBean == null) {
+                if (mCustomerBean == null) {
                     ToastUtils.show(SalesOrderActivity.this, "请先选择购买产品的客户");
                     return true;
                 } else {
                     Intent i = new Intent(SalesOrderActivity.this, SalesProductListActivity.class);
                     i.putExtra(SEARCH_ITEM, mEtFilter.getText().toString());
-                    i.putExtra(C_ID, TextUtils.isEmpty(mCustomerDetailsBean.getC_id()) ? "0" : mCustomerDetailsBean.getC_id());
+                    i.putExtra(C_ID, TextUtils.isEmpty(mCustomerBean.getC_id()) ? "0" : mCustomerBean.getC_id());
                     startActivityForResult(i, RESULT_FOR_SALES_PRODUCT_LIST);
                     return true;
                 }

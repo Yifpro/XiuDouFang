@@ -73,6 +73,8 @@
         <activity android:name=".open.ui.SalesProductDetailsActivity"
                   android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity android:name=".open.ui.AddCustomerActivity" />
+        <activity android:name=".open.ui.CreateOrderActivity"
+                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
     </application>
 
 </manifest>

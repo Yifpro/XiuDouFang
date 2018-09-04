@@ -24,7 +24,7 @@ public class SalesOrderLogic {
     }
 
     //******** 提交订单 ********
-    public void submitOrder(HashMap<String, String> params, JsonCallback<String> callback) {
+    public void saveOrCreateOrder(HashMap<String, String> params, JsonCallback<String> callback) {
         String json = JSONObject.toJSONString(params);
         LogUtils.e("提交订单 -> " + json);
         OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/postorderall?postiorder=0")

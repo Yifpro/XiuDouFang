@@ -501,6 +501,10 @@ public class CustomerListBean {
             public DianhuaBean() {
             }
 
+            public DianhuaBean(String dianhua) {
+                this.dianhua = dianhua;
+            }
+
             protected DianhuaBean(Parcel in) {
                 this.dianhua = in.readString();
             }
@@ -524,6 +528,10 @@ public class CustomerListBean {
              */
 
             private String telephone;
+
+            public TelephoneBean(String telephone) {
+                this.telephone = telephone;
+            }
 
             public String getTelephone() {
                 return telephone;

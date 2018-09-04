@@ -149,4 +149,5 @@
     <string name="add_deliver_goods_address">新增发货地址</string>
     <string name="add_cargo_terminal">新增货运站</string>
     <string name="debt_format">欠：%s</string>
+    <string name="customer_info">客户信息</string>
 </resources>

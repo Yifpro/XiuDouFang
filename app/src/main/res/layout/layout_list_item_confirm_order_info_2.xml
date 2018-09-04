@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.5"
+        android:orientation="vertical"/>
+    <TextView
+        android:id="@+id/tv_key"
+        android:textSize="14dp"
+        android:textColor="@color/black"
+        android:layout_marginRight="4dp"
+        app:layout_constraintRight_toLeftOf="@id/guideline_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/et_value"
+        android:textSize="14dp"
+        android:textColor="@color/black"
+        android:layout_marginLeft="4dp"
+        android:background="@drawable/bg_edittext_query_sales_order"
+        android:cursorVisible="false"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/guideline_1"
+        android:layout_width="0dp"
+        android:textCursorDrawable="@drawable/bg_edit_text_cursor_shape"
+        android:layout_height="wrap_content"/>
+</android.support.constraint.ConstraintLayout>

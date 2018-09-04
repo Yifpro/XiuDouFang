@@ -1,6 +1,9 @@
 package com.example.administrator.xiudoufang.bean;
 
-public class SettingItem {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class SettingItem implements Parcelable {
 
     private String key;
     private String value;
@@ -82,4 +85,38 @@ public class SettingItem {
         result = 37 * result + value.hashCode();
         return result;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.key);
+        dest.writeString(this.value);
+        dest.writeByte(this.isShowLine ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isShowNext ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isToogleButton ? (byte) 1 : (byte) 0);
+    }
+
+    protected SettingItem(Parcel in) {
+        this.key = in.readString();
+        this.value = in.readString();
+        this.isShowLine = in.readByte() != 0;
+        this.isShowNext = in.readByte() != 0;
+        this.isToogleButton = in.readByte() != 0;
+    }
+
+    public static final Creator<SettingItem> CREATOR = new Creator<SettingItem>() {
+        @Override
+        public SettingItem createFromParcel(Parcel source) {
+            return new SettingItem(source);
+        }
+
+        @Override
+        public SettingItem[] newArray(int size) {
+            return new SettingItem[size];
+        }
+    };
 }
