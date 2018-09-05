@@ -11,11 +11,21 @@ import java.util.List;
 
 public class OtherSeting_2 implements MultiItemEntity {
     private String title;
-    private List<String> content;
+    private List<String> list;
+    private String value;
 
-    public OtherSeting_2(String title, List<String> content) {
+    public OtherSeting_2(String title, List<String> list, String value) {
         this.title = title;
-        this.content = content;
+        this.list = list;
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String index) {
+        this.value = value;
     }
 
     public String getTitle() {
@@ -26,12 +36,12 @@ public class OtherSeting_2 implements MultiItemEntity {
         this.title = title;
     }
 
-    public List<String> getContent() {
-        return content;
+    public List<String> getList() {
+        return list;
     }
 
-    public void setContent(List<String> content) {
-        this.content = content;
+    public void setList(List<String> list) {
+        this.list = list;
     }
 
     @Override

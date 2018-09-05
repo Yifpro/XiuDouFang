@@ -12,10 +12,21 @@ import java.util.List;
 public class OtherSeting_1 implements MultiItemEntity {
     private String title;
     private List<OtherSettingItem> list;
+    private String value;
 
-    public OtherSeting_1(String title, List<OtherSettingItem> list) {
+
+    public OtherSeting_1(String title, List<OtherSettingItem> list, String value) {
         this.title = title;
         this.list = list;
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getTitle() {

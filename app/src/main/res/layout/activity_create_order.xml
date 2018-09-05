@@ -20,8 +20,8 @@
             android:layout_height="wrap_content"
             android:background="@color/gray_f2f2f2"
             android:gravity="center"
-            android:paddingBottom="1dp"
-            android:paddingTop="1dp"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
             android:text="@string/customer_info"
             android:textColor="@color/black"
             android:textSize="14dp"
@@ -146,8 +146,8 @@
             android:layout_marginTop="2dp"
             android:background="@color/gray_f2f2f2"
             android:gravity="center"
-            android:paddingBottom="1dp"
-            android:paddingTop="1dp"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
             android:text="产品列表"
             android:textColor="@color/black"
             android:textSize="14dp"
@@ -182,8 +182,7 @@
             android:paddingRight="6dp"
             android:paddingTop="4dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/line">
+            app:layout_constraintRight_toRightOf="parent">
 
             <TextView
                 android:id="@+id/textview_8"
@@ -198,7 +197,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/textview_8"
-                android:text="1121"
+                android:text="0"
                 android:textColor="@color/black"
                 android:textSize="14dp" />
 
@@ -216,7 +215,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="1121"
+                android:text="0.00"
                 android:textColor="@color/black"
                 android:textSize="14dp" />
         </RelativeLayout>

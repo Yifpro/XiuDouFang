@@ -4,6 +4,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -35,11 +36,17 @@ public class SalesOrderAdapter extends BaseItemDraggableAdapter<SalesProductList
         helper.setText(R.id.tv_id, item.getStyleno());
         helper.setText(R.id.tv_unit, item.getFactor() + item.getUnitname());
         helper.setText(R.id.tv_color, item.getYanse());
-        helper.setText(R.id.tv_price, item.getS_jiage2());
+        if (!"1".equals(item.getZhekou())) {
+            helper.setText(R.id.tv_discount, String.format(mContext.getString(R.string.discount_format), item.getZhekou()));
+        } else {
+            helper.setText(R.id.tv_discount, "");
+        }
+        double unitPrice = Double.parseDouble(item.getS_jiage2()) * Double.parseDouble(item.getZhekou());
+        TextView tvPrice = helper.getView(R.id.tv_price);
+        tvPrice.setText(String.format(mContext.getString(R.string.amt_format), mDecimalFormat.format(unitPrice)));
         helper.setText(R.id.et_amount, item.getCp_qty());
         double amount = Double.valueOf(item.getCp_qty());
-        double price = Double.valueOf(item.getS_jiage2());
-        helper.setText(R.id.tv_sums, mDecimalFormat.format(amount * price));
+        helper.setText(R.id.tv_sums, String.format(mContext.getString(R.string.sum_format), mDecimalFormat.format(amount * unitPrice)));
         final EditText etValue = helper.getView(R.id.et_amount);
         etValue.addTextChangedListener(new BaseTextWatcher() {
             @Override

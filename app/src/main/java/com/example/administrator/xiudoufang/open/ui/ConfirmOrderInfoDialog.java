@@ -17,6 +17,7 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.bean.OrderInfo;
 import com.example.administrator.xiudoufang.bean.OrderInfo_1;
 import com.example.administrator.xiudoufang.bean.OrderInfo_2;
+import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.open.BaseOrderInfo;
 import com.example.administrator.xiudoufang.open.adapter.ConfirmOrderInfoAdapter;
 
@@ -31,12 +32,18 @@ public class ConfirmOrderInfoDialog extends DialogFragment implements View.OnCli
     private ArrayList<MultiItemEntity> mList;
     private OnItemClickListener mListener;
 
-    public static SimpleTextDialog newInstance(ArrayList<String> list) {
-        SimpleTextDialog f = new SimpleTextDialog();
+    public static ConfirmOrderInfoDialog newInstance(ArrayList<String> list) {
+        ConfirmOrderInfoDialog f = new ConfirmOrderInfoDialog();
         Bundle args = new Bundle();
         args.putStringArrayList("list", list);
         f.setArguments(args);
         return f;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDialog().getWindow().setLayout(SizeUtils.dp2px(300), SizeUtils.dp2px(320));
     }
 
     @Nullable

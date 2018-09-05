@@ -1,8 +1,10 @@
 package com.example.administrator.xiudoufang.open.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
@@ -46,7 +48,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -54,6 +55,9 @@ import java.util.Locale;
  */
 
 public class CreateOrderActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
+
+    public static final String TAG = CreateOrderActivity.class.getSimpleName();
+    private static final int RESULT_FOR_PRODUCT_INFO_CHANGE = 121;
 
     private TextView mTvNo;
     private TextView mTvName;
@@ -69,15 +73,17 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
     private TimePickerView mStartTimePickerView;
     private TimePickerView mEndTimePickerView;
     private ConfirmOrderInfoDialog mConfirmOrderInfoDialog;
-
-    private SalesOrderLogic mLogic;
     private SimpleTextDialog mSalesSelectorDialog;
     private SimpleTextDialog mReceiptTypeDialog;
+
+    private SalesOrderLogic mLogic;
+    private SalesOrderAdapter mAdapter;
     private ArrayList<SettingItem> mSalesmanList;
     private ArrayList<SettingItem> mReceiptTypeList;
-    private List<SalesProductListBean.SalesProductBean> mList;
+    private ArrayList<SalesProductListBean.SalesProductBean> mList;
     private CustomerListBean.CustomerBean mCustomerBean;
     private OtherSetting mOtherSetting;
+    private int mLastIndex;
 
     @Override
     public int getLayoutId() {
@@ -108,9 +114,29 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
     }
 
     @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putParcelableArrayListExtra(SalesOrderActivity.RESULT_PRODUCT_LIST, mList);
+        setResult(Activity.RESULT_OK, intent);
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_FOR_PRODUCT_INFO_CHANGE && data != null) {
+            SalesProductListBean.SalesProductBean bean = data.getParcelableExtra(SalesProductDetailsActivity.SELECTED_ITEM);
+            mList.remove(mLastIndex);
+            mList.add(mLastIndex, bean);
+            mAdapter.setNewData(mList);
+            calculateAmountAndSums();
+        }
+    }
+
+    @Override
     public void initData() {
-        mCustomerBean = getIntent().getParcelableExtra(SalesOrderActivity.SUBMIT_CUSTOMER);
-        mList = getIntent().getParcelableArrayListExtra(SalesOrderActivity.SUBMIT_PRODUCT_LIST);
+        mCustomerBean = getIntent().getParcelableExtra(SalesOrderActivity.RESULT_CUSTOMER);
+        mList = getIntent().getParcelableArrayListExtra(SalesOrderActivity.RESULT_PRODUCT_LIST);
         mLogic = new SalesOrderLogic();
         mSalesmanList = new ArrayList<>();
         mReceiptTypeList = new ArrayList<>();
@@ -136,7 +162,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         mTvDebt.setText(mCustomerBean.getDebt());
         mTvCreateOrderDate.setText(StringUtils.getCurrentTime());
         mTvDeliveryDate.setText(StringUtils.getCurrentTime());
-        final SalesOrderAdapter adapter = new SalesOrderAdapter(R.layout.layout_list_item_sales_order, mList);
+        mAdapter = new SalesOrderAdapter(R.layout.layout_list_item_sales_order, mList);
         SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
             @Override
             public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int viewType) {
@@ -156,25 +182,18 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
                 menuBridge.closeMenu();
                 int adapterPosition = menuBridge.getAdapterPosition();
                 mList.remove(adapterPosition);
-                adapter.notifyItemChanged(adapterPosition);
-                statisticsData();
+                mAdapter.notifyItemChanged(adapterPosition);
+                calculateAmountAndSums();
             }
         };
         mRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
         mRecyclerView.setSwipeMenuItemClickListener(swipeMenuItemClickListener);
-        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter.bindToRecyclerView(mRecyclerView);
-        adapter.setOnItemChildClickListener(new InnerItemChildClickListener());
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(CreateOrderActivity.this, SalesProductDetailsActivity.class);
-                intent.putExtra(SalesProductListActivity.SELECTED_ITEM, mList.get(position));
-                intent.putExtra(SalesProductDetailsActivity.FROM_CLASS, SalesOrderActivity.TAG);
-                startActivity(intent);
-            }
-        });
+        mAdapter.bindToRecyclerView(mRecyclerView);
+        mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
+        calculateAmountAndSums();
     }
 
     @Override
@@ -209,6 +228,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         params.put("weixinhao", mCustomerBean.getWeixinhao().get(0).getWeixinhao()); //微信
         params.put("fahuodizhi", mCustomerBean.getFahuodizhi().get(0).getFahuodizhi()); //发货地址
         params.put("shouhuodizhi", mCustomerBean.getShouhuodizhi().get(0).getShouhuodizhi()); //收货地址
+
         params.put("shishou_amt", info.getBencishoukuan()); //本次收款
         params.put("yingshou_amt", info.getYingshou()); //应收 金额+其他费用
         params.put("userid", preferences.getString(PreferencesUtils.USER_ID, "")); //用户id
@@ -293,7 +313,22 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
                 break;
             case R.id.tv_submit_order:
                 if (mConfirmOrderInfoDialog == null) {
-                    mConfirmOrderInfoDialog = new ConfirmOrderInfoDialog();
+                    ArrayList<String> list = new ArrayList<>();
+                    list.add(mTvTotalPrice.getText().toString()); //本单金额
+                    list.add(mCustomerBean.getDebt()); //前结欠
+                    DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                    double sums = Double.parseDouble(mTvTotalPrice.getText().toString());
+                    double debt = Double.parseDouble(mCustomerBean.getDebt());
+                    String leijiqian = decimalFormat.format(sums + debt);
+                    list.add(leijiqian); //累计欠
+                    list.add(""); //其他费用
+                    list.add(mTvTotalPrice.getText().toString()); //本单应收
+                    list.add(leijiqian); //累计金额
+                    list.add(""); //本次收款
+                    list.add(""); //优惠金额
+                    list.add(mCustomerBean.getYue_amt()); //账户余额
+                    list.add(""); //余额支付
+                    mConfirmOrderInfoDialog = ConfirmOrderInfoDialog.newInstance(list);
                     mConfirmOrderInfoDialog.setOnItemClickListener(new InnerConfirmOrderInfoListener());
                 }
                 mConfirmOrderInfoDialog.show(getSupportFragmentManager(), "ConfirmOrderInfoDialog");
@@ -383,17 +418,19 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
                 .build();
     }
 
-    private void statisticsData() {
-        int amount = 0;
-        double result = 0;
-        for (int i = 0; i < mList.size(); i++) {
-            double totalPrice = Double.parseDouble(mList.get(i).getS_jiage2()) * Double.parseDouble(mList.get(i).getCp_qty());
-            result += totalPrice;
-            amount += Integer.valueOf(mList.get(i).getCp_qty());
+    private void calculateAmountAndSums() {
+        if (mList != null) {
+            int amount = 0;
+            double result = 0;
+            for (int i = 0; i < mList.size(); i++) {
+                double totalPrice = Double.parseDouble(mList.get(i).getS_jiage2()) * Double.parseDouble(mList.get(i).getCp_qty()) * Double.parseDouble(mList.get(i).getZhekou());
+                result += totalPrice;
+                amount += Integer.valueOf(mList.get(i).getCp_qty());
+            }
+            DecimalFormat mFormat = new DecimalFormat("0.00");
+            mTvTotalAmount.setText(String.valueOf(amount));
+            mTvTotalPrice.setText(mFormat.format(result));
         }
-        DecimalFormat mFormat = new DecimalFormat("0.00");
-        mTvTotalAmount.setText(String.valueOf(amount));
-        mTvTotalPrice.setText(mFormat.format(result));
     }
 
     private class InnerItemChildClickListener implements BaseQuickAdapter.OnItemChildClickListener {
@@ -410,7 +447,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
             int i = Integer.parseInt(etAmount.getText().toString());
             switch (view.getId()) {
                 case R.id.tv_reduce:
-                    if (i > 0) {
+                    if (i > 1) {
                         i--;
                     }
                     break;
@@ -426,7 +463,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
             assert tvSums != null;
             tvSums.setText(mFormat.format(totalPrice));
             etAmount.setText(String.valueOf(i));
-            statisticsData();
+            calculateAmountAndSums();
         }
     }
 
@@ -440,6 +477,18 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         @Override
         public void onConfirm(OrderInfo info) {
             saveOrCreateOrder(true, info);
+        }
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            Intent intent = new Intent(CreateOrderActivity.this, SalesProductDetailsActivity.class);
+            intent.putExtra(SalesProductListActivity.SELECTED_ITEM, mList.get(position));
+            intent.putExtra(SalesProductDetailsActivity.FROM_CLASS, TAG);
+            startActivityForResult(intent, RESULT_FOR_PRODUCT_INFO_CHANGE);
+            mLastIndex = position;
         }
     }
 }

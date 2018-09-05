@@ -220,7 +220,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                 int i = Integer.parseInt(tvAmount.getText().toString());
                 switch (view.getId()) {
                     case R.id.tv_reduce:
-                        if (i > 0) {
+                        if (i > 1) {
                             i--;
                         }
                         break;

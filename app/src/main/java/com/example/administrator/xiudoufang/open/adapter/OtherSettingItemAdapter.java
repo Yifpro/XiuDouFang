@@ -24,6 +24,5 @@ public class OtherSettingItemAdapter extends BaseQuickAdapter<OtherSettingItem, 
     protected void convert(BaseViewHolder helper, OtherSettingItem item) {
         helper.setText(R.id.tv, item.getKey());
         helper.getView(R.id.tv).setSelected(item.isSelected());
-        //R.layout.layout_list_item_other_setting_item;
     }
 }

@@ -676,6 +676,10 @@ public class CustomerListBean {
         }
 
         public static class FreightBean implements Parcelable {
+            public FreightBean(String freight) {
+                this.freight = freight;
+            }
+
             /**
              * freight : 18505295858
              */

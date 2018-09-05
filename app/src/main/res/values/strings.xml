@@ -149,5 +149,15 @@
     <string name="add_deliver_goods_address">新增发货地址</string>
     <string name="add_cargo_terminal">新增货运站</string>
     <string name="debt_format">欠：%s</string>
+    <string name="discount_format">%s折</string>
     <string name="customer_info">客户信息</string>
+    <string name="input_new_cargo_terminal">请输入新增货运站</string>
+    <string name="input_new_deliver_goods_address">请输入新增发货地址</string>
+    <string name="input_new_collect_goods_address">请输入新增收货地址</string>
+    <string name="input_new_contact">请输入新增联系人</string>
+    <string name="forcast">预</string>
+    <string name="total_amount_1">总数量：</string>
+    <string name="total_sums_1">总金额：</string>
+    <string name="reopen_order">重新开单</string>
+    <string name="create_order">生成订单</string>
 </resources>

@@ -24,7 +24,6 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.CustomerListBean;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.CustomPopWindow;
@@ -43,23 +42,27 @@ import java.util.ArrayList;
 public class SalesOrderActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
     public static final String TAG = SalesOrderActivity.class.getSimpleName();
-    public static final String C_ID = "c_id";
-    public static final String SEARCH_ITEM = "search_item";
-    public static final String CUSTOMER_DETAILS = "customer_details";
-    public static final String SUBMIT_CUSTOMER = "submit_customer";
-    public static final String SUBMIT_PRODUCT_LIST = "submit_product_list";
-    private static final int RESULT_FOR_SALES_PRODUCT_LIST = 117;
+    public static final String C_ID = "c_id"; //******** 获取当前客户 id ********
+    public static final String SEARCH_ITEM = "search_item"; //******** 获取过滤条件 ********
+    public static final String CUSTOMER_DETAILS = "customer_details"; //******** 获取选择客户 ********
+    public static final String RESULT_CUSTOMER = "submit_customer"; //******** 获取选定客户 ********
+    public static final String RESULT_PRODUCT_LIST = "submit_product_list"; //******** 获取选定产品 ********
+    private static final int RESULT_FOR_SALES_PRODUCT_LIST = 117; //******** 产品列表请求码 ********
+    private static final int RESULT_FOR_PRODUCT_INFO_CHANGE = 121;
+    private static final int RESULT_FOR_CREATE_ORDER = 122;
 
-    private CustomPopWindow mPopupWindow;
+    private CustomPopWindow mPriceTypePopup;
     private TextView mTvCustomer;
     private EditText mEtFilter;
+    private SwipeMenuRecyclerView mRecyclerView;
     private TextView mTvTotalAmount;
     private TextView mTvTotalPrice;
-    private SwipeMenuRecyclerView mRecyclerView;
+    private TextView mTvDebt;
 
     private SalesOrderAdapter mAdapter;
     private ArrayList<SalesProductListBean.SalesProductBean> mList;
     private CustomerListBean.CustomerBean mCustomerBean;
+    private int mLastIndex;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, SalesOrderActivity.class);
@@ -79,6 +82,7 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
         mTvTotalAmount = findViewById(R.id.tv_total_amount);
         mTvTotalPrice = findViewById(R.id.tv_total_price);
         mRecyclerView = findViewById(R.id.recycler_view);
+        mTvDebt = findViewById(R.id.tv_debt);
 
         mEtFilter.setOnClickListener(this);
         mTvCustomer.setOnClickListener(this);
@@ -92,17 +96,34 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_FOR_SALES_PRODUCT_LIST && data != null) {
-            //******** 返回同时选中的多个产品 ********
-            ArrayList<SalesProductListBean.SalesProductBean> items = data.getParcelableArrayListExtra(SalesProductListActivity.SELECTED_PRODUCT_LIST);
-            if (mList == null) {
-                mList = new ArrayList<>();
+        if (requestCode == RESULT_FOR_SALES_PRODUCT_LIST) {
+            if (data != null) {
+                //******** 返回产品列表选择结果 ********
+                ArrayList<SalesProductListBean.SalesProductBean> items = data.getParcelableArrayListExtra(SalesProductListActivity.SELECTED_PRODUCT_LIST);
+                if (mList == null) {
+                    mList = new ArrayList<>();
+                } else {
+                    mList.clear();
+                }
+                mList.addAll(items);
+                mAdapter.setNewData(items);
+                calculateAmountAndSums();
             } else {
-                mList.clear();
+                mEtFilter.setText("");
             }
-            mList.addAll(items);
-            mAdapter.setNewData(items);
-            calcaulateAmountAndSums();
+        } else if (requestCode == RESULT_FOR_PRODUCT_INFO_CHANGE && data != null) {
+            //******** 更改信息后的产品 ********
+            SalesProductListBean.SalesProductBean bean = data.getParcelableExtra(SalesProductDetailsActivity.SELECTED_ITEM);
+            mList.remove(mLastIndex);
+            mList.add(mLastIndex, bean);
+            mAdapter.setNewData(mList);
+            calculateAmountAndSums();
+        } else if (requestCode == RESULT_FOR_CREATE_ORDER && data != null) {
+            mList.clear();
+            ArrayList<SalesProductListBean.SalesProductBean> temp = data.getParcelableArrayListExtra(RESULT_PRODUCT_LIST);
+            mList.addAll(temp);
+            mAdapter.setNewData(mList);
+            calculateAmountAndSums();
         }
     }
 
@@ -113,10 +134,9 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
         CustomerListBean.CustomerBean customerBean = getIntent().getParcelableExtra(CUSTOMER_DETAILS);
         SalesProductListBean.SalesProductBean salesProductBean = getIntent().getParcelableExtra(SalesProductDetailsActivity.SELECTED_ITEM);
         if (customerBean != null) {
-            //******** 返回选中的客户 ********
+            //******** 返回选择的客户 ********
             mTvCustomer.setText(customerBean.getCustomername());
-            TextView tvDebt = findViewById(R.id.tv_debt);
-            tvDebt.setText(String.format(getString(R.string.debt_format), customerBean.getDebt()));
+            mTvDebt.setText(String.format(getString(R.string.debt_format), customerBean.getDebt()));
             mCustomerBean = customerBean;
         } else if (salesProductBean != null) {
             //******** 返回选中的单个产品 ********
@@ -124,7 +144,7 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
                 mList = new ArrayList<>();
             mList.add(salesProductBean);
             mAdapter.setNewData(mList);
-            calcaulateAmountAndSums();
+            calculateAmountAndSums();
         }
     }
 
@@ -151,7 +171,7 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
                 int adapterPosition = menuBridge.getAdapterPosition();
                 mList.remove(adapterPosition);
                 mAdapter.notifyItemChanged(adapterPosition);
-                calcaulateAmountAndSums();
+                calculateAmountAndSums();
             }
         };
         mRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
@@ -160,23 +180,15 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(SalesOrderActivity.this, SalesProductDetailsActivity.class);
-                intent.putExtra(SalesProductListActivity.SELECTED_ITEM, mList.get(position));
-                intent.putExtra(SalesProductDetailsActivity.FROM_CLASS, TAG);
-                startActivity(intent);
-            }
-        });
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
     }
 
     //******** 计算当前选中产品的数量和金额 ********
-    private void calcaulateAmountAndSums() {
+    private void calculateAmountAndSums() {
         int amount = 0;
         double result = 0;
         for (int i = 0; i < mList.size(); i++) {
-            double totalPrice = Double.parseDouble(mList.get(i).getS_jiage2()) * Double.parseDouble(mList.get(i).getCp_qty());
+            double totalPrice = Double.parseDouble(mList.get(i).getS_jiage2()) * Double.parseDouble(mList.get(i).getCp_qty()) * Double.parseDouble(mList.get(i).getZhekou());
             result += totalPrice;
             amount += Integer.valueOf(mList.get(i).getCp_qty());
         }
@@ -195,15 +207,15 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toolbar_type:
-                if (mPopupWindow == null) {
+                if (mPriceTypePopup == null) {
                     View contentView = LayoutInflater.from(SalesOrderActivity.this).inflate(R.layout.layout_menu_open_bill, null);
-                    mPopupWindow = new CustomPopWindow.PopupWindowBuilder(this)
+                    mPriceTypePopup = new CustomPopWindow.PopupWindowBuilder(this)
                             .setView(contentView)
                             .setFocusable(true)
                             .setOutsideTouchable(true)
                             .create();
                 }
-                mPopupWindow.showAsDropDown(findViewById(R.id.toolbar_type), -80, 0);
+                mPriceTypePopup.showAsDropDown(findViewById(R.id.toolbar_type), -80, 0);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -234,11 +246,18 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
                     startActivityForResult(i, RESULT_FOR_SALES_PRODUCT_LIST);
                 }
                 break;
+            case R.id.tv_reopen:
+                mCustomerBean = null;
+                mList.clear();
+                mTvDebt.setText(String.format(getString(R.string.debt_format), "0.00"));
+                mTvTotalAmount.setText("0");
+                mTvTotalPrice.setText("0.00");
+                break;
             case R.id.tv_create_order:
-                Intent i = new Intent(this, CreateOrderActivity.class);
-                i.putExtra(SUBMIT_CUSTOMER, mCustomerBean);
-                i.putExtra(SUBMIT_PRODUCT_LIST, mList);
-                startActivity(i);
+                Intent intent_2 = new Intent(this, CreateOrderActivity.class);
+                intent_2.putExtra(RESULT_CUSTOMER, mCustomerBean);
+                intent_2.putParcelableArrayListExtra(RESULT_PRODUCT_LIST, mList);
+                startActivityForResult(intent_2, RESULT_FOR_CREATE_ORDER);
                 break;
         }
     }
@@ -275,7 +294,7 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
             int i = Integer.parseInt(etAmount.getText().toString());
             switch (view.getId()) {
                 case R.id.tv_reduce:
-                    if (i > 0) {
+                    if (i > 1) {
                         i--;
                     }
                     break;
@@ -290,7 +309,19 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
             DecimalFormat mFormat = new DecimalFormat("0.00");
             tvSums.setText(mFormat.format(totalPrice));
             etAmount.setText(String.valueOf(i));
-            calcaulateAmountAndSums();
+            calculateAmountAndSums();
+        }
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            Intent intent = new Intent(SalesOrderActivity.this, SalesProductDetailsActivity.class);
+            intent.putExtra(SalesProductListActivity.SELECTED_ITEM, mList.get(position));
+            intent.putExtra(SalesProductDetailsActivity.FROM_CLASS, TAG);
+            startActivityForResult(intent, RESULT_FOR_PRODUCT_INFO_CHANGE);
+            mLastIndex = position;
         }
     }
 }

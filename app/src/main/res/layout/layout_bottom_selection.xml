@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    android:orientation="horizontal"
-    tools:showIn="@layout/layout_activity_purchase_detail">
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/tv_bottom_left"
@@ -16,8 +14,8 @@
         android:layout_weight="1"
         android:background="@drawable/bg_textview_confirm_order_shape"
         android:gravity="center"
-        android:paddingBottom="6dp"
-        android:paddingTop="6dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:textColor="@color/white"
         android:textSize="14dp"/>
 
@@ -29,8 +27,8 @@
         android:layout_weight="1"
         android:background="@drawable/bg_textview_confirm_order_shape"
         android:gravity="center"
-        android:paddingBottom="6dp"
-        android:paddingTop="6dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:textColor="@color/white"
         android:textSize="14dp"/>
 </LinearLayout>

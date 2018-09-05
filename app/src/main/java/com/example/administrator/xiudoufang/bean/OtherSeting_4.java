@@ -9,11 +9,31 @@ import com.example.administrator.xiudoufang.open.adapter.OtherSettingAdapter;
 
 public class OtherSeting_4 implements MultiItemEntity {
     private String title;
-    private String content;
+    private String subTitle;
+    private String value;
+    private boolean isOnlyShowSubTitle;
 
-    public OtherSeting_4(String title, String content) {
+    public OtherSeting_4(String title, String subTitle, String value, boolean isOnlyShowSubTitle) {
         this.title = title;
-        this.content = content;
+        this.subTitle = subTitle;
+        this.value = value;
+        this.isOnlyShowSubTitle = isOnlyShowSubTitle;
+    }
+
+    public boolean isOnlyShowSubTitle() {
+        return isOnlyShowSubTitle;
+    }
+
+    public void setOnlyShowSubTitle(boolean onlyShowSubTitle) {
+        isOnlyShowSubTitle = onlyShowSubTitle;
+    }
+
+    public String getSubTitle() {
+        return subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
     }
 
     public String getTitle() {
@@ -24,12 +44,12 @@ public class OtherSeting_4 implements MultiItemEntity {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public String getValue() {
+        return value;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     @Override

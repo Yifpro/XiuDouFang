@@ -87,6 +87,7 @@
                 app:siv_isShowNext="false"
                 app:siv_key="@string/new_mobile_phone_num"
                 app:siv_type="TYPE_EDIT"
+                app:siv_hint="@string/input_new_mobile_phone_num"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -95,34 +96,39 @@
                 app:siv_isShowNext="false"
                 app:siv_key="@string/new_phone_num"
                 app:siv_type="TYPE_EDIT"
+                app:siv_hint="@string/input_new_phone_num"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_add_contact"
                 app:siv_key="@string/add_contact"
-                app:siv_type="TYPE_TEXT"
+                app:siv_type="TYPE_EDIT"
+                app:siv_hint="@string/input_new_contact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_collect_goods_address"
                 app:siv_key="@string/add_collect_goods_address"
-                app:siv_type="TYPE_TEXT"
+                app:siv_type="TYPE_EDIT"
+                app:siv_hint="@string/input_new_collect_goods_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_deliver_goods_address"
                 app:siv_key="@string/add_deliver_goods_address"
-                app:siv_type="TYPE_TEXT"
+                app:siv_type="TYPE_EDIT"
+                app:siv_hint="@string/input_new_deliver_goods_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <com.example.administrator.xiudoufang.common.widget.SearchInfoView
                 android:id="@+id/siv_add_cargo_terminal"
                 app:siv_key="@string/add_cargo_terminal"
-                app:siv_type="TYPE_TEXT"
+                app:siv_type="TYPE_EDIT"
+                app:siv_hint="@string/input_new_cargo_terminal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

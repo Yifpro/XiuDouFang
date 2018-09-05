@@ -9,12 +9,12 @@ import com.example.administrator.xiudoufang.open.adapter.OtherSettingAdapter;
 
 public class OtherSeting_3 implements MultiItemEntity {
     private String title;
-    private String content;
+    private String value;
     private String hint;
 
-    public OtherSeting_3(String title, String content, String hint) {
+    public OtherSeting_3(String title, String value, String hint) {
         this.title = title;
-        this.content = content;
+        this.value = value;
         this.hint = hint;
     }
 
@@ -34,12 +34,12 @@ public class OtherSeting_3 implements MultiItemEntity {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public String getValue() {
+        return value;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     @Override

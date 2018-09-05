@@ -23,6 +23,7 @@ import com.example.administrator.xiudoufang.bean.OtherSeting_3;
 import com.example.administrator.xiudoufang.bean.OtherSeting_4;
 import com.example.administrator.xiudoufang.bean.OtherSetting;
 import com.example.administrator.xiudoufang.bean.OtherSettingItem;
+import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.open.adapter.OtherSettingAdapter;
 
@@ -43,6 +44,12 @@ public class OtherSettingDialog extends DialogFragment {
         args.putParcelable("other_setting", o);
         f.setArguments(args);
         return f;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDialog().getWindow().setLayout(SizeUtils.dp2px(300), SizeUtils.dp2px(320));
     }
 
     @Nullable
@@ -68,35 +75,47 @@ public class OtherSettingDialog extends DialogFragment {
         JSONArray ordertype = jsonObject.getJSONArray("ordertype");
         JSONArray huoyun = jsonObject.getJSONArray("huoyun");
         JSONArray wuliu = jsonObject.getJSONArray("wuliu");
+        int fahuoIndex = 0;
+        int orderTypeIndex = 0;
+        int huoyunIndex = 0;
+        int wuliuIndex = 0;
         for (int i = 0; i < fahuodian.size(); i++) {
             JSONObject dianItem = fahuodian.getJSONObject(i);
-            fahuodianList.add(new OtherSettingItem(dianItem.getString("name"), dianItem.getString("id"), "1".equals(dianItem.getString("moren"))));
+            boolean isSelected = otherSetting == null ? "1".equals(dianItem.getString("moren")) : dianItem.getString("id").equals(otherSetting.getFahuodianid());
+            fahuodianList.add(new OtherSettingItem(dianItem.getString("name"), dianItem.getString("id"), isSelected));
+            if (isSelected) fahuoIndex = i;
         }
         for (int i = 0; i < ordertype.size(); i++) {
             JSONObject typeItem = ordertype.getJSONObject(i);
-            ordertypeList.add(new OtherSettingItem(typeItem.getString("name"), typeItem.getString("id"), "1".equals(typeItem.getString("moren"))));
+            boolean isSelected = otherSetting == null ? "1".equals(typeItem.getString("moren")) : typeItem.getString("id").equals(otherSetting.getOrderType());
+            ordertypeList.add(new OtherSettingItem(typeItem.getString("name"), typeItem.getString("id"), isSelected));
+            if (isSelected) orderTypeIndex = i;
         }
         for (int i = 0; i < huoyun.size(); i++) {
             JSONObject huoyunItem = huoyun.getJSONObject(i);
-            huoyunList.add(new OtherSettingItem(huoyunItem.getString("name"), huoyunItem.getString("id"), "1".equals(huoyunItem.getString("moren"))));
+            boolean isSelected = otherSetting == null ? "1".equals(huoyunItem.getString("moren")) : huoyunItem.getString("id").equals(otherSetting.getHuoyunType());
+            huoyunList.add(new OtherSettingItem(huoyunItem.getString("name"), huoyunItem.getString("id"), isSelected));
+            if (isSelected) huoyunIndex = i;
         }
         for (int i = 0; i < wuliu.size(); i++) {
             JSONObject wuliuItem = wuliu.getJSONObject(i);
-            wuliuList.add(new OtherSettingItem(wuliuItem.getString("name"), wuliuItem.getString("id"), "1".equals(wuliuItem.getString("moren"))));
+            boolean isSelected = otherSetting == null ? "1".equals(wuliuItem.getString("moren")) : wuliuItem.getString("id").equals(otherSetting.getLogistics());
+            wuliuList.add(new OtherSettingItem(wuliuItem.getString("name"), wuliuItem.getString("id"), isSelected));
+            if (isSelected) wuliuIndex = i;
         }
         ArrayList<MultiItemEntity> list = new ArrayList<>();
-        list.add(new OtherSeting_1("发货店", fahuodianList));
-        list.add(new OtherSeting_1("单据类型", ordertypeList));
-        list.add(new OtherSeting_1("货运类型", huoyunList));
-        list.add(new OtherSeting_1("物流", wuliuList));
+        list.add(new OtherSeting_1("发货店", fahuodianList, fahuodianList.get(fahuoIndex).getValue()));
+        list.add(new OtherSeting_1("单据类型", ordertypeList, ordertypeList.get(orderTypeIndex).getValue()));
+        list.add(new OtherSeting_1("货运类型", huoyunList, huoyunList.get(huoyunIndex).getValue()));
+        list.add(new OtherSeting_1("物流", wuliuList, wuliuList.get(wuliuIndex).getValue()));
         ArrayList<String> orderList = new ArrayList<>();
         orderList.add("否");
         orderList.add("是");
-        list.add(new OtherSeting_2("特殊订单", orderList));
-        list.add(new OtherSeting_3("附加说明", "", "不超过120字"));
-        list.add(new OtherSeting_4("预计交货日期", StringUtils.getCurrentTime()));
-        list.add(new OtherSeting_4("附件", ""));
-        list.add(new OtherSeting_3("客户合同", "", "请输入客户合同"));
+        list.add(new OtherSeting_2("特殊订单", orderList, otherSetting == null ? "否" : otherSetting.getSpecialOrder()));
+        list.add(new OtherSeting_3("附加说明", otherSetting == null ? "" : otherSetting.getAdditionalInstructions(), "不超过120字"));
+        list.add(new OtherSeting_4("预计交货日期", "未设置", otherSetting == null ? null : otherSetting.getForcastDate(), false));
+        list.add(new OtherSeting_4("附件", "查看或上传", otherSetting == null ? null : otherSetting.getExtra(), true));
+        list.add(new OtherSeting_3("客户合同", otherSetting == null ? null : otherSetting.getCustomerContract(), "请输入客户合同"));
         OtherSettingAdapter adapter = new OtherSettingAdapter(list);
         adapter.bindToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
