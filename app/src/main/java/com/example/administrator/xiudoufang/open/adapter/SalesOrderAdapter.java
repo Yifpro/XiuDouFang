@@ -52,6 +52,7 @@ public class SalesOrderAdapter extends BaseItemDraggableAdapter<SalesProductList
             }
         });
 
+        helper.addOnClickListener(R.id.et_amount);
         helper.addOnClickListener(R.id.tv_reduce);
         helper.addOnClickListener(R.id.tv_add);
     }

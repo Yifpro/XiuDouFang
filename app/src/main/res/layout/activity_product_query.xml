@@ -36,5 +36,5 @@
         app:siv_key="@string/already_set_img"
         app:siv_type="TYPE_TEXT"/>
 
-    <include layout="@layout/layout_search_or_clear"/>
+    <include layout="@layout/layout_search_and_clear"/>
 </LinearLayout>

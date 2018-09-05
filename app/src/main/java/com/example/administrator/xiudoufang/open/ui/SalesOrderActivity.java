@@ -24,11 +24,11 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.CustomerListBean;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.CustomPopWindow;
 import com.example.administrator.xiudoufang.open.adapter.SalesOrderAdapter;
-import com.example.administrator.xiudoufang.open.logic.SalesOrderLogic;
 import com.example.administrator.xiudoufang.receipt.ui.CustomerListActivity;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
@@ -52,12 +52,11 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
 
     private CustomPopWindow mPopupWindow;
     private TextView mTvCustomer;
+    private EditText mEtFilter;
     private TextView mTvTotalAmount;
     private TextView mTvTotalPrice;
-    private EditText mEtFilter;
     private SwipeMenuRecyclerView mRecyclerView;
 
-    private SalesOrderLogic mLogic;
     private SalesOrderAdapter mAdapter;
     private ArrayList<SalesProductListBean.SalesProductBean> mList;
     private CustomerListBean.CustomerBean mCustomerBean;
@@ -76,9 +75,9 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
     public void initView() {
         setTitle("销售单");
         mTvCustomer = findViewById(R.id.tv_customer);
+        mEtFilter = findViewById(R.id.et_filter);
         mTvTotalAmount = findViewById(R.id.tv_total_amount);
         mTvTotalPrice = findViewById(R.id.tv_total_price);
-        mEtFilter = findViewById(R.id.et_filter);
         mRecyclerView = findViewById(R.id.recycler_view);
 
         mEtFilter.setOnClickListener(this);
@@ -94,6 +93,7 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_FOR_SALES_PRODUCT_LIST && data != null) {
+            //******** 返回同时选中的多个产品 ********
             ArrayList<SalesProductListBean.SalesProductBean> items = data.getParcelableArrayListExtra(SalesProductListActivity.SELECTED_PRODUCT_LIST);
             if (mList == null) {
                 mList = new ArrayList<>();
@@ -102,7 +102,7 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
             }
             mList.addAll(items);
             mAdapter.setNewData(items);
-            statisticsData();
+            calcaulateAmountAndSums();
         }
     }
 
@@ -110,25 +110,26 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        CustomerListBean.CustomerBean bean = getIntent().getParcelableExtra(CUSTOMER_DETAILS);
-        SalesProductListBean.SalesProductBean item = getIntent().getParcelableExtra(SalesProductDetailsActivity.SELECTED_ITEM);
-        if (bean != null) {
-            mTvCustomer.setText(bean.getCustomername());
+        CustomerListBean.CustomerBean customerBean = getIntent().getParcelableExtra(CUSTOMER_DETAILS);
+        SalesProductListBean.SalesProductBean salesProductBean = getIntent().getParcelableExtra(SalesProductDetailsActivity.SELECTED_ITEM);
+        if (customerBean != null) {
+            //******** 返回选中的客户 ********
+            mTvCustomer.setText(customerBean.getCustomername());
             TextView tvDebt = findViewById(R.id.tv_debt);
-            tvDebt.setText(String.format(getString(R.string.debt_format), bean.getDebt()));
-            mCustomerBean = bean;
-        } else if (item != null) {
+            tvDebt.setText(String.format(getString(R.string.debt_format), customerBean.getDebt()));
+            mCustomerBean = customerBean;
+        } else if (salesProductBean != null) {
+            //******** 返回选中的单个产品 ********
             if (mList == null)
                 mList = new ArrayList<>();
-            mList.add(item);
+            mList.add(salesProductBean);
             mAdapter.setNewData(mList);
-            statisticsData();
+            calcaulateAmountAndSums();
         }
     }
 
     @Override
     public void initData() {
-        mLogic = new SalesOrderLogic();
         mAdapter = new SalesOrderAdapter(R.layout.layout_list_item_sales_order, mList);
         SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
             @Override
@@ -150,7 +151,7 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
                 int adapterPosition = menuBridge.getAdapterPosition();
                 mList.remove(adapterPosition);
                 mAdapter.notifyItemChanged(adapterPosition);
-                statisticsData();
+                calcaulateAmountAndSums();
             }
         };
         mRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
@@ -170,7 +171,8 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
         });
     }
 
-    private void statisticsData() {
+    //******** 计算当前选中产品的数量和金额 ********
+    private void calcaulateAmountAndSums() {
         int amount = 0;
         double result = 0;
         for (int i = 0; i < mList.size(); i++) {
@@ -211,7 +213,7 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_select_customer:
+            case R.id.tv_customer:
                 Intent intent = new Intent(this, CustomerListActivity.class);
                 intent.putExtra(CustomerListActivity.FROM_CLASS, TAG);
                 startActivity(intent);
@@ -288,7 +290,7 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
             DecimalFormat mFormat = new DecimalFormat("0.00");
             tvSums.setText(mFormat.format(totalPrice));
             etAmount.setText(String.valueOf(i));
-            statisticsData();
+            calcaulateAmountAndSums();
         }
     }
 }

@@ -86,6 +86,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
 
     @Override
     public void initView() {
+        setTitle("");
         mTvNo = findViewById(R.id.tv_no);
         mTvName = findViewById(R.id.tv_name);
         mTvDebt = findViewById(R.id.tv_debt);
@@ -400,6 +401,10 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         @Override
         public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
             EditText etAmount = (EditText) adapter.getViewByPosition(position, R.id.et_amount);
+            if (view.getId() == R.id.et_amount) {
+                etAmount.setCursorVisible(true);
+                return;
+            }
             TextView tvSums = (TextView) adapter.getViewByPosition(position, R.id.tv_sums);
             assert etAmount != null;
             int i = Integer.parseInt(etAmount.getText().toString());

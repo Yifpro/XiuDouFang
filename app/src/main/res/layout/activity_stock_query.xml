@@ -86,6 +86,6 @@
         app:siv_key="@string/amount"
         app:siv_type="TYPE_TEXT"/>
 
-    <include layout="@layout/layout_search_or_clear"/>
+    <include layout="@layout/layout_search_and_clear"/>
 </LinearLayout>
 
