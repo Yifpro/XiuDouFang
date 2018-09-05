@@ -329,9 +329,14 @@ public class CustomerListBean {
         }
 
         public static class LianxirenBean implements Parcelable {
+            public LianxirenBean(String lianxiren) {
+                this.lianxiren = lianxiren;
+            }
+
             /**
              * lianxiren : 18505295858
              */
+
 
 
             private String lianxiren;

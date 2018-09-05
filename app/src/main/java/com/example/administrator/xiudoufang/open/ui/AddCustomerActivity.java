@@ -111,21 +111,17 @@ public class AddCustomerActivity extends AppCompatActivity implements IActivityB
                     CustomerListBean.CustomerBean bean = new CustomerListBean.CustomerBean();
                     bean.setC_id("0");
                     bean.setCustomername(mCivName.getValue());
-
+                    bean.setQuancheng(mCivTotalName.getValue());
                     List<CustomerListBean.CustomerBean.TelephoneBean> telephoneBeanList = new ArrayList<>();
                     telephoneBeanList.add(new CustomerListBean.CustomerBean.TelephoneBean(mCivMobilePhoneNum.getValue()));
                     bean.setTelephone(telephoneBeanList);
-                    //bean.setNewMobilePhoneNum(mCivMobilePhoneNum.getValue());
-
-                    bean.setQuancheng(mCivTotalName.getValue());
                     bean.setCustomerno(mCivNo.getValue());
-                    bean.setAddContact(mCivContact.getValue());
-
+                    List<CustomerListBean.CustomerBean.LianxirenBean> lianxirenBeanList = new ArrayList<>();
+                    lianxirenBeanList.add(new CustomerListBean.CustomerBean.LianxirenBean(mCivContact.getValue()));
+                    bean.setLianxiren(lianxirenBeanList);
                     List<CustomerListBean.CustomerBean.DianhuaBean> dianhuaBeanList = new ArrayList<>();
                     dianhuaBeanList.add(new CustomerListBean.CustomerBean.DianhuaBean(mCivPhoneNum.getValue()));
                     bean.setDianhua(dianhuaBeanList);
-                    //bean.setNewPhoneNum(mCivPhoneNum.getValue());
-
                     List<CustomerListBean.CustomerBean.QqBean> qqBeanList = new ArrayList<>();
                     qqBeanList.add(new CustomerListBean.CustomerBean.QqBean(mCivQQ.getValue()));
                     bean.setQq(qqBeanList);

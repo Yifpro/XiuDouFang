@@ -204,7 +204,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         params.put("telephone", mCustomerBean.getTelephone().get(0).getTelephone()); //客户手机
         params.put("tel", mCustomerBean.getDianhua().get(0).getDianhua()); //客户电话
         params.put("QQ", mCustomerBean.getQq().get(0).getQq()); //客户qq
-        params.put("lianxiren", mCustomerBean.getAddContact()); //联系人
+        params.put("lianxiren", mCustomerBean.getLianxiren().get(0).getLianxiren()); //联系人
         params.put("weixinhao", mCustomerBean.getWeixinhao().get(0).getWeixinhao()); //微信
         params.put("fahuodizhi", mCustomerBean.getFahuodizhi().get(0).getFahuodizhi()); //发货地址
         params.put("shouhuodizhi", mCustomerBean.getShouhuodizhi().get(0).getShouhuodizhi()); //收货地址
