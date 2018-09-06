@@ -28,6 +28,7 @@ import com.example.administrator.xiudoufang.bean.OtherSetting;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
 import com.example.administrator.xiudoufang.bean.SettingItem;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -72,7 +73,6 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
     private SwipeMenuRecyclerView mRecyclerView;
     private TimePickerView mStartTimePickerView;
     private TimePickerView mEndTimePickerView;
-    private ConfirmOrderInfoDialog mConfirmOrderInfoDialog;
     private SimpleTextDialog mSalesSelectorDialog;
     private SimpleTextDialog mReceiptTypeDialog;
 
@@ -111,6 +111,14 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         mTvReceiptType.setOnClickListener(this);
         mEtTip.setOnClickListener(this);
         findViewById(R.id.tv_submit_order).setOnClickListener(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        mOtherSetting = getIntent().getParcelableExtra(OtherSettingDialog.OTHER_SETTING);
+        LogUtils.e("回来后的日期 -> " + mOtherSetting.getForcastDate());
     }
 
     @Override
@@ -206,7 +214,13 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toolbar_other:
-                OtherSettingDialog otherSettingDialog = OtherSettingDialog.newInstance(mOtherSetting);
+                final OtherSettingDialog otherSettingDialog = OtherSettingDialog.newInstance(mOtherSetting);
+                otherSettingDialog.setOnSureChangedListener(new OtherSettingDialog.OnSureClickListener() {
+                    @Override
+                    public void onSure(OtherSetting o) {
+                        mOtherSetting = o;
+                    }
+                });
                 otherSettingDialog.show(getSupportFragmentManager(), "OtherSettingDialog");
                 break;
         }
@@ -221,13 +235,13 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         params.put("c_id", mCustomerBean.getC_id()); //客户id
         params.put("customerno", mCustomerBean.getCustomerno()); //客户编号
         params.put("customername", mCustomerBean.getCustomername()); //客户名称
-        params.put("telephone", mCustomerBean.getTelephone().get(0).getTelephone()); //客户手机
-        params.put("tel", mCustomerBean.getDianhua().get(0).getDianhua()); //客户电话
-        params.put("QQ", mCustomerBean.getQq().get(0).getQq()); //客户qq
-        params.put("lianxiren", mCustomerBean.getLianxiren().get(0).getLianxiren()); //联系人
-        params.put("weixinhao", mCustomerBean.getWeixinhao().get(0).getWeixinhao()); //微信
-        params.put("fahuodizhi", mCustomerBean.getFahuodizhi().get(0).getFahuodizhi()); //发货地址
-        params.put("shouhuodizhi", mCustomerBean.getShouhuodizhi().get(0).getShouhuodizhi()); //收货地址
+        params.put("telephone", mCustomerBean.getTelephone().size() > 0 ? mCustomerBean.getTelephone().get(0).getTelephone() : ""); //客户手机
+        params.put("tel", mCustomerBean.getDianhua().size() > 0 ? mCustomerBean.getDianhua().get(0).getDianhua() : ""); //客户电话
+        params.put("QQ", mCustomerBean.getQq().size() > 0 ? mCustomerBean.getQq().get(0).getQq() : ""); //客户qq
+        params.put("lianxiren", mCustomerBean.getLianxiren().size() > 0 ? mCustomerBean.getLianxiren().get(0).getLianxiren() : ""); //联系人
+        params.put("weixinhao", mCustomerBean.getWeixinhao().size() > 0 ? mCustomerBean.getWeixinhao().get(0).getWeixinhao() : ""); //微信
+        params.put("fahuodizhi", mCustomerBean.getFahuodizhi().size() > 0 ? mCustomerBean.getFahuodizhi().get(0).getFahuodizhi() : ""); //发货地址
+        params.put("shouhuodizhi", mCustomerBean.getShouhuodizhi().size() > 0 ? mCustomerBean.getShouhuodizhi().get(0).getShouhuodizhi() : ""); //收货地址
 
         params.put("shishou_amt", info.getBencishoukuan()); //本次收款
         params.put("yingshou_amt", info.getYingshou()); //应收 金额+其他费用
@@ -235,7 +249,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         params.put("remark", mEtTip.getText().toString()); //备注
         params.put("free", ""); //优惠金额
         params.put("allname", mCustomerBean.getQuancheng()); //全称
-        params.put("freight", mCustomerBean.getFreight().get(0).getFreight()); //货运站
+        params.put("freight", mCustomerBean.getFreight().size() > 0 ? mCustomerBean.getFreight().get(0).getFreight() : ""); //货运站
         int receiptTypeIndex = mReceiptTypeList.indexOf(new SettingItem(mTvReceiptType.getText().toString()));
         params.put("shoukuanid", mReceiptTypeList.size() == 0 ? "" : mReceiptTypeList.get(receiptTypeIndex).getValue()); //收款id
         int salesmanIndex = mSalesmanList.indexOf(new SettingItem(mTvSalesman.getText().toString()));
@@ -259,7 +273,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         params.put("confirm", isConfirm ? "1" : "0"); //是否确认订单
         params.put("pay_yueamt", info.getBalancePayment()); //余额支付金额
         params.put("cpjsonstr", JSONObject.toJSONString(mList)); //产品json
-        mLogic.saveOrCreateOrder(params, new JsonCallback<String>() {
+        mLogic.saveOrCreateOrder(params, mOtherSetting.getExtra(), new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
 
@@ -312,26 +326,24 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
                 mEtTip.setCursorVisible(true);
                 break;
             case R.id.tv_submit_order:
-                if (mConfirmOrderInfoDialog == null) {
-                    ArrayList<String> list = new ArrayList<>();
-                    list.add(mTvTotalPrice.getText().toString()); //本单金额
-                    list.add(mCustomerBean.getDebt()); //前结欠
-                    DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                    double sums = Double.parseDouble(mTvTotalPrice.getText().toString());
-                    double debt = Double.parseDouble(mCustomerBean.getDebt());
-                    String leijiqian = decimalFormat.format(sums + debt);
-                    list.add(leijiqian); //累计欠
-                    list.add(""); //其他费用
-                    list.add(mTvTotalPrice.getText().toString()); //本单应收
-                    list.add(leijiqian); //累计金额
-                    list.add(""); //本次收款
-                    list.add(""); //优惠金额
-                    list.add(mCustomerBean.getYue_amt()); //账户余额
-                    list.add(""); //余额支付
-                    mConfirmOrderInfoDialog = ConfirmOrderInfoDialog.newInstance(list);
-                    mConfirmOrderInfoDialog.setOnItemClickListener(new InnerConfirmOrderInfoListener());
-                }
-                mConfirmOrderInfoDialog.show(getSupportFragmentManager(), "ConfirmOrderInfoDialog");
+                ArrayList<String> list = new ArrayList<>();
+                list.add(mTvTotalPrice.getText().toString()); //本单金额
+                list.add(mCustomerBean.getDebt()); //前结欠
+                DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                double sums = Double.parseDouble(mTvTotalPrice.getText().toString());
+                double debt = Double.parseDouble(mCustomerBean.getDebt());
+                String leijiqian = decimalFormat.format(sums + debt);
+                list.add(leijiqian); //累计欠
+                list.add(""); //其他费用
+                list.add(mTvTotalPrice.getText().toString()); //本单应收
+                list.add(leijiqian); //累计金额
+                list.add(""); //本次收款
+                list.add(""); //优惠金额
+                list.add(mCustomerBean.getYue_amt()); //账户余额
+                list.add(""); //余额支付
+                ConfirmOrderInfoDialog confirmOrderInfoDialog = ConfirmOrderInfoDialog.newInstance(list);
+                confirmOrderInfoDialog.setOnItemClickListener(new InnerConfirmOrderInfoListener());
+                confirmOrderInfoDialog.show(getSupportFragmentManager(), "ConfirmOrderInfoDialog");
                 break;
         }
     }
@@ -458,7 +470,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
             etAmount.setText(String.valueOf(i));
             SalesProductListBean.SalesProductBean item = mList.get(position);
             item.setCp_qty(String.valueOf(i));
-            double totalPrice = Double.parseDouble(item.getS_jiage2()) * Double.parseDouble(mList.get(position).getCp_qty());
+            double totalPrice = Double.parseDouble(item.getS_jiage2()) * Double.parseDouble(item.getZhekou()) * Double.parseDouble(mList.get(position).getCp_qty());
             DecimalFormat mFormat = new DecimalFormat("0.00");
             assert tvSums != null;
             tvSums.setText(mFormat.format(totalPrice));

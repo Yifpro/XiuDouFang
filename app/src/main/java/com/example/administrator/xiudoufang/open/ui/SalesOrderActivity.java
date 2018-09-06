@@ -24,6 +24,7 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.CustomerListBean;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.CustomPopWindow;
@@ -118,7 +119,7 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
             mList.add(mLastIndex, bean);
             mAdapter.setNewData(mList);
             calculateAmountAndSums();
-        } else if (requestCode == RESULT_FOR_CREATE_ORDER && data != null) {
+        } else if (requestCode == RESULT_FOR_CREATE_ORDER && data != null && mList != null) {
             mList.clear();
             ArrayList<SalesProductListBean.SalesProductBean> temp = data.getParcelableArrayListExtra(RESULT_PRODUCT_LIST);
             mList.addAll(temp);
@@ -254,10 +255,18 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
                 mTvTotalPrice.setText("0.00");
                 break;
             case R.id.tv_create_order:
-                Intent intent_2 = new Intent(this, CreateOrderActivity.class);
-                intent_2.putExtra(RESULT_CUSTOMER, mCustomerBean);
-                intent_2.putParcelableArrayListExtra(RESULT_PRODUCT_LIST, mList);
-                startActivityForResult(intent_2, RESULT_FOR_CREATE_ORDER);
+                if (mCustomerBean == null) {
+                    ToastUtils.show(this, "请选择购买产品的客户");
+                }
+//                else if (mList == null || mList.size() == 0) {
+//                    ToastUtils.show(this, "请选择需要购买的产品");
+//                }
+                else {
+                    Intent intent_2 = new Intent(this, CreateOrderActivity.class);
+                    intent_2.putExtra(RESULT_CUSTOMER, mCustomerBean);
+                    intent_2.putParcelableArrayListExtra(RESULT_PRODUCT_LIST, mList);
+                    startActivityForResult(intent_2, RESULT_FOR_CREATE_ORDER);
+                }
                 break;
         }
     }
@@ -305,7 +314,7 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
             etAmount.setText(String.valueOf(i));
             SalesProductListBean.SalesProductBean item = mList.get(position);
             item.setCp_qty(String.valueOf(i));
-            double totalPrice = Double.parseDouble(item.getS_jiage2()) * Double.parseDouble(mList.get(position).getCp_qty());
+            double totalPrice = Double.parseDouble(item.getS_jiage2()) * Double.parseDouble(item.getZhekou()) * Double.parseDouble(mList.get(position).getCp_qty());
             DecimalFormat mFormat = new DecimalFormat("0.00");
             tvSums.setText(mFormat.format(totalPrice));
             etAmount.setText(String.valueOf(i));

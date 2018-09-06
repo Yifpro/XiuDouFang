@@ -13,7 +13,7 @@ public class OtherSetting implements Parcelable {
     private String orderType; //订单类型
     private String huoyunType; //货运类型
     private String logistics; //物流
-    private String specialOrder; //特殊订单
+    private String specialOrder = "否"; //特殊订单
     private String additionalInstructions; //附加说明
     private String forcastDate; //预计交货
     private String extra; //附件
@@ -104,6 +104,7 @@ public class OtherSetting implements Parcelable {
         dest.writeString(this.logistics);
         dest.writeString(this.specialOrder);
         dest.writeString(this.additionalInstructions);
+        dest.writeString(this.forcastDate);
         dest.writeString(this.extra);
         dest.writeString(this.customerContract);
     }
@@ -118,6 +119,7 @@ public class OtherSetting implements Parcelable {
         this.logistics = in.readString();
         this.specialOrder = in.readString();
         this.additionalInstructions = in.readString();
+        this.forcastDate = in.readString();
         this.extra = in.readString();
         this.customerContract = in.readString();
     }

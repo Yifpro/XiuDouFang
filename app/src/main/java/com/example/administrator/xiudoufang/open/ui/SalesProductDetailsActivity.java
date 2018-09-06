@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -95,7 +96,7 @@ public class SalesProductDetailsActivity extends AppCompatActivity implements IA
             for (SalesProductListBean.SalesProductBean.ColorlistBean bean : mProductBean.getColorlist()) {
                 mColors.add(bean.getColor());
             }
-            mList.add(new SalesProductDetailsItem_2("产品颜色", mColors.get(0), mColors, true, new InnerColorClickListener()));
+            mList.add(new SalesProductDetailsItem_2("产品颜色", TextUtils.isEmpty(mProductBean.getYanse()) ? mColors.get(0) : mProductBean.getYanse(), mColors, true, new InnerColorClickListener()));
             isHaveColor = true;
         }
         if (mProductBean.getSizxlist() != null && mProductBean.getSizxlist().size() > 0) {
@@ -104,7 +105,7 @@ public class SalesProductDetailsActivity extends AppCompatActivity implements IA
             for (SalesProductListBean.SalesProductBean.SizxlistBean bean : mProductBean.getSizxlist()) {
                 mSizes.add(bean.getSizx());
             }
-            mList.add(new SalesProductDetailsItem_2("产品规格", mSizes.get(0), mSizes, true, new InnerSizeClickListener()));
+            mList.add(new SalesProductDetailsItem_2("产品规格", TextUtils.isEmpty(mProductBean.getGuige()) ? mSizes.get(0) : mProductBean.getGuige(), mSizes, true, new InnerSizeClickListener()));
             isHaveSize = true;
         }
         mList.add(new SalesProductDetailsItem_2("购买数量", mProductBean.getCp_qty(), false));
@@ -114,16 +115,16 @@ public class SalesProductDetailsActivity extends AppCompatActivity implements IA
         ArrayList<String> gift = new ArrayList<>();
         gift.add("否");
         gift.add("是");
-        mList.add(new SalesProductDetailsItem_3("是否为赠品", gift.get(0), gift));
+        mList.add(new SalesProductDetailsItem_3("是否为赠品", "1".equals(mProductBean.getZengpin()) ? gift.get(1) : gift.get(0), gift));
         ArrayList<String> priceSources = new ArrayList<>();
         priceSources.add("手动");
         priceSources.add("等级");
         priceSources.add("批发");
         priceSources.add("参考");
         priceSources.add("历史");
-        mList.add(new SalesProductDetailsItem_3("价格来源", priceSources.get(1), priceSources));
-        mList.add(new SalesProductDetailsItem_4("备注", ""));
-        mList.add(new SalesProductDetailsItem_4("客户货号", ""));
+        mList.add(new SalesProductDetailsItem_3("价格来源", TextUtils.isEmpty(mProductBean.getJiagelaiyuan()) ? priceSources.get(1) : mProductBean.getJiagelaiyuan(), priceSources));
+        mList.add(new SalesProductDetailsItem_4("备注", mProductBean.getBz()));
+        mList.add(new SalesProductDetailsItem_4("客户货号", mProductBean.getHuohao()));
         mAdapter = new SalesProductDetailsAdapter(mList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

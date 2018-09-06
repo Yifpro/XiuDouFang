@@ -74,9 +74,9 @@
                   android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity android:name=".open.ui.AddCustomerActivity" />
         <activity android:name=".open.ui.CreateOrderActivity"
+                  android:launchMode="singleTask"
                   android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
-        <activity android:name=".open.ui.SelectPicActivity"/>
-        <activity android:name=".open.ui.SelectPicActivity" />
+        <activity android:name=".open.ui.ExtraActivity" />
     </application>
 
 </manifest>

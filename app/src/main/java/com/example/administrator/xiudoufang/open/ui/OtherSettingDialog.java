@@ -1,5 +1,6 @@
 package com.example.administrator.xiudoufang.open.ui;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.example.administrator.xiudoufang.bean.OtherSeting_3;
 import com.example.administrator.xiudoufang.bean.OtherSeting_4;
 import com.example.administrator.xiudoufang.bean.OtherSetting;
 import com.example.administrator.xiudoufang.bean.OtherSettingItem;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.open.adapter.OtherSettingAdapter;
@@ -36,7 +38,10 @@ import java.util.List;
 
 public class OtherSettingDialog extends DialogFragment {
 
+    public static final String OTHER_SETTING = "other_setting";
+
     private OnSureClickListener listener;
+    private ArrayList<MultiItemEntity> mList;
 
     public static OtherSettingDialog newInstance(OtherSetting o) {
         OtherSettingDialog f = new OtherSettingDialog();
@@ -62,6 +67,7 @@ public class OtherSettingDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
                 if (listener != null) listener.onSure(getOtherSetting());
+                dismiss();
             }
         });
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
@@ -103,34 +109,49 @@ public class OtherSettingDialog extends DialogFragment {
             wuliuList.add(new OtherSettingItem(wuliuItem.getString("name"), wuliuItem.getString("id"), isSelected));
             if (isSelected) wuliuIndex = i;
         }
-        ArrayList<MultiItemEntity> list = new ArrayList<>();
-        list.add(new OtherSeting_1("发货店", fahuodianList, fahuodianList.get(fahuoIndex).getValue()));
-        list.add(new OtherSeting_1("单据类型", ordertypeList, ordertypeList.get(orderTypeIndex).getValue()));
-        list.add(new OtherSeting_1("货运类型", huoyunList, huoyunList.get(huoyunIndex).getValue()));
-        list.add(new OtherSeting_1("物流", wuliuList, wuliuList.get(wuliuIndex).getValue()));
+        mList = new ArrayList<>();
+        mList.add(new OtherSeting_1("发货店", fahuodianList, fahuodianList.get(fahuoIndex).getValue()));
+        mList.add(new OtherSeting_1("单据类型", ordertypeList, ordertypeList.get(orderTypeIndex).getValue()));
+        mList.add(new OtherSeting_1("货运类型", huoyunList, huoyunList.get(huoyunIndex).getValue()));
+        mList.add(new OtherSeting_1("物流", wuliuList, wuliuList.get(wuliuIndex).getValue()));
         ArrayList<String> orderList = new ArrayList<>();
         orderList.add("否");
         orderList.add("是");
-        list.add(new OtherSeting_2("特殊订单", orderList, otherSetting == null ? "否" : otherSetting.getSpecialOrder()));
-        list.add(new OtherSeting_3("附加说明", otherSetting == null ? "" : otherSetting.getAdditionalInstructions(), "不超过120字"));
-        list.add(new OtherSeting_4("预计交货日期", "未设置", otherSetting == null ? null : otherSetting.getForcastDate(), false));
-        list.add(new OtherSeting_4("附件", "查看或上传", otherSetting == null ? null : otherSetting.getExtra(), true));
-        list.add(new OtherSeting_3("客户合同", otherSetting == null ? null : otherSetting.getCustomerContract(), "请输入客户合同"));
-        OtherSettingAdapter adapter = new OtherSettingAdapter(list);
+        String emm = otherSetting == null ? "否" : "0".equals(otherSetting.getSpecialOrder()) ? "否" : "是";
+        mList.add(new OtherSeting_2("特殊订单", orderList, emm));
+        mList.add(new OtherSeting_3("附加说明", otherSetting == null ? "" : otherSetting.getAdditionalInstructions(), "不超过120字"));
+        mList.add(new OtherSeting_4("预计交货日期", "未设置", otherSetting == null ? null : otherSetting.getForcastDate(), false));
+        mList.add(new OtherSeting_4("附件", "查看或上传", otherSetting == null ? null : otherSetting.getExtra(), true));
+        mList.add(new OtherSeting_3("客户合同", otherSetting == null ? null : otherSetting.getCustomerContract(), "请输入客户合同"));
+        OtherSettingAdapter adapter = new OtherSettingAdapter(mList);
+        adapter.setOnPicSelectListener(new InnerPicSelectListener());
         adapter.bindToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-            }
-        });
         return view;
     }
 
     private OtherSetting getOtherSetting() {
         OtherSetting otherSetting = new OtherSetting();
-        return null;
+        OtherSeting_1 fahuodian = (OtherSeting_1) mList.get(0);
+        OtherSeting_1 orderType = (OtherSeting_1) mList.get(1);
+        OtherSeting_1 huoyun = (OtherSeting_1) mList.get(2);
+        OtherSeting_1 wuliu = (OtherSeting_1) mList.get(3);
+        OtherSeting_2 specialOrder = (OtherSeting_2) mList.get(4);
+        OtherSeting_3 shuoming = (OtherSeting_3) mList.get(5);
+        OtherSeting_4 forcastDate = (OtherSeting_4) mList.get(6);
+        OtherSeting_4 extra = (OtherSeting_4) mList.get(7);
+        OtherSeting_3 contract = (OtherSeting_3) mList.get(8);
+        otherSetting.setFahuodianid(fahuodian.getValue());
+        otherSetting.setOrderType(orderType.getValue());
+        otherSetting.setHuoyunType(huoyun.getValue());
+        otherSetting.setLogistics(wuliu.getValue());
+        otherSetting.setSpecialOrder("否".equals(specialOrder.getValue()) ? "0" : "1");
+        otherSetting.setAdditionalInstructions(shuoming.getValue());
+        otherSetting.setForcastDate(forcastDate.getValue());
+        otherSetting.setExtra(extra.getValue());
+        otherSetting.setCustomerContract(contract.getValue());
+        return otherSetting;
     }
 
     public void setOnSureChangedListener(OnSureClickListener listener) {
@@ -139,6 +160,19 @@ public class OtherSettingDialog extends DialogFragment {
 
     public interface OnSureClickListener {
         void onSure(OtherSetting o);
+    }
+
+    private class InnerPicSelectListener implements OtherSettingAdapter.OnPicSelectListener {
+
+        @Override
+        public void onPicSelect() {
+            Intent intent = new Intent(getActivity(), ExtraActivity.class);
+            OtherSetting otherSetting = getOtherSetting();
+            LogUtils.e("即将传过去的日期 -> " + otherSetting.getForcastDate()+", "+otherSetting.getFahuodianid());
+            intent.putExtra(OTHER_SETTING, otherSetting);
+            startActivity(intent);
+            dismiss();
+        }
     }
 }
 

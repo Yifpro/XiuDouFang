@@ -12,6 +12,7 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseTextWatcher;
 import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 
 import java.text.DecimalFormat;
@@ -46,7 +47,7 @@ public class SalesOrderAdapter extends BaseItemDraggableAdapter<SalesProductList
         tvPrice.setText(String.format(mContext.getString(R.string.amt_format), mDecimalFormat.format(unitPrice)));
         helper.setText(R.id.et_amount, item.getCp_qty());
         double amount = Double.valueOf(item.getCp_qty());
-        helper.setText(R.id.tv_sums, String.format(mContext.getString(R.string.sum_format), mDecimalFormat.format(amount * unitPrice)));
+        helper.setText(R.id.tv_sums, mDecimalFormat.format(amount * unitPrice));
         final EditText etValue = helper.getView(R.id.et_amount);
         etValue.addTextChangedListener(new BaseTextWatcher() {
             @Override

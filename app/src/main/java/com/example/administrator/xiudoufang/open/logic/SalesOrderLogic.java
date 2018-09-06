@@ -8,6 +8,7 @@ import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.lzy.okgo.OkGo;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,12 +25,13 @@ public class SalesOrderLogic {
     }
 
     //******** 提交订单 ********
-    public void saveOrCreateOrder(HashMap<String, String> params, JsonCallback<String> callback) {
+    public void saveOrCreateOrder(HashMap<String, String> params, String path, JsonCallback<String> callback) {
         String json = JSONObject.toJSONString(params);
         LogUtils.e("提交订单 -> " + json);
-        OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/postorderall?postiorder=0")
-                .headers("Content-Type", "application/json")
-                .upJson(json)
-                .execute(callback);
+//        OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/postorderall?postiorder=0")
+//                .headers("Content-Type", "application/json")
+//                .upJson(json)
+//                .params("fujian", new File(path))
+//                .execute(callback);
     }
 }

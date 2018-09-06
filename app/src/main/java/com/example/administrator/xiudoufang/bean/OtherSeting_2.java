@@ -24,7 +24,7 @@ public class OtherSeting_2 implements MultiItemEntity {
         return value;
     }
 
-    public void setValue(String index) {
+    public void setValue(String value) {
         this.value = value;
     }
 

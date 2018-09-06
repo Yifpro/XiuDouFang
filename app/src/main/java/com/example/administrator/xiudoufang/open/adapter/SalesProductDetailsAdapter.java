@@ -23,6 +23,7 @@ import com.example.administrator.xiudoufang.bean.SalesProductDetailsItem_1;
 import com.example.administrator.xiudoufang.bean.SalesProductDetailsItem_2;
 import com.example.administrator.xiudoufang.bean.SalesProductDetailsItem_3;
 import com.example.administrator.xiudoufang.bean.SalesProductDetailsItem_4;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 
@@ -150,6 +151,7 @@ public class SalesProductDetailsAdapter extends BaseMultiItemQuickAdapter<MultiI
                 final SalesProductDetailsItem_4 item_4 = (SalesProductDetailsItem_4) item;
                 helper.setText(R.id.tv_key, item_4.getKey());
                 final EditText etValue = helper.getView(R.id.et_value);
+                etValue.setText(item_4.getValue());
                 etValue.addTextChangedListener(new BaseTextWatcher() {
                     @Override
                     public void afterTextChanged(Editable editable) {

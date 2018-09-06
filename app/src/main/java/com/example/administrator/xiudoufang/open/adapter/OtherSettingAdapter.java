@@ -1,6 +1,5 @@
 package com.example.administrator.xiudoufang.open.adapter;
 
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.graphics.Color;
@@ -31,9 +30,9 @@ import com.example.administrator.xiudoufang.bean.OtherSeting_2;
 import com.example.administrator.xiudoufang.bean.OtherSeting_3;
 import com.example.administrator.xiudoufang.bean.OtherSeting_4;
 import com.example.administrator.xiudoufang.bean.OtherSettingItem;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.open.decoration.GridSpacingItemDecoration;
-import com.example.administrator.xiudoufang.open.ui.SelectPicActivity;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -57,8 +56,11 @@ public class OtherSettingAdapter extends BaseMultiItemQuickAdapter<MultiItemEnti
 
     private TimePickerView mForcastDatePickerView;
 
+    private OnPicSelectListener mListener;
+    List<MultiItemEntity> data;
     public OtherSettingAdapter(List<MultiItemEntity> data) {
         super(data);
+        this.data = data;
         addItemType(LAYOUT_FIRST, R.layout.layout_list_item_other_setting_1);
         addItemType(LAYOUT_SECOND, R.layout.layout_list_item_other_setting_2);
         addItemType(LAYOUT_THIRD, R.layout.layout_list_item_other_setting_3);
@@ -154,7 +156,7 @@ public class OtherSettingAdapter extends BaseMultiItemQuickAdapter<MultiItemEnti
                 }
             });
         } else {
-            OtherSeting_4 item_4 = (OtherSeting_4) item;
+            final OtherSeting_4 item_4 = (OtherSeting_4) item;
             helper.setText(R.id.tv_title, item_4.getTitle());
             final TextView tvContent = helper.getView(R.id.tv_content);
             tvContent.setText(item_4.isOnlyShowSubTitle() ? item_4.getSubTitle() : TextUtils.isEmpty(item_4.getValue()) ? item_4.getSubTitle() : item_4.getValue());
@@ -162,28 +164,30 @@ public class OtherSettingAdapter extends BaseMultiItemQuickAdapter<MultiItemEnti
                 tvContent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showForcastDateDialog(tvContent);
+                        showForcastDateDialog(tvContent, item_4);
                     }
                 });
             } else {
                 tvContent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(mContext, SelectPicActivity.class);
-                        mContext.startActivity(intent);
+                       if (mListener != null) {
+                           mListener.onPicSelect();
+                       }
                     }
                 });
             }
         }
     }
 
-    private void showForcastDateDialog(final TextView tvContent) {
+    private void showForcastDateDialog(final TextView tvContent, final OtherSeting_4 item_4) {
         if (mForcastDatePickerView == null) {
             mForcastDatePickerView = new TimePickerBuilder(mContext, new OnTimeSelectListener() {
                 @Override
                 public void onTimeSelect(Date date, View v) {
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
                     tvContent.setText(format.format(date));
+                    item_4.setValue(format.format(date));
                 }
             })
                     .setLayoutRes(R.layout.layout_pickerview_custom_time, new CustomListener() {
@@ -216,5 +220,13 @@ public class OtherSettingAdapter extends BaseMultiItemQuickAdapter<MultiItemEnti
                     .build();
         }
         mForcastDatePickerView.show();
+    }
+
+    public void setOnPicSelectListener(OnPicSelectListener listener) {
+        this.mListener = listener;
+    }
+
+    public interface OnPicSelectListener {
+        void onPicSelect();
     }
 }

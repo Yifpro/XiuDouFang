@@ -3,6 +3,7 @@ package com.example.administrator.xiudoufang.open.adapter;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -33,10 +34,14 @@ public class ConfirmOrderInfoAdapter extends BaseMultiItemQuickAdapter<MultiItem
     private List<MultiItemEntity> data;
     private DecimalFormat mFormat = new DecimalFormat("0.00");
     private boolean isInputable; //******** 余额支付是否可输入 ********
+    private double originalBendanjine;
+    private double originalLeijiqian;
 
     public ConfirmOrderInfoAdapter(@Nullable List<MultiItemEntity> data) {
         super(data);
         this.data = data;
+        this.originalBendanjine = originalBendanjine;
+        this.originalLeijiqian = originalLeijiqian;
         addItemType(LAYOUT_TEXT, R.layout.layout_list_item_confirm_order_info_1);
         addItemType(LAYOUT_EDIT, R.layout.layout_list_item_confirm_order_info_2);
     }
@@ -76,14 +81,21 @@ public class ConfirmOrderInfoAdapter extends BaseMultiItemQuickAdapter<MultiItem
                     public void afterTextChanged(Editable editable) {
                         String value = editable.toString().trim();
                         info_2.setValue(value);
-                        OrderInfo_2 otherFee = (OrderInfo_2) data.get(3);
+                        OrderInfo_2 otherFee = (OrderInfo_2) data.get(3); //其他费用
                         if (otherFee.getKey().equals(info_2.getKey())) {
-                            OrderInfo_1 yingshou = (OrderInfo_1) data.get(4);
-                            double a = Double.parseDouble(yingshou.getValue()) + Double.parseDouble(value);
+                            if (TextUtils.isEmpty(value)) {
+                                value = "0";
+                            }
+                            OrderInfo_1 bendanjine = (OrderInfo_1) data.get(0);
+                            double a = Double.parseDouble(bendanjine.getValue()) + Double.parseDouble(value);
+                            OrderInfo_1 yingshou = (OrderInfo_1) data.get(4); //本单应收
                             yingshou.setValue(mFormat.format(a));
-                            OrderInfo_1 leiji = (OrderInfo_1) data.get(5);
-                            double b = Double.parseDouble(leiji.getValue()) + Double.parseDouble(value);
+
+                            OrderInfo_1 leijiqian = (OrderInfo_1) data.get(2);
+                            double b = Double.parseDouble(leijiqian.getValue()) + Double.parseDouble(value);
+                            OrderInfo_1 leiji = (OrderInfo_1) data.get(5); //累计金额
                             leiji.setValue(mFormat.format(b));
+
                             notifyItemChanged(4);
                             notifyItemChanged(5);
                         }

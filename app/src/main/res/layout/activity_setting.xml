@@ -17,8 +17,6 @@
         android:textColor="@color/white"
         android:background="@drawable/bg_btn_exit_login_shape"
         android:gravity="center"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
         android:layout_marginTop="32dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"

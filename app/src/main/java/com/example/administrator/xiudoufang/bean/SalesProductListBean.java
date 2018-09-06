@@ -93,7 +93,7 @@ public class SalesProductListBean {
         private String cp_qty = "1";
         private String order_prc;
         private String s_jiage2;
-        private String zengpin;
+        private String zengpin = "0";
         private String zhekou = "1";
         private String bz;
         private String action;

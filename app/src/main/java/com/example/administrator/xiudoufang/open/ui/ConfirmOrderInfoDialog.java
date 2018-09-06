@@ -52,6 +52,7 @@ public class ConfirmOrderInfoDialog extends DialogFragment implements View.OnCli
         assert getDialog().getWindow() != null;
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         View view = inflater.inflate(R.layout.fragment_confirm_order_info, container);
+        view.findViewById(R.id.iv_close).setOnClickListener(this);
         view.findViewById(R.id.tv_save_order).setOnClickListener(this);
         view.findViewById(R.id.tv_confirm_order).setOnClickListener(this);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
@@ -75,6 +76,9 @@ public class ConfirmOrderInfoDialog extends DialogFragment implements View.OnCli
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.iv_close:
+                dismiss();
+                break;
             case R.id.tv_save_order:
                 if (mListener != null) mListener.onSave(getInfo());
                 break;
