@@ -68,7 +68,6 @@ public class ExtraActivity extends AppCompatActivity implements IActivityBase, V
     @Override
     public void initData() {
         mOtherSetting = getIntent().getParcelableExtra(OtherSettingDialog.OTHER_SETTING);
-        LogUtils.e("相册收到的日期 -> " + mOtherSetting.getForcastDate()+", "+mOtherSetting.getFahuodianid());
         if (!TextUtils.isEmpty(mOtherSetting.getExtra())) {
             GlideApp.with(this).load(mOtherSetting.getExtra()).into(mIvIcon);
             mTvClearExtra.setSelected(true);

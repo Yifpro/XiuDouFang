@@ -168,7 +168,6 @@ public class OtherSettingDialog extends DialogFragment {
         public void onPicSelect() {
             Intent intent = new Intent(getActivity(), ExtraActivity.class);
             OtherSetting otherSetting = getOtherSetting();
-            LogUtils.e("即将传过去的日期 -> " + otherSetting.getForcastDate()+", "+otherSetting.getFahuodianid());
             intent.putExtra(OTHER_SETTING, otherSetting);
             startActivity(intent);
             dismiss();

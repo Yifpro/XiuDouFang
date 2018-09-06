@@ -257,11 +257,9 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
             case R.id.tv_create_order:
                 if (mCustomerBean == null) {
                     ToastUtils.show(this, "请选择购买产品的客户");
-                }
-//                else if (mList == null || mList.size() == 0) {
-//                    ToastUtils.show(this, "请选择需要购买的产品");
-//                }
-                else {
+                } else if (mList == null || mList.size() == 0) {
+                    ToastUtils.show(this, "请选择需要购买的产品");
+                } else {
                     Intent intent_2 = new Intent(this, CreateOrderActivity.class);
                     intent_2.putExtra(RESULT_CUSTOMER, mCustomerBean);
                     intent_2.putParcelableArrayListExtra(RESULT_PRODUCT_LIST, mList);

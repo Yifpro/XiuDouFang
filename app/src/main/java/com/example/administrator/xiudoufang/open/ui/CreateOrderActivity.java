@@ -25,6 +25,7 @@ import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.CustomerListBean;
 import com.example.administrator.xiudoufang.bean.OrderInfo;
 import com.example.administrator.xiudoufang.bean.OtherSetting;
+import com.example.administrator.xiudoufang.bean.OtherSettingItem;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
 import com.example.administrator.xiudoufang.bean.SettingItem;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
@@ -118,7 +119,6 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         super.onNewIntent(intent);
         setIntent(intent);
         mOtherSetting = getIntent().getParcelableExtra(OtherSettingDialog.OTHER_SETTING);
-        LogUtils.e("回来后的日期 -> " + mOtherSetting.getForcastDate());
     }
 
     @Override
@@ -247,7 +247,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         params.put("yingshou_amt", info.getYingshou()); //应收 金额+其他费用
         params.put("userid", preferences.getString(PreferencesUtils.USER_ID, "")); //用户id
         params.put("remark", mEtTip.getText().toString()); //备注
-        params.put("free", ""); //优惠金额
+        params.put("free", info.getDiscount()); //优惠金额
         params.put("allname", mCustomerBean.getQuancheng()); //全称
         params.put("freight", mCustomerBean.getFreight().size() > 0 ? mCustomerBean.getFreight().get(0).getFreight() : ""); //货运站
         int receiptTypeIndex = mReceiptTypeList.indexOf(new SettingItem(mTvReceiptType.getText().toString()));
@@ -258,22 +258,42 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         params.put("quyu", mCustomerBean.getQuyu()); //区域
         params.put("quyuno", mCustomerBean.getQuyuno()); //区域id
         params.put("action", "0"); //动作
-        params.put("ordertype", mOtherSetting.getOrderType()); //订单类型
-        params.put("huoyunleixing", mOtherSetting.getHuoyunType()); //货运类型
-        params.put("fahuodian", mOtherSetting.getFahuodianid()); //发货店
+        String fahuodianId = null;
+        String ordertypeId = null;
+        if (mOtherSetting == null) {
+            JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
+            JSONArray fahuodian = jsonObject.getJSONArray("fahuodian");
+            JSONArray ordertype = jsonObject.getJSONArray("ordertype");
+            for (int i = 0; i < fahuodian.size(); i++) {
+                JSONObject dianItem = fahuodian.getJSONObject(i);
+                if ("1".equals(dianItem.getString("moren")))
+                    fahuodianId = dianItem.getString("id");
+            }
+            for (int i = 0; i < ordertype.size(); i++) {
+                JSONObject typeItem = ordertype.getJSONObject(i);
+                if ("1".equals(typeItem.getString("moren")))
+                    ordertypeId = typeItem.getString("id");
+            }
+        } else {
+            fahuodianId = mOtherSetting.getFahuodianid();
+            ordertypeId = mOtherSetting.getOrderType();
+        }
+        params.put("fahuodian", fahuodianId); //发货店
+        params.put("ordertype", ordertypeId); //订单类型
+        params.put("huoyunleixing", mOtherSetting == null ? "0" : mOtherSetting.getHuoyunType()); //货运类型
+        params.put("kuaidiid", mOtherSetting == null ? "0" : mOtherSetting.getLogistics()); //快递id
+        params.put("yuji_jiaohuoriqi", mOtherSetting == null ? "" : mOtherSetting.getForcastDate()); //预计交货日期
+        params.put("teshu", mOtherSetting == null ? "" : mOtherSetting.getSpecialOrder()); //特殊订单
+        params.put("fujia_memo", mOtherSetting == null ? "" : mOtherSetting.getAdditionalInstructions()); //附加说明
+        params.put("cust_orderno", mOtherSetting == null ? "" : mOtherSetting.getCustomerContract()); //客户合同
         params.put("xiadanriqi", mTvCreateOrderDate.getText().toString()); //下单日期
         params.put("jiaohuoriqi", mTvDeliveryDate.getText().toString()); //交货日期
-        params.put("yuji_jiaohuoriqi", mOtherSetting.getForcastDate()); //预计交货日期
-        params.put("teshu", mOtherSetting.getSpecialOrder()); //特殊订单
-        params.put("fujia_memo", mOtherSetting.getAdditionalInstructions()); //附加说明
-        params.put("kuaidiid", mOtherSetting.getLogistics()); //快递id
         params.put("feiyong", info.getOtherFree()); //费用
         params.put("songhuo_time", ""); //最佳送货
-        params.put("cust_orderno", mOtherSetting.getCustomerContract()); //客户合同
         params.put("confirm", isConfirm ? "1" : "0"); //是否确认订单
         params.put("pay_yueamt", info.getBalancePayment()); //余额支付金额
         params.put("cpjsonstr", JSONObject.toJSONString(mList)); //产品json
-        mLogic.saveOrCreateOrder(params, mOtherSetting.getExtra(), new JsonCallback<String>() {
+        mLogic.saveOrCreateOrder(params, mOtherSetting == null ? null : mOtherSetting.getExtra(), new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
 
