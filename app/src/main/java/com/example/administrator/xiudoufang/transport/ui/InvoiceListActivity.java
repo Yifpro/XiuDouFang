@@ -63,8 +63,7 @@ public class InvoiceListActivity extends AppCompatActivity implements IActivityB
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_FOR_INVOICE_QUERY && data != null) {
             mFilter = data.getParcelableExtra(InvoiceQueryActivity.INVOICE_FILTER);
-            if (!TextUtils.isEmpty(mFilter.getNo()))
-                mParams.put("id", mFilter.getNo());
+            mParams.put("id", mFilter.getNo());
             mParams.put("searchitem", mFilter.getCustomer());
             mParams.put("starttime", mFilter.getStartTime());
             mParams.put("endtime", mFilter.getEndTime());
@@ -76,6 +75,7 @@ public class InvoiceListActivity extends AppCompatActivity implements IActivityB
 
     @Override
     public void initView() {
+        setTitle("发货单");
         mRefreshLayout = findViewById(R.id.refresh_layout);
         mRecyclerView = findViewById(R.id.recycler_view);
     }
@@ -96,6 +96,7 @@ public class InvoiceListActivity extends AppCompatActivity implements IActivityB
         loadInvoiceList(true);
     }
 
+    //******** 加载发货单列表 ********
     private void loadInvoiceList(final boolean isRefresh) {
         if (isRefresh) mCurrentPage = 1;
         if (mParams == null) {
@@ -137,7 +138,7 @@ public class InvoiceListActivity extends AppCompatActivity implements IActivityB
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_transport_num, menu);
+        getMenuInflater().inflate(R.menu.menu_check_order, menu);
         return true;
     }
 

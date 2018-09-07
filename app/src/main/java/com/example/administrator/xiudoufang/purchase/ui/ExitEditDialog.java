@@ -28,7 +28,7 @@ public class ExitEditDialog extends DialogFragment {
                 dismiss();
             }
         });
-        view.findViewById(R.id.tv_submit).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (listener != null)

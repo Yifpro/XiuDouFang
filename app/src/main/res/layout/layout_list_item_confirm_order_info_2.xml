@@ -28,10 +28,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
-        android:background="@drawable/bg_edittext_query_sales_order"
+        android:background="@drawable/rect_4_white"
         android:cursorVisible="false"
         android:textColor="@color/black"
-        android:textCursorDrawable="@drawable/bg_edit_text_cursor_shape"
+        android:textCursorDrawable="@drawable/text_cursor_shape"
         android:textSize="14dp"
         app:layout_constraintLeft_toRightOf="@id/guideline_1"
         app:layout_constraintRight_toRightOf="parent"/>

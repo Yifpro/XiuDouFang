@@ -63,6 +63,6 @@
         app:siv_type="TYPE_TEXT"
         app:siv_value="全部"/>
 
-    <include layout="@layout/layout_search_and_clear"/>
+    <include layout="@layout/include_search_and_clear"/>
 </LinearLayout>
 

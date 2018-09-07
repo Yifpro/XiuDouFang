@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_margin="5dp"
-        app:tabBackground="@drawable/bg_tab_check_order_selector"
+        app:tabBackground="@drawable/bg_tablayout_blue_white_selector"
         app:tabIndicatorColor="@color/colorPrimary"
         app:tabSelectedTextColor="@color/white"
         app:tabTextColor="@color/black" />

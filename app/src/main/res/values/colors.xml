@@ -5,11 +5,11 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#fff</color>
     <color name="black">#000</color>
-    <color name="gray_737373">#737373</color>
-    <color name="gray_888888">#888888</color>
-    <color name="gray_cccccc">#cccccc</color>
-    <color name="gray_f2f2f2">#f2f2f2</color>
     <color name="red">#f00</color>
+    <color name="gray_f2f2f2">#f2f2f2</color>
+    <color name="gray_cccccc">#cccccc</color>
+    <color name="gray_888888">#888888</color>
+    <color name="gray_737373">#737373</color>
     <color name="blue_e5f6ff">#e5f6ff</color>
     <color name="orange_ffae33">#ffae33</color>
     <color name="green_40ff00">#40ff00</color>

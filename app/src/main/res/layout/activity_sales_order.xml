@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textview_1"/>
 
     <include
-        layout="@layout/layout_filter_bar_sales_order"
+        layout="@layout/include_filter_bar_word"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -68,7 +68,7 @@
         android:id="@+id/tv_forcast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_textview_forcast_shape"
+        android:background="@drawable/oval_28_28_blue"
         android:gravity="center"
         android:text="@string/forcast"
         android:textColor="@color/white"

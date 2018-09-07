@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_dialog_select_server_shape"
+    android:background="@drawable/rect_8_white"
     android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
@@ -19,7 +19,7 @@
         android:id="@+id/tv_sure"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_textview_other_setting_shape"
+        android:background="@drawable/rect_8_bl_br_blue"
         android:gravity="center"
         android:paddingBottom="6dp"
         android:paddingTop="6dp"

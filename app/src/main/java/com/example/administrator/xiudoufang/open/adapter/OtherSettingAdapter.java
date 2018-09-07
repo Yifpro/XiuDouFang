@@ -30,7 +30,6 @@ import com.example.administrator.xiudoufang.bean.OtherSeting_2;
 import com.example.administrator.xiudoufang.bean.OtherSeting_3;
 import com.example.administrator.xiudoufang.bean.OtherSeting_4;
 import com.example.administrator.xiudoufang.bean.OtherSettingItem;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.open.decoration.GridSpacingItemDecoration;
 
@@ -49,10 +48,10 @@ import java.util.Locale;
 
 public class OtherSettingAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
 
-    public static final int LAYOUT_FIRST = 1;
-    public static final int LAYOUT_SECOND = 2;
-    public static final int LAYOUT_THIRD = 3;
-    public static final int LAYOUT_FOUTH = 4;
+    public static final int TYPE_FIRST = 1;
+    public static final int TYPE_SECOND = 2;
+    public static final int TYPE_THIRD = 3;
+    public static final int TYPE_FOUTH = 4;
 
     private TimePickerView mForcastDatePickerView;
 
@@ -61,15 +60,15 @@ public class OtherSettingAdapter extends BaseMultiItemQuickAdapter<MultiItemEnti
     public OtherSettingAdapter(List<MultiItemEntity> data) {
         super(data);
         this.data = data;
-        addItemType(LAYOUT_FIRST, R.layout.layout_list_item_other_setting_1);
-        addItemType(LAYOUT_SECOND, R.layout.layout_list_item_other_setting_2);
-        addItemType(LAYOUT_THIRD, R.layout.layout_list_item_other_setting_3);
-        addItemType(LAYOUT_FOUTH, R.layout.layout_list_item_other_setting_4);
+        addItemType(TYPE_FIRST, R.layout.layout_list_item_other_setting_1);
+        addItemType(TYPE_SECOND, R.layout.layout_list_item_other_setting_2);
+        addItemType(TYPE_THIRD, R.layout.layout_list_item_other_setting_3);
+        addItemType(TYPE_FOUTH, R.layout.layout_list_item_other_setting_4);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, MultiItemEntity item) {
-        if (item.getItemType() == LAYOUT_FIRST) {
+        if (item.getItemType() == TYPE_FIRST) {
             final OtherSeting_1 item_1 = (OtherSeting_1) item;
             helper.setText(R.id.tv_title, item_1.getTitle());
             RecyclerView recyclerView = helper.getView(R.id.recycler_view);
@@ -90,7 +89,7 @@ public class OtherSettingAdapter extends BaseMultiItemQuickAdapter<MultiItemEnti
             recyclerView.addItemDecoration(new GridSpacingItemDecoration(3, SizeUtils.dp2px(5), false));
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
-        } else if (item.getItemType() == LAYOUT_SECOND) {
+        } else if (item.getItemType() == TYPE_SECOND) {
             final OtherSeting_2 item_2 = (OtherSeting_2) item;
             helper.setText(R.id.tv_title, item_2.getTitle());
             List<String> list = item_2.getList();
@@ -143,7 +142,7 @@ public class OtherSettingAdapter extends BaseMultiItemQuickAdapter<MultiItemEnti
                     linearLayout.addView(line);
                 }
             }
-        } else if (item.getItemType() == LAYOUT_THIRD) {
+        } else if (item.getItemType() == TYPE_THIRD) {
             final OtherSeting_3 item_3 = (OtherSeting_3) item;
             helper.setText(R.id.tv_title, item_3.getTitle());
             final EditText etContent = helper.getView(R.id.et_content);

@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -497,7 +496,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 mAdapter.setNewData(mList);
                 if (mList.size() == 0) {
                     mTvBottomRight.setClickable(false);
-                    mTvBottomRight.setBackgroundResource(R.drawable.bg_textview_confirm_order_unclick_shape);
+                    mTvBottomRight.setBackgroundResource(R.drawable.rect_4_gray_888888);
                 } else {
                     mAdapter.setNewData(mList);
                 }

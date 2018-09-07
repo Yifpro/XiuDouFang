@@ -9,7 +9,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
@@ -111,7 +110,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
                 showPaymentTimePickerDialog();
             }
         });
-        findViewById(R.id.tv_submit).setOnClickListener(this);
+        findViewById(R.id.tv_confirm).setOnClickListener(this);
     }
 
     private void setSegmentStatus(String direction) {
@@ -283,7 +282,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_submit:
+            case R.id.tv_confirm:
                 submitBill();
                 break;
         }

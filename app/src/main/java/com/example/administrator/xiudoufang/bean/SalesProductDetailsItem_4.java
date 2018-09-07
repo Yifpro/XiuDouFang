@@ -38,6 +38,6 @@ public class SalesProductDetailsItem_4 implements MultiItemEntity {
 
     @Override
     public int getItemType() {
-        return SalesProductDetailsAdapter.LAYOUT_FOUTH;
+        return SalesProductDetailsAdapter.TYPE_FOUTH;
     }
 }

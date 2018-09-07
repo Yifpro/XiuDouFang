@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@drawable/bg_dialog_select_server_shape"
+              android:background="@drawable/rect_8_white"
               android:orientation="vertical">
 
     <TextView
@@ -38,7 +38,7 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="@string/confirm"
-        android:background="@drawable/bg_textview_confirm_shape"
+        android:background="@drawable/rect_12_bl_br_blue"
         android:textColor="@color/white"
         android:textSize="14dp" />
 

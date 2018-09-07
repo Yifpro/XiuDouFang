@@ -41,6 +41,6 @@ public class OrderInfo_2 implements MultiItemEntity, BaseOrderInfo {
 
     @Override
     public int getItemType() {
-        return ConfirmOrderInfoAdapter.LAYOUT_EDIT;
+        return ConfirmOrderInfoAdapter.TYPE_EDIT;
     }
 }

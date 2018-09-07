@@ -35,6 +35,6 @@ public class StockDetailsItem implements MultiItemEntity {
 
     @Override
     public int getItemType() {
-        return StockDetailsAdapter.TYPE_LEVEL_0;
+        return StockDetailsAdapter.TYPE_LEVEL_1;
     }
 }

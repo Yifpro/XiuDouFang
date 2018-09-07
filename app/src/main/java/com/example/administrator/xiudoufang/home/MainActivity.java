@@ -1,4 +1,4 @@
-package com.example.administrator.xiudoufang.base;
+package com.example.administrator.xiudoufang.home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,12 +9,13 @@ import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
+import com.example.administrator.xiudoufang.base.IActivityBase;
+import com.example.administrator.xiudoufang.bean.IntegerStringPair;
 import com.example.administrator.xiudoufang.check.ui.OrderListActivity;
 import com.example.administrator.xiudoufang.open.ui.SalesOrderActivity;
 import com.example.administrator.xiudoufang.product.ui.ProductListActivity;
 import com.example.administrator.xiudoufang.receipt.ui.CustomerListActivity;
 import com.example.administrator.xiudoufang.transport.ui.InvoiceListActivity;
-import com.example.administrator.xiudoufang.bean.MenuItem;
 import com.example.administrator.xiudoufang.purchase.ui.PurchaseActivity;
 import com.example.administrator.xiudoufang.setting.ui.SettingActivity;
 import com.example.administrator.xiudoufang.stock.ui.StockActivity;
@@ -41,17 +42,17 @@ public class MainActivity extends AppCompatActivity implements IActivityBase {
 
     @Override
     public void initData() {
-        ArrayList<MenuItem> menuItems = new ArrayList<>();
-        menuItems.add(new MenuItem(R.mipmap.ic_open_bill, "开单"));
-        menuItems.add(new MenuItem(R.mipmap.ic_query_blue, "查单"));
-        menuItems.add(new MenuItem(R.mipmap.ic_receivables, "收款"));
-        menuItems.add(new MenuItem(R.mipmap.ic_product, "产品"));
-        menuItems.add(new MenuItem(R.mipmap.ic_transport_num, "运号"));
-        menuItems.add(new MenuItem(R.mipmap.ic_stock, "库存"));
-        menuItems.add(new MenuItem(R.mipmap.ic_purchase, "采购"));
-        menuItems.add(new MenuItem(R.mipmap.ic_setting, "设置"));
-        menuItems.add(new MenuItem(0, ""));
-        MainAdapter adapter = new MainAdapter(R.layout.layout_list_item_main, menuItems);
+        ArrayList<IntegerStringPair> pairs = new ArrayList<>();
+        pairs.add(new IntegerStringPair(R.mipmap.ic_open_bill, "开单"));
+        pairs.add(new IntegerStringPair(R.mipmap.ic_query_blue, "查单"));
+        pairs.add(new IntegerStringPair(R.mipmap.ic_receipt, "收款"));
+        pairs.add(new IntegerStringPair(R.mipmap.ic_product, "产品"));
+        pairs.add(new IntegerStringPair(R.mipmap.ic_transport_num, "运号"));
+        pairs.add(new IntegerStringPair(R.mipmap.ic_stock, "库存"));
+        pairs.add(new IntegerStringPair(R.mipmap.ic_purchase, "采购"));
+        pairs.add(new IntegerStringPair(R.mipmap.ic_setting, "设置"));
+        pairs.add(new IntegerStringPair(0, ""));
+        MainAdapter adapter = new MainAdapter(R.layout.layout_list_item_main, pairs);
         adapter.bindToRecyclerView(mRecyclerView);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override

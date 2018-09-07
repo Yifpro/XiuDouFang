@@ -22,5 +22,5 @@
         android:textColor="@color/black"
         android:layout_marginLeft="18dp"
         android:layout_marginRight="18dp"
-        android:background="@drawable/bg_edit_other_setting_shape"/>
+        android:background="@drawable/rect_4_white_gray"/>
 </LinearLayout>

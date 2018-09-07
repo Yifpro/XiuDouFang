@@ -76,7 +76,7 @@
         android:layout_marginLeft="36dp"
         android:layout_marginRight="36dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/bg_textview_confirm_order_shape"
+        android:background="@drawable/rect_4_blue_6_pt_pb"
         android:clickable="true"
         android:gravity="center"
         android:onClick="onClick"

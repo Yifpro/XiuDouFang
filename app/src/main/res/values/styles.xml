@@ -40,7 +40,7 @@
         <item name="android:textSize">14dp</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
-        <item name="android:background">@drawable/bg_menu_item_open_bill_selector</item>
+        <item name="android:background">@drawable/gray_white_pressed_selector</item>
     </style>
 
     <style name="picture.default.style" parent="Theme.AppCompat.Light.DarkActionBar">

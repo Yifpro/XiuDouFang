@@ -7,7 +7,7 @@
     <include layout="@layout/layout_toolbar" />
 
     <include
-        layout="@layout/layout_info_filter"
+        layout="@layout/include_filter_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"

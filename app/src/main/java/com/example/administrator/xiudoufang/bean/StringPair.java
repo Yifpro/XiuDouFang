@@ -3,7 +3,7 @@ package com.example.administrator.xiudoufang.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class SettingItem implements Parcelable {
+public class StringPair implements Parcelable {
 
     private String key;
     private String value;
@@ -11,16 +11,16 @@ public class SettingItem implements Parcelable {
     private boolean isShowNext;
     private boolean isToogleButton;
 
-    public SettingItem(String key) {
+    public StringPair(String key) {
         this.key = key;
     }
 
-    public SettingItem(String key, String value) {
+    public StringPair(String key, String value) {
         this.key = key;
         this.value = value;
     }
 
-    public SettingItem(String key, String value, boolean isShowLine) {
+    public StringPair(String key, String value, boolean isShowLine) {
         this.key = key;
         this.value = value;
         this.isShowLine = isShowLine;
@@ -46,7 +46,7 @@ public class SettingItem implements Parcelable {
         return isShowLine;
     }
 
-    public SettingItem setShowLine(boolean showLine) {
+    public StringPair setShowLine(boolean showLine) {
         isShowLine = showLine;
         return this;
     }
@@ -55,7 +55,7 @@ public class SettingItem implements Parcelable {
         return isShowNext;
     }
 
-    public SettingItem setShowNext(boolean showNext) {
+    public StringPair setShowNext(boolean showNext) {
         isShowNext = showNext;
         return this;
     }
@@ -64,15 +64,15 @@ public class SettingItem implements Parcelable {
         return isToogleButton;
     }
 
-    public SettingItem setToogleButton(boolean toogleButton) {
+    public StringPair setToogleButton(boolean toogleButton) {
         isToogleButton = toogleButton;
         return this;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof SettingItem) {
-            SettingItem s2 = (SettingItem) obj;
+        if (obj instanceof StringPair) {
+            StringPair s2 = (StringPair) obj;
             return this.key.equals(s2.key);
         }
         return false;
@@ -100,7 +100,7 @@ public class SettingItem implements Parcelable {
         dest.writeByte(this.isToogleButton ? (byte) 1 : (byte) 0);
     }
 
-    protected SettingItem(Parcel in) {
+    protected StringPair(Parcel in) {
         this.key = in.readString();
         this.value = in.readString();
         this.isShowLine = in.readByte() != 0;
@@ -108,15 +108,15 @@ public class SettingItem implements Parcelable {
         this.isToogleButton = in.readByte() != 0;
     }
 
-    public static final Creator<SettingItem> CREATOR = new Creator<SettingItem>() {
+    public static final Creator<StringPair> CREATOR = new Creator<StringPair>() {
         @Override
-        public SettingItem createFromParcel(Parcel source) {
-            return new SettingItem(source);
+        public StringPair createFromParcel(Parcel source) {
+            return new StringPair(source);
         }
 
         @Override
-        public SettingItem[] newArray(int size) {
-            return new SettingItem[size];
+        public StringPair[] newArray(int size) {
+            return new StringPair[size];
         }
     };
 }

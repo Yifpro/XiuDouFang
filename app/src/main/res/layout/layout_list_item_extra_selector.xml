@@ -9,7 +9,7 @@
         android:id="@+id/tv"
         android:textSize="16dp"
         android:textColor="@color/colorPrimary"
-        android:background="@drawable/bg_item_server_selector"
+        android:background="@drawable/gray_white_pressed_selector"
         android:gravity="center"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"

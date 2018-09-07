@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/gray_cccccc"
     android:orientation="vertical">
 
     <include layout="@layout/layout_toolbar"/>
@@ -86,6 +85,6 @@
         app:siv_key="@string/amount"
         app:siv_type="TYPE_TEXT"/>
 
-    <include layout="@layout/layout_search_and_clear"/>
+    <include layout="@layout/include_search_and_clear"/>
 </LinearLayout>
 

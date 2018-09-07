@@ -90,7 +90,7 @@
         android:paddingBottom="6dp"
         android:gravity="center"
         android:textColor="@color/white"
-        android:background="@drawable/bg_textview_confirm_order_shape"
+        android:background="@drawable/rect_4_blue_6_pt_pb"
         android:text="@string/sure"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

@@ -3,9 +3,9 @@
           package="com.example.administrator.xiudoufang">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".base.XiuDouFangApplication"
@@ -22,61 +22,72 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".base.MainActivity"/>
+        <activity android:name=".home.MainActivity"/>
         <activity android:name=".setting.ui.SettingActivity"/>
-        <activity android:name=".setting.ui.StoreSwitchActivity"/>
+        <activity android:name=".setting.ui.ShopListActivity"/>
         <activity android:name=".purchase.ui.PurchaseActivity"/>
         <activity
             android:name=".purchase.ui.SupplierListActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
-        <activity android:name=".purchase.ui.SupplierDetailsActivity" />
-        <activity android:name=".stock.ui.StockDetailsActivity" />
-        <activity android:name=".check.ui.WebActivity" />
-        <activity android:name=".purchase.ui.NewPurchaseOrderActivity"
-                  android:launchMode="singleTask" />
-        <activity android:name=".purchase.ui.ScanActivity" />
-        <activity android:name=".purchase.ui.SupplierProductListActivity"
-                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
-        <activity android:name=".purchase.ui.WarehouseListActivity" />
-        <activity android:name=".purchase.ui.AddSupplierActivity" />
-        <activity android:name=".purchase.ui.AreaListActivity"
-                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        <activity android:name=".purchase.ui.SupplierDetailsActivity"/>
+        <activity android:name=".stock.ui.StockDetailsActivity"/>
+        <activity android:name=".check.ui.WebActivity"/>
+        <activity
+            android:name=".purchase.ui.NewPurchaseOrderActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".purchase.ui.ScanActivity"/>
+        <activity
+            android:name=".purchase.ui.SupplierProductListActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity android:name=".purchase.ui.WarehouseListActivity"/>
+        <activity android:name=".purchase.ui.AddSupplierActivity"/>
+        <activity
+            android:name=".purchase.ui.AreaListActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity android:name=".purchase.ui.PurchaseQueryActivity"/>
-        <activity android:name=".purchase.ui.PurchaseDetailsActivity"
-                  android:launchMode="singleTask"/>
-        <activity android:name=".purchase.ui.SupplierProductDetailsActivity" />
-        <activity android:name=".stock.ui.StockActivity"
-                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity
+            android:name=".purchase.ui.PurchaseDetailsActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".purchase.ui.SupplierProductDetailsActivity"/>
+        <activity
+            android:name=".stock.ui.StockActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity android:name=".stock.ui.StockQueryActivity"/>
         <activity android:name=".transport.ui.InvoiceListActivity"/>
         <activity android:name=".transport.ui.InvoiceQueryActivity"/>
         <activity android:name=".product.ui.ProductListActivity"/>
-        <activity android:name=".product.ui.ProductQueryActivity"
-                  android:launchMode="singleTask" />
-        <activity android:name=".product.ui.ProductEditActivity" />
+        <activity
+            android:name=".product.ui.ProductQueryActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".product.ui.ProductEditActivity"/>
         <activity
             android:name=".receipt.ui.CustomerListActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity android:name=".receipt.ui.PaymentActivity"/>
         <activity android:name=".check.ui.OrderListActivity"/>
         <activity android:name=".check.ui.OrderQueryActivity"/>
-        <activity android:name=".open.ui.SalesOrderActivity"
-                  android:launchMode="singleTask"
+        <activity
+            android:name=".open.ui.SalesOrderActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity android:name=".stock.ui.TypeListActivity"
                   android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
-        <activity android:name=".stock.ui.TypeListActivity" />
         <activity android:name=".product.ui.ProductDetailsActivity"/>
-        <activity android:name=".transport.ui.InvoiceDetailsActivity" />
-        <activity android:name=".check.ui.OrderDetailsActivity" />
-        <activity android:name=".open.ui.SalesProductListActivity"
-                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
-        <activity android:name=".receipt.ui.CustomerDetailsActivity" />
-        <activity android:name=".open.ui.SalesProductDetailsActivity"
-                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
-        <activity android:name=".open.ui.AddCustomerActivity" />
-        <activity android:name=".open.ui.CreateOrderActivity"
-                  android:launchMode="singleTask"
-                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
-        <activity android:name=".open.ui.ExtraActivity" />
+        <activity android:name=".transport.ui.InvoiceDetailsActivity"/>
+        <activity android:name=".check.ui.OrderDetailsActivity"/>
+        <activity
+            android:name=".open.ui.SalesProductListActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity android:name=".receipt.ui.CustomerDetailsActivity"/>
+        <activity
+            android:name=".open.ui.SalesProductDetailsActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity android:name=".open.ui.AddCustomerActivity"/>
+        <activity
+            android:name=".open.ui.CreateOrderActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity android:name=".open.ui.ExtraActivity"/>
     </application>
 
 </manifest>

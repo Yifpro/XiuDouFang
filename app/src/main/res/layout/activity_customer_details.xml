@@ -133,14 +133,14 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:id="@+id/tv_submit"
+                android:id="@+id/tv_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/bg_textview_confirm_order_shape"
+                android:background="@drawable/rect_4_blue_6_pt_pb"
                 android:gravity="center"
                 android:padding="10dp"
                 android:onClick="onSubmit"

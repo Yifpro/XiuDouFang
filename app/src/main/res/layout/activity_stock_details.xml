@@ -7,12 +7,6 @@
 
     <include layout="@layout/layout_toolbar" />
 
-    <ImageView
-        android:id="@+id/iv_icon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center_horizontal"/>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"

@@ -1,5 +1,7 @@
 package com.example.administrator.xiudoufang.stock.logic;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.bean.StockDetailsBean;
 import com.example.administrator.xiudoufang.bean.StockListBean;
@@ -18,30 +20,33 @@ import java.util.HashMap;
 public class StockLogic {
 
     //******** 获取库存列表 ********
-    public void requestStockList(HashMap<String, String> params, JsonCallback<StockListBean> callback) {
+    public void requestStockList(Context context, HashMap<String, String> params, JsonCallback<StockListBean> callback) {
         String json = JSONObject.toJSONString(params);
         LogUtils.e("库存列表 -> " + json);
         OkGo.<StockListBean>post(StringUtils.BASE_URL + "/Api/products/Getinvdata?Getinvdata=0")
+                .tag(context)
                 .headers("Content-Type", "application/json")
                 .upJson(json)
                 .execute(callback);
     }
 
     //******** 获取库存详情 ********
-    public void requestStockDetails(HashMap<String, String> params, JsonCallback<StockDetailsBean> callback) {
+    public void requestStockDetails(Context context, HashMap<String, String> params, JsonCallback<StockDetailsBean> callback) {
         String json = JSONObject.toJSONString(params);
         LogUtils.e("库存详情 -> " + json);
         OkGo.<StockDetailsBean>post(StringUtils.BASE_URL + "/Api/products/Getsingleproinvdata?Getsingleproinvdata=0")
+                .tag(context)
                 .headers("Content-Type", "application/json")
                 .upJson(json)
                 .execute(callback);
     }
 
     //******** 获取类别列表 ********
-    public void requestTypeList(HashMap<String, String> params, JsonCallback<TypeListBean> callback) {
+    public void requestTypeList(Context context, HashMap<String, String> params, JsonCallback<TypeListBean> callback) {
         String json = JSONObject.toJSONString(params);
         LogUtils.e("类别列表 -> " + json);
         OkGo.<TypeListBean>get(StringUtils.getUrl("/Api/products/request_producttype?", params))
+                .tag(context)
                 .execute(callback);
     }
 }

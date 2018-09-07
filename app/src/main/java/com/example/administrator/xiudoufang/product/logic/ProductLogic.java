@@ -1,5 +1,7 @@
 package com.example.administrator.xiudoufang.product.logic;
 
+import android.app.Activity;
+
 import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.bean.ProductDetailsBean;
 import com.example.administrator.xiudoufang.bean.ProductListBean;

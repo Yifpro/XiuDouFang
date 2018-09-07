@@ -8,17 +8,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.base.MainActivity;
+import com.example.administrator.xiudoufang.common.utils.StringUtils;
+import com.example.administrator.xiudoufang.home.MainActivity;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SoftInputHelper;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
-import com.example.administrator.xiudoufang.common.widget.SimpleEditTextView;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.login.logic.LoginLogic;
 import com.lzy.okgo.callback.StringCallback;
@@ -30,10 +30,10 @@ import java.util.HashMap;
 public class LoginActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
 
-    private SimpleEditTextView mSetvAccount;
-    private SimpleEditTextView mSetvPassword;
-    private ImageView mIvPsdStatus;
-    private ServerSelectorDialog mServerDialog;
+    private EditText mEtAccount;
+    private EditText mEtPassword;
+    private ImageView mIvStatus;
+    private SelectServerDialog mServerDialog;
     private VerificateCodeDialog mVerificateCodeDialog;
 
     private LoginLogic mLogic;
@@ -50,40 +50,38 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
 
     @Override
     public void initView() {
-        SimpleEditTextView setvServer = findViewById(R.id.setv_server);
-        mSetvAccount = findViewById(R.id.setv_account);
-        mSetvPassword = findViewById(R.id.setv_password);
-        mIvPsdStatus = findViewById(R.id.iv_psd_status);
+        mEtAccount = findViewById(R.id.et_account);
+        mEtPassword = findViewById(R.id.et_password);
+        mIvStatus = findViewById(R.id.iv_status);
 
-        findViewById(R.id.ll_remember_psd).setOnClickListener(this);
+        mIvStatus.setOnClickListener(this);
+        findViewById(R.id.tv_server).setOnClickListener(this);
+        findViewById(R.id.tv_status).setOnClickListener(this);
         findViewById(R.id.tv_login).setOnClickListener(this);
-        setvServer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mServerDialog == null)
-                    mServerDialog = new ServerSelectorDialog();
-                mServerDialog.show(getSupportFragmentManager(), "ServerSelectorDialog");
-            }
-        });
     }
 
     @Override
     public void initData() {
         mLogic = new LoginLogic();
         boolean isSaved = PreferencesUtils.getPreferences().getBoolean(PreferencesUtils.IS_SAVED_ACCOUNT, false);
-        mIvPsdStatus.setSelected(isSaved);
-        mSetvAccount.setText(PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_NAME, ""));
+        mIvStatus.setSelected(isSaved);
+        mEtAccount.setText(PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_NAME, ""));
         if (isSaved) {
-            mSetvAccount.setText(PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_NAME, ""));
-            mSetvPassword.setText(PreferencesUtils.getPreferences().getString(PreferencesUtils.PASSWORD, ""));
+            mEtAccount.setText(PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_NAME, ""));
+            mEtPassword.setText(PreferencesUtils.getPreferences().getString(PreferencesUtils.PASSWORD, ""));
         }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.ll_remember_psd:
-                mIvPsdStatus.setSelected(!mIvPsdStatus.isSelected());
+            case R.id.tv_server:
+                if (mServerDialog == null)
+                    mServerDialog = new SelectServerDialog();
+                mServerDialog.show(getSupportFragmentManager(), "SelectServerDialog");
+            case R.id.iv_status:
+            case R.id.tv_status:
+                mIvStatus.setSelected(!mIvStatus.isSelected());
                 break;
             case R.id.tv_login:
                 login();
@@ -93,27 +91,71 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
 
     //******** 检查是否需要验证码 ********
     private void login() {
-        HttpParams httpParams = new HttpParams();
-        httpParams.put("username", mSetvAccount.getText());
-        httpParams.put("password", mSetvPassword.getText());
-        httpParams.put("shoujino", "");
         LoadingViewDialog.getInstance().show(this);
-        mLogic.checkVerificationCode(httpParams, new StringCallback() {
+        HttpParams httpParams = new HttpParams();
+        httpParams.put("username", mEtAccount.getText().toString());
+        httpParams.put("password", mEtPassword.getText().toString());
+        httpParams.put("shoujino", "");
+        mLogic.checkVerificationCode(this, httpParams, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
-                LogUtils.e("是否需要验证码->" + response.body());
+                LogUtils.e("需要验证？-> " + response.body());
                 JSONObject jsonObject = JSONObject.parseObject(response.body());
                 String msg = jsonObject.getString("mesage");
                 if ("请求成功".equals(msg)) {
                     String needcheck = jsonObject.getString("needcheck");
                     if ("0".equals(needcheck)) {
+                        //******** 不需要验证 ********
                         requestLogin("");
                     } else {
+                        //******** 需要 ********
                         LoadingViewDialog.getInstance().dismiss();
                         showVerificationCodeDialog(jsonObject.getString("userid"));
                     }
                 } else {
                     ToastUtils.show(LoginActivity.this, msg);
+                }
+            }
+        });
+    }
+
+    //******** 请求登录 ********
+    private void requestLogin(String phoneCode) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("username", mEtAccount.getText().toString()); //用户名
+        map.put("password", mEtPassword.getText().toString()); //密码
+        map.put("logdianid", ""); //登陆店
+        map.put("phonecode", phoneCode); //验证码
+        map.put("changedian", "0"); //普通登录或者切换分店
+        mLogic.requestLogin(LoginActivity.this, map, new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                LogUtils.e("登录 -> " + response.body());
+                JSONObject jsonObject = JSONObject.parseObject(response.body());
+                String messagestr = jsonObject.getString("messagestr");
+                if (!TextUtils.isEmpty(messagestr)) {
+                    LoadingViewDialog.getInstance().dismiss();
+                    mVerificateCodeDialog.setEmpty();
+                    ToastUtils.show(LoginActivity.this, messagestr);
+                } else {
+                    //******** 登录信息缓存至本地 ********
+                    StringUtils.cacheInfoToFile(response.body(), StringUtils.LOGIN_INFO);
+                    //******** 是否记住密码 ********
+                    if (mIvStatus.isSelected()) {
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put(PreferencesUtils.IS_SAVED_ACCOUNT, true);
+                        map.put(PreferencesUtils.USER_NAME, mEtAccount.getText().toString());
+                        map.put(PreferencesUtils.PASSWORD, mEtPassword.getText().toString());
+                        map.put(PreferencesUtils.USER_ID, jsonObject.getString("userid"));
+                        map.put(PreferencesUtils.DIAN_ID, jsonObject.getString("dianid"));
+                        PreferencesUtils.save(map);
+                    } else {
+                        PreferencesUtils.save(PreferencesUtils.IS_SAVED_ACCOUNT, false);
+                        PreferencesUtils.save(PreferencesUtils.USER_NAME, mEtAccount.getText().toString());
+                    }
+                    LoadingViewDialog.getInstance().dismiss();
+                    MainActivity.start(LoginActivity.this);
+                    finish();
                 }
             }
         });
@@ -139,46 +181,6 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
             });
         }
         mVerificateCodeDialog.show(getSupportFragmentManager(), "VerificateCodeDialog");
-    }
-
-    //******** 请求登录 ********
-    private void requestLogin(String phoneCode) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("username", mSetvAccount.getText());
-        map.put("password", mSetvPassword.getText());
-        map.put("logdianid", "");
-        map.put("phonecode", phoneCode);
-        map.put("changedian", "0");
-        mLogic.requestLogin(LoginActivity.this, map, new StringCallback() {
-            @Override
-            public void onSuccess(Response<String> response) {
-                LogUtils.e("登录->" + response.body());
-                JSONObject jsonObject = JSONObject.parseObject(response.body());
-                String messagestr = jsonObject.getString("messagestr");
-                if (!TextUtils.isEmpty(messagestr)) {
-                    LoadingViewDialog.getInstance().dismiss();
-                    mVerificateCodeDialog.setEmpty();
-                    ToastUtils.show(LoginActivity.this, messagestr);
-                } else {
-                    mLogic.cacheLoginInfo(LoginActivity.this, response.body());
-                    if (mIvPsdStatus.isSelected()) {
-                        HashMap<String, Object> map = new HashMap<>();
-                        map.put(PreferencesUtils.IS_SAVED_ACCOUNT, true);
-                        map.put(PreferencesUtils.USER_NAME, mSetvAccount.getText());
-                        map.put(PreferencesUtils.PASSWORD, mSetvPassword.getText());
-                        map.put(PreferencesUtils.USER_ID, jsonObject.getString("userid"));
-                        map.put(PreferencesUtils.DIAN_ID, jsonObject.getString("dianid"));
-                        PreferencesUtils.save(map);
-                    } else {
-                        PreferencesUtils.save(PreferencesUtils.IS_SAVED_ACCOUNT, false);
-                        PreferencesUtils.save(PreferencesUtils.USER_NAME, mSetvAccount.getText());
-                    }
-                    LoadingViewDialog.getInstance().dismiss();
-                    MainActivity.start(LoginActivity.this);
-                    finish();
-                }
-            }
-        });
     }
 
     //******** 点击外部区域隐藏软键盘 ********

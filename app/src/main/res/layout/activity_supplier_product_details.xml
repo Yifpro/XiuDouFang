@@ -215,10 +215,10 @@
                 android:gravity="top"
                 android:hint="备注（请输入少于50字）"
                 android:padding="5dp"
-                android:textCursorDrawable="@drawable/bg_edit_text_cursor_shape"
+                android:textCursorDrawable="@drawable/text_cursor_shape"
                 android:textSize="14dp"/>
 
-            <include layout="@layout/layout_bottom_selection" />
+            <include layout="@layout/include_bottom_selection" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

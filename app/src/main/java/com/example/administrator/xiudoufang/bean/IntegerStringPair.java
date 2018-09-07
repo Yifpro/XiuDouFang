@@ -1,11 +1,11 @@
 package com.example.administrator.xiudoufang.bean;
 
-public class MenuItem {
+public class IntegerStringPair {
 
     private int icon;
     private String title;
 
-    public MenuItem(int icon, String title) {
+    public IntegerStringPair(int icon, String title) {
         this.icon = icon;
         this.title = title;
     }

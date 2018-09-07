@@ -173,7 +173,7 @@ public class StockDetailsBean {
 
         @Override
         public int getItemType() {
-            return StockDetailsAdapter.TYPE_LEVEL_1;
+            return StockDetailsAdapter.TYPE_LEVEL_2;
         }
 
         public String getDianid() {

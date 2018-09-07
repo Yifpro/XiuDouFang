@@ -1,6 +1,5 @@
 package com.example.administrator.xiudoufang.setting.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -15,10 +14,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.LoginStore;
-import com.example.administrator.xiudoufang.bean.SettingItem;
-import com.example.administrator.xiudoufang.common.utils.CacheDiskUtils;
+import com.example.administrator.xiudoufang.bean.StringPair;
+import com.example.administrator.xiudoufang.common.utils.CacheDataManager;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.login.ui.LoginActivity;
 import com.example.administrator.xiudoufang.setting.adapter.SettingAdapter;
 
@@ -33,9 +33,9 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
     private RecyclerView mRecyclerView;
 
     private SettingAdapter mAdapter;
-    private ArrayList<SettingItem> mItemList;
+    private ArrayList<StringPair> mList;
     private ArrayList<LoginStore> mLoginStores;
-    private int mLogindianIndex;
+    private int mIndex; //******** 当前店的下标 ********
 
     public static void start(Context context) {
         context.startActivity(new Intent(context, SettingActivity.class));
@@ -64,42 +64,42 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
             String id = object.getString("id");
             String mjname = object.getString("mjname");
             if (id.equals(jsonObject.getString("dianid"))) {
-                mLogindianIndex = i;
+                mIndex = i;
                 mLoginStores.add(new LoginStore(id, mjname, true));
             } else {
                 mLoginStores.add(new LoginStore(id, mjname, false));
             }
         }
-        mItemList = new ArrayList<>();
-        mItemList.add(new SettingItem("账户名", jsonObject.getString("username")).setShowLine(true));
-        mItemList.add(new SettingItem("姓名", jsonObject.getString("xm")));
-        mItemList.add(new SettingItem("部门", jsonObject.getString("bumen")));
-        mItemList.add(new SettingItem("店ID", jsonObject.getString("dianid")));
-        mItemList.add(new SettingItem("版本号", "1.0.9"));
-        mItemList.add(new SettingItem("服务器地址", StringUtils.BASE_URL));
-        mItemList.add(new SettingItem("当前店", mLoginStores.get(mLogindianIndex).getName()).setShowNext(true).setShowLine(true));
-        CacheDiskUtils instance = CacheDiskUtils.getInstance();
-        LogUtils.e("cache clear before->"+instance.getCacheSize());
-        mItemList.add(new SettingItem("清除缓存", instance.formatCacheSize(instance.getCacheSize())).setShowNext(true));
-        mItemList.add(new SettingItem("连续扫描模式", "").setToogleButton(true));
-        mAdapter = new SettingAdapter(R.layout.layout_list_item_setting, mItemList);
+        mList = new ArrayList<>();
+        mList.add(new StringPair("账户名", jsonObject.getString("username")).setShowLine(true));
+        mList.add(new StringPair("姓名", jsonObject.getString("xm")));
+        mList.add(new StringPair("部门", jsonObject.getString("bumen")));
+        mList.add(new StringPair("店ID", jsonObject.getString("dianid")));
+        mList.add(new StringPair("版本号", "1.0.9"));
+        mList.add(new StringPair("服务器地址", StringUtils.BASE_URL));
+        mList.add(new StringPair("当前店", mLoginStores.get(mIndex).getName()).setShowNext(true).setShowLine(true));
+        mList.add(new StringPair("清除缓存", CacheDataManager.getTotalCacheSize(this)).setShowNext(true));
+        mList.add(new StringPair("连续扫描模式", "").setToogleButton(true));
+        mAdapter = new SettingAdapter(R.layout.layout_list_item_setting, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (position) {
                     case 6:
-                        Intent intent = new Intent(SettingActivity.this, StoreSwitchActivity.class);
+                        //******** 切换店 ********
+                        Intent intent = new Intent(SettingActivity.this, ShopListActivity.class);
                         intent.putParcelableArrayListExtra(STORE_LIST, mLoginStores);
-                        intent.putExtra(SELECTED_INDEX, mLogindianIndex);
+                        intent.putExtra(SELECTED_INDEX, mIndex);
                         startActivityForResult(intent, RESULT_SORT_LIST);
                         break;
                     case 7:
-                        CacheDiskUtils.getInstance().clear();
-                        int index = mItemList.indexOf(new SettingItem("清除缓存"));
-                        CacheDiskUtils instance = CacheDiskUtils.getInstance();
-                        LogUtils.e("cache clear after->"+instance.getCacheSize());
-                        mItemList.get(index).setValue(instance.formatCacheSize(instance.getCacheSize()));
+                        //******** 清除缓存 ********
+                        CacheDataManager.clearAllCache(SettingActivity.this);
+                        int index = mList.indexOf(new StringPair("清除缓存"));
+                        mList.get(index).setValue(CacheDataManager.getTotalCacheSize(SettingActivity.this));
+                        adapter.notifyItemChanged(index);
+                        ToastUtils.show(SettingActivity.this, "清除缓存完毕");
                         break;
                     case 8:
                         break;
@@ -112,14 +112,13 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == RESULT_SORT_LIST && resultCode == Activity.RESULT_OK) {
-            int index = mItemList.indexOf(new SettingItem("当前店"));
-            assert data != null;
-            mLoginStores.get(mLogindianIndex).setSelected(false);
-            mLogindianIndex = data.getIntExtra("index", 0);
-            mLoginStores.get(mLogindianIndex).setSelected(true);
-            String storeName = mLoginStores.get(mLogindianIndex).getName();
-            mItemList.get(index).setValue(storeName);
+        if (requestCode == RESULT_SORT_LIST && data != null) {
+            int index = mList.indexOf(new StringPair("当前店"));
+            mLoginStores.get(mIndex).setSelected(false);
+            mIndex = data.getIntExtra("index", 0);
+            mLoginStores.get(mIndex).setSelected(true);
+            String storeName = mLoginStores.get(mIndex).getName();
+            mList.get(index).setValue(storeName);
             mAdapter.notifyItemChanged(index);
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -129,8 +128,8 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
 
         @Override
         public void onClick(View view) {
-            SettingActivity.this.finish();
             LoginActivity.start(SettingActivity.this);
+            SettingActivity.this.finish();
         }
     }
 }

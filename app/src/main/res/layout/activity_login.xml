@@ -1,84 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/login_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp">
+    android:layout_height="match_parent">
 
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_1"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <ImageView
         android:id="@+id/iv_icon"
         android:layout_width="160dp"
         android:layout_height="160dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
-        android:background="@mipmap/ic_icon" />
+        android:src="@mipmap/ic_icon"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline_1"/>
 
-    <com.example.administrator.xiudoufang.common.widget.SimpleEditTextView
-        android:id="@+id/setv_server"
-        android:layout_width="match_parent"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraint_layout_1"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/iv_icon"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
         android:layout_marginTop="36dp"
-        app:setv_icon="@mipmap/ic_cloud"
-        app:setv_inputType="TYPE_NULL"
-        app:setv_isEditable="false"
-        app:setv_value="@string/auto" />
-
-    <com.example.administrator.xiudoufang.common.widget.SimpleEditTextView
-        android:id="@+id/setv_account"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/setv_server"
-        app:setv_hint="@string/input_account"
-        app:setv_icon="@mipmap/ic_person" />
-
-    <com.example.administrator.xiudoufang.common.widget.SimpleEditTextView
-        android:id="@+id/setv_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/setv_account"
-        app:setv_hint="@string/input_password"
-        app:setv_icon="@mipmap/ic_lock"
-        app:setv_is_password="true" />
-
-    <LinearLayout
-        android:id="@+id/ll_remember_psd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/setv_password"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        android:paddingLeft="10dp">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_icon">
 
         <ImageView
-            android:id="@+id/iv_psd_status"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/bg_password_status_selector" />
+            android:id="@+id/imageview_1"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:src="@mipmap/ic_cloud"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_server"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/remember_password" />
-    </LinearLayout>
+            android:layout_marginLeft="10dp"
+            android:text="@string/auto"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="@id/imageview_1"
+            app:layout_constraintLeft_toRightOf="@id/imageview_1"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/gray_888888"
+            app:layout_constraintTop_toBottomOf="@id/imageview_1"/>
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraint_layout_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraint_layout_1">
+
+        <ImageView
+            android:id="@+id/imageview_2"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:src="@mipmap/ic_person"/>
+
+        <EditText
+            android:id="@+id/et_account"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:hint="@string/input_account"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textCursorDrawable="@drawable/text_cursor_shape"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="@id/imageview_2"
+            app:layout_constraintLeft_toRightOf="@id/imageview_2"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/gray_888888"
+            app:layout_constraintTop_toBottomOf="@id/imageview_2"/>
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraint_layout_3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraint_layout_2">
+
+        <ImageView
+            android:id="@+id/imageview_3"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:src="@mipmap/ic_lock"/>
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:hint="@string/input_password"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textCursorDrawable="@drawable/text_cursor_shape"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="@id/imageview_3"
+            app:layout_constraintLeft_toRightOf="@id/imageview_3"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/gray_888888"
+            app:layout_constraintTop_toBottomOf="@id/imageview_3"/>
+    </android.support.constraint.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/iv_status"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_password_status_selector"
+        app:layout_constraintLeft_toLeftOf="@id/constraint_layout_3"
+        app:layout_constraintTop_toBottomOf="@id/constraint_layout_3"/>
+
+    <TextView
+        android:id="@id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/remember_password"
+        app:layout_constraintBottom_toBottomOf="@id/iv_status"
+        app:layout_constraintLeft_toRightOf="@id/iv_status"/>
 
     <TextView
         android:id="@+id/tv_login"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ll_remember_psd"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/rect_4_blue_6_pt_pb"
         android:gravity="center"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
         android:text="@string/login"
         android:textColor="@color/white"
-        android:textSize="14dp" />
+        android:textSize="14dp"
+        app:layout_constraintLeft_toLeftOf="@id/constraint_layout_3"
+        app:layout_constraintRight_toRightOf="@id/constraint_layout_3"
+        app:layout_constraintTop_toBottomOf="@id/iv_status"/>
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

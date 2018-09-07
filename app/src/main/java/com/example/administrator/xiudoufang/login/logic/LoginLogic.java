@@ -24,26 +24,25 @@ public class LoginLogic {
             ToastUtils.show(context, "请输入密码");
         } else {
             OkGo.<String>get(StringUtils.getUrl("/Api/products/login_worker?", map))
+                    .tag(context)
                     .execute(callback);
         }
     }
 
     //******** 获取验证码 ********
-    public void requestVerificationCode(String userid, Callback<String> callback) {
+    public void requestVerificationCode(Context context, String userid, Callback<String> callback) {
         HashMap<String, String> map = new HashMap<>();
         map.put("userid", userid);
         OkGo.<String>get(StringUtils.getUrl("/Api/products/LoginGetphonecode?", map))
+                .tag(context)
                 .execute(callback);
     }
 
     //******** 检查是否需要验证码 ********
-    public void checkVerificationCode(HttpParams httpParams, Callback<String> callback) {
+    public void checkVerificationCode(Context context, HttpParams httpParams, Callback<String> callback) {
         OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/UserLogincheck?loginaction=0")
+                .tag(context)
                 .params(httpParams)
                 .execute(callback);
-    }
-
-    public void cacheLoginInfo(Context context, String response) {
-        StringUtils.cacheInfoToFile(response, StringUtils.LOGIN_INFO);
     }
 }

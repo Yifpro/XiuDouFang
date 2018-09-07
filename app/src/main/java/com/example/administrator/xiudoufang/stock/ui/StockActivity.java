@@ -12,7 +12,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -22,6 +21,7 @@ import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.StockFilter;
 import com.example.administrator.xiudoufang.bean.StockListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.purchase.ui.ScanActivity;
@@ -38,6 +38,7 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
 
     private final int COUNT = 20;
     public static final String PRODUCT_NO = "product_no";
+    public static final String UNITVALUE = "unitvalue";
     private static final int RESULT_FOR_STOCK_QUERY = 112;
 
     private EditText mEtFilter;
@@ -45,8 +46,8 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
     private RecyclerView mRecyclerView;
 
     private StockLogic mLogic;
-    private HashMap<String, String> mParams;
     private StockListAdapter mAdapter;
+    private HashMap<String, String> mParams;
     private List<StockListBean.StockBean> mList;
     private int mCurrentPage = 1;
     private String mFilterText = "";
@@ -57,9 +58,15 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
     }
 
     @Override
+    public int getLayoutId() {
+        return R.layout.activity_stock;
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_FOR_STOCK_QUERY && data != null) {
+            //******** 根据过滤条件查询 ********
             StockFilter filter = data.getParcelableExtra(StockQueryActivity.FILTER_INFO);
             mParams.put("code", filter.getNo());
             mParams.put("sn", filter.getName());
@@ -78,19 +85,18 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
     }
 
     @Override
-    public int getLayoutId() {
-        return R.layout.activity_stock;
-    }
-
-    @Override
     public void initView() {
         setTitle("库存");
         mEtFilter = findViewById(R.id.et_filter);
         mRefreshLayout = findViewById(R.id.refresh_layout);
         mRecyclerView = findViewById(R.id.recycler_view);
 
+        mEtFilter.setHint(R.string.search);
+        mEtFilter.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+
         findViewById(R.id.iv_scan).setOnClickListener(this);
         findViewById(R.id.iv_filter).setOnClickListener(this);
+        mEtFilter.setOnClickListener(this);
         mEtFilter.addTextChangedListener(new InnerTextWatcher());
         mEtFilter.setOnEditorActionListener(new InnerEditActionListener());
     }
@@ -100,30 +106,25 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
         mLogic = new StockLogic();
         mAdapter = new StockListAdapter(R.layout.layout_list_item_stock, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(StockActivity.this, StockDetailsActivity.class);
-                intent.putExtra(PRODUCT_NO, mList.get(position).getCpid());
-                startActivity(intent);
-            }
-        });
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mList = new ArrayList<>();
         LoadingViewDialog.getInstance().show(this);
+        initParams();
         loadStockList(true);
     }
 
+    //******** 加载库存信息 ********
     private void loadStockList(final boolean isRefresh) {
         if (isRefresh) mCurrentPage = 1;
-        if (mParams == null) initParams();
         mParams.put("pagenum", String.valueOf(mCurrentPage++));
-        mLogic.requestStockList(mParams, new JsonCallback<StockListBean>() {
+        mLogic.requestStockList(this, mParams, new JsonCallback<StockListBean>() {
             @Override
             public void onSuccess(Response<StockListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
                 List<StockListBean.StockBean> temp = response.body().getInvlists();
+                LogUtils.e("list size ->"+temp.size());
                 if (isRefresh) {
                     mList.clear();
                     mList.addAll(temp);
@@ -148,25 +149,28 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
         mParams = new HashMap<>();
         mParams.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
         mParams.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-        mParams.put("code", "");
-        mParams.put("sn", "");
-        mParams.put("classname", "");
-        mParams.put("supp", "");
-        mParams.put("xinghao", "");
-        mParams.put("tiaoxingma", "");
-        mParams.put("pinpai", "");
-        mParams.put("qtystr", "1");
-        mParams.put("detail", "");
-        mParams.put("scanner", "");
-        mParams.put("unitvalue", "");
-        mParams.put("searchstr", mFilterText);
-        mParams.put("count", String.valueOf(COUNT));
-        mParams.put("subchild", "");
+        mParams.put("code", ""); //产品编号
+        mParams.put("sn", ""); //产品名称
+        mParams.put("classname", ""); //类别
+        mParams.put("supp", ""); //供应商
+        mParams.put("xinghao", ""); //型号
+        mParams.put("tiaoxingma", ""); //条形码
+        mParams.put("pinpai", ""); //品牌
+        mParams.put("qtystr", "1"); //数量
+        mParams.put("detail", ""); //详述
+        mParams.put("scanner", ""); //扫描动作
+        mParams.put("unitvalue", ""); //辅助单位
+        mParams.put("searchstr", mFilterText); //检索内容
+        mParams.put("count", String.valueOf(COUNT)); //个数
+        mParams.put("subchild", ""); //是否包含子集
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.et_filter:
+                mEtFilter.setCursorVisible(true);
+                break;
             case R.id.iv_scan:
                 Intent intent = new Intent(this, ScanActivity.class);
                 startActivity(intent);
@@ -201,6 +205,17 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
         @Override
         public void afterTextChanged(Editable editable) {
             mFilterText = editable.toString().trim();
+        }
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            Intent intent = new Intent(StockActivity.this, StockDetailsActivity.class);
+            intent.putExtra(PRODUCT_NO, mList.get(position).getCpid());
+            intent.putExtra(UNITVALUE, mParams.get("unitvalue"));
+            startActivity(intent);
         }
     }
 }

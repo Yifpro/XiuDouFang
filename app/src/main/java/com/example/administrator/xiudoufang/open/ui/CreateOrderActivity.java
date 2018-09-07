@@ -25,11 +25,9 @@ import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.CustomerListBean;
 import com.example.administrator.xiudoufang.bean.OrderInfo;
 import com.example.administrator.xiudoufang.bean.OtherSetting;
-import com.example.administrator.xiudoufang.bean.OtherSettingItem;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
-import com.example.administrator.xiudoufang.bean.SettingItem;
+import com.example.administrator.xiudoufang.bean.StringPair;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -79,8 +77,8 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
 
     private SalesOrderLogic mLogic;
     private SalesOrderAdapter mAdapter;
-    private ArrayList<SettingItem> mSalesmanList;
-    private ArrayList<SettingItem> mReceiptTypeList;
+    private ArrayList<StringPair> mSalesmanList;
+    private ArrayList<StringPair> mReceiptTypeList;
     private ArrayList<SalesProductListBean.SalesProductBean> mList;
     private CustomerListBean.CustomerBean mCustomerBean;
     private OtherSetting mOtherSetting;
@@ -153,7 +151,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         for (int i = 0; i < user.size(); i++) {
             String userid = user.getJSONObject(i).getString("userid");
             String name = user.getJSONObject(i).getString("name");
-            mSalesmanList.add(new SettingItem(name, userid));
+            mSalesmanList.add(new StringPair(name, userid));
         }
         if (mSalesmanList.size() > 0) mTvSalesman.setText(mSalesmanList.get(0).getKey());
         JSONArray pay = jsonObject.getJSONArray("pay");
@@ -162,7 +160,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
             String payname = pay.getJSONObject(i).getString("payname");
             if ("1".equals(pay.getJSONObject(i).getString("moren")))
                 mTvReceiptType.setText(payname);
-            mReceiptTypeList.add(new SettingItem(payname, id));
+            mReceiptTypeList.add(new StringPair(payname, id));
         }
 
         mTvNo.setText(mCustomerBean.getCustomerno());
@@ -250,9 +248,9 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         params.put("free", info.getDiscount()); //优惠金额
         params.put("allname", mCustomerBean.getQuancheng()); //全称
         params.put("freight", mCustomerBean.getFreight().size() > 0 ? mCustomerBean.getFreight().get(0).getFreight() : ""); //货运站
-        int receiptTypeIndex = mReceiptTypeList.indexOf(new SettingItem(mTvReceiptType.getText().toString()));
+        int receiptTypeIndex = mReceiptTypeList.indexOf(new StringPair(mTvReceiptType.getText().toString()));
         params.put("shoukuanid", mReceiptTypeList.size() == 0 ? "" : mReceiptTypeList.get(receiptTypeIndex).getValue()); //收款id
-        int salesmanIndex = mSalesmanList.indexOf(new SettingItem(mTvSalesman.getText().toString()));
+        int salesmanIndex = mSalesmanList.indexOf(new StringPair(mTvSalesman.getText().toString()));
         params.put("operatorid", mSalesmanList.size() == 0 ? "" : mSalesmanList.get(salesmanIndex).getValue()); //经办人
         params.put("country", mCustomerBean.getCountry()); //区域类型
         params.put("quyu", mCustomerBean.getQuyu()); //区域

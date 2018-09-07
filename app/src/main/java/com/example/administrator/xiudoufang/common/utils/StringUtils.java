@@ -1,5 +1,8 @@
 package com.example.administrator.xiudoufang.common.utils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -61,7 +64,6 @@ public class StringUtils {
             }
             return sb.toString();
         } catch (IOException e) {
-            LogUtils.e("error->" + e.getMessage());
             e.printStackTrace();
         } finally {
             try {

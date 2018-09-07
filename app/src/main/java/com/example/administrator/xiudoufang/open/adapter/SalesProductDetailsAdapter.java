@@ -23,14 +23,12 @@ import com.example.administrator.xiudoufang.bean.SalesProductDetailsItem_1;
 import com.example.administrator.xiudoufang.bean.SalesProductDetailsItem_2;
 import com.example.administrator.xiudoufang.bean.SalesProductDetailsItem_3;
 import com.example.administrator.xiudoufang.bean.SalesProductDetailsItem_4;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,34 +38,34 @@ import java.util.List;
 
 public class SalesProductDetailsAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
 
-    public static final int LAYOUT_IMG = 0;
-    public static final int LAYOUT_FIRST = 1;
-    public static final int LAYOUT_SECOND = 2;
-    public static final int LAYOUT_THIRD = 3;
-    public static final int LAYOUT_FOUTH = 4;
+    public static final int TYPE_IMG = 0;
+    public static final int TYPE_FIRST = 1;
+    public static final int TYPE_SECOND = 2;
+    public static final int TYPE_THIRD = 3;
+    public static final int TYPE_FOUTH = 4;
 
     public SalesProductDetailsAdapter(List<MultiItemEntity> data) {
         super(data);
-        addItemType(LAYOUT_IMG, R.layout.layout_list_item_sales_product_details_0);
-        addItemType(LAYOUT_FIRST, R.layout.layout_list_item_sales_product_details_1);
-        addItemType(LAYOUT_SECOND, R.layout.layout_list_item_sales_product_details_2);
-        addItemType(LAYOUT_THIRD, R.layout.layout_list_item_sales_product_details_3);
-        addItemType(LAYOUT_FOUTH, R.layout.layout_list_item_sales_product_details_4);
+        addItemType(TYPE_IMG, R.layout.layout_list_item_sales_product_details_0);
+        addItemType(TYPE_FIRST, R.layout.layout_list_item_sales_product_details_1);
+        addItemType(TYPE_SECOND, R.layout.layout_list_item_sales_product_details_2);
+        addItemType(TYPE_THIRD, R.layout.layout_list_item_sales_product_details_3);
+        addItemType(TYPE_FOUTH, R.layout.layout_list_item_sales_product_details_4);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, MultiItemEntity item) {
         switch (item.getItemType()) {
-            case LAYOUT_IMG:
+            case TYPE_IMG:
                 SalesProductDetailsItem_0 item_0 = (SalesProductDetailsItem_0) item;
                 GlideApp.with(mContext).load(StringUtils.PIC_URL + item_0.getUrl()).error(R.mipmap.ic_icon).into((ImageView) helper.getView(R.id.iv_icon));
                 break;
-            case LAYOUT_FIRST:
+            case TYPE_FIRST:
                 SalesProductDetailsItem_1 item_1 = (SalesProductDetailsItem_1) item;
                 helper.setText(R.id.tv_key, item_1.getKey());
                 helper.setText(R.id.tv_value, item_1.getValue());
                 break;
-            case LAYOUT_SECOND:
+            case TYPE_SECOND:
                 final SalesProductDetailsItem_2 item_2 = (SalesProductDetailsItem_2) item;
                 helper.setText(R.id.tv_key, item_2.getKey());
                 if (item_2.isText()) {
@@ -93,7 +91,7 @@ public class SalesProductDetailsAdapter extends BaseMultiItemQuickAdapter<MultiI
                     });
                 }
                 break;
-            case LAYOUT_THIRD:
+            case TYPE_THIRD:
                 final SalesProductDetailsItem_3 item_3 = (SalesProductDetailsItem_3) item;
                 helper.setText(R.id.tv_key, item_3.getKey());
                 ArrayList<String> list = item_3.getList();
@@ -147,7 +145,7 @@ public class SalesProductDetailsAdapter extends BaseMultiItemQuickAdapter<MultiI
                     }
                 }
                 break;
-            case LAYOUT_FOUTH:
+            case TYPE_FOUTH:
                 final SalesProductDetailsItem_4 item_4 = (SalesProductDetailsItem_4) item;
                 helper.setText(R.id.tv_key, item_4.getKey());
                 final EditText etValue = helper.getView(R.id.et_value);

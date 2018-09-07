@@ -41,12 +41,12 @@ public class VerificateCodeDialog extends DialogFragment implements View.OnClick
         View view = inflater.inflate(R.layout.fragment_verificate, container);
         mEtInput = view.findViewById(R.id.et_code);
         view.findViewById(R.id.tv_cancel).setOnClickListener(this);
-        view.findViewById(R.id.tv_submit).setOnClickListener(this);
+        view.findViewById(R.id.tv_confirm).setOnClickListener(this);
         mTvCode = view.findViewById(R.id.tv_code);
         mTvCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mLogic.requestVerificationCode(mUserid, new StringCallback() {
+                mLogic.requestVerificationCode(getActivity(), mUserid, new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
                         LogUtils.e("发送验证码->" + response.body());
@@ -97,7 +97,7 @@ public class VerificateCodeDialog extends DialogFragment implements View.OnClick
             case R.id.tv_cancel:
                 dismiss();
                 break;
-            case R.id.tv_submit:
+            case R.id.tv_confirm:
                 if (listener != null)
                     listener.onClick(mEtInput.getText().toString());
                 break;

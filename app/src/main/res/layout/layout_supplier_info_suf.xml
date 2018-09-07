@@ -103,6 +103,6 @@
         android:gravity="top"
         android:hint="备注（请输入少于200字）"
         android:padding="5dp"
-        android:textCursorDrawable="@drawable/bg_edit_text_cursor_shape"
+        android:textCursorDrawable="@drawable/text_cursor_shape"
         android:textSize="14dp"/>
 </merge>

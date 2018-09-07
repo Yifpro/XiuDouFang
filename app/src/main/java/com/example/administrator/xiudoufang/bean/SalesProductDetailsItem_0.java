@@ -25,6 +25,6 @@ public class SalesProductDetailsItem_0 implements MultiItemEntity {
 
     @Override
     public int getItemType() {
-        return SalesProductDetailsAdapter.LAYOUT_IMG;
+        return SalesProductDetailsAdapter.TYPE_IMG;
     }
 }

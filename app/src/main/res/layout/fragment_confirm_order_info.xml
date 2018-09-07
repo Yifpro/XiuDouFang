@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_fragment_confirm_order_info_shape"
+    android:background="@drawable/rect_8_gray"
     android:orientation="vertical">
 
     <ImageView
@@ -47,7 +46,7 @@
             android:id="@+id/tv_save_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_textview_confirm_order_shape"
+            android:background="@drawable/rect_4_blue_6_pt_pb"
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
@@ -61,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/bg_textview_confirm_order_shape"
+            android:background="@drawable/rect_4_blue_6_pt_pb"
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"

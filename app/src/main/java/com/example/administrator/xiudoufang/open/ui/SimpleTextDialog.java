@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.bean.SettingItem;
+import com.example.administrator.xiudoufang.bean.StringPair;
 import com.example.administrator.xiudoufang.open.adapter.SimpleTextAdapter;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class SimpleTextDialog extends DialogFragment {
 
     private OnItemClickListener listener;
 
-    public static SimpleTextDialog newInstance(ArrayList<SettingItem> list) {
+    public static SimpleTextDialog newInstance(ArrayList<StringPair> list) {
         SimpleTextDialog f = new SimpleTextDialog();
         Bundle args = new Bundle();
         args.putParcelableArrayList("list", list);
@@ -42,7 +42,7 @@ public class SimpleTextDialog extends DialogFragment {
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         View view = inflater.inflate(R.layout.fragment_transfer_purchase_selector, container);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
-        final ArrayList<SettingItem> list = getArguments().getParcelableArrayList("list");
+        final ArrayList<StringPair> list = getArguments().getParcelableArrayList("list");
         SimpleTextAdapter adapter = new SimpleTextAdapter(R.layout.layout_list_item_transfer_purchase, list);
         adapter.bindToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);

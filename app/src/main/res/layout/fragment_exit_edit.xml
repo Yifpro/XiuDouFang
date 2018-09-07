@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_dialog_select_server_shape"
+    android:background="@drawable/rect_8_white"
     android:orientation="vertical">
 
     <TextView
@@ -53,7 +53,7 @@
             android:background="@color/gray_cccccc" />
 
         <TextView
-            android:id="@+id/tv_submit"
+            android:id="@+id/tv_confirm"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

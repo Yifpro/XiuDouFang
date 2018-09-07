@@ -54,6 +54,6 @@ public class OtherSeting_4 implements MultiItemEntity {
 
     @Override
     public int getItemType() {
-        return OtherSettingAdapter.LAYOUT_FOUTH;
+        return OtherSettingAdapter.TYPE_FOUTH;
     }
 }

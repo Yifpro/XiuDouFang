@@ -109,7 +109,7 @@ public class XiuDouFangApplication extends Application {
 
             @Override
             public void onActivityDestroyed(Activity activity) {
-
+                OkGo.getInstance().cancelTag(activity);
             }
         });
     }

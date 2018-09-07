@@ -10,7 +10,6 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.StockFilter;
 import com.example.administrator.xiudoufang.bean.TypeListBean;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 import com.example.administrator.xiudoufang.common.widget.SingleLineTextDialog;
 
@@ -71,20 +70,20 @@ public class StockQueryActivity extends AppCompatActivity implements IActivityBa
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_FOR_TYPE_LIST && data != null) {
+        if (requestCode == RESULT_FOR_TYPE_LIST && data != null) { //******** 返回类别选择结果 ********
             ArrayList<TypeListBean.TypeBean> list = data.getParcelableArrayListExtra(TypeListActivity.TYPE_LIST);
-            StringBuilder idBuilder = new StringBuilder();
-            StringBuilder nameBuilder = new StringBuilder();
+            StringBuilder typeIdBuilder = new StringBuilder();
+            StringBuilder typeNameBuilder = new StringBuilder();
             if (list != null) {
                 for (int i = 0; i < list.size(); i++) {
-                    idBuilder.append(list.get(i).getId()).append(",");
-                    nameBuilder.append(list.get(i).getName()).append(",");
+                    typeIdBuilder.append(list.get(i).getId()).append(",");
+                    typeNameBuilder.append(list.get(i).getName()).append(",");
                 }
             }
-            idBuilder.setLength(idBuilder.length() - 1);
-            nameBuilder.setLength(nameBuilder.length() - 1);
-            mIdType = idBuilder.toString();
-            mSivType.setValue(nameBuilder);
+            typeIdBuilder.setLength(typeIdBuilder.length() - 1);
+            typeNameBuilder.setLength(typeNameBuilder.length() - 1);
+            mIdType = typeIdBuilder.toString();
+            mSivType.setValue(typeNameBuilder);
             includeSubclass = data.getBooleanExtra(TypeListActivity.INCLUDE_SUBCLASS, false) ? "1" : "0";
         }
     }
@@ -120,7 +119,6 @@ public class StockQueryActivity extends AppCompatActivity implements IActivityBa
                 stockFilter.setUnit(String.valueOf(mUnitIndex + 1));
                 stockFilter.setAmount(amountValue[mAmountIndex]);
                 stockFilter.setIsIncludeSubclass(includeSubclass);
-                LogUtils.e(mSivNo.getValue()+", "+mSivName.getValue());
                 Intent intent = new Intent();
                 intent.putExtra(FILTER_INFO, stockFilter);
                 setResult(Activity.RESULT_OK, intent);

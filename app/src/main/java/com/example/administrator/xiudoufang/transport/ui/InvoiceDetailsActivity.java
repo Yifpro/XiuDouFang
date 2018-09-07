@@ -59,7 +59,7 @@ public class InvoiceDetailsActivity extends AppCompatActivity implements IActivi
 
         findViewById(R.id.iv_clear).setOnClickListener(this);
         findViewById(R.id.tv_select_pic).setOnClickListener(this);
-        findViewById(R.id.tv_submit).setOnClickListener(this);
+        findViewById(R.id.tv_confirm).setOnClickListener(this);
         findViewById(R.id.tv_clear_no).setOnClickListener(this);
     }
 
@@ -83,7 +83,7 @@ public class InvoiceDetailsActivity extends AppCompatActivity implements IActivi
                 }
                 mImageDialog.show(getSupportFragmentManager(), "ImageSelectorDialog");
                 break;
-            case R.id.tv_submit:
+            case R.id.tv_confirm:
                 LogUtils.e("emm -> " + mInvoiceBean.getId()+", " + mInvoiceBean.getYunhao());
                 mLogic.changeTransportNum(mInvoiceBean.getId(), mEtTransportNum.getText().toString(), mPicPath, new StringCallback() {
                     @Override
