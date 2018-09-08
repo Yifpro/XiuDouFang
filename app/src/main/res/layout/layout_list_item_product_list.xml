@@ -30,7 +30,7 @@
             android:layout_height="32dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="15dp"
-            android:src="@mipmap/ic_icon"/>
+            android:src="@mipmap/ic_launcher"/>
 
         <TextView
             android:id="@+id/tv_id"

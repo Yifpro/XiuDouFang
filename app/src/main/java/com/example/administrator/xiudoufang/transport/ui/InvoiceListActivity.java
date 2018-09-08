@@ -62,7 +62,7 @@ public class InvoiceListActivity extends AppCompatActivity implements IActivityB
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_FOR_INVOICE_QUERY && data != null) { //******** 返回过滤条件 ********
+        if (requestCode == RESULT_FOR_INVOICE_QUERY && data != null) { //******** 返回运单号过滤条件 ********
             mFilter = data.getParcelableExtra(InvoiceQueryActivity.INVOICE_FILTER);
             mParams.put("id", mFilter.getNo());
             mParams.put("searchitem", mFilter.getCustomer());

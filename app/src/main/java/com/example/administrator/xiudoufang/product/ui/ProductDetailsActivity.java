@@ -1,7 +1,9 @@
 package com.example.administrator.xiudoufang.product.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +21,7 @@ import com.example.administrator.xiudoufang.bean.ProductDetailsBean;
 import com.example.administrator.xiudoufang.bean.ProductListBean;
 import com.example.administrator.xiudoufang.bean.ProductWeightBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
@@ -44,6 +47,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
     public static final String CPID = "cpid";
     public static final String PRODUCT_ID = "product_id";
     public static final String PIC_LIST = "pic_list";
+    private static final int RESULT_FOR_PRODUCT_EDIT = 125;
 
     private ProductLogic mLogic;
     private ProductListBean.ChanpinpicBean mProductBean;
@@ -77,12 +81,38 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
     }
 
     @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra(ProductEditActivity.PRODUCT_ICON, mProductBean.getPhotourl());
+        setResult(Activity.RESULT_OK, intent);
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_FOR_PRODUCT_EDIT && data != null) {
+            ArrayList<String> tempList = data.getStringArrayListExtra(ProductEditActivity.PRODUCT_ICON);
+            ArrayList<ProductListBean.ChanpinpicBean.PiclistBean> list = new ArrayList<>();
+            for (String s : tempList) {
+                list.add(new ProductListBean.ChanpinpicBean.PiclistBean(s));
+            }
+            mProductBean.setPhotourl(tempList.get(0));
+            mProductBean.setPiclist(list);
+            GlideApp.with(this)
+                    .load(mProductBean.getPhotourl().contains("/") ? mProductBean.getPhotourl() : StringUtils.PIC_SMALL_URL + mProductBean.getPhotourl())
+                    .error(R.mipmap.ic_error)
+                    .into(mIvIcon);
+        }
+    }
+
+    @Override
     public void initData() {
         mLogic = new ProductLogic();
         mProductBean = getIntent().getParcelableExtra(ProductListActivity.PRODUCT_ITEM);
         mRvSupplier.setVisibility(View.GONE);
         mRvLevelPrice.setVisibility(View.GONE);
-        GlideApp.with(this).load(StringUtils.PIC_SMALL_URL + mProductBean.getPhotourl()).error(R.mipmap.ic_error).into(mIvIcon);
+        GlideApp.with(this).load(mProductBean.getPhotourl().contains("/") ? mProductBean.getPhotourl() : StringUtils.PIC_SMALL_URL + mProductBean.getPhotourl()).error(R.mipmap.ic_error).into(mIvIcon);
         //******** 基础信息列表 ********
         String[] infoKey = {"编号", "类名", "产品名"};
         String[] infoValue = {mProductBean.getStyleno(), mProductBean.getClassname(), mProductBean.getStylename()};
@@ -174,7 +204,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                 intent.putExtra(CPID, mProductBean.getCpid());
                 intent.putExtra(PRODUCT_ID, mProductBean.getStyleno());
                 intent.putStringArrayListExtra(PIC_LIST, list);
-                startActivity(intent);
+                startActivityForResult(intent, RESULT_FOR_PRODUCT_EDIT);
                 break;
         }
         return super.onOptionsItemSelected(item);

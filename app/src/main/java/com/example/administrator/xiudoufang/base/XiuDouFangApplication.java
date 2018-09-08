@@ -70,7 +70,7 @@ public class XiuDouFangApplication extends Application {
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle bundle) {
-                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //限制竖屏
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 ScreenUtils.adaptScreen4VerticalSlide(activity, 360);
                 setDarkMode(activity, true);
                 if (activity instanceof IActivityBase) {

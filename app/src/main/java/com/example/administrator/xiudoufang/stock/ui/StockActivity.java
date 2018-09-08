@@ -65,8 +65,7 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_FOR_STOCK_QUERY && data != null) {
-            //******** 根据过滤条件查询 ********
+        if (requestCode == RESULT_FOR_STOCK_QUERY && data != null) { //******** 返回库存过滤条件 ********
             StockFilter filter = data.getParcelableExtra(StockQueryActivity.FILTER_INFO);
             mParams.put("code", filter.getNo());
             mParams.put("sn", filter.getName());

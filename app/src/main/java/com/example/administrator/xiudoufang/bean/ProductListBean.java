@@ -163,6 +163,10 @@ public class ProductListBean {
         }
 
         public static class PiclistBean implements Parcelable {
+            public PiclistBean(String pic) {
+                this.pic = pic;
+            }
+
             /**
              * pic : 59122c74-47d1-435d-bf8a-59491ea670a0.png
              */

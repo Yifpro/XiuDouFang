@@ -21,7 +21,7 @@
             android:layout_height="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@mipmap/ic_icon"/>
+            tools:src="@mipmap/ic_launcher"/>
 
         <TextView
             android:id="@+id/tv_id"

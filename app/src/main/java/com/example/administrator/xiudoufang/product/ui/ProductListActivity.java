@@ -37,6 +37,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
     private final int COUNT = 20;
     private static final int RESULT_FOR_PRODUCT_QUERY = 114;
     public static final String PRODUCT_ITEM = "product_item";
+    private static final int RESULT_FOR_PRODUCT_DETAILS = 126;
 
     private RefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -46,6 +47,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
     private ArrayList<ProductListBean.ChanpinpicBean> mList;
     private int mCurrentPage = 1;
     private HashMap<String, String> mParams;
+    private int mIndex;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, ProductListActivity.class);
@@ -60,7 +62,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_FOR_PRODUCT_QUERY && data != null) {
+        if (requestCode == RESULT_FOR_PRODUCT_QUERY && data != null) { //******** 返回产品过滤条件 ********
             ProductFilter filter = data.getParcelableExtra(ProductQueryActivity.PRODUCT_FILTER);
             mParams.put("searchitem", filter.getName());
             mParams.put("classid", filter.getTypeId());
@@ -69,6 +71,9 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
             mParams.put("c_id", filter.getSupplierId());
             LoadingViewDialog.getInstance().show(this);
             loadProductList(true);
+        } else if (requestCode == RESULT_FOR_PRODUCT_DETAILS && data != null) { //******** 返回修改的产品图片 ********
+            mList.get(mIndex).setPhotourl(data.getStringExtra(ProductEditActivity.PRODUCT_ICON));
+            mAdapter.notifyItemChanged(mIndex);
         }
     }
 
@@ -92,24 +97,13 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
         mList = new ArrayList<>();
         LoadingViewDialog.getInstance().show(this);
+        initParams();
         loadProductList(true);
     }
 
+    //******** 加载产品列表 ********
     private void loadProductList(final boolean isRefresh) {
         if (isRefresh) mCurrentPage = 1;
-        if (mParams == null) {
-            SharedPreferences preferences = PreferencesUtils.getPreferences();
-            mParams = new HashMap<>();
-            mParams.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
-            mParams.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-            mParams.put("dqcpid", "");
-            mParams.put("tiaoxingma", "");
-            mParams.put("searchitem", "");
-            mParams.put("classid", "");
-            mParams.put("action", "");
-            mParams.put("nopic", "");
-            mParams.put("c_id", "");
-        }
         mParams.put("pagenum", String.valueOf(mCurrentPage++));
         mParams.put("count", String.valueOf(COUNT));
         mLogic.requestProductList(this, mParams, new JsonCallback<ProductListBean>() {
@@ -134,6 +128,20 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
                 }
             }
         });
+    }
+
+    private void initParams() {
+        SharedPreferences preferences = PreferencesUtils.getPreferences();
+        mParams = new HashMap<>();
+        mParams.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
+        mParams.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
+        mParams.put("dqcpid", "");
+        mParams.put("tiaoxingma", "");
+        mParams.put("searchitem", "");
+        mParams.put("classid", "");
+        mParams.put("action", "");
+        mParams.put("nopic", "");
+        mParams.put("c_id", "");
     }
 
     @Override
@@ -163,7 +171,8 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
             Intent intent = new Intent(ProductListActivity.this, ProductDetailsActivity.class);
             intent.putExtra(PRODUCT_ITEM, mList.get(position));
-            startActivity(intent);
+            startActivityForResult(intent, RESULT_FOR_PRODUCT_DETAILS);
+            mIndex = position;
         }
     }
 

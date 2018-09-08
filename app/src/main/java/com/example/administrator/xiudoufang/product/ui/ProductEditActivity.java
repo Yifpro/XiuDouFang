@@ -1,21 +1,19 @@
 package com.example.administrator.xiudoufang.product.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.PicBean;
-import com.example.administrator.xiudoufang.bean.ProductListBean;
-import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.bean.PicName;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
@@ -29,9 +27,7 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -40,12 +36,15 @@ import java.util.List;
 
 public class ProductEditActivity extends AppCompatActivity implements IActivityBase {
 
+    public static final String PRODUCT_ICON = "product_icon";
+
     private RecyclerView mRecyclerView;
     private ImageSelectorDialog mImageDialog;
 
     private ProductLogic mLogic;
-    private List<PicBean> mList;
     private ProductEditAdapter mAdapter;
+    private List<PicBean> mList;
+    private boolean isSummit; //******** 是否已经提交图片 ********
 
     @Override
     public int getLayoutId() {
@@ -56,6 +55,20 @@ public class ProductEditActivity extends AppCompatActivity implements IActivityB
     public void initView() {
         setTitle(getIntent().getStringExtra(ProductDetailsActivity.PRODUCT_ID));
         mRecyclerView = findViewById(R.id.recycler_view);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isSummit && mList.size() > 1) {
+            Intent intent = new Intent();
+            ArrayList<String> list = new ArrayList<>();
+            for (int i = 0; i < mList.size() - 1; i++) {
+                list.add((String) mList.get(i).getPic());
+            }
+            intent.putStringArrayListExtra(PRODUCT_ICON, list);
+            setResult(Activity.RESULT_OK, intent);
+        }
+        super.onBackPressed();
     }
 
     @Override
@@ -87,16 +100,21 @@ public class ProductEditActivity extends AppCompatActivity implements IActivityB
     }
 
     public void onClick(View view) {
+        List<PicName> oldPic = new ArrayList<>();
         List<File> list = new ArrayList<>();
         if (mList.size() > 0) {
             for (PicBean p : mList) {
-                if (p.getPic() instanceof String && p.isLocal()) {
-                    list.add(new File((String) p.getPic()));
+                if (p.getPic() instanceof String) {
+                    if (p.isLocal()) {
+                        list.add(new File((String) p.getPic()));
+                    } else {
+                        oldPic.add(new PicName((String) p.getPic()));
+                    }
                 }
             }
         }
         LoadingViewDialog.getInstance().show(this);
-        mLogic.uploadProductPic(this, getIntent().getStringExtra(ProductDetailsActivity.CPID), list, new StringCallback() {
+        mLogic.uploadProductPic(this, getIntent().getStringExtra(ProductDetailsActivity.CPID), oldPic, list, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 LogUtils.e("上传图片 -> " + response.body());
@@ -104,14 +122,16 @@ public class ProductEditActivity extends AppCompatActivity implements IActivityB
                 JSONObject jsonObject = JSONObject.parseObject(response.body());
                 if (!"1".equals(jsonObject.getString("messagestr"))) {
                     ToastUtils.show(ProductEditActivity.this, jsonObject.getString("messagestr"));
+                } else {
+                    isSummit = true;
+                    ToastUtils.show(ProductEditActivity.this, "提交成功");
                 }
-                finish();
             }
 
             @Override
             public void onError(Response<String> response) {
                 super.onError(response);
-                LogUtils.e("上传失败"+response.body());
+                LogUtils.e("上传失败" + response.body());
             }
         });
     }

@@ -77,7 +77,7 @@ public class ProductQueryActivity extends AppCompatActivity implements IActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_FOR_TYPE_LIST && data != null) {
+        if (requestCode == RESULT_FOR_TYPE_LIST && data != null) { //******** 返回类别选择 ********
             ArrayList<TypeListBean.TypeBean> list = data.getParcelableArrayListExtra(TypeListActivity.TYPE_LIST);
             StringBuilder idBuilder = new StringBuilder();
             StringBuilder nameBuilder = new StringBuilder();
@@ -123,14 +123,6 @@ public class ProductQueryActivity extends AppCompatActivity implements IActivity
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_query:
-                ProductFilter p1 = new ProductFilter();
-                ProductFilter p2 = new ProductFilter();
-                p1.setAction("");
-                p2.setAction(null);
-                String p1str = JSONObject.toJSONString(p1);
-                String p2str = JSONObject.toJSONString(p2);
-                LogUtils.e("p1->"+p1str);
-                LogUtils.e("p2->"+p2str);
                 Intent intent = new Intent();
                 ProductFilter filter = new ProductFilter();
                 filter.setName(mSivName.getValue());

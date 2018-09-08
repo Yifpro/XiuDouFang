@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@mipmap/ic_icon"/>
+        tools:src="@mipmap/ic_launcher"/>
 
     <TextView
         android:id="@+id/tv_name"
