@@ -359,7 +359,7 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
                     }
                 }
             }
-            GlideApp.with(this).load(photoUrl).error(R.mipmap.ic_icon).into(mIvIcon);
+            GlideApp.with(this).load(photoUrl).error(R.mipmap.ic_error).into(mIvIcon);
             mSivProductNo.setValue(productNo);
             mSivProductName.setValue(productName);
             mSivStockAmount.setValue(stockAmount);

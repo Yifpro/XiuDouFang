@@ -124,7 +124,6 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
             public void onSuccess(Response<StockListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
                 List<StockListBean.StockBean> temp = response.body().getInvlists();
-                LogUtils.e("list size ->"+temp.size());
                 if (isRefresh) {
                     mList.clear();
                     mList.addAll(temp);

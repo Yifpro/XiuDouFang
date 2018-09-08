@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.base.BaseTextWatcher;
 import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.InvoiceListBean;
@@ -87,7 +85,10 @@ public class InvoiceDetailsActivity extends AppCompatActivity implements IActivi
     public void initData() {
         mLogic = new InvoiceDetailsLogic();
         mInvoiceBean = getIntent().getParcelableExtra(InvoiceListActivity.SELECTED_ITEM);
-        GlideApp.with(this).load(StringUtils.PIC_URL + mInvoiceBean.getKuaidi_pic()).error(R.mipmap.ic_icon).into(mIvIcon);
+        GlideApp.with(this)
+                .load(mInvoiceBean.getKuaidi_pic().contains("/") ? mInvoiceBean.getKuaidi_pic() : StringUtils.PIC_URL + mInvoiceBean.getKuaidi_pic())
+                .error(R.mipmap.ic_error)
+                .into(mIvIcon);
         mEtTransportNum.setText(mInvoiceBean.getYunhao());
         //******** 返回默认图片且运号为空，则该运单已被清除过 ********
         boolean isCanNotClearTransportNum = "nopic.png".equals(mInvoiceBean.getKuaidi_pic()) && TextUtils.isEmpty(mInvoiceBean.getYunhao());
@@ -137,6 +138,7 @@ public class InvoiceDetailsActivity extends AppCompatActivity implements IActivi
                 }
                 break;
             case R.id.tv_clear_transport_num:
+                LoadingViewDialog.getInstance().show(this);
                 mLogic.deleteTransportNum(mInvoiceBean.getId(), new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {

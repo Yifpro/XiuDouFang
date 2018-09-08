@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,6 +71,12 @@ public class InvoiceListActivity extends AppCompatActivity implements IActivityB
             mParams.put("yunhao", mFilter.getTransportNum());
             LoadingViewDialog.getInstance().show(this);
             loadInvoiceList(true);
+        } else if (requestCode == RESULT_FOR_INVOICE_DETAILS && data != null) {
+            InvoiceListBean.InvoiceBean temp = data.getParcelableExtra(InvoiceListActivity.SELECTED_ITEM);
+            InvoiceListBean.InvoiceBean bean = mList.get(mIndex);
+            if (!bean.getKuaidi_pic().equals(temp.getKuaidi_pic())) bean.setKuaidi_pic(temp.getKuaidi_pic());
+            if (!bean.getYunhao().equals(temp.getYunhao())) bean.setYunhao(temp.getYunhao());
+            mAdapter.notifyItemChanged(mIndex);
         }
     }
 
@@ -95,24 +100,13 @@ public class InvoiceListActivity extends AppCompatActivity implements IActivityB
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mList = new ArrayList<>();
         LoadingViewDialog.getInstance().show(this);
+        initParams();
         loadInvoiceList(true);
     }
 
     //******** 加载发货单列表 ********
     private void loadInvoiceList(final boolean isRefresh) {
         if (isRefresh) mCurrentPage = 1;
-        if (mParams == null) {
-            mParams = new HashMap<>();
-            mParams.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
-            mParams.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
-            mParams.put("c_id", "0");
-            mParams.put("id", "0");
-            mParams.put("searchitem", "");
-            mParams.put("starttime", StringUtils.getCurrentTime());
-            mParams.put("endtime", StringUtils.getCurrentTime());
-            mParams.put("yunhao", "");
-            mParams.put("count", String.valueOf(COUNT));
-        }
         mParams.put("pagenum", String.valueOf(mCurrentPage++));
         mLogic.requestInvoiceList(mParams, new JsonCallback<InvoiceListBean>() {
             @Override
@@ -136,6 +130,19 @@ public class InvoiceListActivity extends AppCompatActivity implements IActivityB
                 }
             }
         });
+    }
+
+    private void initParams() {
+        mParams = new HashMap<>();
+        mParams.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
+        mParams.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
+        mParams.put("c_id", "0");
+        mParams.put("id", "0");
+        mParams.put("searchitem", "");
+        mParams.put("starttime", StringUtils.getCurrentTime());
+        mParams.put("endtime", StringUtils.getCurrentTime());
+        mParams.put("yunhao", "");
+        mParams.put("count", String.valueOf(COUNT));
     }
 
     @Override

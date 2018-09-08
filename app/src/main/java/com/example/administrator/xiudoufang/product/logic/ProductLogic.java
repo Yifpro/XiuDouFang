@@ -1,6 +1,7 @@
 package com.example.administrator.xiudoufang.product.logic;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.bean.ProductDetailsBean;
@@ -25,7 +26,7 @@ import java.util.List;
 public class ProductLogic {
 
     //******** 获取产品列表 ********
-    public void requestProductList(HashMap<String, String> params, JsonCallback<ProductListBean> callback) {
+    public void requestProductList(Context context, HashMap<String, String> params, JsonCallback<ProductListBean> callback) {
         String json = JSONObject.toJSONString(params);
         LogUtils.e("产品列表 -> " + json);
         OkGo.<ProductListBean>post(StringUtils.BASE_URL + "/Api/products/request_Postcppic?request_Postcppic=0")
@@ -35,7 +36,7 @@ public class ProductLogic {
     }
 
     //******** 获取产品明细 ********
-    public void requestProductDetails(HashMap<String, String> params, JsonCallback<ProductDetailsBean> callback) {
+    public void requestProductDetails(Context context, HashMap<String, String> params, JsonCallback<ProductDetailsBean> callback) {
         String json = JSONObject.toJSONString(params);
         LogUtils.e("产品明细 -> " + json);
         OkGo.<ProductDetailsBean>get(StringUtils.getUrl("/Api/products/request_cpprcice?", params))
@@ -43,7 +44,7 @@ public class ProductLogic {
     }
 
     //******** 上传产品图片 ********
-    public void uploadProductPic(String cpid, List<File> files, StringCallback callback) {
+    public void uploadProductPic(Context context, String cpid, List<File> files, StringCallback callback) {
         HttpParams params = new HttpParams();
         params.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
         params.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));

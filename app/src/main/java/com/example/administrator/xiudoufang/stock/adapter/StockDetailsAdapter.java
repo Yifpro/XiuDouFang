@@ -37,7 +37,7 @@ public class StockDetailsAdapter extends BaseMultiItemQuickAdapter<MultiItemEnti
         switch (helper.getItemViewType()) {
             case TYPE_LEVEL_0:
                 ImgBean bean = (ImgBean) item;
-                GlideApp.with(mContext).load(StringUtils.PIC_SMALL_URL + bean.getImg()).error(R.mipmap.ic_icon).into((ImageView) helper.getView(R.id.iv_icon));
+                GlideApp.with(mContext).load(StringUtils.PIC_SMALL_URL + bean.getImg()).error(R.mipmap.ic_error).into((ImageView) helper.getView(R.id.iv_icon));
                 break;
             case TYPE_LEVEL_1:
                 StockDetailsItem detailsItem = (StockDetailsItem) item;

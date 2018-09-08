@@ -58,7 +58,7 @@ public class SalesProductDetailsAdapter extends BaseMultiItemQuickAdapter<MultiI
         switch (item.getItemType()) {
             case TYPE_IMG:
                 SalesProductDetailsItem_0 item_0 = (SalesProductDetailsItem_0) item;
-                GlideApp.with(mContext).load(StringUtils.PIC_URL + item_0.getUrl()).error(R.mipmap.ic_icon).into((ImageView) helper.getView(R.id.iv_icon));
+                GlideApp.with(mContext).load(StringUtils.PIC_URL + item_0.getUrl()).error(R.mipmap.ic_error).into((ImageView) helper.getView(R.id.iv_icon));
                 break;
             case TYPE_FIRST:
                 SalesProductDetailsItem_1 item_1 = (SalesProductDetailsItem_1) item;

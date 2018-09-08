@@ -98,6 +98,7 @@ public class TypeListActivity extends AppCompatActivity implements IActivityBase
 
     //******** 加载类别列表 ********
     private void loadTypeList() {
+        LoadingViewDialog.getInstance().show(this);
         SharedPreferences preferences = PreferencesUtils.getPreferences();
         HashMap<String, String> params = new HashMap<>();
         params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
@@ -105,7 +106,6 @@ public class TypeListActivity extends AppCompatActivity implements IActivityBase
         params.put("searchitem", mFilterText);
         params.put("classid", "0");
         params.put("action", "0");
-        LoadingViewDialog.getInstance().show(this);
         mLogic.requestTypeList(this, params, new JsonCallback<TypeListBean>() {
             @Override
             public void onSuccess(Response<TypeListBean> response) {

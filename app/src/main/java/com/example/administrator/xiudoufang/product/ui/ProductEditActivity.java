@@ -96,7 +96,7 @@ public class ProductEditActivity extends AppCompatActivity implements IActivityB
             }
         }
         LoadingViewDialog.getInstance().show(this);
-        mLogic.uploadProductPic(getIntent().getStringExtra(ProductDetailsActivity.CPID), list, new StringCallback() {
+        mLogic.uploadProductPic(this, getIntent().getStringExtra(ProductDetailsActivity.CPID), list, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 LogUtils.e("上传图片 -> " + response.body());

@@ -25,7 +25,7 @@ public class StockListAdapter extends BaseQuickAdapter<StockListBean.StockBean, 
 
     @Override
     protected void convert(BaseViewHolder helper, StockListBean.StockBean item) {
-        GlideApp.with(mContext).load(StringUtils.PIC_SMALL_URL + item.getPic()).error(R.mipmap.ic_icon).into((ImageView) helper.getView(R.id.iv_icon));
+        GlideApp.with(mContext).load(StringUtils.PIC_SMALL_URL + item.getPic()).error(R.mipmap.ic_error).into((ImageView) helper.getView(R.id.iv_icon));
         helper.setText(R.id.tv_id, item.getStyleno());
         helper.setText(R.id.tv_name, item.getStylename());
         helper.setText(R.id.tv_stock_num, item.getInvnum());

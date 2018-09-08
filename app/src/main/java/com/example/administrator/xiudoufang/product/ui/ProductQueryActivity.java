@@ -7,11 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.ProductFilter;
 import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.bean.TypeListBean;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 import com.example.administrator.xiudoufang.common.widget.SingleLineTextDialog;
 import com.example.administrator.xiudoufang.purchase.ui.SupplierDetailsActivity;
@@ -23,8 +25,8 @@ import java.util.Collections;
 
 public class ProductQueryActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
-    private static final int RESULT_FOR_TYPE_LIST = 115;
     public static final String TAG = ProductQueryActivity.class.getSimpleName();
+    private static final int RESULT_FOR_TYPE_LIST = 115;
     public static final String PRODUCT_FILTER = "product_filter";
 
     private SearchInfoView mSivName;
@@ -64,6 +66,7 @@ public class ProductQueryActivity extends AppCompatActivity implements IActivity
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+        //******** 返回供应商 ********
         Supplier supplier = getIntent().getParcelableExtra(SupplierDetailsActivity.SELECTED_SUPPLIER);
         if (supplier != null) {
             mSivSupplier.setValue(supplier.getName());
@@ -120,6 +123,14 @@ public class ProductQueryActivity extends AppCompatActivity implements IActivity
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_query:
+                ProductFilter p1 = new ProductFilter();
+                ProductFilter p2 = new ProductFilter();
+                p1.setAction("");
+                p2.setAction(null);
+                String p1str = JSONObject.toJSONString(p1);
+                String p2str = JSONObject.toJSONString(p2);
+                LogUtils.e("p1->"+p1str);
+                LogUtils.e("p2->"+p2str);
                 Intent intent = new Intent();
                 ProductFilter filter = new ProductFilter();
                 filter.setName(mSivName.getValue());

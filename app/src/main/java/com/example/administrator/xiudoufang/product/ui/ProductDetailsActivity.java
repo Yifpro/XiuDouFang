@@ -34,7 +34,6 @@ import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Administrator on 2018/8/28
@@ -83,7 +82,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
         mProductBean = getIntent().getParcelableExtra(ProductListActivity.PRODUCT_ITEM);
         mRvSupplier.setVisibility(View.GONE);
         mRvLevelPrice.setVisibility(View.GONE);
-        GlideApp.with(this).load(StringUtils.PIC_SMALL_URL + mProductBean.getPhotourl()).error(R.mipmap.ic_icon).into(mIvIcon);
+        GlideApp.with(this).load(StringUtils.PIC_SMALL_URL + mProductBean.getPhotourl()).error(R.mipmap.ic_error).into(mIvIcon);
         //******** 基础信息列表 ********
         String[] infoKey = {"编号", "类名", "产品名"};
         String[] infoValue = {mProductBean.getStyleno(), mProductBean.getClassname(), mProductBean.getStylename()};
@@ -147,7 +146,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
         params.put("searchitem", "");
         params.put("pagenum", "1");
         params.put("count", "20");
-        mLogic.requestProductDetails(params, new JsonCallback<ProductDetailsBean>() {
+        mLogic.requestProductDetails(this, params, new JsonCallback<ProductDetailsBean>() {
             @Override
             public void onSuccess(Response<ProductDetailsBean> response) {
                 LoadingViewDialog.getInstance().dismiss();

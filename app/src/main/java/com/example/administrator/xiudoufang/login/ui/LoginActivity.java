@@ -8,7 +8,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.R;
@@ -99,7 +98,7 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
         mLogic.checkVerificationCode(this, httpParams, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
-                LogUtils.e("需要验证？-> " + response.body());
+                LogUtils.e("是否需要验证-> " + response.body());
                 JSONObject jsonObject = JSONObject.parseObject(response.body());
                 String msg = jsonObject.getString("mesage");
                 if ("请求成功".equals(msg)) {

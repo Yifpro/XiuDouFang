@@ -38,7 +38,7 @@ public class SalesProductListAdapter  extends BaseQuickAdapter<SalesProductListB
         } else {
             helper.getView(R.id.iv_select).setVisibility(View.GONE);
         }
-        GlideApp.with(mContext).load(StringUtils.PIC_SMALL_URL + item.getPhotourl()).error(R.mipmap.ic_icon).into((ImageView) helper.getView(R.id.iv_icon));
+        GlideApp.with(mContext).load(StringUtils.PIC_SMALL_URL + item.getPhotourl()).error(R.mipmap.ic_error).into((ImageView) helper.getView(R.id.iv_icon));
         helper.setText(R.id.tv_id, item.getStyleno());
         helper.setText(R.id.tv_name, item.getStylename());
 

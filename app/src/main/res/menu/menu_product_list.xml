@@ -9,6 +9,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/toolbar_filter"
+        android:icon="@mipmap/ic_query_blue"
         android:title="筛选"
         android:orderInCategory="0"
         app:showAsAction="always" />

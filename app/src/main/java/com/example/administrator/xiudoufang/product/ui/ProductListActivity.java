@@ -112,7 +112,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         }
         mParams.put("pagenum", String.valueOf(mCurrentPage++));
         mParams.put("count", String.valueOf(COUNT));
-        mLogic.requestProductList(mParams, new JsonCallback<ProductListBean>() {
+        mLogic.requestProductList(this, mParams, new JsonCallback<ProductListBean>() {
             @Override
             public void onSuccess(Response<ProductListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
