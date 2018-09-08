@@ -23,8 +23,10 @@ import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 import com.example.administrator.xiudoufang.purchase.ui.NewPurchaseOrderActivity;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 public class InvoiceQueryActivity extends AppCompatActivity implements IActivityBase, OnClickListener {
 
@@ -90,6 +92,10 @@ public class InvoiceQueryActivity extends AppCompatActivity implements IActivity
                     });
             mEndTimePickerView = setBuilder(builder);
         }
+        Calendar calendar = Calendar.getInstance();
+        String[] split = mSivEndTime.getValue().split("-");
+        calendar.set(Integer.parseInt(split[0]), Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
+        mEndTimePickerView.setDate(calendar);
         mEndTimePickerView.show();
     }
 
@@ -125,6 +131,10 @@ public class InvoiceQueryActivity extends AppCompatActivity implements IActivity
                     });
             mStartTimePickerView = setBuilder(builder);
         }
+        Calendar calendar = Calendar.getInstance();
+        String[] split = mSivStartTime.getValue().split("-");
+        calendar.set(Integer.parseInt(split[0]), Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
+        mStartTimePickerView.setDate(calendar);
         mStartTimePickerView.show();
     }
 

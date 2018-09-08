@@ -22,6 +22,7 @@ import com.lzy.okgo.model.Response;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -115,6 +116,10 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
                     });
             mPvEndTime = setBuilder(builder);
         }
+        Calendar calendar = Calendar.getInstance();
+        String[] split = mSivEndTime.getValue().split("-");
+        calendar.set(Integer.parseInt(split[0]), Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
+        mPvEndTime.setDate(calendar);
         mPvEndTime.show();
     }
 
@@ -150,6 +155,10 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
                     });
             mPvStartTime = setBuilder(builder);
         }
+        Calendar calendar = Calendar.getInstance();
+        String[] split = mSivStartTime.getValue().split("-");
+        calendar.set(Integer.parseInt(split[0]), Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
+        mPvStartTime.setDate(calendar);
         mPvStartTime.show();
     }
 

@@ -34,6 +34,7 @@ import com.lzy.okgo.model.Response;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -236,6 +237,10 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
                     .isDialog(true)
                     .build();
         }
+        Calendar calendar = Calendar.getInstance();
+        String[] split = mSivPaymentDate.getValue().split("-");
+        calendar.set(Integer.parseInt(split[0]), Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
+        mPvPaymentDate.setDate(calendar);
         mPvPaymentDate.show();
     }
 

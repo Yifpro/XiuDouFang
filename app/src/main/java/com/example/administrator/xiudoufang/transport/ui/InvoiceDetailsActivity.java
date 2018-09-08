@@ -84,7 +84,6 @@ public class InvoiceDetailsActivity extends AppCompatActivity implements IActivi
                 mImageDialog.show(getSupportFragmentManager(), "ImageSelectorDialog");
                 break;
             case R.id.tv_confirm:
-                LogUtils.e("emm -> " + mInvoiceBean.getId()+", " + mInvoiceBean.getYunhao());
                 mLogic.changeTransportNum(mInvoiceBean.getId(), mEtTransportNum.getText().toString(), mPicPath, new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {

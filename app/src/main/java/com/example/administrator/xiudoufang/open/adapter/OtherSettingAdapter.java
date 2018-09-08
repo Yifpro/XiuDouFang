@@ -38,6 +38,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -218,6 +219,10 @@ public class OtherSettingAdapter extends BaseMultiItemQuickAdapter<MultiItemEnti
                     .isDialog(true)
                     .build();
         }
+        Calendar calendar = Calendar.getInstance();
+        String[] split = tvContent.getText().toString().split("-");
+        calendar.set(Integer.parseInt(split[0]), Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
+        mForcastDatePickerView.setDate(calendar);
         mForcastDatePickerView.show();
     }
 

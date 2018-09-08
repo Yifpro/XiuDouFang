@@ -58,6 +58,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -478,6 +479,10 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                     });
             mPvArrivalTime = setBuilder(builder);
         }
+        Calendar calendar = Calendar.getInstance();
+        String[] split = mSivArrival.getValue().split("-");
+        calendar.set(Integer.parseInt(split[0]), Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
+        mPvArrivalTime.setDate(calendar);
         mPvArrivalTime.show();
     }
 
@@ -514,6 +519,10 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                     });
             mPvSetupOrderTime = setBuilder(builder);
         }
+        Calendar calendar = Calendar.getInstance();
+        String[] split = mSivSetupOrderDate.getValue().split("-");
+        calendar.set(Integer.parseInt(split[0]), Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
+        mPvSetupOrderTime.setDate(calendar);
         mPvSetupOrderTime.show();
     }
 

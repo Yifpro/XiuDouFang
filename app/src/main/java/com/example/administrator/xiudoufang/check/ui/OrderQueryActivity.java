@@ -24,6 +24,7 @@ import com.example.administrator.xiudoufang.common.widget.SingleLineTextDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -180,6 +181,10 @@ public class OrderQueryActivity extends AppCompatActivity implements IActivityBa
                     });
             mEndTimePickerView = setBuilder(builder);
         }
+        Calendar calendar = Calendar.getInstance();
+        String[] split = mSivEndTime.getValue().split("-");
+        calendar.set(Integer.parseInt(split[0]), Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
+        mEndTimePickerView.setDate(calendar);
         mEndTimePickerView.show();
     }
 
@@ -216,6 +221,10 @@ public class OrderQueryActivity extends AppCompatActivity implements IActivityBa
                     });
             mStartTimePickerView = setBuilder(builder);
         }
+        Calendar calendar = Calendar.getInstance();
+        String[] split = mSivStartTime.getValue().split("-");
+        calendar.set(Integer.parseInt(split[0]), Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
+        mStartTimePickerView.setDate(calendar);
         mStartTimePickerView.show();
     }
 

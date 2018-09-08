@@ -46,6 +46,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -399,6 +400,10 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
                     });
             mEndTimePickerView = setBuilder(builder);
         }
+        Calendar calendar = Calendar.getInstance();
+        String[] split = mTvDeliveryDate.getText().toString().split("-");
+        calendar.set(Integer.parseInt(split[0]), Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
+        mEndTimePickerView.setDate(calendar);
         mEndTimePickerView.show();
     }
 
@@ -435,6 +440,10 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
                     });
             mStartTimePickerView = setBuilder(builder);
         }
+        Calendar calendar = Calendar.getInstance();
+        String[] split = mTvCreateOrderDate.getText().toString().split("-");
+        calendar.set(Integer.parseInt(split[0]), Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
+        mStartTimePickerView.setDate(calendar);
         mStartTimePickerView.show();
     }
 
