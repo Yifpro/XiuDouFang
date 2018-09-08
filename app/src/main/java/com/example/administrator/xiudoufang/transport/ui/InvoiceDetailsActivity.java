@@ -7,12 +7,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.InvoiceListBean;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
+import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.purchase.ui.ImageSelectorDialog;
 import com.example.administrator.xiudoufang.transport.logic.InvoiceDetailsLogic;
 import com.luck.picture.lib.PictureSelector;
@@ -84,10 +87,14 @@ public class InvoiceDetailsActivity extends AppCompatActivity implements IActivi
                 mImageDialog.show(getSupportFragmentManager(), "ImageSelectorDialog");
                 break;
             case R.id.tv_confirm:
+                LoadingViewDialog.getInstance().show(this);
                 mLogic.changeTransportNum(mInvoiceBean.getId(), mEtTransportNum.getText().toString(), mPicPath, new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
                         LogUtils.e("修改单号 -> " + response.body());
+                        LoadingViewDialog.getInstance().dismiss();
+                        JSONObject jsonObject = JSONObject.parseObject(response.body());
+                        ToastUtils.show(InvoiceDetailsActivity.this, "1".equals(jsonObject.getString("status")) ? "提交成功" : "提交失败");
                     }
                 });
                 break;
@@ -96,6 +103,9 @@ public class InvoiceDetailsActivity extends AppCompatActivity implements IActivi
                     @Override
                     public void onSuccess(Response<String> response) {
                         LogUtils.e("删除单号 -> " + response.body());
+                        LoadingViewDialog.getInstance().dismiss();
+                        JSONObject jsonObject = JSONObject.parseObject(response.body());
+                        ToastUtils.show(InvoiceDetailsActivity.this, "1".equals(jsonObject.getString("status")) ? "提交成功" : jsonObject.getString("messages"));
                     }
                 });
                 break;

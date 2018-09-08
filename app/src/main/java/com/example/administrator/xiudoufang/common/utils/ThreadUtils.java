@@ -51,25 +51,25 @@ public final class ThreadUtils {
     }
 
     /**
-     * Return bg_segment_text_color_selector thread pool that reuses bg_segment_text_color_selector fixed number of threads
-     * operating off bg_segment_text_color_selector shared unbounded queue, using the provided
+     * Return white_blue_selected_selector thread pool that reuses white_blue_selected_selector fixed number of threads
+     * operating off white_blue_selected_selector shared unbounded queue, using the provided
      * ThreadFactory to create new threads when needed.
      *
      * @param size The size of thread in the pool.
-     * @return bg_segment_text_color_selector fixed thread pool
+     * @return white_blue_selected_selector fixed thread pool
      */
     public static ExecutorService getFixedPool(@IntRange(from = 1) final int size) {
         return getPoolByTypeAndPriority(size);
     }
 
     /**
-     * Return bg_segment_text_color_selector thread pool that reuses bg_segment_text_color_selector fixed number of threads
-     * operating off bg_segment_text_color_selector shared unbounded queue, using the provided
+     * Return white_blue_selected_selector thread pool that reuses white_blue_selected_selector fixed number of threads
+     * operating off white_blue_selected_selector shared unbounded queue, using the provided
      * ThreadFactory to create new threads when needed.
      *
      * @param size     The size of thread in the pool.
      * @param priority The priority of thread in the poll.
-     * @return bg_segment_text_color_selector fixed thread pool
+     * @return white_blue_selected_selector fixed thread pool
      */
     public static ExecutorService getFixedPool(@IntRange(from = 1) final int size,
                                                @IntRange(from = 1, to = 10) final int priority) {
@@ -77,97 +77,97 @@ public final class ThreadUtils {
     }
 
     /**
-     * Return bg_segment_text_color_selector thread pool that uses bg_segment_text_color_selector single worker thread operating
+     * Return white_blue_selected_selector thread pool that uses white_blue_selected_selector single worker thread operating
      * off an unbounded queue, and uses the provided ThreadFactory to
-     * create bg_segment_text_color_selector new thread when needed.
+     * create white_blue_selected_selector new thread when needed.
      *
-     * @return bg_segment_text_color_selector single thread pool
+     * @return white_blue_selected_selector single thread pool
      */
     public static ExecutorService getSinglePool() {
         return getPoolByTypeAndPriority(TYPE_SINGLE);
     }
 
     /**
-     * Return bg_segment_text_color_selector thread pool that uses bg_segment_text_color_selector single worker thread operating
+     * Return white_blue_selected_selector thread pool that uses white_blue_selected_selector single worker thread operating
      * off an unbounded queue, and uses the provided ThreadFactory to
-     * create bg_segment_text_color_selector new thread when needed.
+     * create white_blue_selected_selector new thread when needed.
      *
      * @param priority The priority of thread in the poll.
-     * @return bg_segment_text_color_selector single thread pool
+     * @return white_blue_selected_selector single thread pool
      */
     public static ExecutorService getSinglePool(@IntRange(from = 1, to = 10) final int priority) {
         return getPoolByTypeAndPriority(TYPE_SINGLE, priority);
     }
 
     /**
-     * Return bg_segment_text_color_selector thread pool that creates new threads as needed, but
+     * Return white_blue_selected_selector thread pool that creates new threads as needed, but
      * will reuse previously constructed threads when they are
      * available.
      *
-     * @return bg_segment_text_color_selector cached thread pool
+     * @return white_blue_selected_selector cached thread pool
      */
     public static ExecutorService getCachedPool() {
         return getPoolByTypeAndPriority(TYPE_CACHED);
     }
 
     /**
-     * Return bg_segment_text_color_selector thread pool that creates new threads as needed, but
+     * Return white_blue_selected_selector thread pool that creates new threads as needed, but
      * will reuse previously constructed threads when they are
      * available.
      *
      * @param priority The priority of thread in the poll.
-     * @return bg_segment_text_color_selector cached thread pool
+     * @return white_blue_selected_selector cached thread pool
      */
     public static ExecutorService getCachedPool(@IntRange(from = 1, to = 10) final int priority) {
         return getPoolByTypeAndPriority(TYPE_CACHED, priority);
     }
 
     /**
-     * Return bg_segment_text_color_selector thread pool that creates (2 * CPU_COUNT + 1) threads
-     * operating off bg_segment_text_color_selector queue which size is 128.
+     * Return white_blue_selected_selector thread pool that creates (2 * CPU_COUNT + 1) threads
+     * operating off white_blue_selected_selector queue which size is 128.
      *
-     * @return bg_segment_text_color_selector IO thread pool
+     * @return white_blue_selected_selector IO thread pool
      */
     public static ExecutorService getIoPool() {
         return getPoolByTypeAndPriority(TYPE_CACHED);
     }
 
     /**
-     * Return bg_segment_text_color_selector thread pool that creates (2 * CPU_COUNT + 1) threads
-     * operating off bg_segment_text_color_selector queue which size is 128.
+     * Return white_blue_selected_selector thread pool that creates (2 * CPU_COUNT + 1) threads
+     * operating off white_blue_selected_selector queue which size is 128.
      *
      * @param priority The priority of thread in the poll.
-     * @return bg_segment_text_color_selector IO thread pool
+     * @return white_blue_selected_selector IO thread pool
      */
     public static ExecutorService getIoPool(@IntRange(from = 1, to = 10) final int priority) {
         return getPoolByTypeAndPriority(TYPE_CACHED, priority);
     }
 
     /**
-     * Return bg_segment_text_color_selector thread pool that creates (CPU_COUNT + 1) threads
-     * operating off bg_segment_text_color_selector queue which size is 128 and the maximum
+     * Return white_blue_selected_selector thread pool that creates (CPU_COUNT + 1) threads
+     * operating off white_blue_selected_selector queue which size is 128 and the maximum
      * number of threads equals (2 * CPU_COUNT + 1).
      *
-     * @return bg_segment_text_color_selector cpu thread pool for
+     * @return white_blue_selected_selector cpu thread pool for
      */
     public static ExecutorService getCpuPool() {
         return getPoolByTypeAndPriority(TYPE_CPU);
     }
 
     /**
-     * Return bg_segment_text_color_selector thread pool that creates (CPU_COUNT + 1) threads
-     * operating off bg_segment_text_color_selector queue which size is 128 and the maximum
+     * Return white_blue_selected_selector thread pool that creates (CPU_COUNT + 1) threads
+     * operating off white_blue_selected_selector queue which size is 128 and the maximum
      * number of threads equals (2 * CPU_COUNT + 1).
      *
      * @param priority The priority of thread in the poll.
-     * @return bg_segment_text_color_selector cpu thread pool for
+     * @return white_blue_selected_selector cpu thread pool for
      */
     public static ExecutorService getCpuPool(@IntRange(from = 1, to = 10) final int priority) {
         return getPoolByTypeAndPriority(TYPE_CPU, priority);
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector fixed thread pool.
+     * Executes the given task in white_blue_selected_selector fixed thread pool.
      *
      * @param size The size of thread in the fixed thread pool.
      * @param task The task to execute.
@@ -178,7 +178,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector fixed thread pool.
+     * Executes the given task in white_blue_selected_selector fixed thread pool.
      *
      * @param size     The size of thread in the fixed thread pool.
      * @param task     The task to execute.
@@ -192,7 +192,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector fixed thread pool after the given delay.
+     * Executes the given task in white_blue_selected_selector fixed thread pool after the given delay.
      *
      * @param size  The size of thread in the fixed thread pool.
      * @param task  The task to execute.
@@ -208,7 +208,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector fixed thread pool after the given delay.
+     * Executes the given task in white_blue_selected_selector fixed thread pool after the given delay.
      *
      * @param size     The size of thread in the fixed thread pool.
      * @param task     The task to execute.
@@ -226,7 +226,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector fixed thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector fixed thread pool at fix rate.
      *
      * @param size   The size of thread in the fixed thread pool.
      * @param task   The task to execute.
@@ -242,7 +242,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector fixed thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector fixed thread pool at fix rate.
      *
      * @param size     The size of thread in the fixed thread pool.
      * @param task     The task to execute.
@@ -260,7 +260,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector fixed thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector fixed thread pool at fix rate.
      *
      * @param size         The size of thread in the fixed thread pool.
      * @param task         The task to execute.
@@ -278,7 +278,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector fixed thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector fixed thread pool at fix rate.
      *
      * @param size         The size of thread in the fixed thread pool.
      * @param task         The task to execute.
@@ -298,7 +298,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector single thread pool.
+     * Executes the given task in white_blue_selected_selector single thread pool.
      *
      * @param task The task to execute.
      * @param <T>  The type of the task's result.
@@ -308,7 +308,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector single thread pool.
+     * Executes the given task in white_blue_selected_selector single thread pool.
      *
      * @param task     The task to execute.
      * @param priority The priority of thread in the poll.
@@ -320,7 +320,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector single thread pool after the given delay.
+     * Executes the given task in white_blue_selected_selector single thread pool after the given delay.
      *
      * @param task  The task to execute.
      * @param delay The time from now to delay execution.
@@ -334,7 +334,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector single thread pool after the given delay.
+     * Executes the given task in white_blue_selected_selector single thread pool after the given delay.
      *
      * @param task     The task to execute.
      * @param delay    The time from now to delay execution.
@@ -350,7 +350,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector single thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector single thread pool at fix rate.
      *
      * @param task   The task to execute.
      * @param period The period between successive executions.
@@ -364,7 +364,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector single thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector single thread pool at fix rate.
      *
      * @param task     The task to execute.
      * @param period   The period between successive executions.
@@ -380,7 +380,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector single thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector single thread pool at fix rate.
      *
      * @param task         The task to execute.
      * @param initialDelay The time to delay first execution.
@@ -396,7 +396,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector single thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector single thread pool at fix rate.
      *
      * @param task         The task to execute.
      * @param initialDelay The time to delay first execution.
@@ -416,7 +416,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cached thread pool.
+     * Executes the given task in white_blue_selected_selector cached thread pool.
      *
      * @param task The task to execute.
      * @param <T>  The type of the task's result.
@@ -426,7 +426,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cached thread pool.
+     * Executes the given task in white_blue_selected_selector cached thread pool.
      *
      * @param task     The task to execute.
      * @param priority The priority of thread in the poll.
@@ -438,7 +438,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cached thread pool after the given delay.
+     * Executes the given task in white_blue_selected_selector cached thread pool after the given delay.
      *
      * @param task  The task to execute.
      * @param delay The time from now to delay execution.
@@ -452,7 +452,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cached thread pool after the given delay.
+     * Executes the given task in white_blue_selected_selector cached thread pool after the given delay.
      *
      * @param task     The task to execute.
      * @param delay    The time from now to delay execution.
@@ -468,7 +468,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cached thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector cached thread pool at fix rate.
      *
      * @param task   The task to execute.
      * @param period The period between successive executions.
@@ -482,7 +482,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cached thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector cached thread pool at fix rate.
      *
      * @param task     The task to execute.
      * @param period   The period between successive executions.
@@ -498,7 +498,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cached thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector cached thread pool at fix rate.
      *
      * @param task         The task to execute.
      * @param initialDelay The time to delay first execution.
@@ -514,7 +514,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cached thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector cached thread pool at fix rate.
      *
      * @param task         The task to execute.
      * @param initialDelay The time to delay first execution.
@@ -652,7 +652,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cpu thread pool.
+     * Executes the given task in white_blue_selected_selector cpu thread pool.
      *
      * @param task The task to execute.
      * @param <T>  The type of the task's result.
@@ -662,7 +662,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cpu thread pool.
+     * Executes the given task in white_blue_selected_selector cpu thread pool.
      *
      * @param task     The task to execute.
      * @param priority The priority of thread in the poll.
@@ -674,7 +674,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cpu thread pool after the given delay.
+     * Executes the given task in white_blue_selected_selector cpu thread pool after the given delay.
      *
      * @param task  The task to execute.
      * @param delay The time from now to delay execution.
@@ -688,7 +688,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cpu thread pool after the given delay.
+     * Executes the given task in white_blue_selected_selector cpu thread pool after the given delay.
      *
      * @param task     The task to execute.
      * @param delay    The time from now to delay execution.
@@ -704,7 +704,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cpu thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector cpu thread pool at fix rate.
      *
      * @param task   The task to execute.
      * @param period The period between successive executions.
@@ -718,7 +718,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cpu thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector cpu thread pool at fix rate.
      *
      * @param task     The task to execute.
      * @param period   The period between successive executions.
@@ -734,7 +734,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cpu thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector cpu thread pool at fix rate.
      *
      * @param task         The task to execute.
      * @param initialDelay The time to delay first execution.
@@ -750,7 +750,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector cpu thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector cpu thread pool at fix rate.
      *
      * @param task         The task to execute.
      * @param initialDelay The time to delay first execution.
@@ -770,7 +770,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector custom thread pool.
+     * Executes the given task in white_blue_selected_selector custom thread pool.
      *
      * @param pool The custom thread pool.
      * @param task The task to execute.
@@ -781,7 +781,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector custom thread pool after the given delay.
+     * Executes the given task in white_blue_selected_selector custom thread pool after the given delay.
      *
      * @param pool  The custom thread pool.
      * @param task  The task to execute.
@@ -797,7 +797,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector custom thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector custom thread pool at fix rate.
      *
      * @param pool   The custom thread pool.
      * @param task   The task to execute.
@@ -813,7 +813,7 @@ public final class ThreadUtils {
     }
 
     /**
-     * Executes the given task in bg_segment_text_color_selector custom thread pool at fix rate.
+     * Executes the given task in white_blue_selected_selector custom thread pool at fix rate.
      *
      * @param pool         The custom thread pool.
      * @param task         The task to execute.
