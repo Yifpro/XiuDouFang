@@ -71,7 +71,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
             mParams.put("c_id", filter.getSupplierId());
             LoadingViewDialog.getInstance().show(this);
             loadProductList(true);
-        } else if (requestCode == RESULT_FOR_PRODUCT_DETAILS && data != null) { //******** 返回修改的产品图片 ********
+        } else if (requestCode == RESULT_FOR_PRODUCT_DETAILS && data != null) { //******** 返回更改的产品图片 ********
             mList.get(mIndex).setPhotourl(data.getStringExtra(ProductEditActivity.PRODUCT_ICON));
             mAdapter.notifyItemChanged(mIndex);
         }

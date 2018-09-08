@@ -91,7 +91,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_FOR_PRODUCT_EDIT && data != null) {
+        if (requestCode == RESULT_FOR_PRODUCT_EDIT && data != null) { //******** 返回更改后的图片 ********
             ArrayList<String> tempList = data.getStringArrayListExtra(ProductEditActivity.PRODUCT_ICON);
             ArrayList<ProductListBean.ChanpinpicBean.PiclistBean> list = new ArrayList<>();
             for (String s : tempList) {

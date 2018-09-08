@@ -56,8 +56,8 @@ public class InvoiceQueryActivity extends AppCompatActivity implements IActivity
 
         findViewById(R.id.tv_query).setOnClickListener(this);
         findViewById(R.id.tv_reset).setOnClickListener(this);
-        mSivStartTime.setOnClickListener(new InnerStartTimeClickListener());
-        mSivEndTime.setOnClickListener(new InnerEndTimeClickListener());
+        mSivStartTime.setOnClickListener(this);
+        mSivEndTime.setOnClickListener(this);
     }
 
     private void showEndTimePickerDialog() {
@@ -170,40 +170,38 @@ public class InvoiceQueryActivity extends AppCompatActivity implements IActivity
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_query:
-                Intent intent = new Intent();
-                InvoiceFilter filter = new InvoiceFilter();
-                filter.setNo(mSivInvoiceNo.getValue());
-                filter.setCustomer(mSivCustomer.getValue());
-                filter.setStartTime(mSivStartTime.getValue());
-                filter.setEndTime(mSivEndTime.getValue());
-                filter.setTransportNum(mSivTransportNum.getValue());
-                intent.putExtra(INVOICE_FILTER, filter);
-                setResult(Activity.RESULT_OK, intent);
-                finish();
+            case R.id.siv_start_time: //******** 选择开始时间 ********
+                showStartTimePickerDialog();
                 break;
-            case R.id.tv_reset:
-                mSivInvoiceNo.setValue("");
-                mSivCustomer.setValue("");
-                resetTime();
-                mSivTransportNum.setValue("");
+            case R.id.siv_end_time: //******** 选择结束时间 ********
+                showEndTimePickerDialog();
+                break;
+            case R.id.tv_query: //******** 点击搜索 ********
+                startSearch();
+                break;
+            case R.id.tv_reset: //******** 点击重置 ********
+                reset();
                 break;
         }
     }
 
-    private class InnerEndTimeClickListener implements OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            showEndTimePickerDialog();
-        }
+    private void reset() {
+        mSivInvoiceNo.setValue("");
+        mSivCustomer.setValue("");
+        mSivTransportNum.setValue("");
+        resetTime();
     }
 
-    private class InnerStartTimeClickListener implements OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            showStartTimePickerDialog();
-        }
+    private void startSearch() {
+        Intent intent = new Intent();
+        InvoiceFilter filter = new InvoiceFilter();
+        filter.setNo(mSivInvoiceNo.getValue());
+        filter.setCustomer(mSivCustomer.getValue());
+        filter.setStartTime(mSivStartTime.getValue());
+        filter.setEndTime(mSivEndTime.getValue());
+        filter.setTransportNum(mSivTransportNum.getValue());
+        intent.putExtra(INVOICE_FILTER, filter);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 }

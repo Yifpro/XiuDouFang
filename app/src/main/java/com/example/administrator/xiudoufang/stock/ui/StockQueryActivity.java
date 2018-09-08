@@ -63,6 +63,9 @@ public class StockQueryActivity extends AppCompatActivity implements IActivityBa
         mSivUnit = findViewById(R.id.siv_unit);
         mSivAmount = findViewById(R.id.siv_amount);
 
+        mSivType.setOnClickListener(this);
+        mSivUnit.setOnClickListener(this);
+        mSivAmount.setOnClickListener(this);
         findViewById(R.id.tv_query).setOnClickListener(this);
         findViewById(R.id.tv_reset).setOnClickListener(this);
     }
@@ -98,88 +101,87 @@ public class StockQueryActivity extends AppCompatActivity implements IActivityBa
         mAmountList = new ArrayList<>();
         Collections.addAll(mAmountList, amountArr);
         mSivAmount.setValue(mAmountList.get(mAmountIndex));
-        mSivType.setOnClickListener(new InnerTypeClickListener());
-        mSivUnit.setOnClickListener(new InnerUnitClickListener());
-        mSivAmount.setOnClickListener(new InnerAmountClickListener());
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_query:
-                StockFilter stockFilter = new StockFilter();
-                stockFilter.setNo(mSivNo.getValue());
-                stockFilter.setName(mSivName.getValue());
-                stockFilter.setType(mIdType == null ? "" : mIdType);
-                stockFilter.setSupplier(mSivSupplier.getValue());
-                stockFilter.setModel(mSivModel.getValue());
-                stockFilter.setBarCode(mSivBarCode.getValue());
-                stockFilter.setBrand(mSivBrand.getValue());
-                stockFilter.setDetails(mSivDetails.getValue());
-                stockFilter.setUnit(String.valueOf(mUnitIndex + 1));
-                stockFilter.setAmount(amountValue[mAmountIndex]);
-                stockFilter.setIsIncludeSubclass(includeSubclass);
-                Intent intent = new Intent();
-                intent.putExtra(FILTER_INFO, stockFilter);
-                setResult(Activity.RESULT_OK, intent);
-                finish();
+            case R.id.siv_type: //******** 选择类别 ********
+                Intent i = new Intent(StockQueryActivity.this, TypeListActivity.class);
+                startActivityForResult(i, RESULT_FOR_TYPE_LIST);
                 break;
-            case R.id.tv_reset:
-                mSivNo.setValue("");
-                mSivName.setValue("");
-                mSivType.setValue("");
-                mSivSupplier.setValue("");
-                mSivModel.setValue("");
-                mSivBarCode.setValue("");
-                mSivBrand.setValue("");
-                mSivDetails.setValue("");
-                mSivUnit.setValue(mUnitList.get(UNIT));
-                mSivAmount.setValue(mAmountList.get(AMOUNT));
+            case R.id.siv_unit: //******** 选择单位 ********
+                showUnitDialog();
+                break;
+            case R.id.siv_amount: //******** 选择数量 ********
+                showAmountDialog();
+                break;
+            case R.id.tv_query: //******** 点击搜索 ********
+                startSearch();
+                break;
+            case R.id.tv_reset: //******** 点击重置 ********
+                reset();
                 break;
         }
     }
 
-    private class InnerUnitClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            if (mUnitDialog == null) {
-                mUnitDialog = SingleLineTextDialog.newInstance(mUnitList);
-                mUnitDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        mUnitIndex = position;
-                        mSivUnit.setValue(mUnitList.get(position));
-                    }
-                });
-            }
-            mUnitDialog.show(getSupportFragmentManager(), "SingleLineTextDialog");
-        }
+    private void reset() {
+        mSivNo.setValue("");
+        mSivName.setValue("");
+        mSivType.setValue("");
+        mSivSupplier.setValue("");
+        mSivModel.setValue("");
+        mSivBarCode.setValue("");
+        mSivBrand.setValue("");
+        mSivDetails.setValue("");
+        mSivUnit.setValue(mUnitList.get(UNIT));
+        mSivAmount.setValue(mAmountList.get(AMOUNT));
     }
 
-    private class InnerAmountClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            if (mAmountDialog == null) {
-                mAmountDialog = SingleLineTextDialog.newInstance(mAmountList);
-                mAmountDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        mAmountIndex = position;
-                        mSivAmount.setValue(mAmountList.get(position));
-                    }
-                });
-            }
-            mAmountDialog.show(getSupportFragmentManager(), "SingleLineTextDialog");
-        }
+    private void startSearch() {
+        StockFilter stockFilter = new StockFilter();
+        stockFilter.setNo(mSivNo.getValue());
+        stockFilter.setName(mSivName.getValue());
+        stockFilter.setType(mIdType == null ? "" : mIdType);
+        stockFilter.setSupplier(mSivSupplier.getValue());
+        stockFilter.setModel(mSivModel.getValue());
+        stockFilter.setBarCode(mSivBarCode.getValue());
+        stockFilter.setBrand(mSivBrand.getValue());
+        stockFilter.setDetails(mSivDetails.getValue());
+        stockFilter.setUnit(String.valueOf(mUnitIndex + 1));
+        stockFilter.setAmount(amountValue[mAmountIndex]);
+        stockFilter.setIsIncludeSubclass(includeSubclass);
+        Intent intent = new Intent();
+        intent.putExtra(FILTER_INFO, stockFilter);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
-    private class InnerTypeClickListener implements View.OnClickListener {
 
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(StockQueryActivity.this, TypeListActivity.class);
-            startActivityForResult(intent, RESULT_FOR_TYPE_LIST);
+    private void showAmountDialog() {
+        if (mAmountDialog == null) {
+            mAmountDialog = SingleLineTextDialog.newInstance(mAmountList);
+            mAmountDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    mAmountIndex = position;
+                    mSivAmount.setValue(mAmountList.get(position));
+                }
+            });
         }
+        mAmountDialog.show(getSupportFragmentManager(), "SingleLineTextDialog");
+    }
+
+    private void showUnitDialog() {
+        if (mUnitDialog == null) {
+            mUnitDialog = SingleLineTextDialog.newInstance(mUnitList);
+            mUnitDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    mUnitIndex = position;
+                    mSivUnit.setValue(mUnitList.get(position));
+                }
+            });
+        }
+        mUnitDialog.show(getSupportFragmentManager(), "SingleLineTextDialog");
     }
 }

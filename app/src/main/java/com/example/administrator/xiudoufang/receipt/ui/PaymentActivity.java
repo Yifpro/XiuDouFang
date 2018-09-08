@@ -93,24 +93,9 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
         mSivPaymentDate = findViewById(R.id.siv_payment_date);
         mEtTip = findViewById(R.id.et_tip);
 
-        mSivSubject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showSubjectDialog();
-            }
-        });
-        mSivReceiptType.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showReceiptDialog();
-            }
-        });
-        mSivPaymentDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPaymentTimePickerDialog();
-            }
-        });
+        mSivSubject.setOnClickListener(this);
+        mSivReceiptType.setOnClickListener(this);
+        mSivPaymentDate.setOnClickListener(this);
         findViewById(R.id.tv_confirm).setOnClickListener(this);
     }
 
@@ -287,6 +272,15 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.siv_subject:
+                showSubjectDialog();
+                break;
+            case R.id.siv_receipt_type:
+                showReceiptDialog();
+                break;
+            case R.id.siv_payment_date:
+                showPaymentTimePickerDialog();
+                break;
             case R.id.tv_confirm:
                 submitBill();
                 break;

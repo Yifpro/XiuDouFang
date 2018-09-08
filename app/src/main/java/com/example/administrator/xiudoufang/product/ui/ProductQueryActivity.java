@@ -58,8 +58,9 @@ public class ProductQueryActivity extends AppCompatActivity implements IActivity
 
         tvQuery.setOnClickListener(this);
         tvReset.setOnClickListener(this);
-        mSivSupplier.setOnClickListener(new InnerSupplierClickListener());
-        mSivType.setOnClickListener(new InnerTypeClickListener());
+        mSivSupplier.setOnClickListener(this);
+        mSivType.setOnClickListener(this);
+        mSivPic.setOnClickListener(this);
     }
 
     @Override
@@ -101,9 +102,20 @@ public class ProductQueryActivity extends AppCompatActivity implements IActivity
         mPicList = new ArrayList<>();
         Collections.addAll(mPicList, picArr);
         mSivPic.setValue(mPicList.get(0));
-        mSivPic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.siv_supplier:
+                Intent intent_1 = new Intent(ProductQueryActivity.this, SupplierListActivity.class);
+                intent_1.putExtra(SupplierListActivity.FROM_CLASS, TAG);
+                startActivity(intent_1);
+                break;
+            case R.id.siv_type:
+                startActivityForResult(new Intent(ProductQueryActivity.this, TypeListActivity.class), RESULT_FOR_TYPE_LIST);
+                break;
+            case R.id.siv_pic:
                 if (mPicDialog == null) {
                     mPicDialog = SingleLineTextDialog.newInstance(mPicList);
                     mPicDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
@@ -115,23 +127,17 @@ public class ProductQueryActivity extends AppCompatActivity implements IActivity
                     });
                 }
                 mPicDialog.show(getSupportFragmentManager(), "SingleLineTextDialog");
-            }
-        });
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
+                break;
             case R.id.tv_query:
-                Intent intent = new Intent();
+                Intent intent_2 = new Intent();
                 ProductFilter filter = new ProductFilter();
                 filter.setName(mSivName.getValue());
                 filter.setSupplierId(mSupplier == null ? "" : mSupplier.getId());
                 filter.setTypeId(mIdType);
                 filter.setAction(mIsIncludeSubclass);
                 filter.setIsIncludePic(mPicIndex == 0 ? "" : mPicIndex == 1 ? "1" : "0");
-                intent.putExtra(PRODUCT_FILTER, filter);
-                setResult(Activity.RESULT_OK, intent);
+                intent_2.putExtra(PRODUCT_FILTER, filter);
+                setResult(Activity.RESULT_OK, intent_2);
                 finish();
                 break;
             case R.id.tv_reset:
@@ -142,25 +148,6 @@ public class ProductQueryActivity extends AppCompatActivity implements IActivity
                 mSupplier = null;
                 mIdType = null;
                 break;
-        }
-    }
-
-    private class InnerSupplierClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(ProductQueryActivity.this, SupplierListActivity.class);
-            intent.putExtra(SupplierListActivity.FROM_CLASS, TAG);
-            startActivity(intent);
-        }
-    }
-
-    private class InnerTypeClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(ProductQueryActivity.this, TypeListActivity.class);
-            startActivityForResult(intent, RESULT_FOR_TYPE_LIST);
         }
     }
 }

@@ -46,18 +46,7 @@ public class ShopListActivity extends AppCompatActivity implements IActivityBase
         mIndex = getIntent().getIntExtra(SettingActivity.SELECTED_INDEX, 0);
         StoreSwitchAdapter adapter = new StoreSwitchAdapter(R.layout.layout_list_item_store_switch, mList);
         adapter.bindToRecyclerView(mRecyclerView);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (mIndex != position) {
-                    mList.get(mIndex).setSelected(false);
-                    mList.get(position).setSelected(true);
-                    adapter.notifyItemChanged(mIndex);
-                    adapter.notifyItemChanged(position);
-                    mIndex = position;
-                }
-            }
-        });
+        adapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -85,5 +74,19 @@ public class ShopListActivity extends AppCompatActivity implements IActivityBase
             setResult(Activity.RESULT_OK, new Intent().putExtra("index", mIndex));
         }
         super.onBackPressed();
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            if (mIndex != position) {
+                mList.get(mIndex).setSelected(false);
+                mList.get(position).setSelected(true);
+                adapter.notifyItemChanged(mIndex);
+                adapter.notifyItemChanged(position);
+                mIndex = position;
+            }
+        }
     }
 }
