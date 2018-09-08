@@ -36,6 +36,7 @@ public class InvoiceListActivity extends AppCompatActivity implements IActivityB
 
     private final int COUNT = 20;
     private static final int RESULT_FOR_INVOICE_QUERY = 116;
+    private static final int RESULT_FOR_INVOICE_DETAILS = 124;
     public static final String SELECTED_ITEM = "selected_item";
 
     private RefreshLayout mRefreshLayout;
@@ -47,6 +48,7 @@ public class InvoiceListActivity extends AppCompatActivity implements IActivityB
     private int mCurrentPage = 1;
     private InvoiceListAdapter mAdapter;
     private InvoiceFilter mFilter;
+    private int mIndex; //******** 进入运单详情的位置 ********
 
     public static void start(Context context) {
         Intent intent = new Intent(context, InvoiceListActivity.class);
@@ -160,7 +162,8 @@ public class InvoiceListActivity extends AppCompatActivity implements IActivityB
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
             Intent intent = new Intent(InvoiceListActivity.this, InvoiceDetailsActivity.class);
             intent.putExtra(SELECTED_ITEM, mList.get(position));
-            startActivity(intent);
+            startActivityForResult(intent, RESULT_FOR_INVOICE_DETAILS);
+            mIndex = position;
         }
     }
 

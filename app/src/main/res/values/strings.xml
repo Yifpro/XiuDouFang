@@ -114,20 +114,6 @@
     <string name="amount">数量</string>
     <string name="include_subclass">包含子类</string>
     <string name="filter">筛选</string>
-    <!--运号-->
-    <string name="search">搜索</string>
-    <string name="customer">客户</string>
-    <string name="input_customer">请输入客户</string>
-    <string name="order_no">单号</string>
-    <string name="input_order_no">请输入单号</string>
-    <string name="start_time">开始时间</string>
-    <string name="end_time">结束时间</string>
-    <string name="transportion_no">运号</string>
-    <string name="input_transportion_no">请输入运号</string>
-    <string name="clear">清空</string>
-    <string name="select_pic">相册/拍照</string>
-    <string name="submit">提交</string>
-    <string name="clear_transport_num">清除运号</string>
     <!--查单-->
     <string name="amt_format">¥ %s</string>
     <string name="ph_amt_format">配货数：%s</string>
@@ -160,4 +146,19 @@
     <string name="total_sums_1">总金额：</string>
     <string name="reopen_order">重新开单</string>
     <string name="create_order">生成订单</string>
+    <!--运号-->
+    <string name="search">搜索</string>
+    <string name="customer">客户</string>
+    <string name="input_customer">请输入客户</string>
+    <string name="order_no">单号</string>
+    <string name="input_order_no">请输入单号</string>
+    <string name="start_time">开始时间</string>
+    <string name="end_time">结束时间</string>
+    <string name="transportion_no">运号</string>
+    <string name="input_transportion_no">请输入运号</string>
+    <string name="clear">清空</string>
+    <string name="select_pic">相册/拍照</string>
+    <string name="submit">提交</string>
+    <string name="clear_transport_num">清除运号</string>
+    <string name="input_transport_num">请输入运号</string>
 </resources>
