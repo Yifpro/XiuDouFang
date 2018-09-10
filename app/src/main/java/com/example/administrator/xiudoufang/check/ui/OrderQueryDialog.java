@@ -43,14 +43,7 @@ public class OrderQueryDialog extends DialogFragment {
         adapter.bindToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (listener != null)
-                    listener.onItemClick(position);
-                dismiss();
-            }
-        });
+        adapter.setOnItemClickListener(new InnerItemClickListener());
         return view;
     }
 
@@ -60,5 +53,15 @@ public class OrderQueryDialog extends DialogFragment {
 
     public interface OnItemClickListener {
         void onItemClick(int position);
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            if (listener != null)
+                listener.onItemClick(position);
+            dismiss();
+        }
     }
 }

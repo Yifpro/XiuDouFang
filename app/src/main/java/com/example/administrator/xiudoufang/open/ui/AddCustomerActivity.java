@@ -87,8 +87,7 @@ public class AddCustomerActivity extends AppCompatActivity implements IActivityB
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        //******** 区域返回结果 ********
-        if (requestCode == RESULT_SELECT_AREA && data != null) {
+        if (requestCode == RESULT_SELECT_AREA && data != null) { //******** 返回选择区域 ********
             mCivAreaNo.setValue(data.getStringExtra("area_code"));
             mCivAreaName.setValue(data.getStringExtra("area_name"));
         }
@@ -166,6 +165,7 @@ public class AddCustomerActivity extends AppCompatActivity implements IActivityB
         }
     }
 
+    //******** 区域类型选择框 ********
     private void showAreaTypeDialog() {
         if (areaTypePickerView == null) {
             final List<String> areaTypeItems;

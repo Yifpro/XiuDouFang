@@ -131,7 +131,7 @@ public class SalesProductListActivity extends AppCompatActivity implements IActi
         }
         mParams.put("searchitem", mFilterText);
         mParams.put("pagenum", String.valueOf(mCurrentPage++));
-        mLogic.requestProductList(mParams, new JsonCallback<SalesProductListBean>() {
+        mLogic.requestProductList(this, mParams, new JsonCallback<SalesProductListBean>() {
             @Override
             public void onSuccess(Response<SalesProductListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();

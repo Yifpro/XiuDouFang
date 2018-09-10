@@ -113,11 +113,12 @@ public class OrderListSubFragment extends BaseFragment {
         }
     }
 
+    //******** 加载订单列表 ********
     private void loadOrderList(final boolean isRefresh) {
         if (isRefresh) mCurrentPage = 1;
         if (mParams == null) initParams();
         mParams.put("pagenum", String.valueOf(mCurrentPage++));
-        mOrderListLogic.requestOrderList(mParams, new JsonCallback<OrderListBean>() {
+        mOrderListLogic.requestOrderList(mActivity, mParams, new JsonCallback<OrderListBean>() {
             @Override
             public void onSuccess(Response<OrderListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
@@ -222,7 +223,7 @@ public class OrderListSubFragment extends BaseFragment {
             }
             mActionParams.put("iid", mList.get(position).getIid());
             mActionParams.put("action", mType == 0 ? "1" : "2");
-            mOrderListLogic.requestActionForOrder(mActionParams, new JsonCallback<String>() {
+            mOrderListLogic.requestActionForOrder(mActivity, mActionParams, new JsonCallback<String>() {
                 @Override
                 public void onSuccess(Response<String> response) {
                     JSONObject jsonObject = JSONObject.parseObject(response.body());

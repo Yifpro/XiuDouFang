@@ -107,7 +107,7 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
     //******** 加载供应商列表 ********
     private void loadSupplierList(final boolean isRefresh) {
         if (isRefresh) mCurrentPage = 1;
-        mParams.put("serchitem", mFilterText);
+        mParams.put("serchitem", mFilterText); //******** 模糊查询字段 ********
         mParams.put("pagenum", String.valueOf(mCurrentPage++));
         mParams.put("count", String.valueOf(COUNT));
         mLogic.requestSupplierList(this, mParams, new JsonCallback<SupplierListBean>() {
@@ -138,7 +138,7 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
         mParams = new HashMap<>();
         mParams.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
         mParams.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
-        mParams.put("c_id", "0");
+        mParams.put("c_id", "0"); //******** 0：供应商列表 id：单个供应商 ********
     }
 
     @Override

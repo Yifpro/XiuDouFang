@@ -292,7 +292,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         params.put("confirm", isConfirm ? "1" : "0"); //是否确认订单
         params.put("pay_yueamt", info.getBalancePayment()); //余额支付金额
         params.put("cpjsonstr", JSONObject.toJSONString(mList)); //产品json
-        mLogic.saveOrCreateOrder(params, mOtherSetting == null ? null : mOtherSetting.getExtra(), new JsonCallback<String>() {
+        mLogic.saveOrCreateOrder(this, params, mOtherSetting == null ? null : mOtherSetting.getExtra(), new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
 
@@ -310,64 +310,79 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
                 showDeliveryTimePickerDialog();
                 break;
             case R.id.tv_salesman:
-                if (mSalesmanList.size() > 0) {
-                    if (mSalesSelectorDialog == null) {
-                        mSalesSelectorDialog = SimpleTextDialog.newInstance(mSalesmanList);
-                        mSalesSelectorDialog.setOnItemChangedListener(new SimpleTextDialog.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(int position, String key) {
-                                mTvSalesman.setText(key);
-                            }
-                        });
-                    }
-                    mSalesSelectorDialog.show(getSupportFragmentManager(), "SimpleTextDialog");
-                } else {
-                    ToastUtils.show(this, "暂无其他业务员可选择");
-                }
+                showSalesSelectorDialog();
                 break;
             case R.id.tv_receipt_type:
-                if (mReceiptTypeList.size() > 0) {
-                    if (mReceiptTypeDialog == null) {
-                        mReceiptTypeDialog = SimpleTextDialog.newInstance(mReceiptTypeList);
-                        mReceiptTypeDialog.setOnItemChangedListener(new SimpleTextDialog.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(int position, String key) {
-                                mTvReceiptType.setText(key);
-                            }
-                        });
-                    }
-                    mReceiptTypeDialog.show(getSupportFragmentManager(), "SimpleTextDialog");
-                } else {
-                    ToastUtils.show(this, "暂无其他收款方式可选择");
-                }
+                showReceiptTypeDialog();
                 break;
             case R.id.et_tip:
                 mEtTip.setCursorVisible(true);
                 break;
             case R.id.tv_submit_order:
-                ArrayList<String> list = new ArrayList<>();
-                list.add(mTvTotalPrice.getText().toString()); //本单金额
-                list.add(mCustomerBean.getDebt()); //前结欠
-                DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                double sums = Double.parseDouble(mTvTotalPrice.getText().toString());
-                double debt = Double.parseDouble(mCustomerBean.getDebt());
-                String leijiqian = decimalFormat.format(sums + debt);
-                list.add(leijiqian); //累计欠
-                list.add(""); //其他费用
-                list.add(mTvTotalPrice.getText().toString()); //本单应收
-                list.add(leijiqian); //累计金额
-                list.add(""); //本次收款
-                list.add(""); //优惠金额
-                list.add(mCustomerBean.getYue_amt()); //账户余额
-                list.add(""); //余额支付
-                ConfirmOrderInfoDialog confirmOrderInfoDialog = ConfirmOrderInfoDialog.newInstance(list);
-                confirmOrderInfoDialog.setOnItemClickListener(new InnerConfirmOrderInfoListener());
-                confirmOrderInfoDialog.show(getSupportFragmentManager(), "ConfirmOrderInfoDialog");
+                showConfirmOrderInfoDialog();
                 break;
         }
     }
 
-    //******** 交货日期选择器 ********
+    //******** 订单信息确认框 ********
+    private void showConfirmOrderInfoDialog() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add(mTvTotalPrice.getText().toString()); //本单金额
+        list.add(mCustomerBean.getDebt()); //前结欠
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        double sums = Double.parseDouble(mTvTotalPrice.getText().toString());
+        double debt = Double.parseDouble(mCustomerBean.getDebt());
+        String leijiqian = decimalFormat.format(sums + debt);
+        list.add(leijiqian); //累计欠
+        list.add(""); //其他费用
+        list.add(mTvTotalPrice.getText().toString()); //本单应收
+        list.add(leijiqian); //累计金额
+        list.add(""); //本次收款
+        list.add(""); //优惠金额
+        list.add(mCustomerBean.getYue_amt()); //账户余额
+        list.add(""); //余额支付
+        ConfirmOrderInfoDialog confirmOrderInfoDialog = ConfirmOrderInfoDialog.newInstance(list);
+        confirmOrderInfoDialog.setOnItemClickListener(new InnerConfirmOrderInfoListener());
+        confirmOrderInfoDialog.show(getSupportFragmentManager(), "ConfirmOrderInfoDialog");
+    }
+
+    //******** 收款方式选择框 ********
+    private void showReceiptTypeDialog() {
+        if (mReceiptTypeList.size() > 0) {
+            if (mReceiptTypeDialog == null) {
+                mReceiptTypeDialog = SimpleTextDialog.newInstance(mReceiptTypeList);
+                mReceiptTypeDialog.setOnItemChangedListener(new SimpleTextDialog.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position, String key) {
+                        mTvReceiptType.setText(key);
+                    }
+                });
+            }
+            mReceiptTypeDialog.show(getSupportFragmentManager(), "SimpleTextDialog");
+        } else {
+            ToastUtils.show(this, "暂无其他收款方式可选择");
+        }
+    }
+
+    //******** 业务员选择框 ********
+    private void showSalesSelectorDialog() {
+        if (mSalesmanList.size() > 0) {
+            if (mSalesSelectorDialog == null) {
+                mSalesSelectorDialog = SimpleTextDialog.newInstance(mSalesmanList);
+                mSalesSelectorDialog.setOnItemChangedListener(new SimpleTextDialog.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position, String key) {
+                        mTvSalesman.setText(key);
+                    }
+                });
+            }
+            mSalesSelectorDialog.show(getSupportFragmentManager(), "SimpleTextDialog");
+        } else {
+            ToastUtils.show(this, "暂无其他业务员可选择");
+        }
+    }
+
+    //******** 交货日期选择框********
     private void showDeliveryTimePickerDialog() {
         if (mEndTimePickerView == null) {
             TimePickerBuilder builder = new TimePickerBuilder(this, new OnTimeSelectListener() {
@@ -407,7 +422,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         mEndTimePickerView.show();
     }
 
-    //******** 下单日期选择器 ********
+    //******** 下单日期选择框 ********
     private void showCreateOrderTimePickerDialog() {
         if (mStartTimePickerView == null) {
             TimePickerBuilder builder = new TimePickerBuilder(this, new OnTimeSelectListener() {
@@ -457,6 +472,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
                 .build();
     }
 
+    //******** 统计数量金额 ********
     private void calculateAmountAndSums() {
         if (mList != null) {
             int amount = 0;

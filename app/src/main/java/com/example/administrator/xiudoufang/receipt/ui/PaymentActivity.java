@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class PaymentActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
@@ -138,8 +139,9 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
         loadCustomerList();
     }
 
+    //******** 加载会计科目列表 ********
     private void loadSubjectList() {
-        mLogic.requestSubjectList("", new JsonCallback<SubjectListBean>() {
+        mLogic.requestSubjectList(this, "", new JsonCallback<SubjectListBean>() {
             @Override
             public void onSuccess(Response<SubjectListBean> response) {
                 if (list == null)
@@ -153,6 +155,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
         });
     }
 
+    //******** 加载客户列表 ********
     private void loadCustomerList() {
         if (getIntent() != null) {
             CustomerListBean.CustomerBean bean = getIntent().getParcelableExtra(CustomerListActivity.SELECTED_ITEM);
@@ -165,7 +168,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
             map.put("count", "20");
             map.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
             LoadingViewDialog.getInstance().show(this);
-            mLogic.requestCustomerList(map, new StringCallback() {
+            mLogic.requestCustomerList(this, map, new StringCallback() {
                 @Override
                 public void onSuccess(Response<String> response) {
                     LoadingViewDialog.getInstance().dismiss();
@@ -184,12 +187,13 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
         }
     }
 
+    //******** 款项日期选择框 ********
     private void showPaymentTimePickerDialog() {
         if (mPvPaymentDate == null) {
             mPvPaymentDate = new TimePickerBuilder(PaymentActivity.this, new OnTimeSelectListener() {
                 @Override
                 public void onTimeSelect(Date date, View v) {
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
                     mSivPaymentDate.setValue(format.format(date));
                 }
             })
@@ -229,6 +233,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
         mPvPaymentDate.show();
     }
 
+    //******** 收款方式选择框 ********
     private void showReceiptDialog() {
         if (mReceiptDialog == null) {
             mReceiptDialog = new ReceiptSelectorDialog();
@@ -249,6 +254,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
         mReceiptDialog.show(getSupportFragmentManager(), "SubjectSelectorDialog");
     }
 
+    //******** 科目选择框 ********
     private void showSubjectDialog() {
         if (list == null) {
             ToastUtils.show(this, "暂无数据");
@@ -304,7 +310,7 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
                 params.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
                 params.put("accountid", mSubjectId);
                 params.put("leixing", mDirection);
-                mLogic.requestReceipt(params, new StringCallback() {
+                mLogic.requestReceipt(this, params, new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
 

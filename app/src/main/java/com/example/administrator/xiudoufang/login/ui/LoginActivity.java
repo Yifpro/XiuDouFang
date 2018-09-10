@@ -92,8 +92,8 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
     private void login() {
         LoadingViewDialog.getInstance().show(this);
         HttpParams httpParams = new HttpParams();
-        httpParams.put("username", mEtAccount.getText().toString());
-        httpParams.put("password", mEtPassword.getText().toString());
+        httpParams.put("username", mEtAccount.getText().toString()); //******** 用户名 ********
+        httpParams.put("password", mEtPassword.getText().toString()); //******** 密码 ********
         httpParams.put("shoujino", "");
         mLogic.checkVerificationCode(this, httpParams, new StringCallback() {
             @Override
@@ -121,11 +121,11 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
     //******** 请求登录 ********
     private void requestLogin(String phoneCode) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("username", mEtAccount.getText().toString()); //用户名
-        map.put("password", mEtPassword.getText().toString()); //密码
+        map.put("username", mEtAccount.getText().toString()); //******** 用户名 ********
+        map.put("password", mEtPassword.getText().toString()); //******** 密码 ********
         map.put("logdianid", ""); //登陆店
         map.put("phonecode", phoneCode); //验证码
-        map.put("changedian", "0"); //普通登录或者切换分店
+        map.put("changedian", "0"); //0：普通登录 1：切换分店
         mLogic.requestLogin(LoginActivity.this, map, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {

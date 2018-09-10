@@ -66,13 +66,13 @@ public class OrderQueryActivity extends AppCompatActivity implements IActivityBa
         mSivTransportType = findViewById(R.id.siv_transport_type);
         mSivProxyOrder = findViewById(R.id.siv_proxy_order);
 
-        findViewById(R.id.tv_query).setOnClickListener(this);
-        findViewById(R.id.tv_reset).setOnClickListener(this);
         mSivStartTime.setOnClickListener(this);
         mSivEndTime.setOnClickListener(this);
         mSivOrderType.setOnClickListener(this);
         mSivTransportType.setOnClickListener(this);
         mSivProxyOrder.setOnClickListener(this);
+        findViewById(R.id.tv_query).setOnClickListener(this);
+        findViewById(R.id.tv_reset).setOnClickListener(this);
     }
 
     @Override
@@ -127,18 +127,18 @@ public class OrderQueryActivity extends AppCompatActivity implements IActivityBa
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.siv_start_time:
-                showStartTimePickerDialog();
+                showStartTimePickerDialog(); //******** 开始时间选择框 ********
                 break;
             case R.id.siv_end_time:
-                showEndTimePickerDialog();
+                showEndTimePickerDialog(); //******** 结束时间选择框 ********
                 break;
-            case R.id.siv_order_type:
+            case R.id.siv_order_type: //******** 订单类型选择框 ********
                 showOrderTypeDialog();
                 break;
-            case R.id.siv_transport_type:
+            case R.id.siv_transport_type: //******** 货运类型选择框 ********
                 showTransportTypeDialog();
                 break;
-            case R.id.siv_proxy_order:
+            case R.id.siv_proxy_order: //******** 代发订单选择框 ********
                 showProxyOrderDialog();
                 break;
             case R.id.tv_query:
@@ -202,7 +202,6 @@ public class OrderQueryActivity extends AppCompatActivity implements IActivityBa
         mOrderTypeDialog.show(getSupportFragmentManager(), "SingleLineTextDialog");
     }
 
-    //******** 结束日期选择器 ********
     private void showEndTimePickerDialog() {
         if (mEndTimePickerView == null) {
             TimePickerBuilder builder = new TimePickerBuilder(OrderQueryActivity.this, new OnTimeSelectListener() {
@@ -242,7 +241,6 @@ public class OrderQueryActivity extends AppCompatActivity implements IActivityBa
         mEndTimePickerView.show();
     }
 
-    //******** 开始日期选择器 ********
     private void showStartTimePickerDialog() {
         if (mStartTimePickerView == null) {
             TimePickerBuilder builder = new TimePickerBuilder(OrderQueryActivity.this, new OnTimeSelectListener() {

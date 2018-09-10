@@ -44,16 +44,7 @@ public class SubjectSelectorDialog extends DialogFragment {
         list = getArguments().getParcelableArrayList("data");
         mAdapter = new SubjectSelectorAdapter(R.layout.layout_list_item_subject_selector, list);
         mAdapter.bindToRecyclerView(mRecyclerView);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (mListener != null) {
-                    SubjectListBean.AccounttypesBean bean = list.get(position);
-                    mListener.onItemChanged(bean.getAccountid(), bean.getDirection(), bean.getShow_name());
-                }
-                dismiss();
-            }
-        });
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return view;
@@ -65,5 +56,17 @@ public class SubjectSelectorDialog extends DialogFragment {
 
     public interface OnItemChangedListener {
         void onItemChanged(String subjectId, String direction, String item);
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            if (mListener != null) {
+                SubjectListBean.AccounttypesBean bean = list.get(position);
+                mListener.onItemChanged(bean.getAccountid(), bean.getDirection(), bean.getShow_name());
+            }
+            dismiss();
+        }
     }
 }

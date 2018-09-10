@@ -146,23 +146,23 @@ public class PurchaseSubFragment extends BaseFragment implements OnEventListener
     @SuppressWarnings("unchecked")
     private void initParams() {
         mPurchaseListParams = new HashMap();
-        mPurchaseListParams.put("iid", "");
+        mPurchaseListParams.put("iid", ""); //******** 采购单d ********
         mPurchaseListParams.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
-        mPurchaseListParams.put("PuOrderNo", "");
-        mPurchaseListParams.put("suppno", "");
-        mPurchaseListParams.put("Suppname", "");
+        mPurchaseListParams.put("PuOrderNo", ""); //******** 采购单编号 ********
+        mPurchaseListParams.put("suppno", ""); //******** 供应商编号 ********
+        mPurchaseListParams.put("Suppname", ""); //******** 供应商名称 ********
         mPurchaseListParams.put("starttime", "");
         mPurchaseListParams.put("endtime", "");
-        mPurchaseListParams.put("etadate", "");
-        mPurchaseListParams.put("crman", "");
-        mPurchaseListParams.put("queren_man", "");
+        mPurchaseListParams.put("etadate", ""); //******** 预计到货时间 ********
+        mPurchaseListParams.put("crman", ""); //******** 创建人 ********
+        mPurchaseListParams.put("queren_man", ""); //******** 确认人 ********
         mPurchaseListParams.put("quyuno", "");
         mPurchaseListParams.put("quyu", "");
-        mPurchaseListParams.put("fujia_memo", "");
-        mPurchaseListParams.put("remark", "");
+        mPurchaseListParams.put("fujia_memo", ""); //******** 附加备注 ********
+        mPurchaseListParams.put("remark", ""); //******** 备注 ********
         mPurchaseListParams.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
-        mPurchaseListParams.put("status_str", mType);
-        mPurchaseListParams.put("fromorder", "");
+        mPurchaseListParams.put("status_str", mType); //******** 采购单类型 ********
+        mPurchaseListParams.put("fromorder", ""); //******** 由订单转采购 0：不是 1：是 默认传空 ********
         mPurchaseListParams.put("count", String.valueOf(COUNT));
     }
 

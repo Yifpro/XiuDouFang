@@ -76,9 +76,7 @@ public class OrderInfoDialog extends DialogFragment implements View.OnClickListe
                 dismiss();
                 break;
             case R.id.tv_print_format:
-                Intent intent = new Intent(getActivity(), WebActivity.class);
-                intent.putExtra(WebActivity.URL, mOrderInfoBean.getUrlstr());
-                startActivity(intent);
+                startActivity(new Intent(getActivity(), WebActivity.class).putExtra(WebActivity.URL, mOrderInfoBean.getUrlstr()));
                 break;
         }
     }

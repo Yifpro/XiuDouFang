@@ -144,10 +144,10 @@ public class SupplierProductListActivity extends AppCompatActivity implements IA
         mParams = new HashMap<>();
         mParams.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
         mParams.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
-        mParams.put("c_id", getIntent().getStringExtra(SUPPLIER_ID));
+        mParams.put("c_id", getIntent().getStringExtra(SUPPLIER_ID)); //******** 供应商id ********
         mParams.put("count", String.valueOf(COUNT));
-        mParams.put("saomiao", "0");
-        mParams.put("dqcpid", "0");
+        mParams.put("saomiao", "0"); //******** 是否扫描 ********
+        mParams.put("dqcpid", "0"); //******** 当前产品id ********
     }
 
     @Override

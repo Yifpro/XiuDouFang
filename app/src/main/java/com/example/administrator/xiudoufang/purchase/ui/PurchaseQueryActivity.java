@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class PurchaseQueryActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
@@ -81,12 +82,13 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
         mTransferPurchaseDialog.show(getSupportFragmentManager(), "TransferPurchaseDialog");
     }
 
+    //******** 结束时间选择框 ********
     private void showEndTimePickerDialog() {
         if (mPvEndTime == null) {
             TimePickerBuilder builder = new TimePickerBuilder(PurchaseQueryActivity.this, new OnTimeSelectListener() {
                 @Override
                 public void onTimeSelect(Date date, View v) {
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
                     mSivEndTime.setValue(format.format(date));
                 }
             })
@@ -120,12 +122,13 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
         mPvEndTime.show();
     }
 
+    //******** 开始时间选择框 ********
     private void showStartTimePickerDialog() {
         if (mPvStartTime == null) {
             TimePickerBuilder builder = new TimePickerBuilder(PurchaseQueryActivity.this, new OnTimeSelectListener() {
                 @Override
                 public void onTimeSelect(Date date, View v) {
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
                     mSivStartTime.setValue(format.format(date));
                 }
             })

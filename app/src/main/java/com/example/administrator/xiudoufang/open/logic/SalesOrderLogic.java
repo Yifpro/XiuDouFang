@@ -1,5 +1,7 @@
 package com.example.administrator.xiudoufang.open.logic;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.bean.ProductListBean;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
@@ -19,19 +21,21 @@ import java.util.Map;
 public class SalesOrderLogic {
 
     //******** 获取产品列表 ********
-    public void requestProductList(HashMap<String, String> map, JsonCallback<SalesProductListBean> callback) {
+    public void requestProductList(Context context, HashMap<String, String> map, JsonCallback<SalesProductListBean> callback) {
         OkGo.<SalesProductListBean>get(StringUtils.getUrl("/Api/products/requset_cplist?", map))
+                .tag(context)
                 .execute(callback);
     }
 
     //******** 提交订单 ********
-    public void saveOrCreateOrder(HashMap<String, String> params, String path, JsonCallback<String> callback) {
+    public void saveOrCreateOrder(Context context, HashMap<String, String> params, String path, JsonCallback<String> callback) {
         String json = JSONObject.toJSONString(params);
         LogUtils.e("提交订单 -> " + json);
-//        OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/postorderall?postiorder=0")
-//                .headers("Content-Type", "application/json")
-//                .upJson(json)
-//                .params("fujian", new File(path))
-//                .execute(callback);
+        OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/postorderall?postiorder=0")
+                .tag(context)
+                .headers("Content-Type", "application/json")
+                .upJson(json)
+                .params("fujian", new File(path))
+                .execute(callback);
     }
 }

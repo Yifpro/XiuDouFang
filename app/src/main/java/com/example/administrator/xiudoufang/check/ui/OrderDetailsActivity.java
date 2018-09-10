@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -23,7 +22,6 @@ import com.example.administrator.xiudoufang.check.adapter.PopupOperateAdapter;
 import com.example.administrator.xiudoufang.check.logic.OrderListLogic;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
-import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.CustomPopWindow;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
@@ -86,9 +84,9 @@ public class OrderDetailsActivity extends AppCompatActivity implements IActivity
         mLogic = new OrderListLogic();
         mAdapter = new OrderDetailsAdapter(R.layout.layout_list_item_order_details, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
-        mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
         LoadingViewDialog.getInstance().show(this);
         loadOrderDetails();
     }
@@ -145,8 +143,9 @@ public class OrderDetailsActivity extends AppCompatActivity implements IActivity
         mPopupWindow.showAsDropDown(findViewById(R.id.toolbar_operate), -80, 0);
     }
 
+    //******** 加载订单详情 ********
     private void loadOrderDetails() {
-        mLogic.requestOrderDetails(mOrderBean.getIid(), mOrderBean.getC_id(), new JsonCallback<OrderDetailsBean>() {
+        mLogic.requestOrderDetails(this, mOrderBean.getIid(), mOrderBean.getC_id(), new JsonCallback<OrderDetailsBean>() {
             @Override
             public void onSuccess(Response<OrderDetailsBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
@@ -209,7 +208,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements IActivity
             }
             mActionParams.put("iid", mList.get(position).getIid());
             mActionParams.put("action", getAction(position));
-            mLogic.requestActionForOrder(mActionParams, new JsonCallback<String>() {
+            mLogic.requestActionForOrder(OrderDetailsActivity.this, mActionParams, new JsonCallback<String>() {
                 @Override
                 public void onSuccess(Response<String> response) {
                     JSONObject jsonObject = JSONObject.parseObject(response.body());

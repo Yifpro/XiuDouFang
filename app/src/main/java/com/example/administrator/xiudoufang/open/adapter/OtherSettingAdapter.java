@@ -31,6 +31,7 @@ import com.example.administrator.xiudoufang.bean.OtherSeting_3;
 import com.example.administrator.xiudoufang.bean.OtherSeting_4;
 import com.example.administrator.xiudoufang.bean.OtherSettingItem;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
+import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.open.decoration.GridSpacingItemDecoration;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -220,7 +221,7 @@ public class OtherSettingAdapter extends BaseMultiItemQuickAdapter<MultiItemEnti
                     .build();
         }
         Calendar calendar = Calendar.getInstance();
-        String[] split = tvContent.getText().toString().split("-");
+        String[] split = "未设置".equals(tvContent.getText().toString()) ? StringUtils.getCurrentTime().split("-") : tvContent.getText().toString().split("-");
         calendar.set(Integer.parseInt(split[0]), Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
         mForcastDatePickerView.setDate(calendar);
         mForcastDatePickerView.show();

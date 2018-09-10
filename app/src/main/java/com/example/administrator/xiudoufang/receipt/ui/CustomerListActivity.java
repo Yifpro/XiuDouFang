@@ -119,7 +119,7 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
         }
         mParams.put("search", mFilterText);
         mParams.put("pagenum", String.valueOf(mCurrentPage++));
-        mLogic.requestCustomerList(mParams, new StringCallback() {
+        mLogic.requestCustomerList(this, mParams, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 LogUtils.e("客户列表 -> " + response.body());

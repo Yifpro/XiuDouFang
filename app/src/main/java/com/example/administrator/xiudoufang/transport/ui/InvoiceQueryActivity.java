@@ -60,6 +60,7 @@ public class InvoiceQueryActivity extends AppCompatActivity implements IActivity
         mSivEndTime.setOnClickListener(this);
     }
 
+    //******** 结束时间选择框 ********
     private void showEndTimePickerDialog() {
         if (mEndTimePickerView == null) {
             TimePickerBuilder builder = new TimePickerBuilder(InvoiceQueryActivity.this, new OnTimeSelectListener() {
@@ -99,6 +100,7 @@ public class InvoiceQueryActivity extends AppCompatActivity implements IActivity
         mEndTimePickerView.show();
     }
 
+    //******** 开始时间选择框 ********
     private void showStartTimePickerDialog() {
         if (mStartTimePickerView == null) {
             TimePickerBuilder builder = new TimePickerBuilder(InvoiceQueryActivity.this, new OnTimeSelectListener() {

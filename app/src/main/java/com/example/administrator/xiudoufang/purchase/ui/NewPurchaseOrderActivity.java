@@ -278,7 +278,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     //******** 加载科目列表 ********
     @SuppressWarnings("unchecked")
     private void loadSubjectList() {
-        mCustomerListLogic.requestSubjectList("5", new JsonCallback<SubjectListBean>() {
+        mCustomerListLogic.requestSubjectList(this, "5", new JsonCallback<SubjectListBean>() {
             @Override
             public void onSuccess(Response<SubjectListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
@@ -389,52 +389,52 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         SharedPreferences preferences = PreferencesUtils.getPreferences();
         JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
         HashMap<String, String> params = new HashMap<>();
-        params.put("iid", "0");
+        params.put("iid", "0"); //******** 采购单id，新单为0 ********
         params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
         params.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-        params.put("c_id", StringUtils.checkEmpty(mSupplier.getC_id(), "0"));
-        params.put("customerno", StringUtils.checkEmpty(mSupplier.getCustomerNo(), "0"));
-        params.put("customername", StringUtils.checkEmpty(mSupplier.getName(), ""));
-        params.put("telephone", StringUtils.checkEmpty(mSupplier.getNewPhoneNum(), ""));
-        params.put("tel", StringUtils.checkEmpty(mSupplier.getNewTelephoneNum(), ""));
-        params.put("lianxiren", StringUtils.checkEmpty(mSupplier.getNewContact(), ""));
-        params.put("remark", mEtTip.getText().toString());
-        params.put("quyuno", StringUtils.checkEmpty(mSupplier.getAreaNo(), ""));
-        params.put("quyu", StringUtils.checkEmpty(mSupplier.getAreaName(), ""));
-        params.put("action", "0");
-        params.put("IssDate", mSivSetupOrderDate.getValue());
-        params.put("yuji_jiaohuoriqi", mSivArrivalDate.getValue());
-        params.put("confirm", isDraft ? "0" : "1");
-        params.put("fendianid", mSupplier.getFendianid());
-        params.put("poprice_mode", jsonObject.getString("poprice_mode"));
-        params.put("youhuijine", mSivDiscountAmount.getValue());
+        params.put("c_id", StringUtils.checkEmpty(mSupplier.getC_id(), "0")); //******** 供应商id ********
+        params.put("customerno", StringUtils.checkEmpty(mSupplier.getCustomerNo(), "0")); //******** 供应商编号 ********
+        params.put("customername", StringUtils.checkEmpty(mSupplier.getName(), "")); //******** 供应商名称 ********
+        params.put("telephone", StringUtils.checkEmpty(mSupplier.getNewPhoneNum(), "")); //******** 手机号 ********
+        params.put("tel", StringUtils.checkEmpty(mSupplier.getNewTelephoneNum(), "")); //******** 电话 ********
+        params.put("lianxiren", StringUtils.checkEmpty(mSupplier.getNewContact(), "")); //******** 联系人 ********
+        params.put("remark", mEtTip.getText().toString()); //******** 备注 ********
+        params.put("quyuno", StringUtils.checkEmpty(mSupplier.getAreaNo(), "")); //******** 区域编号 ********
+        params.put("quyu", StringUtils.checkEmpty(mSupplier.getAreaName(), "")); //******** 区域名称 ********
+        params.put("action", "0"); //******** 0：默认 1：改单 ********
+        params.put("IssDate", mSivSetupOrderDate.getValue()); //******** 发单日期 ********
+        params.put("yuji_jiaohuoriqi", mSivArrivalDate.getValue()); //******** 预计交货日期 ********
+        params.put("confirm", isDraft ? "0" : "1"); //******** 确认订单 ********
+        params.put("fendianid", mSupplier.getFendianid()); //******** 分店id ********
+        params.put("poprice_mode", jsonObject.getString("poprice_mode")); //******** 用户显示的是价格还是价码 ********
+        params.put("youhuijine", mSivDiscountAmount.getValue()); //******** 优惠金额 ********
         ArrayList<HashMap<String, String>> maps = new ArrayList<>();
         if (mProductItemList != null && mProductItemList.size() > 0) {
             HashMap<String, String> map;
             for (ProductItem item : mProductItemList) {
                 map = new HashMap<>();
-                map.put("pnid", "0");
-                map.put("cpid", item.getCpid());
-                map.put("yanse", item.getColor());
-                map.put("guige", item.getSize());
-                map.put("factor", item.getFactor());
-                map.put("unitname", item.getUnit());
-                map.put("cp_qty", item.getAmount());
-                map.put("order_prc", item.getSinglePrice());
-                map.put("s_jiage2", item.getUnitPrice());
-                map.put("zengpin", item.isGift() ? "1" : "0");
-                map.put("bz", item.getTip());
-                map.put("huohao", item.getGoodsNo());
-                map.put("pricecode", item.getPriceCode());
-                map.put("jiagelaiyuan", item.getPriceSource());
+                map.put("pnid", "0"); //******** 当前id ********
+                map.put("cpid", item.getCpid()); //******** 产品id ********
+                map.put("yanse", item.getColor()); //******** 颜色 ********
+                map.put("guige", item.getSize()); //******** 规格 ********
+                map.put("factor", item.getFactor()); //******** 比率 ********
+                map.put("unitname", item.getUnit()); //******** 单位 ********
+                map.put("cp_qty", item.getAmount()); //******** 数量 ********
+                map.put("order_prc", item.getSinglePrice()); //******** 单品价格 ********
+                map.put("s_jiage2", item.getUnitPrice()); //******** 单位价格 ********
+                map.put("zengpin", item.isGift() ? "1" : "0"); //******** 赠品 ********
+                map.put("bz", item.getTip()); //******** 备注 ********
+                map.put("huohao", item.getGoodsNo()); //******** 货号 ********
+                map.put("pricecode", item.getPriceCode()); //******** 价码 ********
+                map.put("jiagelaiyuan", item.getPriceSource()); //******** 价格来源 ********
                 maps.add(map);
             }
         }
-        params.put("cpjsonstr", JSONObject.toJSONString(maps));
-        params.put("warehouseid", mWarehouseId);
-        params.put("benci_amt", mSivPaymentAmount.getValue());
-        params.put("bankid", mPayId);
-        params.put("accountid", mSubjectId);
+        params.put("cpjsonstr", JSONObject.toJSONString(maps)); //******** 产品明细json ********
+        params.put("warehouseid", mWarehouseId); //******** 仓位id ********
+        params.put("benci_amt", mSivPaymentAmount.getValue()); //******** 付款金额 ********
+        params.put("bankid", mPayId); //******** 支付方式id ********
+        params.put("accountid", mSubjectId); //******** 会计科目id ********
         LoadingViewDialog.getInstance().show(this);
         mNewPurchaseOrderLogic.requestPostPurchaseOrder(this, params, mImgPath, new JsonCallback<String>() {
             @Override
@@ -446,7 +446,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         });
     }
 
-    //******** 预计到货日期选择器 ********
+    //******** 预计到货日期选择框 ********
     private void showArrivalTimePickerDialog() {
         if (mPvArrivalTime == null) {
             TimePickerBuilder builder = new TimePickerBuilder(NewPurchaseOrderActivity.this, new OnTimeSelectListener() {
@@ -486,7 +486,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         mPvArrivalTime.show();
     }
 
-    //******** 发单日期选择器 ********
+    //******** 发单日期选择框 ********
     private void showSetupOrderTimePickerDialog() {
         if (mPvSetupOrderTime == null) {
             TimePickerBuilder builder = new TimePickerBuilder(NewPurchaseOrderActivity.this, new OnTimeSelectListener() {
