@@ -100,22 +100,17 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mList = new ArrayList<>();
         LoadingViewDialog.getInstance().show(this);
+        initParams();
         loadSupplierList(true);
     }
 
+    //******** 加载供应商列表 ********
     private void loadSupplierList(final boolean isRefresh) {
         if (isRefresh) mCurrentPage = 1;
-        SharedPreferences preferences = PreferencesUtils.getPreferences();
-        if (mParams == null) {
-            mParams = new HashMap<>();
-            mParams.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
-            mParams.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-            mParams.put("c_id", "0");
-        }
         mParams.put("serchitem", mFilterText);
         mParams.put("pagenum", String.valueOf(mCurrentPage++));
         mParams.put("count", String.valueOf(COUNT));
-        mLogic.requestSupplierList(mParams, new JsonCallback<SupplierListBean>() {
+        mLogic.requestSupplierList(this, mParams, new JsonCallback<SupplierListBean>() {
             @Override
             public void onSuccess(Response<SupplierListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
@@ -137,6 +132,13 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
                 }
             }
         });
+    }
+
+    private void initParams() {
+        mParams = new HashMap<>();
+        mParams.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
+        mParams.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
+        mParams.put("c_id", "0");
     }
 
     @Override

@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -17,7 +16,6 @@ import com.example.administrator.xiudoufang.base.BaseFragment;
 import com.example.administrator.xiudoufang.base.OnEventListener;
 import com.example.administrator.xiudoufang.bean.PurchaseListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
@@ -109,18 +107,19 @@ public class PurchaseSubFragment extends BaseFragment implements OnEventListener
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         mList = new ArrayList<>();
+        assert (getActivity()) != null;
         if (((PurchaseActivity) getActivity()).mParams == null) {
             LoadingViewDialog.getInstance().show(getActivity());
             loadPurchaseList(true);
         }
     }
 
+    //******** 加载采购单列表 ********
     private void loadPurchaseList(final boolean isRefresh) {
-        LogUtils.e("load " + mType);
         if (isRefresh) mCurrentPage = 1;
         if (mPurchaseListParams == null) initParams();
         mPurchaseListParams.put("pagenum", String.valueOf(mCurrentPage++));
-        mLogic.requestPurchaseList(mPurchaseListParams, new JsonCallback<PurchaseListBean>() {
+        mLogic.requestPurchaseList(getActivity(), mPurchaseListParams, new JsonCallback<PurchaseListBean>() {
             @Override
             public void onSuccess(Response<PurchaseListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
@@ -228,7 +227,7 @@ public class PurchaseSubFragment extends BaseFragment implements OnEventListener
             }
             mActionParams.put("iid", mList.get(position).getIid());
             mActionParams.put("action", mLogic.getAction(view.getId(), mType));
-            mLogic.requestActionForOrder(mActionParams, new JsonCallback<String>() {
+            mLogic.requestActionForOrder(getActivity(), mActionParams, new JsonCallback<String>() {
                 @Override
                 public void onSuccess(Response<String> response) {
                     JSONObject jsonObject = JSONObject.parseObject(response.body());

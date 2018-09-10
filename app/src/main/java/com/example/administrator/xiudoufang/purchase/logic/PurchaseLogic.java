@@ -1,16 +1,18 @@
 package com.example.administrator.xiudoufang.purchase.logic;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.bean.PurchaseListBean;
+import com.example.administrator.xiudoufang.bean.ReloadPriceListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.Callback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,17 +21,18 @@ import java.util.List;
 public class PurchaseLogic {
 
     //******** 获取采购单列表 ********
-    public void requestPurchaseList(HashMap<String, String> params, JsonCallback<PurchaseListBean> callback) {
+    public void requestPurchaseList(Context context, HashMap<String, String> params, JsonCallback<PurchaseListBean> callback) {
         String json = JSONObject.toJSONString(params);
         LogUtils.e("采购单列表 -> " + json);
         OkGo.<PurchaseListBean>post(StringUtils.BASE_URL + "/api/products/Getpuomstrlistsdata?Getpuomstrlistsdata=0")
+                .tag(context)
                 .headers("Content-Type", "application/json")
                 .upJson(json)
                 .execute(callback);
     }
 
     //******** 获取采购单明细 ********
-    public void requestPurchaseDetails(String orderId, Callback<String> callback) {
+    public void requestPurchaseDetails(Context context, String orderId, JsonCallback<String> callback) {
         HashMap<String, String> map = new HashMap<>();
         map.put("iid", orderId);
         map.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
@@ -37,16 +40,29 @@ public class PurchaseLogic {
         String json = JSONObject.toJSONString(map);
         LogUtils.e("采购单明细 -> "+json);
         OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/GetSinglepuomstrdata?iid=0")
+                .tag(context)
                 .headers("Content-Type", "application/json")
                 .upJson(json)
                 .execute(callback);
     }
 
     //******** 对应动作更改订单 ********
-    public void requestActionForOrder(HashMap<String, String> params, JsonCallback<String> callback) {
+    public void requestActionForOrder(Context context, HashMap<String, String> params, JsonCallback<String> callback) {
         String json = JSONObject.toJSONString(params);
         LogUtils.e("动作 -> " + json);
         OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/Actionfor_poorder?Actionfor_poorder=0")
+                .tag(context)
+                .headers("Content-Type", "application/json")
+                .upJson(json)
+                .execute(callback);
+    }
+
+    //******** 重新加载历史价格 ********
+    public void reloadHistoryPrice(Context context, HashMap<String, String> params, JsonCallback<ReloadPriceListBean> callback) {
+        String json = JSONObject.toJSONString(params);
+        LogUtils.e("重载 -> " + json);
+        OkGo.<ReloadPriceListBean>post(StringUtils.BASE_URL + "/Api/products/requset_supppricedata?requset_supppricedata=")
+                .tag(context)
                 .headers("Content-Type", "application/json")
                 .upJson(json)
                 .execute(callback);
@@ -73,7 +89,7 @@ public class PurchaseLogic {
             item.setGoodsNo(object.getString("huohao"));
             item.setTip(object.getString("bz"));
             item.setStatus(object.getString("statusstr"));
-            item.setId(object.getString("cpid"));
+            item.setCpid(object.getString("cpid"));
             item.setFactor(object.getString("factor"));
             item.setUnit(object.getString("unitname"));
             item.setSinglePrice(object.getString("order_prc"));

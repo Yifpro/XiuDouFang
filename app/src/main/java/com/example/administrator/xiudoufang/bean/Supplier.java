@@ -9,7 +9,8 @@ import android.os.Parcelable;
 
 public class Supplier implements Parcelable {
 
-    private String id;
+    private String c_id;
+    private String iid;
     private String customerNo;
     private String name;
     private String totalName;
@@ -22,6 +23,14 @@ public class Supplier implements Parcelable {
     private String areaName;
     private String fendianid = "0";
 
+    public String getIid() {
+        return iid;
+    }
+
+    public void setIid(String iid) {
+        this.iid = iid;
+    }
+
     public String getFendianid() {
         return fendianid;
     }
@@ -30,12 +39,12 @@ public class Supplier implements Parcelable {
         this.fendianid = fendianid;
     }
 
-    public String getId() {
-        return id;
+    public String getC_id() {
+        return c_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setC_id(String c_id) {
+        this.c_id = c_id;
     }
 
     public String getCustomerNo() {
@@ -128,7 +137,8 @@ public class Supplier implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
+        dest.writeString(this.c_id);
+        dest.writeString(this.iid);
         dest.writeString(this.customerNo);
         dest.writeString(this.name);
         dest.writeString(this.totalName);
@@ -143,7 +153,8 @@ public class Supplier implements Parcelable {
     }
 
     protected Supplier(Parcel in) {
-        this.id = in.readString();
+        this.c_id = in.readString();
+        this.iid = in.readString();
         this.customerNo = in.readString();
         this.name = in.readString();
         this.totalName = in.readString();

@@ -27,7 +27,10 @@ public class ProductEditAdapter extends BaseQuickAdapter<PicBean, BaseViewHolder
     @Override
     protected void convert(BaseViewHolder helper, PicBean item) {
         if (item.getPic() instanceof  String) {
-            GlideApp.with(mContext).load(item.isLocal() ? item.getPic() : StringUtils.PIC_SMALL_URL + item.getPic()).error(R.mipmap.ic_error).into((ImageView) helper.getView(R.id.iv_extra));
+            GlideApp.with(mContext)
+                    .load(item.isLocal() ? item.getPic() : StringUtils.PIC_SMALL_URL + item.getPic())
+                    .error(R.mipmap.ic_error)
+                    .into((ImageView) helper.getView(R.id.iv_extra));
             helper.getView(R.id.iv_clear).setVisibility(View.VISIBLE);
         } else {
             helper.setImageResource(R.id.iv_extra, (Integer) item.getPic());

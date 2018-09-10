@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ProductItem implements Parcelable {
 
-    private String id;
+    private String cpid;
     private String productNo;
     private String color;
     private String size;
@@ -58,6 +58,14 @@ public class ProductItem implements Parcelable {
     private List<ChengbenjialistBean> chengbenjialist;
     private List<CankaoshoujialistBean> cankaoshoujialist;
     private List<ChuchangjialistBean> chuchangjialist;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ProductItem) {
+            return getCpid().equals(((ProductItem) obj).getCpid());
+        }
+        return false;
+    }
 
     public String getModel() {
         return model;
@@ -286,6 +294,7 @@ public class ProductItem implements Parcelable {
         private String price;
         private String pricecode;
 
+
         public LishijialistBean(String unit_bilv, String unitname) {
             this.unit_bilv = unit_bilv;
             this.unitname = unitname;
@@ -294,7 +303,7 @@ public class ProductItem implements Parcelable {
         @Override
         public boolean equals(Object obj) {
             if (obj instanceof LishijialistBean) {
-                return unit_bilv.equals(((LishijialistBean) obj).unit_bilv) && unitname.equals(((LishijialistBean) obj).unitname);
+                return unit_bilv.equals(((LishijialistBean) obj).unit_bilv);
             }
             return false;
         }
@@ -342,6 +351,9 @@ public class ProductItem implements Parcelable {
         public LishijialistBean() {
         }
 
+        public LishijialistBean(String unit_bilv) {
+            this.unit_bilv = unit_bilv;
+        }
 
         @Override
         public int describeContents() {
@@ -684,12 +696,12 @@ public class ProductItem implements Parcelable {
         };
     }
 
-    public String getId() {
-        return id;
+    public String getCpid() {
+        return cpid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCpid(String cpid) {
+        this.cpid = cpid;
     }
 
     public String getProductNo() {
@@ -1056,7 +1068,7 @@ public class ProductItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
+        dest.writeString(this.cpid);
         dest.writeString(this.productNo);
         dest.writeString(this.color);
         dest.writeString(this.size);
@@ -1107,8 +1119,12 @@ public class ProductItem implements Parcelable {
     public ProductItem() {
     }
 
+    public ProductItem(String c_id) {
+        this.cpid = c_id;
+    }
+
     protected ProductItem(Parcel in) {
-        this.id = in.readString();
+        this.cpid = in.readString();
         this.productNo = in.readString();
         this.color = in.readString();
         this.size = in.readString();

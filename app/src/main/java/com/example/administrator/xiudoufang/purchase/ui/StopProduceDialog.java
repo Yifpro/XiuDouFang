@@ -29,8 +29,6 @@ public class StopProduceDialog extends DialogFragment {
         assert getDialog().getWindow() != null;
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         View view = inflater.inflate(R.layout.fragment_stop_produce, container);
-        TextView tvContent = view.findViewById(R.id.tv_content);
-        tvContent.setText(R.string.stop_produce_tip);
         view.findViewById(R.id.tv_continue).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

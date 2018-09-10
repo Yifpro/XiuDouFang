@@ -153,12 +153,6 @@ public class SearchInfoView extends LinearLayout {
         return null;
     }
 
-    public void setOnClickListener(OnClickListener listener) {
-        if (listener == null)
-            return;
-        mRelativeLayout.setOnClickListener(listener);
-    }
-
     public void setLeftSegmentClickable(boolean clickable) {
         if (mTvLeftSegment != null)
             mTvLeftSegment.setClickable(clickable);

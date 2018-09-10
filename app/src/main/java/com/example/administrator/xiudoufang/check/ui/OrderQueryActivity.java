@@ -68,11 +68,11 @@ public class OrderQueryActivity extends AppCompatActivity implements IActivityBa
 
         findViewById(R.id.tv_query).setOnClickListener(this);
         findViewById(R.id.tv_reset).setOnClickListener(this);
-        mSivStartTime.setOnClickListener(new InnerStartTimeClickListener());
-        mSivEndTime.setOnClickListener(new InnerEndTimeClickListener());
-        mSivOrderType.setOnClickListener(new InnerOrderTypeClickListener());
-        mSivTransportType.setOnClickListener(new InnerTransportTypeClickListener());
-        mSivProxyOrder.setOnClickListener(new InnerProxyOrderClickListener());
+        mSivStartTime.setOnClickListener(this);
+        mSivEndTime.setOnClickListener(this);
+        mSivOrderType.setOnClickListener(this);
+        mSivTransportType.setOnClickListener(this);
+        mSivProxyOrder.setOnClickListener(this);
     }
 
     @Override
@@ -126,6 +126,21 @@ public class OrderQueryActivity extends AppCompatActivity implements IActivityBa
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.siv_start_time:
+                showStartTimePickerDialog();
+                break;
+            case R.id.siv_end_time:
+                showEndTimePickerDialog();
+                break;
+            case R.id.siv_order_type:
+                showOrderTypeDialog();
+                break;
+            case R.id.siv_transport_type:
+                showTransportTypeDialog();
+                break;
+            case R.id.siv_proxy_order:
+                showProxyOrderDialog();
+                break;
             case R.id.tv_query:
                 Intent intent = new Intent();
                 OrderFilter filter = new OrderFilter();
@@ -146,6 +161,45 @@ public class OrderQueryActivity extends AppCompatActivity implements IActivityBa
                 resetTime();
                 break;
         }
+    }
+
+    private void showProxyOrderDialog() {
+        if (mProxyOrderDialog == null) {
+            mProxyOrderDialog = SingleLineTextDialog.newInstance(mProxyOrderList);
+            mProxyOrderDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    mSivProxyOrder.setValue(mProxyOrderList.get(position));
+                }
+            });
+        }
+        mProxyOrderDialog.show(getSupportFragmentManager(), "SingleLineTextDialog");
+    }
+
+    private void showTransportTypeDialog() {
+        if (mTransportTypeDialog == null) {
+            mTransportTypeDialog = OrderQueryDialog.newInstance(mTransportTypeList);
+            mTransportTypeDialog.setOnItemChangedListener(new OrderQueryDialog.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    mSivTransportType.setValue(mTransportTypeList.get(position).getName());
+                }
+            });
+        }
+        mTransportTypeDialog.show(getSupportFragmentManager(), "SingleLineTextDialog");
+    }
+
+    private void showOrderTypeDialog() {
+        if (mOrderTypeDialog == null) {
+            mOrderTypeDialog = OrderQueryDialog.newInstance(mOrderTypeList);
+            mOrderTypeDialog.setOnItemChangedListener(new OrderQueryDialog.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    mSivOrderType.setValue(mOrderTypeList.get(position).getName());
+                }
+            });
+        }
+        mOrderTypeDialog.show(getSupportFragmentManager(), "SingleLineTextDialog");
     }
 
     //******** 结束日期选择器 ********
@@ -236,72 +290,5 @@ public class OrderQueryActivity extends AppCompatActivity implements IActivityBa
                 .setBackgroundId(0x00000000)
                 .isDialog(true)
                 .build();
-    }
-
-    private class InnerOrderTypeClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            if (mOrderTypeDialog == null) {
-                mOrderTypeDialog = OrderQueryDialog.newInstance(mOrderTypeList);
-                mOrderTypeDialog.setOnItemChangedListener(new OrderQueryDialog.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        mSivOrderType.setValue(mOrderTypeList.get(position).getName());
-                    }
-                });
-            }
-            mOrderTypeDialog.show(getSupportFragmentManager(), "SingleLineTextDialog");
-        }
-    }
-
-    private class InnerTransportTypeClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            if (mTransportTypeDialog == null) {
-                mTransportTypeDialog = OrderQueryDialog.newInstance(mTransportTypeList);
-                mTransportTypeDialog.setOnItemChangedListener(new OrderQueryDialog.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        mSivTransportType.setValue(mTransportTypeList.get(position).getName());
-                    }
-                });
-            }
-            mTransportTypeDialog.show(getSupportFragmentManager(), "SingleLineTextDialog");
-        }
-    }
-
-    private class InnerProxyOrderClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            if (mProxyOrderDialog == null) {
-                mProxyOrderDialog = SingleLineTextDialog.newInstance(mProxyOrderList);
-                mProxyOrderDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        mSivProxyOrder.setValue(mProxyOrderList.get(position));
-                    }
-                });
-            }
-            mProxyOrderDialog.show(getSupportFragmentManager(), "SingleLineTextDialog");
-        }
-    }
-
-    private class InnerStartTimeClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            showStartTimePickerDialog();
-        }
-    }
-
-    private class InnerEndTimeClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            showEndTimePickerDialog();
-        }
     }
 }

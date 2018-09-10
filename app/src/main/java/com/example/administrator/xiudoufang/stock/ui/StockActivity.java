@@ -170,12 +170,10 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
                 mEtFilter.setCursorVisible(true);
                 break;
             case R.id.iv_scan:
-                Intent intent = new Intent(this, ScanActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(this, ScanActivity.class));
                 break;
             case R.id.iv_filter:
-                Intent i = new Intent(this, StockQueryActivity.class);
-                startActivityForResult(i, RESULT_FOR_STOCK_QUERY);
+                startActivityForResult(new Intent(this, StockQueryActivity.class), RESULT_FOR_STOCK_QUERY);
                 break;
         }
     }

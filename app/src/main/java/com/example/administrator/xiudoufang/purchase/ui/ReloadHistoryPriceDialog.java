@@ -12,23 +12,23 @@ import android.view.ViewGroup;
 
 import com.example.administrator.xiudoufang.R;
 
-public class ExitEditDialog extends DialogFragment implements View.OnClickListener {
+/**
+ * Created by Administrator on 2018/9/10
+ */
 
-    private OnSumbitClickListener listener;
+public class ReloadHistoryPriceDialog extends DialogFragment implements View.OnClickListener {
+
+    private OnReplaceListener mListener;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         assert getDialog().getWindow() != null;
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        View view = inflater.inflate(R.layout.fragment_exit_edit, container);
+        View view = inflater.inflate(R.layout.fragment_reload_history_price, container);
         view.findViewById(R.id.tv_cancel).setOnClickListener(this);
-        view.findViewById(R.id.tv_confirm).setOnClickListener(this);
+        view.findViewById(R.id.tv_replace).setOnClickListener(this);
         return view;
-    }
-
-    public void setOnSubmitClickListener(OnSumbitClickListener listener) {
-        this.listener = listener;
     }
 
     @Override
@@ -37,14 +37,17 @@ public class ExitEditDialog extends DialogFragment implements View.OnClickListen
             case R.id.tv_cancel:
                 dismiss();
                 break;
-            case R.id.tv_confirm:
-                if (listener != null)
-                    listener.onClick();
+            case R.id.tv_replace:
+                mListener.onReplace();
                 break;
         }
     }
 
-    interface OnSumbitClickListener {
-        void onClick();
+    public void setOnReplaceListener(OnReplaceListener listener) {
+        mListener = listener;
+    }
+
+    public interface OnReplaceListener {
+        void onReplace();
     }
 }

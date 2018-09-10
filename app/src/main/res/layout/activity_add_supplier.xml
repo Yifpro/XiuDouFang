@@ -79,7 +79,6 @@
         android:background="@drawable/rect_4_blue_6_pt_pb"
         android:clickable="true"
         android:gravity="center"
-        android:onClick="onClick"
         android:paddingBottom="4dp"
         android:paddingTop="4dp"
         android:text="@string/sure"

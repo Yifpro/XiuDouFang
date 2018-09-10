@@ -58,15 +58,16 @@ public class WarehouseListActivity extends AppCompatActivity implements IActivit
         mLogic = new NewPurchaseOrderLogic();
         mAdapter = new WarehouseListAdapter(R.layout.layout_list_item_warehouse_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
-        mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
         LoadingViewDialog.getInstance().show(this);
         loadWarehouseList();
     }
 
+    //******** 加载仓位列表 ********
     private void loadWarehouseList() {
-        mLogic.requestWarehouseList(new JsonCallback<WarehouseListBean>() {
+        mLogic.requestWarehouseList(this, new JsonCallback<WarehouseListBean>() {
             @Override
             public void onSuccess(Response<WarehouseListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();

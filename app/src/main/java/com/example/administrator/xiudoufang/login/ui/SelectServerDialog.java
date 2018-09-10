@@ -11,10 +11,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.bean.ServerItem;
 import com.example.administrator.xiudoufang.R;
+import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.login.adapter.ServerSelectorAdapter;
 
 import java.util.ArrayList;
@@ -33,7 +35,10 @@ public class SelectServerDialog extends DialogFragment {
         ServerSelectorAdapter adapter = new ServerSelectorAdapter(R.layout.layout_list_item_server_selector, serverItems);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         adapter.bindToRecyclerView(recyclerView);
-        View header = View.inflate(getActivity(), R.layout.layout_list_header_server_selector, null);
+        View header = View.inflate(getActivity(), R.layout.layout_list_header_single_text, null);
+        TextView tvHeader = header.findViewById(R.id.tv);
+        tvHeader.setTextSize(16);
+        tvHeader.setText(R.string.select_server);
         adapter.addHeaderView(header);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

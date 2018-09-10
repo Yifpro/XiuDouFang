@@ -43,22 +43,7 @@ public class ImageSelectorDialog extends DialogFragment {
         adapter.bindToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                switch (position) {
-                    case 0:
-                        PictureSelectionModel model = PictureSelector.create(getActivity()).openCamera(PictureMimeType.ofImage());
-                        setPhotoAttribute(model);
-                        break;
-                    case 1:
-                        PictureSelectionModel selectionModel = PictureSelector.create(getActivity()).openGallery(PictureMimeType.ofImage());
-                        setPhotoAttribute(selectionModel);
-                        break;
-                }
-                dismiss();
-            }
-        });
+        adapter.setOnItemClickListener(new InnerItemClickListener());
         return view;
     }
 
@@ -102,5 +87,23 @@ public class ImageSelectorDialog extends DialogFragment {
                 //.recordVideoSecond()//视频秒数录制 默认60s int
                 //.isDragFrame(false)// 是否可拖动裁剪框(固定)
                 .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            switch (position) {
+                case 0:
+                    PictureSelectionModel model = PictureSelector.create(getActivity()).openCamera(PictureMimeType.ofImage());
+                    setPhotoAttribute(model);
+                    break;
+                case 1:
+                    PictureSelectionModel selectionModel = PictureSelector.create(getActivity()).openGallery(PictureMimeType.ofImage());
+                    setPhotoAttribute(selectionModel);
+                    break;
+            }
+            dismiss();
+        }
     }
 }

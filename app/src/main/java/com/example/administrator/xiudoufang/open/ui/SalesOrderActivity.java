@@ -227,9 +227,8 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_customer:
-                Intent intent = new Intent(this, CustomerListActivity.class);
-                intent.putExtra(CustomerListActivity.FROM_CLASS, TAG);
-                startActivity(intent);
+                startActivity(new Intent(this, CustomerListActivity.class)
+                        .putExtra(CustomerListActivity.FROM_CLASS, TAG));
                 break;
             case R.id.iv_scan:
                 break;
@@ -241,10 +240,10 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
                 if (mCustomerBean == null) {
                     ToastUtils.show(this, "请先选择购买产品的客户");
                 } else {
-                    Intent i = new Intent(this, SalesProductListActivity.class);
-                    i.putExtra(SEARCH_ITEM, mEtFilter.getText().toString());
-                    i.putExtra(C_ID, TextUtils.isEmpty(mCustomerBean.getC_id()) ? "0" : mCustomerBean.getC_id());
-                    startActivityForResult(i, RESULT_FOR_SALES_PRODUCT_LIST);
+                    Intent intent = new Intent(this, SalesProductListActivity.class);
+                    intent.putExtra(SEARCH_ITEM, mEtFilter.getText().toString());
+                    intent.putExtra(C_ID, TextUtils.isEmpty(mCustomerBean.getC_id()) ? "0" : mCustomerBean.getC_id());
+                    startActivityForResult(intent, RESULT_FOR_SALES_PRODUCT_LIST);
                 }
                 break;
             case R.id.tv_reopen:

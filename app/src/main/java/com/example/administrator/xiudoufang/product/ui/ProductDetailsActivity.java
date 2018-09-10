@@ -112,7 +112,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
         mProductBean = getIntent().getParcelableExtra(ProductListActivity.PRODUCT_ITEM);
         mRvSupplier.setVisibility(View.GONE);
         mRvLevelPrice.setVisibility(View.GONE);
-        GlideApp.with(this).load(mProductBean.getPhotourl().contains("/") ? mProductBean.getPhotourl() : StringUtils.PIC_SMALL_URL + mProductBean.getPhotourl()).error(R.mipmap.ic_error).into(mIvIcon);
+        GlideApp.with(this)
+                .load(mProductBean.getPhotourl().contains("/") ? mProductBean.getPhotourl() : StringUtils.PIC_SMALL_URL + mProductBean.getPhotourl())
+                .error(R.mipmap.ic_error)
+                .into(mIvIcon);
         //******** 基础信息列表 ********
         String[] infoKey = {"编号", "类名", "产品名"};
         String[] infoValue = {mProductBean.getStyleno(), mProductBean.getClassname(), mProductBean.getStylename()};

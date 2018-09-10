@@ -161,8 +161,7 @@ public class AddCustomerActivity extends AppCompatActivity implements IActivityB
                 showAreaTypeDialog();
                 break;
             case R.id.civ_custom_define_area:
-                Intent intent = new Intent(this, AreaListActivity.class);
-                startActivityForResult(intent, RESULT_SELECT_AREA);
+                startActivityForResult(new Intent(this, AreaListActivity.class), RESULT_SELECT_AREA);
                 break;
         }
     }

@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.R;
@@ -128,39 +127,15 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         findViewById(R.id.tv_collapse).setOnClickListener(this);
         mTvBottomLeft.setOnClickListener(this);
         mTvBottomRight.setOnClickListener(this);
-        mSivPurchaseUnit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPurchaseUnitDialog();
-            }
-        });
-        mSivPriceSource.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPriceSourceDialog();
-            }
-        });
-        mSivProcutColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showColorDialog();
-            }
-        });
-        mSivSize.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showSpecDialog();
-            }
-        });
-        mSivGift.setOnItemChangeListener(new SearchInfoView.OnItemChangeListener() {
-            @Override
-            public void onItemchange(boolean isLeft) {
-                mIsLeft = isLeft;
-            }
-        });
+        mSivPurchaseUnit.setOnClickListener(this);
+        mSivPriceSource.setOnClickListener(this);
+        mSivProcutColor.setOnClickListener(this);
+        mSivSize.setOnClickListener(this);
+        mSivGift.setOnItemChangeListener(new InnerItemChangeListener());
     }
 
-    private void showSpecDialog() {
+    //******** 规格选择框 ********
+    private void showSizeDialog() {
         if (mSpecDialog == null) {
             mSpecDialog = SingleLineTextDialog.newInstance(mSpecList);
             mSpecDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
@@ -175,7 +150,8 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         mSpecDialog.show(getSupportFragmentManager(), "SizeDialog");
     }
 
-    private void showColorDialog() {
+    //******** 产品颜色选择框 ********
+    private void showProductColorDialog() {
         if (mColorDialog == null) {
             mColorDialog = SingleLineTextDialog.newInstance(mColorList);
             mColorDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
@@ -190,6 +166,7 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         mColorDialog.show(getSupportFragmentManager(), "ColorDialog");
     }
 
+    //******** 价格来源选择框 ********
     private void showPriceSourceDialog() {
         if (mPriceSourceDialog == null) {
             mPriceSourceList = new ArrayList<>();
@@ -233,6 +210,7 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         mPriceSourceDialog.show(getSupportFragmentManager(), "PriceSourceDialog");
     }
 
+    //******** 采购单位选择框 ********
     private void showPurchaseUnitDialog() {
         if (mPurchaseUnitDialog == null) {
             mPurchaseUnitDialog = SingleLineTextDialog.newInstance(mPurchaseUnitList);
@@ -382,6 +360,18 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.siv_purchase_unit:
+                showPurchaseUnitDialog();
+                break;
+            case R.id.siv_price_source:
+                showPriceSourceDialog();
+                break;
+            case R.id.siv_product_color:
+                showProductColorDialog();
+                break;
+            case R.id.siv_size:
+                showSizeDialog();
+                break;
             case R.id.tv_expand:
                 mLinearLayout.setVisibility(View.VISIBLE);
                 mTvExpand.setVisibility(View.GONE);
@@ -432,15 +422,15 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         }
     }
 
+    //******** 检查产品是否停产 ********
     private boolean checkStopProduce() {
         if (mProductItem == null && "1".equals(mSupplierProductBean.getStop_produce())) return true;
-        if (mSupplierProductBean == null && mProductItem.isStopProduce()) return true;
-        return false;
+        return mSupplierProductBean == null && mProductItem.isStopProduce();
     }
 
     private void addProduct() {
         ProductItem item = new ProductItem();
-        item.setId(mProductItem == null ? mSupplierProductBean.getCpid() : mProductItem.getId());
+        item.setCpid(mProductItem == null ? mSupplierProductBean.getCpid() : mProductItem.getCpid());
         item.setPhotourl(mProductItem == null ? mSupplierProductBean.getPhotourl() : mProductItem.getPhotourl());
         item.setProductNo(mSivProductNo.getValue());
         item.setStylename(mSivProductName.getValue());
@@ -482,5 +472,13 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         Intent intent = new Intent(SupplierProductDetailsActivity.this, NewPurchaseOrderActivity.class);
         intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, item);
         startActivity(intent);
+    }
+
+    private class InnerItemChangeListener implements SearchInfoView.OnItemChangeListener {
+
+        @Override
+        public void onItemchange(boolean isLeft) {
+            mIsLeft = isLeft;
+        }
     }
 }

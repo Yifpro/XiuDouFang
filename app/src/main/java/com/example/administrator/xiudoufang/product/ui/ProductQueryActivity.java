@@ -7,13 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.ProductFilter;
 import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.bean.TypeListBean;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 import com.example.administrator.xiudoufang.common.widget.SingleLineTextDialog;
 import com.example.administrator.xiudoufang.purchase.ui.SupplierDetailsActivity;
@@ -108,9 +106,8 @@ public class ProductQueryActivity extends AppCompatActivity implements IActivity
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.siv_supplier:
-                Intent intent_1 = new Intent(ProductQueryActivity.this, SupplierListActivity.class);
-                intent_1.putExtra(SupplierListActivity.FROM_CLASS, TAG);
-                startActivity(intent_1);
+                startActivity(new Intent(ProductQueryActivity.this, SupplierListActivity.class)
+                        .putExtra(SupplierListActivity.FROM_CLASS, TAG));
                 break;
             case R.id.siv_type:
                 startActivityForResult(new Intent(ProductQueryActivity.this, TypeListActivity.class), RESULT_FOR_TYPE_LIST);
@@ -132,7 +129,7 @@ public class ProductQueryActivity extends AppCompatActivity implements IActivity
                 Intent intent_2 = new Intent();
                 ProductFilter filter = new ProductFilter();
                 filter.setName(mSivName.getValue());
-                filter.setSupplierId(mSupplier == null ? "" : mSupplier.getId());
+                filter.setSupplierId(mSupplier == null ? "" : mSupplier.getC_id());
                 filter.setTypeId(mIdType);
                 filter.setAction(mIsIncludeSubclass);
                 filter.setIsIncludePic(mPicIndex == 0 ? "" : mPicIndex == 1 ? "1" : "0");

@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.support.annotation.Px;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +32,7 @@ import java.util.List;
 
 public class PurchaseActivity extends AppCompatActivity implements IActivityBase {
 
+    private final String[] mKeys = {"PuOrderNo", "Suppname", "starttime", "endtime", "crman", "remark", "fromorder"};
     private static final int RESULT_FOR_NEW_PURCHASE_ORDER = 110;
     private static final int RESULT_FOR_FILTER_LIST = 111;
     public static final String FILTER_LIST = "filter_list";
@@ -44,9 +43,9 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
     private RecyclerView mRecyclerView;
 
     private List<DrawerItem> mTabs;
-    private int mLastIndex = -1;
-    private List<BaseFragment> mFragments;
     public HashMap<String, String> mParams;
+    private List<BaseFragment> mFragments;
+    private int mLastIndex = -1;
 
     public static void start(Context context) {
         context.startActivity(new Intent(context, PurchaseActivity.class));
@@ -75,13 +74,13 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
             mTabs.add(new DrawerItem(titles[i], i == 0));
         }
         PurchaseTabAdapter adapter = new PurchaseTabAdapter(R.layout.layout_list_item_purchase_tab, mTabs);
-        adapter.bindToRecyclerView(mRecyclerView);
-        View header = View.inflate(this, R.layout.layout_list_header_server_selector, null);
+        View header = View.inflate(this, R.layout.layout_list_header_single_text, null);
         TextView tvHeader = header.findViewById(R.id.tv);
         tvHeader.setHeight(SizeUtils.dp2px(72));
         tvHeader.setTextSize(22);
         tvHeader.setText("筛选");
         adapter.addHeaderView(header);
+        adapter.bindToRecyclerView(mRecyclerView);
         adapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -98,16 +97,15 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_FOR_NEW_PURCHASE_ORDER && resultCode == Activity.RESULT_OK) {
+        if (requestCode == RESULT_FOR_NEW_PURCHASE_ORDER && resultCode == Activity.RESULT_OK) { //******** 新开单后刷新当前 fragment ********
             int currentItem = mViewPager.getCurrentItem();
             ((OnEventListener) mFragments.get(currentItem)).onEvent();
-        } else if (requestCode == RESULT_FOR_FILTER_LIST && resultCode == Activity.RESULT_OK) {
-            String[] keys = {"PuOrderNo", "Suppname", "starttime", "endtime", "crman", "remark", "fromorder"};
+        } else if (requestCode == RESULT_FOR_FILTER_LIST && resultCode == Activity.RESULT_OK) { //******** 设置过滤条件后刷新 ********
             if (mParams == null) {
                 mParams = new HashMap<>();
                 ArrayList<String> list = data.getStringArrayListExtra(FILTER_LIST);
                 for (int i = 0; i < list.size(); i++) {
-                    mParams.put(keys[i], list.get(i));
+                    mParams.put(mKeys[i], list.get(i));
                 }
             }
             mFragments.get(mViewPager.getCurrentItem()).onRefresh();
@@ -124,12 +122,10 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toolbar_search:
-                Intent i = new Intent(this, PurchaseQueryActivity.class);
-                startActivityForResult(i, RESULT_FOR_FILTER_LIST);
+                startActivityForResult(new Intent(this, PurchaseQueryActivity.class), RESULT_FOR_FILTER_LIST);
                 break;
             case R.id.toolbar_menu:
-                Intent intent = new Intent(this, NewPurchaseOrderActivity.class);
-                startActivityForResult(intent, RESULT_FOR_NEW_PURCHASE_ORDER);
+                startActivityForResult(new Intent(this, NewPurchaseOrderActivity.class), RESULT_FOR_NEW_PURCHASE_ORDER);
                 break;
         }
         return super.onOptionsItemSelected(item);

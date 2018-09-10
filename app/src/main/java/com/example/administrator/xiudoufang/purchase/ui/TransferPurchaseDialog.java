@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
+import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.purchase.adapter.TransferPurchaseAdapter;
 
 import java.util.ArrayList;
@@ -43,8 +44,10 @@ public class TransferPurchaseDialog extends DialogFragment {
         TransferPurchaseAdapter adapter = new TransferPurchaseAdapter(R.layout.layout_list_item_transfer_purchase, items);
         adapter.bindToRecyclerView(recyclerView);
         adapter.setOnItemClickListener(new InnerItemClickListener());
-        View header = View.inflate(getActivity(), R.layout.layout_list_header_transfer_purchase, null);
-        ((TextView) header.findViewById(R.id.tv)).setText("请选择");
+        View header = View.inflate(getActivity(), R.layout.layout_list_header_single_text, null);
+        TextView tvHeader = header.findViewById(R.id.tv);
+        tvHeader.setTextSize(16);
+        tvHeader.setText("筛选");
         adapter.addHeaderView(header);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

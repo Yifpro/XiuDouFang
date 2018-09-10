@@ -27,9 +27,12 @@ import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.PayBean;
 import com.example.administrator.xiudoufang.bean.ProductItem;
+import com.example.administrator.xiudoufang.bean.ReloadHistoryPriceBean;
+import com.example.administrator.xiudoufang.bean.ReloadPriceListBean;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -45,7 +48,6 @@ import com.example.administrator.xiudoufang.receipt.ui.SubjectSelectorDialog;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
-import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
@@ -94,6 +96,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     private TimePickerView mPvArrivalTime;
     private SubjectSelectorDialog mSubjectDialog;
     private ReceiptSelectorDialog mPaymentDialog;
+    private ReloadHistoryPriceDialog mReloadHistoryPriceDialog;
 
     private PurchaseLogic mPurchaseLogic;
     private CustomerListLogic mCustomerListLogic;
@@ -120,7 +123,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         mSivOrderId = findViewById(R.id.siv_order_id);
         mSivSupplier = findViewById(R.id.siv_supplier);
         mSivDebt = findViewById(R.id.siv_debt);
-        mSivBillingDate = findViewById(R.id.siv_billing_date);
+        mSivBillingDate = findViewById(R.id.siv_setup_order_date);
         mSivArrivalDate = findViewById(R.id.siv_arrival_date);
         mSivWarehourse = findViewById(R.id.siv_warehourse);
         mRecyclerView = findViewById(R.id.recycler_view);
@@ -158,46 +161,12 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 findViewById(R.id.tv_scan_product).setOnClickListener(this);
                 findViewById(R.id.tv_bottom_left).setOnClickListener(this);
                 findViewById(R.id.tv_bottom_right).setOnClickListener(this);
-                mSivSupplier.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(PurchaseDetailsActivity.this, SupplierListActivity.class);
-                        intent.putExtra(SupplierListActivity.FROM_CLASS, TAG);
-                        startActivity(intent);
-                    }
-                });
-                mSivBillingDate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showBillingDatePickerDialog();
-                    }
-                });
-                mSivArrivalDate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showArrivalDatePickerDialog();
-                    }
-                });
-                mSivWarehourse.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(PurchaseDetailsActivity.this, WarehouseListActivity.class);
-                        intent.putExtra(WarehouseListActivity.WAREHOUSE_ID, mWarehouseId);
-                        startActivityForResult(intent, RESULT_WAREHOUSE);
-                    }
-                });
-                mSivSubject.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showSubjectDialog();
-                    }
-                });
-                mSivPaymentType.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showPaymentDialog();
-                    }
-                });
+                mSivSupplier.setOnClickListener(this);
+                mSivBillingDate.setOnClickListener(this);
+                mSivArrivalDate.setOnClickListener(this);
+                mSivWarehourse.setOnClickListener(this);
+                mSivSubject.setOnClickListener(this);
+                mSivPaymentType.setOnClickListener(this);
                 break;
             case "2":
                 setStatus();
@@ -237,6 +206,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         }
     }
 
+    //******** 更改订单动作 ********
     private void changeActionForOrder(int viewId) {
         if (mActionParams == null) {
             SharedPreferences preferences = PreferencesUtils.getPreferences();
@@ -247,7 +217,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         }
         mActionParams.put("action", mPurchaseLogic.getAction(viewId, getIntent().getStringExtra(PurchaseSubFragment.ITEM_STATUS)));
         LoadingViewDialog.getInstance().show(this);
-        mPurchaseLogic.requestActionForOrder(mActionParams, new JsonCallback<String>() {
+        mPurchaseLogic.requestActionForOrder(this, mActionParams, new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
                 LoadingViewDialog.getInstance().dismiss();
@@ -265,19 +235,65 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        mSupplier = getIntent().getParcelableExtra(SupplierDetailsActivity.SELECTED_SUPPLIER);
+        final Supplier supplier = getIntent().getParcelableExtra(SupplierDetailsActivity.SELECTED_SUPPLIER);
         ProductItem item = getIntent().getParcelableExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT);
-        if (mSupplier != null) {
-            mSivSupplier.setValue(mSupplier.getName());
-            mSivDebt.setValue(mSupplier.getDebt());
-        } else if (item != null) {
+        if (supplier != null) { //******** 返回选择的供应商 ********
+            if (mList.size() > 0) {
+                if (mReloadHistoryPriceDialog == null) {
+                    mReloadHistoryPriceDialog = new ReloadHistoryPriceDialog();
+                }
+                mReloadHistoryPriceDialog.setOnReplaceListener(new ReloadHistoryPriceDialog.OnReplaceListener() {
+                    @Override
+                    public void onReplace() {
+                        reloadHistoryPrice();
+                        mSivSupplier.setValue(supplier.getName());
+                        mSivDebt.setValue(supplier.getDebt());
+                        mSupplier = supplier;
+                    }
+                });
+                mReloadHistoryPriceDialog.show(getSupportFragmentManager(), "ReloadHistoryPriceDialog");
+            } else {
+                mSivSupplier.setValue(supplier.getName());
+                mSivDebt.setValue(supplier.getDebt());
+                mSupplier = supplier;
+            }
+        } else if (item != null) { //******** 返回选择的单个产品 ********
             if (mList == null)
                 mList = new ArrayList<>();
             mList.add(item);
             mAdapter.setNewData(mList);
             mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
+            mTvBottomRight.setBackgroundResource(R.drawable.rect_4_blue);
             caculateTotalPrice();
         }
+    }
+
+    //******** 重新加载历史价格 ********
+    private void reloadHistoryPrice() {
+        LoadingViewDialog.getInstance().show(this);
+        ArrayList<ReloadHistoryPriceBean> list = new ArrayList<>();
+        for (ProductItem item : mList) {
+            list.add(new ReloadHistoryPriceBean(item.getFactor(), item.getCpid()));
+        }
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("iid", mSupplier.getIid());
+        params.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
+        params.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
+        params.put("c_id", mSupplier.getC_id());
+        params.put("cpjsonstr", JSONArray.toJSONString(list));
+        mPurchaseLogic.reloadHistoryPrice(this, params, new JsonCallback<ReloadPriceListBean>() {
+            @Override
+            public void onSuccess(Response<ReloadPriceListBean> response) {
+                List<ReloadPriceListBean.ReloadPriceBean> temp = response.body().getSuppprice_lists();
+                for (ReloadPriceListBean.ReloadPriceBean bean : temp) {
+                    int index = mList.indexOf(new ProductItem(bean.getCpid()));
+                    int lishiIndex = mList.get(index).getLishijialist().indexOf(new ProductItem.LishijialistBean(bean.getUnit_bilv()));
+                    mList.get(index).getLishijialist().get(lishiIndex).setPrice(bean.getPrice());
+                }
+                LoadingViewDialog.getInstance().dismiss();
+            }
+        });
     }
 
     @Override
@@ -300,15 +316,15 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == RESULT_WAREHOUSE && data != null) {
+        if (requestCode == RESULT_WAREHOUSE && data != null) { //******** 返回选择的货仓 ********
             mWarehouseId = data.getStringExtra(WarehouseListActivity.WAREHOUSE_ID);
             mSivWarehourse.setValue(data.getStringExtra(WarehouseListActivity.WAREHOUSE_NAME));
-        } else if (requestCode == PictureConfig.CHOOSE_REQUEST && resultCode == RESULT_OK && data != null) { //******** 附件返回结果 ********
+        } else if (requestCode == PictureConfig.CHOOSE_REQUEST && resultCode == RESULT_OK && data != null) { //******** 返回选择的附件 ********
             List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
             mImgPath = selectList.get(0).getCompressPath();
             GlideApp.with(this).load(mImgPath).into(mIvExtra);
             mIvClear.setVisibility(View.VISIBLE);
-        } else if (requestCode == RESULT_PRODUCT_LIST && data != null) {
+        } else if (requestCode == RESULT_PRODUCT_LIST && data != null) { //******** 返回选择的产品列表 ********
             ArrayList<ProductItem> items = data.getParcelableArrayListExtra(SELECTED_PRODUCT_LIST);
             if (mList == null) {
                 mList = new ArrayList<>();
@@ -318,6 +334,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             mList.addAll(items);
             mAdapter.setNewData(items);
             mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
+            mTvBottomRight.setBackgroundResource(R.drawable.rect_4_blue);
             caculateTotalPrice();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -470,13 +487,14 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
 
     private void loadPurchaseDetails() {
         LoadingViewDialog.getInstance().show(this);
-        mPurchaseLogic.requestPurchaseDetails(getIntent().getStringExtra(PurchaseSubFragment.ORDER_ID), new StringCallback() {
+        mPurchaseLogic.requestPurchaseDetails(this, getIntent().getStringExtra(PurchaseSubFragment.ORDER_ID), new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
                 mJsonObject = JSONObject.parseObject(response.body());
                 JSONObject result = mJsonObject.getJSONObject("results");
                 mSupplier = new Supplier();
-                mSupplier.setId(result.getString("c_id"));
+                mSupplier.setIid(result.getString("iid"));
+                mSupplier.setC_id(result.getString("c_id"));
                 mSupplier.setCustomerNo(result.getString("customerno"));
                 mSupplier.setName(result.getString("customername"));
                 mSupplier.setNewPhoneNum(result.getString("telephone"));
@@ -486,14 +504,16 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 mSupplier.setAreaName(result.getString("quyu"));
                 mSupplier.setFendianid(result.getString("fendianid"));
 
-                mSivOrderId.setValue(result.getString("iid"));
+                mSivOrderId.setValue(result.getString("puOrderNo"));
                 mSivSupplier.setValue(result.getString("customername"));
                 mSivDebt.setValue(result.getString("debt"));
                 mSivBillingDate.setValue(result.getString("issDate").substring(0, 9));
                 String etadate = result.getString("etadate");
                 mSivArrivalDate.setValue(etadate.length() > 8 ? etadate.substring(0, 9) : etadate);
-                mSivPaymentAmount.setValue(result.getString("benci_amt"));
-                mSivDiscountAmount.setValue(result.getString("youhuijine"));
+                if (Double.parseDouble(result.getString("benci_amt")) > 0)
+                    mSivPaymentAmount.setValue(result.getString("benci_amt"));
+                if (Double.parseDouble(result.getString("youhuijine")) > 0)
+                    mSivDiscountAmount.setValue(result.getString("youhuijine"));
                 mEtTip.setText(result.getString("remark"));
                 mWarehouseId = result.getString("warehouseid");
                 mPayId = result.getString("bankid");
@@ -518,6 +538,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     private void loadPaymentInfo(String bankid) {
         JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
         JSONArray pay = jsonObject.getJSONArray("pay");
+        LogUtils.e("支付方式->" + bankid + ", " + pay.toString());
         for (int i = 0; i < pay.size(); i++) {
             JSONObject object = pay.getJSONObject(i);
             if (object.getString("id").equals(bankid)) {
@@ -549,7 +570,29 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.siv_supplier:
+                startActivity(new Intent(PurchaseDetailsActivity.this, SupplierListActivity.class)
+                        .putExtra(SupplierListActivity.FROM_CLASS, TAG));
+                break;
+            case R.id.siv_setup_order_date:
+                showBillingDatePickerDialog();
+                break;
+            case R.id.siv_arrival_date:
+                showArrivalDatePickerDialog();
+                break;
+            case R.id.siv_warehourse:
+                startActivityForResult(new Intent(PurchaseDetailsActivity.this, WarehouseListActivity.class)
+                        .putExtra(WarehouseListActivity.WAREHOUSE_ID, mWarehouseId), RESULT_WAREHOUSE);
+                break;
+            case R.id.siv_subject:
+                showSubjectDialog();
+                break;
+            case R.id.siv_payment_type:
+                showPaymentDialog();
+                break;
             case R.id.tv_add_product:
+                startActivityForResult(new Intent(this, SupplierProductListActivity.class)
+                        .putExtra(SupplierProductListActivity.SUPPLIER_ID, mSupplier.getC_id()), RESULT_PRODUCT_LIST);
                 break;
             case R.id.tv_scan_product:
                 break;
@@ -571,7 +614,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         params.put("iid", mJsonObject.getJSONObject("result").getString("iid"));
         params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
         params.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-        params.put("c_id", StringUtils.checkEmpty(mSupplier.getId(), "0"));
+        params.put("c_id", StringUtils.checkEmpty(mSupplier.getC_id(), "0"));
         params.put("customerno", StringUtils.checkEmpty(mSupplier.getCustomerNo(), "0"));
         params.put("customername", StringUtils.checkEmpty(mSupplier.getName(), ""));
         params.put("telephone", StringUtils.checkEmpty(mSupplier.getNewPhoneNum(), ""));
@@ -593,7 +636,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             for (ProductItem item : mList) {
                 map = new HashMap<>();
                 map.put("pnid", "0");
-                map.put("cpid", item.getId());
+                map.put("cpid", item.getCpid());
                 map.put("yanse", item.getColor());
                 map.put("guige", item.getSize());
                 map.put("factor", item.getFactor());
@@ -615,7 +658,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         params.put("bankid", mPayId);
         params.put("accountid", mSubjectId);
         LoadingViewDialog.getInstance().show(this);
-        new NewPurchaseOrderLogic().requestPostPurchaseOrder(params, mImgPath, new JsonCallback<String>() {
+        new NewPurchaseOrderLogic().requestPostPurchaseOrder(this, params, mImgPath, new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
                 LoadingViewDialog.getInstance().dismiss();

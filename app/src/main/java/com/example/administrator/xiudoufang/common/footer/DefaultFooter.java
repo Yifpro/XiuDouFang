@@ -18,10 +18,10 @@ import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 
 public class DefaultFooter extends LinearLayout implements RefreshFooter {
 
-    public static String REFRESH_FOOTER_FINISH = "加载完成";
-    public static String REFRESH_FOOTER_FAILED = "加载失败";
-    public static String REFRESH_FOOTER_PULLING = "上拉加载更多";
-    public static String REFRESH_FOOTER_NOTHING = "没有更多数据了";
+    public final static String REFRESH_FOOTER_FINISH = "加载完成";
+    public final static String REFRESH_FOOTER_FAILED = "加载失败";
+    public final static String REFRESH_FOOTER_PULLING = "上拉加载更多";
+    public final static String REFRESH_FOOTER_NOTHING = "没有更多数据了";
 
     private TextView mTitleText;
 

@@ -92,9 +92,8 @@ public class OrderListActivity extends AppCompatActivity implements IActivityBas
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toolbar_filter:
-                Intent i = new Intent(this, OrderQueryActivity.class);
-                i.putExtra(ORDER_FILTER, mOrderFilter);
-                startActivityForResult(i, RESULT_FOR_ORDER_FILTER);
+                startActivityForResult(new Intent(this, OrderQueryActivity.class)
+                        .putExtra(ORDER_FILTER, mOrderFilter), RESULT_FOR_ORDER_FILTER);
                 break;
         }
         return super.onOptionsItemSelected(item);

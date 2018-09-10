@@ -55,7 +55,7 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
         mSivAreaName = findViewById(R.id.siv_area_name);
 
         findViewById(R.id.tv_sure).setOnClickListener(this);
-        findViewById(R.id.siv_custom_area).setOnClickListener(new InnerClickListener());
+        findViewById(R.id.siv_custom_area).setOnClickListener(this);
     }
 
     @Override
@@ -84,6 +84,9 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.siv_custom_area:
+                startActivityForResult(new Intent(SupplierDetailsActivity.this, AreaListActivity.class), RESULT_SELECT_AREA);
+                break;
             case R.id.tv_sure:
                 String tag = getIntent().getStringExtra(SupplierListActivity.FROM_CLASS);
                 Class clazz;
@@ -96,7 +99,7 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
                 }
                 Intent intent = new Intent(this, clazz);
                 Supplier details = new Supplier();
-                details.setId(mBean.getC_id());
+                details.setC_id(mBean.getC_id());
                 details.setCustomerNo(mBean.getCustomerno());
                 details.setName(mBean.getCustomername());
                 details.setTotalName(mBean.getQuancheng());
@@ -111,15 +114,6 @@ public class SupplierDetailsActivity extends AppCompatActivity implements IActiv
                 intent.putExtra(SELECTED_SUPPLIER, details);
                 startActivity(intent);
                 break;
-        }
-    }
-
-    private class InnerClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(SupplierDetailsActivity.this, AreaListActivity.class);
-            startActivityForResult(intent, RESULT_SELECT_AREA);
         }
     }
 }

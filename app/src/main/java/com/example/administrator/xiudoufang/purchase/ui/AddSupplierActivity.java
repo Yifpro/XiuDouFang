@@ -18,7 +18,7 @@ import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
  * Created by Administrator on 2018/8/17
  */
 
-public class AddSupplierActivity extends AppCompatActivity implements IActivityBase {
+public class AddSupplierActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
     private static final int RESULT_SELECT_AREA = 105;
 
@@ -52,7 +52,8 @@ public class AddSupplierActivity extends AppCompatActivity implements IActivityB
         mSivAreaName = findViewById(R.id.siv_area_name);
 
         mSivName.setKey(StringUtils.getSpannableString("供应商名称*", 5));
-        findViewById(R.id.siv_custom_area).setOnClickListener(new InnerClickListener());
+        findViewById(R.id.siv_custom_area).setOnClickListener(this);
+        findViewById(R.id.tv_sure).setOnClickListener(this);
     }
 
     @Override
@@ -60,41 +61,39 @@ public class AddSupplierActivity extends AppCompatActivity implements IActivityB
 
     }
 
-    public void onClick(View view) {
-        if (TextUtils.isEmpty(mSivName.getValue())) {
-            mSivName.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
-        } else {
-            Intent intent = new Intent(this, NewPurchaseOrderActivity.class);
-            Supplier supplier = new Supplier();
-            supplier.setId("0");
-            supplier.setName(mSivName.getValue());
-            supplier.setTotalName(mSivTotalName.getValue());
-            supplier.setNewPhoneNum(mSivMobilePhoneNum.getValue());
-            supplier.setNewTelephoneNum(mSivPhoneNum.getValue());
-            supplier.setNewContact(mSivContact.getValue());
-            supplier.setAreaNo(mSivAreaNo.getValue());
-            supplier.setAreaName(mSivAreaName.getValue());
-            intent.putExtra(SupplierDetailsActivity.SELECTED_SUPPLIER, supplier);
-            startActivity(intent);
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        //******** 区域返回结果 ********
-        if (requestCode == RESULT_SELECT_AREA && data != null) {
+        if (requestCode == RESULT_SELECT_AREA && data != null) { //******** 返回区域选择 ********
             mSivAreaNo.setValue(data.getStringExtra("area_code"));
             mSivAreaName.setValue(data.getStringExtra("area_name"));
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private class InnerClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(AddSupplierActivity.this, AreaListActivity.class);
-            startActivityForResult(intent, RESULT_SELECT_AREA);
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.siv_custom_area:
+                startActivityForResult(new Intent(AddSupplierActivity.this, AreaListActivity.class), RESULT_SELECT_AREA);
+                break;
+            case R.id.tv_sure:
+                if (TextUtils.isEmpty(mSivName.getValue())) {
+                    mSivName.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
+                } else {
+                    Intent intent = new Intent(this, NewPurchaseOrderActivity.class);
+                    Supplier supplier = new Supplier();
+                    supplier.setC_id("0");
+                    supplier.setName(mSivName.getValue());
+                    supplier.setTotalName(mSivTotalName.getValue());
+                    supplier.setNewPhoneNum(mSivMobilePhoneNum.getValue());
+                    supplier.setNewTelephoneNum(mSivPhoneNum.getValue());
+                    supplier.setNewContact(mSivContact.getValue());
+                    supplier.setAreaNo(mSivAreaNo.getValue());
+                    supplier.setAreaName(mSivAreaName.getValue());
+                    intent.putExtra(SupplierDetailsActivity.SELECTED_SUPPLIER, supplier);
+                    startActivity(intent);
+                }
+                break;
         }
     }
 }

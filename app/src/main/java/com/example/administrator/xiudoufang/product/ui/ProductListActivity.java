@@ -154,12 +154,10 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toolbar_scan:
-                Intent intent = new Intent(this, ScanActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(this, ScanActivity.class));
                 break;
             case R.id.toolbar_filter:
-                Intent i = new Intent(this, ProductQueryActivity.class);
-                startActivityForResult(i, RESULT_FOR_PRODUCT_QUERY);
+                startActivityForResult(new Intent(this, ProductQueryActivity.class), RESULT_FOR_PRODUCT_QUERY);
                 break;
         }
         return super.onOptionsItemSelected(item);

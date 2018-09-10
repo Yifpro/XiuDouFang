@@ -1,7 +1,6 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -14,17 +13,14 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
-import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
 import com.example.administrator.xiudoufang.purchase.logic.PurchaseLogic;
-import com.lzy.okgo.model.Response;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
 public class PurchaseQueryActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
@@ -64,11 +60,12 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
         mTransferPurchase = "全部";
         findViewById(R.id.tv_query).setOnClickListener(this);
         findViewById(R.id.tv_reset).setOnClickListener(this);
-        mSivStartTime.setOnClickListener(new InnerStartTimeClickListener());
-        mSivEndTime.setOnClickListener(new InnerEndTimeClickListener());
-        mSivTransferPurchase.setOnClickListener(new InnerTransferPurchaseClickListener());
+        mSivStartTime.setOnClickListener(this);
+        mSivEndTime.setOnClickListener(this);
+        mSivTransferPurchase.setOnClickListener(this);
     }
 
+    //******** 订单转采购选择框 ********
     private void showTransferPurchaseDialog() {
         if (mTransferPurchaseDialog == null) {
             mTransferPurchaseDialog = TransferPurchaseDialog.newInstance(mList);
@@ -184,6 +181,15 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.siv_start_time:
+                showStartTimePickerDialog();
+                break;
+            case R.id.siv_end_time:
+                showEndTimePickerDialog();
+                break;
+            case R.id.siv_transfer_purchase:
+                showTransferPurchaseDialog();
+                break;
             case R.id.tv_query:
                 queryOrder();
                 break;
@@ -220,29 +226,5 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
     private void initTime() {
         mSivStartTime.setValue(StringUtils.getCurrentTime());
         mSivEndTime.setValue(StringUtils.getCurrentTime());
-    }
-
-    private class InnerStartTimeClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            showStartTimePickerDialog();
-        }
-    }
-
-    private class InnerEndTimeClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            showEndTimePickerDialog();
-        }
-    }
-
-    private class InnerTransferPurchaseClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            showTransferPurchaseDialog();
-        }
     }
 }

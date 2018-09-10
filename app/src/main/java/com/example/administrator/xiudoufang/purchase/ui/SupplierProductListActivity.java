@@ -110,23 +110,15 @@ public class SupplierProductListActivity extends AppCompatActivity implements IA
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mList = new ArrayList<>();
         LoadingViewDialog.getInstance().show(this);
+        initParams();
         loadProductList(true);
     }
 
+    //******** 加载产品列表 ********
     private void loadProductList(final boolean isFiltering) {
-        if (mParams == null) {
-            SharedPreferences preferences = PreferencesUtils.getPreferences();
-            mParams = new HashMap<>();
-            mParams.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
-            mParams.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-            mParams.put("c_id", getIntent().getStringExtra(SUPPLIER_ID));
-            mParams.put("count", String.valueOf(COUNT));
-            mParams.put("saomiao", "0");
-            mParams.put("dqcpid", "0");
-        }
         mParams.put("serchitem", mFilterText);
         mParams.put("pagenum", String.valueOf(mCurrentPage++));
-        mLogic.requestProductList(mParams, new JsonCallback<SupplierProductListBean>() {
+        mLogic.requestProductList(this, mParams, new JsonCallback<SupplierProductListBean>() {
             @Override
             public void onSuccess(Response<SupplierProductListBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
@@ -146,6 +138,16 @@ public class SupplierProductListActivity extends AppCompatActivity implements IA
                 }
             }
         });
+    }
+
+    private void initParams() {
+        mParams = new HashMap<>();
+        mParams.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
+        mParams.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
+        mParams.put("c_id", getIntent().getStringExtra(SUPPLIER_ID));
+        mParams.put("count", String.valueOf(COUNT));
+        mParams.put("saomiao", "0");
+        mParams.put("dqcpid", "0");
     }
 
     @Override
@@ -196,7 +198,7 @@ public class SupplierProductListActivity extends AppCompatActivity implements IA
                     if (bean.isSelected()) {
                         ProductItem item = new ProductItem();
                         item.setPhotourl(bean.getPhotourl());
-                        item.setId(bean.getCpid());
+                        item.setCpid(bean.getCpid());
                         item.setProductNo(bean.getStyleno());
                         item.setStylename(bean.getStylename());
                         item.setColor("");

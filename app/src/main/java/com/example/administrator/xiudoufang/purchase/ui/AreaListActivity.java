@@ -56,6 +56,7 @@ public class AreaListActivity extends AppCompatActivity implements IActivityBase
         mEtFilter = findViewById(R.id.et_filter);
         mIvClose = findViewById(R.id.iv_close);
         mTvCancel = findViewById(R.id.tv_cancel);
+
         mEtFilter.setOnClickListener(this);
         mIvClose.setOnClickListener(this);
         mTvCancel.setOnClickListener(this);

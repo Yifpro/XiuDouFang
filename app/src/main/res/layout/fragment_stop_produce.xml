@@ -22,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:text="@string/stop_produce_tip"
         android:textColor="@color/gray_888888"
         android:textSize="12dp" />
 

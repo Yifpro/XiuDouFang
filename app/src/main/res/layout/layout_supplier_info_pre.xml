@@ -20,7 +20,7 @@
         android:layout_height="wrap_content" />
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-        android:id="@+id/siv_billing_date"
+        android:id="@+id/siv_setup_order_date"
         app:siv_key="发单日期"
         app:siv_type="TYPE_TEXT"
         android:layout_width="match_parent"
