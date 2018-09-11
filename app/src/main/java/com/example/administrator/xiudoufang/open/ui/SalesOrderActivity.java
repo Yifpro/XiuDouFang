@@ -25,6 +25,7 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.CustomerListBean;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.CustomPopWindow;
@@ -207,20 +208,61 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toolbar_type:
                 if (mPriceTypePopup == null) {
                     View view = LayoutInflater.from(SalesOrderActivity.this).inflate(R.layout.layout_menu_open_bill, null);
                     RecyclerView priceSourceRecyclerView = view.findViewById(R.id.price_source_recycler_view);
                     ArrayList<String> list = new ArrayList<>();
-                    String[] arr = {"手动", "等级", "批发", "参考", "历史"};
+                    final String[] arr = {"手动", "等级", "批发", "参考", "历史"};
                     Collections.addAll(list, arr);
                     PriceSourcePopupAdapter adapter = new PriceSourcePopupAdapter(R.layout.layout_list_item_price_source_popup, list);
                     adapter.bindToRecyclerView(priceSourceRecyclerView);
                     priceSourceRecyclerView.setAdapter(adapter);
                     priceSourceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-                    adapter.setOnItemClickListener(new InnerPriceSourceClickListener());
+                    adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                            if (mList != null && mList.size() > 0) {
+                                DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                                for (SalesProductListBean.SalesProductBean productBean : mList) {
+                                    SalesProductListBean.SalesProductBean.PacklistBean packlistBean = null;
+                                    for (SalesProductListBean.SalesProductBean.PacklistBean bean : productBean.getPacklist()) {
+                                        if (productBean.getFactor().equals(bean.getUnit_bilv()))
+                                            packlistBean = bean;
+                                    }
+                                    LogUtils.e("packlistBean->"+packlistBean.getUnit_bilv()+", "+packlistBean.getUnitname()
+                                            +", 等级->"+packlistBean.getDengji_price()
+                                            +", 参考->"+packlistBean.getCankao_price()
+                                            +", 历史->"+packlistBean.getLishi_price());
+                                    String price = "0.00";
+                                    switch (position) {
+                                        case 0: //******** 手动 ********
+                                            break;
+                                        case 1: //******** 等级 ********
+                                            price = packlistBean.getDengji_price();
+                                            break;
+                                        case 2: //******** 批发 ********
+                                            price = productBean.getSupp_prc();
+                                            break;
+                                        case 3: //******** 参考 ********
+                                            price = packlistBean.getCankao_price();
+                                            break;
+                                        case 4: //******** 历史 ********
+                                            price = packlistBean.getLishi_price();
+                                            break;
+                                    }
+                                    LogUtils.e("单位价->"+Double.parseDouble(price)+", "+Double.parseDouble(packlistBean.getUnit_bilv()));
+                                    productBean.setOrder_prc(decimalFormat.format(Double.parseDouble(price)));
+                                    productBean.setS_jiage2(decimalFormat.format(Double.parseDouble(price) * Double.parseDouble(packlistBean.getUnit_bilv())));
+                                }
+                                mAdapter.setNewData(mList);
+                            }
+                            item.setTitle(arr[position] + "▼");
+                            mPriceTypePopup.dissmiss();
+                        }
+                    });
                     mPriceTypePopup = new CustomPopWindow.PopupWindowBuilder(this)
                             .setView(view)
                             .setFocusable(true)
@@ -339,25 +381,6 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
             intent.putExtra(SalesProductDetailsActivity.FROM_CLASS, TAG);
             startActivityForResult(intent, RESULT_FOR_PRODUCT_INFO_CHANGE);
             mLastIndex = position;
-        }
-    }
-
-    private class InnerPriceSourceClickListener implements BaseQuickAdapter.OnItemClickListener {
-
-        @Override
-        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-            switch (position) {
-                case 0:
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-            }
         }
     }
 }
