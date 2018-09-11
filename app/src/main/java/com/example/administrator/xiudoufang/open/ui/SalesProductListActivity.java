@@ -123,11 +123,11 @@ public class SalesProductListActivity extends AppCompatActivity implements IActi
             mParams = new HashMap<>();
             mParams.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
             JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
-            mParams.put("userdengji", jsonObject.getString("dengji_value"));
-            mParams.put("dqcpid", "0");
+            mParams.put("userdengji", jsonObject.getString("dengji_value")); //******** 用户服务等级 ********
+            mParams.put("dqcpid", "0"); //******** 产品id 默认0 ********
             mParams.put("count", String.valueOf(COUNT));
             mParams.put("saomiao", "0");
-            mParams.put("c_id", getIntent().getStringExtra(SalesOrderActivity.C_ID));
+            mParams.put("c_id", getIntent().getStringExtra(SalesOrderActivity.C_ID)); //******** 客户id 新客户0 ********
         }
         mParams.put("searchitem", mFilterText);
         mParams.put("pagenum", String.valueOf(mCurrentPage++));

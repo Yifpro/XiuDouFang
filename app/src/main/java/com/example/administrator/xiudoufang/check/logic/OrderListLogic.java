@@ -45,8 +45,8 @@ public class OrderListLogic {
         HashMap<String, String> params = new HashMap<>();
         params.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
         params.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
-        params.put("iid", iid);
-        params.put("c_id", c_id);
+        params.put("iid", iid); //******** 订单id ********
+        params.put("c_id", c_id); //******** 客户id ********
         String json = JSONObject.toJSONString(params);
         LogUtils.e("订单明细 -> " + json);
         OkGo.<OrderDetailsBean>post(StringUtils.BASE_URL + "/Api/products/requset_orderdetail?requset_orderdetail=0")

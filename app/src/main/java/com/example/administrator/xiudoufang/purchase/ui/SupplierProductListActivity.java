@@ -147,7 +147,7 @@ public class SupplierProductListActivity extends AppCompatActivity implements IA
         mParams.put("c_id", getIntent().getStringExtra(SUPPLIER_ID)); //******** 供应商id ********
         mParams.put("count", String.valueOf(COUNT));
         mParams.put("saomiao", "0"); //******** 是否扫描 ********
-        mParams.put("dqcpid", "0"); //******** 当前产品id ********
+        mParams.put("dqcpid", "0"); //******** 产品id ********
     }
 
     @Override

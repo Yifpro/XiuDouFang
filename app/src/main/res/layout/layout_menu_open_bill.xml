@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.RecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/price_source_recycler_view"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/tv_manual"
-        style="@style/MenuItemOpenMenu"
-        android:text="手动" />
-    <TextView
-        android:id="@+id/tv_level"
-        style="@style/MenuItemOpenMenu"
-        android:text="等级" />
-    <TextView
-        android:id="@+id/tv_wholesale"
-        style="@style/MenuItemOpenMenu"
-        android:text="批发" />
-    <TextView
-        android:id="@+id/tv_refer"
-        style="@style/MenuItemOpenMenu"
-        android:text="参考" />
-    <TextView
-        android:id="@+id/tv_history"
-        style="@style/MenuItemOpenMenu"
-        android:text="历史" />
-
-</LinearLayout>
+    android:layout_height="wrap_content" />

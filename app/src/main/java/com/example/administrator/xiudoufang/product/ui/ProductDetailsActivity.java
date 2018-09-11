@@ -175,7 +175,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
         HashMap<String, String> params = new HashMap<>();
         params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
         params.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-        params.put("dqcpid", mProductBean.getCpid());
+        params.put("dqcpid", mProductBean.getCpid()); //******** 产品id ********
         params.put("searchitem", "");
         params.put("pagenum", "1");
         params.put("count", "20");

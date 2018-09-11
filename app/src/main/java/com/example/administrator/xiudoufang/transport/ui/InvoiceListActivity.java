@@ -136,12 +136,12 @@ public class InvoiceListActivity extends AppCompatActivity implements IActivityB
         mParams = new HashMap<>();
         mParams.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
         mParams.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
-        mParams.put("c_id", "0");
-        mParams.put("id", "0");
+        mParams.put("c_id", "0"); //******** 客户id 默认0 ********
+        mParams.put("id", "0"); //******** 发货单id 默认0 ********
         mParams.put("searchitem", "");
-        mParams.put("starttime", StringUtils.getCurrentTime());
-        mParams.put("endtime", StringUtils.getCurrentTime());
-        mParams.put("yunhao", "");
+        mParams.put("starttime", StringUtils.getCurrentTime()); //******** 发货开始日期 ********
+        mParams.put("endtime", StringUtils.getCurrentTime()); //******** 发货截止日期 ********
+        mParams.put("yunhao", ""); //******** 运号 ********
         mParams.put("count", String.valueOf(COUNT));
     }
 

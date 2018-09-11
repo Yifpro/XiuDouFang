@@ -135,13 +135,13 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         mParams = new HashMap<>();
         mParams.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
         mParams.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-        mParams.put("dqcpid", "");
-        mParams.put("tiaoxingma", "");
+        mParams.put("dqcpid", ""); //******** 产品id ********
+        mParams.put("tiaoxingma", ""); //******** 条形码 ********
         mParams.put("searchitem", "");
-        mParams.put("classid", "");
-        mParams.put("action", "");
-        mParams.put("nopic", "");
-        mParams.put("c_id", "");
+        mParams.put("classid", ""); //******** 类别id ********
+        mParams.put("action", ""); //******** 是否包含子级 ********
+        mParams.put("nopic", ""); //******** 是否有图片 ********
+        mParams.put("c_id", ""); //******** 供应商id ********
     }
 
     @Override

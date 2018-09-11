@@ -232,7 +232,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
 
     private void saveOrCreateOrder(boolean isConfirm, OrderInfo info) {
         SharedPreferences preferences = PreferencesUtils.getPreferences();
-        HashMap<String, String> params = new LinkedHashMap<>();
+        HashMap<String, String> params = new HashMap<>();
         params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, "")); //店id
         params.put("iid", "0"); //订单id
         params.put("c_id", mCustomerBean.getC_id()); //客户id

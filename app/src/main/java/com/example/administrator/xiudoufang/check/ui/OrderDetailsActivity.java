@@ -206,8 +206,8 @@ public class OrderDetailsActivity extends AppCompatActivity implements IActivity
                 mActionParams.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
                 mActionParams.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
             }
-            mActionParams.put("iid", mList.get(position).getIid());
-            mActionParams.put("action", getAction(position));
+            mActionParams.put("iid", mList.get(position).getIid()); //******** 订单id ********
+            mActionParams.put("action", getAction(position)); //******** 动作 ********
             mLogic.requestActionForOrder(OrderDetailsActivity.this, mActionParams, new JsonCallback<String>() {
                 @Override
                 public void onSuccess(Response<String> response) {

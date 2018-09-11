@@ -161,8 +161,8 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
             CustomerListBean.CustomerBean bean = getIntent().getParcelableExtra(CustomerListActivity.SELECTED_ITEM);
             HashMap<String, String> map = new HashMap<>();
             map.put("dianid", bean.getDianid());
-            map.put("userdengji", bean.getDengji_value());
-            map.put("dqc_id", bean.getC_id());
+            map.put("userdengji", bean.getDengji_value()); //******** 用户服务等级 ********
+            map.put("dqc_id", bean.getC_id()); //******** 客户id ********
             map.put("search", "");
             map.put("pagenum", "1");
             map.put("count", "20");
@@ -300,16 +300,16 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
                 HttpParams params = new HttpParams();
                 params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
                 params.put("c_id", mSingleCustomerItem.getC_id());
-                params.put("orderid", "0");
-                params.put("amt", mSivPaymentAmount.getValue());
-                params.put("youhui", mSivDiscountAmount.getValue());
-                params.put("shoukuanid", mPayId);
-                params.put("memo", mEtTip.getText().toString());
-                params.put("dqman", preferences.getString(PreferencesUtils.USER_NAME, ""));
-                params.put("riqi", mSivPaymentDate.getValue());
+                params.put("orderid", "0"); //******** 订单id ********
+                params.put("amt", mSivPaymentAmount.getValue()); //******** 收付款金额 ********
+                params.put("youhui", mSivDiscountAmount.getValue()); //******** 优惠金额 ********
+                params.put("shoukuanid", mPayId); //******** 银行支付方式id ********
+                params.put("memo", mEtTip.getText().toString()); //******** 备注 ********
+                params.put("dqman", preferences.getString(PreferencesUtils.USER_NAME, "")); //******** 操作人 ********
+                params.put("riqi", mSivPaymentDate.getValue()); //******** 日期 ********
                 params.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-                params.put("accountid", mSubjectId);
-                params.put("leixing", mDirection);
+                params.put("accountid", mSubjectId); //******** 会计科目id ********
+                params.put("leixing", mDirection); //******** 1：收款 0：付款 ********
                 mLogic.requestReceipt(this, params, new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {

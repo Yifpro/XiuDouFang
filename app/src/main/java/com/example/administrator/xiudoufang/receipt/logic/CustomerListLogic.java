@@ -22,6 +22,7 @@ public class CustomerListLogic {
     }
 
     //******** 获取会计科目列表 ********
+    //******** action：空->所有科目、4->收付款、5->采购开单 ********
     public void requestSubjectList(Context context, String action, Callback<SubjectListBean> callback) {
         HashMap<String, String> map = new HashMap<>();
         map.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));

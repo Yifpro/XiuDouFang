@@ -29,14 +29,10 @@ public class ConfirmOrderInfoAdapter extends BaseMultiItemQuickAdapter<MultiItem
     private List<MultiItemEntity> data;
     private DecimalFormat mFormat = new DecimalFormat("0.00");
     private boolean isInputable; //******** 余额支付是否可输入 ********
-    private double originalBendanjine;
-    private double originalLeijiqian;
 
     public ConfirmOrderInfoAdapter(@Nullable List<MultiItemEntity> data) {
         super(data);
         this.data = data;
-        this.originalBendanjine = originalBendanjine;
-        this.originalLeijiqian = originalLeijiqian;
         addItemType(TYPE_TEXT, R.layout.layout_list_item_confirm_order_info_1);
         addItemType(TYPE_EDIT, R.layout.layout_list_item_confirm_order_info_2);
     }

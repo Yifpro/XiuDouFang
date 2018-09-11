@@ -52,8 +52,8 @@ public class ProductLogic {
         HttpParams params = new HttpParams();
         params.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
         params.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
-        params.put("cpid", cpid);
-        params.put("zongdianid", JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO)).getString("zongdianid"));
+        params.put("cpid", cpid); //******** 产品id ********
+        params.put("zongdianid", JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO)).getString("zongdianid")); //******** 总店id ********
         params.put("dianidstr", "");
         if (oldPic != null && oldPic.size() > 0)
             params.put("picjson", JSONArray.toJSONString(oldPic));

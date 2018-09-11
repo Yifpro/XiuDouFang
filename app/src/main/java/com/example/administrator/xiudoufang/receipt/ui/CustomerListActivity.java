@@ -112,9 +112,9 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
             JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
             mParams = new HashMap<>();
             mParams.put("dianid", jsonObject.getString("dianid"));
-            mParams.put("userdengji", jsonObject.getString("dengji_value"));
+            mParams.put("userdengji", jsonObject.getString("dengji_value")); //******** 用户服务等级 ********
             mParams.put("userid", jsonObject.getString("userid"));
-            mParams.put("dqc_id", "0");
+            mParams.put("dqc_id", "0"); //******** 客户id ********
             mParams.put("count", String.valueOf(COUNT));
         }
         mParams.put("search", mFilterText);

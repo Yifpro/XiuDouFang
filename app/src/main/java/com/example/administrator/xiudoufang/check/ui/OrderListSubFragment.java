@@ -160,18 +160,18 @@ public class OrderListSubFragment extends BaseFragment {
     private void initParams() {
         mParams = new HashMap<>();
         mParams.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
-        mParams.put("c_id", "0");
-        mParams.put("iid", "0");
-        mParams.put("customername", "");
-        mParams.put("starttime", StringUtils.getCurrentTime());
-        mParams.put("endtime", StringUtils.getCurrentTime());
-        mParams.put("dingdanleixing", "");
-        mParams.put("huoyunleixing", "");
-        mParams.put("daifa", "");
+        mParams.put("c_id", "0"); //******** 客户id ********
+        mParams.put("iid", "0"); //******** 订单id ********
+        mParams.put("customername", ""); //******** 客户名称 ********
+        mParams.put("starttime", StringUtils.getCurrentTime()); //******** 下单日期 ********
+        mParams.put("endtime", StringUtils.getCurrentTime()); //******** 下单日期 ********
+        mParams.put("dingdanleixing", ""); //******** 订单类型 ********
+        mParams.put("huoyunleixing", ""); //******** 货运类型 ********
+        mParams.put("daifa", ""); //******** 代发类型 ********
         mParams.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
-        mParams.put("queren_status", mType == 0 ? "0" : mType == 4 ? "" : "1");
-        mParams.put("shipstatus", mType == 3 ? "1" : "");
-        mParams.put("peihuo_status", mType == 1 ? "0" : mType == 2 ? "1" : "");
+        mParams.put("queren_status", mType == 0 ? "0" : mType == 4 ? "" : "1"); //******** 确认状态 ********
+        mParams.put("shipstatus", mType == 3 ? "1" : ""); //******** 完成状态 ********
+        mParams.put("peihuo_status", mType == 1 ? "0" : mType == 2 ? "1" : ""); //******** 配货状态 ********
         mParams.put("count", String.valueOf(COUNT));
     }
 
@@ -221,8 +221,8 @@ public class OrderListSubFragment extends BaseFragment {
                 mActionParams.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
                 mActionParams.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
             }
-            mActionParams.put("iid", mList.get(position).getIid());
-            mActionParams.put("action", mType == 0 ? "1" : "2");
+            mActionParams.put("iid", mList.get(position).getIid()); //******** 订单id ********
+            mActionParams.put("action", mType == 0 ? "1" : "2"); //******** 动作 ********
             mOrderListLogic.requestActionForOrder(mActivity, mActionParams, new JsonCallback<String>() {
                 @Override
                 public void onSuccess(Response<String> response) {

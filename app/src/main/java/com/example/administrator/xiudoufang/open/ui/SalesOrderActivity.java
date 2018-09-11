@@ -8,6 +8,7 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -24,10 +25,10 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.CustomerListBean;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.CustomPopWindow;
+import com.example.administrator.xiudoufang.open.adapter.PriceSourcePopupAdapter;
 import com.example.administrator.xiudoufang.open.adapter.SalesOrderAdapter;
 import com.example.administrator.xiudoufang.receipt.ui.CustomerListActivity;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
@@ -39,6 +40,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class SalesOrderActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
@@ -210,6 +212,15 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
             case R.id.toolbar_type:
                 if (mPriceTypePopup == null) {
                     View view = LayoutInflater.from(SalesOrderActivity.this).inflate(R.layout.layout_menu_open_bill, null);
+                    RecyclerView priceSourceRecyclerView = view.findViewById(R.id.price_source_recycler_view);
+                    ArrayList<String> list = new ArrayList<>();
+                    String[] arr = {"手动", "等级", "批发", "参考", "历史"};
+                    Collections.addAll(list, arr);
+                    PriceSourcePopupAdapter adapter = new PriceSourcePopupAdapter(R.layout.layout_list_item_price_source_popup, list);
+                    adapter.bindToRecyclerView(priceSourceRecyclerView);
+                    priceSourceRecyclerView.setAdapter(adapter);
+                    priceSourceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+                    adapter.setOnItemClickListener(new InnerPriceSourceClickListener());
                     mPriceTypePopup = new CustomPopWindow.PopupWindowBuilder(this)
                             .setView(view)
                             .setFocusable(true)
@@ -328,6 +339,25 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
             intent.putExtra(SalesProductDetailsActivity.FROM_CLASS, TAG);
             startActivityForResult(intent, RESULT_FOR_PRODUCT_INFO_CHANGE);
             mLastIndex = position;
+        }
+    }
+
+    private class InnerPriceSourceClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            switch (position) {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+            }
         }
     }
 }
