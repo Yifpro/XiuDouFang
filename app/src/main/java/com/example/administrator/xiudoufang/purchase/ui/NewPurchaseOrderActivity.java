@@ -72,6 +72,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     public static final String SELECTED_PRODUCT = "selected_product";
     public static final String SELECTED_PRODUCT_LIST = "selected_product_list";
     public static final String TAG = NewPurchaseOrderActivity.class.getSimpleName();
+    private static final int RESULT_FOR_SCAN_BAR_CODE = 130; //******** 扫描条形码 ********
 
     private SearchInfoView mSivSupplier;
     private SearchInfoView mSivDebt;
@@ -301,15 +302,13 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             mIvClear.setVisibility(View.VISIBLE);
         } else if (requestCode == RESULT_PRODUCT_LIST && data != null) { //******** 返回选择的产品列表 ********
             ArrayList<ProductItem> items = data.getParcelableArrayListExtra(SELECTED_PRODUCT_LIST);
-            if (mProductItemList == null) {
-                mProductItemList = new ArrayList<>();
-            } else {
-                mProductItemList.clear();
-            }
+            if (mProductItemList == null) mProductItemList = new ArrayList<>();
             mProductItemList.addAll(items);
             mAdapter.setNewData(items);
             mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
             caculateTotalPrice();
+        } else if (requestCode == ScanActivity.CREATE_PURCHASE_ORDER && data != null) { //******** 返回扫码产品 ********
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -353,7 +352,8 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                             @Override
                             public void accept(Permission permission) throws Exception {
                                 if (permission.granted) {
-                                    ScanActivity.start(NewPurchaseOrderActivity.this);
+                                    startActivityForResult(new Intent(NewPurchaseOrderActivity.this, ScanActivity.class)
+                                            .putExtra(ScanActivity.FROM_CLASS, ScanActivity.CREATE_PURCHASE_ORDER), RESULT_FOR_SCAN_BAR_CODE);
                                 } else {
                                     ToastUtils.show(NewPurchaseOrderActivity.this, "请开启权限后重新尝试");
                                 }

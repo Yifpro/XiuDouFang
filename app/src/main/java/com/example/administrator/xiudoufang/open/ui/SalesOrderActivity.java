@@ -1,5 +1,6 @@
 package com.example.administrator.xiudoufang.open.ui;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +32,10 @@ import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.CustomPopWindow;
 import com.example.administrator.xiudoufang.open.adapter.PriceSourcePopupAdapter;
 import com.example.administrator.xiudoufang.open.adapter.SalesOrderAdapter;
+import com.example.administrator.xiudoufang.purchase.ui.ScanActivity;
 import com.example.administrator.xiudoufang.receipt.ui.CustomerListActivity;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
@@ -43,6 +47,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import io.reactivex.functions.Consumer;
+
 public class SalesOrderActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
     public static final String TAG = SalesOrderActivity.class.getSimpleName();
@@ -52,8 +58,9 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
     public static final String RESULT_CUSTOMER = "submit_customer"; //******** 获取选定客户 ********
     public static final String RESULT_PRODUCT_LIST = "submit_product_list"; //******** 获取选定产品 ********
     private static final int RESULT_FOR_SALES_PRODUCT_LIST = 117; //******** 产品列表请求码 ********
-    private static final int RESULT_FOR_PRODUCT_INFO_CHANGE = 121;
-    private static final int RESULT_FOR_CREATE_ORDER = 122;
+    private static final int RESULT_FOR_PRODUCT_INFO_CHANGE = 121; //******** 选定产品后更改信息 ********
+    private static final int RESULT_FOR_CREATE_ORDER = 122; //******** 生成订单请求码 ********
+    private static final int RESULT_FOR_SCAN_BAR_CODE = 127; //******** 扫描条形码 ********
 
     private CustomPopWindow mPriceTypePopup;
     private TextView mTvCustomer;
@@ -128,6 +135,8 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
             mList.addAll(temp);
             mAdapter.setNewData(mList);
             calculateAmountAndSums();
+        } else if (requestCode == ScanActivity.SALES_ORDER && data != null) { //******** 返回扫码产品 ********
+
         }
     }
 
@@ -284,6 +293,19 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
                         .putExtra(CustomerListActivity.FROM_CLASS, TAG));
                 break;
             case R.id.iv_scan:
+                new RxPermissions(this)
+                        .requestEach(Manifest.permission.CAMERA)
+                        .subscribe(new Consumer<Permission>() {
+                            @Override
+                            public void accept(Permission permission) throws Exception {
+                                if (permission.granted) {
+                                    startActivityForResult(new Intent(SalesOrderActivity.this, ScanActivity.class)
+                                            .putExtra(ScanActivity.FROM_CLASS, ScanActivity.SALES_ORDER), RESULT_FOR_SCAN_BAR_CODE);
+                                } else {
+                                    ToastUtils.show(SalesOrderActivity.this, "请开启权限后重新尝试");
+                                }
+                            }
+                        });
                 break;
             case R.id.et_filter:
                 if (!mEtFilter.isCursorVisible())

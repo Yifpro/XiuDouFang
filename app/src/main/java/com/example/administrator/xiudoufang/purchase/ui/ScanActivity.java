@@ -1,5 +1,6 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -13,11 +14,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
+import com.example.administrator.xiudoufang.bean.ProductItem;
+import com.example.administrator.xiudoufang.bean.ProductListBean;
+import com.example.administrator.xiudoufang.bean.SalesProductListBean;
+import com.example.administrator.xiudoufang.bean.StockListBean;
+import com.example.administrator.xiudoufang.bean.SupplierProductListBean;
+import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
+import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.utils.TintUtils;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
+import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
+import com.example.administrator.xiudoufang.open.logic.SalesOrderLogic;
+import com.example.administrator.xiudoufang.open.ui.SalesOrderActivity;
+import com.example.administrator.xiudoufang.product.logic.ProductLogic;
+import com.example.administrator.xiudoufang.purchase.logic.NewPurchaseOrderLogic;
+import com.example.administrator.xiudoufang.stock.logic.StockLogic;
+import com.lzy.okgo.model.Response;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import cn.bingoogolapple.qrcode.core.BarcodeType;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
+import cn.bingoogolapple.qrcode.zxing.ZXingView;
 
 /**
  * Created by Administrator on 2018/8/20
@@ -25,7 +50,18 @@ import cn.bingoogolapple.qrcode.core.QRCodeView;
 
 public class ScanActivity extends AppCompatActivity implements IActivityBase, QRCodeView.Delegate, View.OnClickListener {
 
-    private QRCodeView mQRCodeView;
+    public static final String FROM_CLASS = "from_class";
+    public static final String BARCODE_PRODUCT = "barcode_product";
+    public static final String BARCODE_PRODUCT_LIST = "barcode_product_list";
+    public static final int SALES_ORDER = 0;
+    public static final int PRODUCT_LIST = 1;
+    public static final int STOCK_LIST = 2;
+    public static final int CREATE_PURCHASE_ORDER = 3;
+    public static final int PURCHASE_ORDER_DETAILS = 4;
+    private static final int PAGENUM = 1;
+    private static final int COUNT = 10;
+
+    private ZXingView mZXingView;
     private TextView mTvFlash;
 
     private SensorManager mSensorManager;
@@ -44,15 +80,16 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
     @Override
     public void initView() {
         setTitle("扫一扫");
-        mQRCodeView = findViewById(R.id.zxingview);
+        mZXingView = findViewById(R.id.zxingview);
         mTvFlash = findViewById(R.id.tv_flash);
-        mQRCodeView.setDelegate(this);
+        mZXingView.setDelegate(this);
         mTvFlash.setOnClickListener(this);
     }
 
     @Override
     public void initData() {
-        mQRCodeView.startSpot();
+        mZXingView.startSpot();
+        mZXingView.setType(BarcodeType.ONE_DIMENSION, null);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         assert mSensorManager != null;
         Sensor sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -61,7 +98,7 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
         mTvFlash.setText("轻点打开");
         mTvFlash.setTextColor(Color.WHITE);
         mTvFlash.setCompoundDrawablesWithIntrinsicBounds(null, TintUtils.tintDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_flash),
-                ColorStateList.valueOf(getResources().getColor(R.color.white))), null, null);
+                ColorStateList.valueOf(Color.WHITE)), null, null);
     }
 
     @Override
@@ -69,17 +106,17 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
         switch (v.getId()) {
             case R.id.tv_flash:
                 if (mIsOpen) {
-                    mQRCodeView.closeFlashlight();
+                    mZXingView.closeFlashlight();
                     mTvFlash.setText("轻点打开");
                     mTvFlash.setTextColor(Color.WHITE);
                     mTvFlash.setCompoundDrawablesWithIntrinsicBounds(null, TintUtils.tintDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_flash),
-                            ColorStateList.valueOf(getResources().getColor(R.color.white))), null, null);
+                            ColorStateList.valueOf(Color.WHITE)), null, null);
                 } else {
-                    mQRCodeView.openFlashlight();
+                    mZXingView.openFlashlight();
                     mTvFlash.setText("轻点关闭");
-                    mTvFlash.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    mTvFlash.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
                     mTvFlash.setCompoundDrawablesWithIntrinsicBounds(null, TintUtils.tintDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_flash),
-                            ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary))), null, null);
+                            ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorPrimary))), null, null);
                 }
                 mIsOpen = !mIsOpen;
                 break;
@@ -88,7 +125,165 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
 
     @Override
     public void onScanQRCodeSuccess(String result) {
+        ToastUtils.show(this, result);
+        final int fromClass = getIntent().getIntExtra(FROM_CLASS, 0);
+        switch (fromClass) {
+            case SALES_ORDER: //******** 开单首页 ********
+                SalesOrderLogic salesOrderLogic = new SalesOrderLogic();
+                HashMap<String, String> params_1 = new HashMap<>();
+                params_1.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
+                JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
+                params_1.put("userdengji", jsonObject.getString("dengji_value")); //******** 用户服务等级 ********
+                params_1.put("dqcpid", "0"); //******** 产品id 默认0 ********
+                params_1.put("count", String.valueOf(COUNT));
+                params_1.put("saomiao", "1");
+                params_1.put("c_id", getIntent().getStringExtra(SalesOrderActivity.C_ID)); //******** 客户id 新客户0 ********
+                params_1.put("searchitem", result);
+                params_1.put("pagenum", String.valueOf(PAGENUM));
+                salesOrderLogic.requestProductList(this, params_1, new JsonCallback<SalesProductListBean>() {
+                    @Override
+                    public void onSuccess(Response<SalesProductListBean> response) {
+                        LoadingViewDialog.getInstance().dismiss();
+                        List<SalesProductListBean.SalesProductBean> temp = response.body().getChanpinlist();
+                        for (SalesProductListBean.SalesProductBean bean : temp) {
+                            for (SalesProductListBean.SalesProductBean.PacklistBean b : bean.getPacklist()) {
+                                if ("1".equals(b.getCheck())) {
+                                    DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                                    String price = decimalFormat.format(Double.parseDouble(b.getDengji_price()));
+                                    bean.setOrder_prc(price);
+                                    bean.setS_jiage2(price);
+                                    bean.setFactor(b.getUnit_bilv());
+                                    bean.setUnitname(b.getUnitname());
+                                }
+                            }
 
+                        }
+                    }
+                });
+                break;
+            case PRODUCT_LIST: //******** 产品模块的产品列表 ********
+                ProductLogic productLogic = new ProductLogic();
+                HashMap<String, String> params_2 = new HashMap<>();
+                params_2.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
+                params_2.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
+                params_2.put("dqcpid", ""); //******** 产品id ********
+                params_2.put("tiaoxingma", result); //******** 条形码 ********
+                params_2.put("searchitem", "");
+                params_2.put("classid", ""); //******** 类别id ********
+                params_2.put("action", ""); //******** 是否包含子级 ********
+                params_2.put("nopic", ""); //******** 是否有图片 ********
+                params_2.put("c_id", ""); //******** 供应商id ********
+                params_2.put("pagenum", String.valueOf(PAGENUM));
+                params_2.put("count", String.valueOf(COUNT));
+                productLogic.requestProductList(this, params_2, new JsonCallback<ProductListBean>() {
+                    @Override
+                    public void onSuccess(Response<ProductListBean> response) {
+                        LoadingViewDialog.getInstance().dismiss();
+                        List<ProductListBean.ChanpinpicBean> temp = response.body().getChanpinpic();
+                    }
+                });
+                break;
+            case STOCK_LIST: //******** 库存列表 ********
+                StockLogic stockLogic = new StockLogic();
+                HashMap<String, String> params_3 = new HashMap<>();
+                params_3.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
+                params_3.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
+                params_3.put("code", ""); //产品编号
+                params_3.put("sn", ""); //产品名称
+                params_3.put("classname", ""); //类别
+                params_3.put("supp", ""); //供应商
+                params_3.put("xinghao", ""); //型号
+                params_3.put("tiaoxingma", ""); //条形码
+                params_3.put("pinpai", ""); //品牌
+                params_3.put("qtystr", "1"); //数量
+                params_3.put("detail", ""); //详述
+                params_3.put("scanner", "1"); //扫描动作
+                params_3.put("unitvalue", ""); //辅助单位
+                params_3.put("searchstr", ""); //检索内容
+                params_3.put("count", String.valueOf(COUNT)); //个数
+                params_3.put("subchild", ""); //是否包含子集
+                params_3.put("pagenum", String.valueOf(PAGENUM));
+                stockLogic.requestStockList(this, params_3, new JsonCallback<StockListBean>() {
+                    @Override
+                    public void onSuccess(Response<StockListBean> response) {
+                        LoadingViewDialog.getInstance().dismiss();
+                        List<StockListBean.StockBean> temp = response.body().getInvlists();
+                    }
+                });
+                break;
+            case CREATE_PURCHASE_ORDER: //******** 新开采购单 ********
+            case PURCHASE_ORDER_DETAILS: //******** 采购单详情 ********
+                NewPurchaseOrderLogic newPurchaseOrderLogic = new NewPurchaseOrderLogic();
+                HashMap<String, String> params_4 = new HashMap<>();
+                params_4.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
+                params_4.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
+                params_4.put("c_id", "0"); //******** 供应商id ********
+                params_4.put("count", String.valueOf(COUNT));
+                params_4.put("saomiao", "1"); //******** 是否扫描 ********
+                params_4.put("dqcpid", "0"); //******** 产品id ********
+                params_4.put("serchitem", result);
+                params_4.put("pagenum", String.valueOf(PAGENUM));
+                newPurchaseOrderLogic.requestProductList(this, params_4, new JsonCallback<SupplierProductListBean>() {
+                    @Override
+                    public void onSuccess(Response<SupplierProductListBean> response) {
+                        LoadingViewDialog.getInstance().dismiss();
+                        List<SupplierProductListBean.SupplierProductBean> temp = response.body().getPo_chanpinlist();
+                        if (temp.size() > 0) {
+                            if (temp.size() > 1) {
+                                ArrayList<SupplierProductListBean.SupplierProductBean> list = new ArrayList<>(temp.size());
+                                for (SupplierProductListBean.SupplierProductBean bean : temp) {
+                                    list.add(bean);
+                                }
+                                RepeatingBarcodeProductDialog.newInstance(fromClass, list)
+                                        .setOnItemClickListener(new RepeatingBarcodeProductDialog.OnItemClickListener() {
+                                            @Override
+                                            public void onSubmit(ArrayList<ProductItem> list) {
+                                                setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT_LIST, list));
+                                                finish();
+                                            }
+
+                                            @Override
+                                            public void onCancel() {
+                                                mZXingView.startSpot();
+                                            }
+                                        })
+                                        .show(getSupportFragmentManager(), "");
+                            } else {
+                                Intent intent = new Intent(ScanActivity.this, NewPurchaseOrderActivity.class);
+                                ProductItem item = new ProductItem();
+                                SupplierProductListBean.SupplierProductBean bean = temp.get(0);
+                                item.setPhotourl(bean.getPhotourl());
+                                item.setCpid(bean.getCpid());
+                                item.setProductNo(bean.getStyleno());
+                                item.setStylename(bean.getStylename());
+                                item.setColor("");
+                                item.setSize("");
+                                String factor = "", unit = "";
+                                for (SupplierProductListBean.SupplierProductBean.PacklistBean b : bean.getPacklist()) {
+                                    if ("1".equals(b.getCheck())) {
+                                        factor = b.getUnit_bilv();
+                                        unit = b.getUnitname();
+                                    }
+                                }
+                                SupplierProductListBean.SupplierProductBean.LishijialistBean historyBean = bean.getLishijialist().get(bean.getLishijialist().indexOf(new SupplierProductListBean.SupplierProductBean.LishijialistBean(factor, unit)));
+                                item.setFactor(factor);
+                                item.setUnit(unit);
+                                item.setAmount("1");
+                                item.setSinglePrice(historyBean.getPrice());
+                                item.setUnitPrice(historyBean.getPrice());
+                                item.setTip("");
+                                item.setGoodsNo("");
+                                item.setPriceCode(historyBean.getPricecode());
+                                item.setPriceSource("历史价");
+                                intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, item);
+                                startActivity(intent);
+                            }
+                        }
+                    }
+                });
+                break;
+        }
+        mZXingView.startSpot();
     }
 
     @Override
@@ -99,19 +294,19 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
     @Override
     protected void onStart() {
         super.onStart();
-        mQRCodeView.startCamera();
-        mQRCodeView.showScanRect();
+        mZXingView.startCamera();
+        mZXingView.showScanRect();
     }
 
     @Override
     protected void onStop() {
-        mQRCodeView.stopCamera();
+        mZXingView.stopCamera();
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        mQRCodeView.onDestroy();
+        mZXingView.onDestroy();
         if (mSensorManager != null) {
             mSensorManager.unregisterListener(listener);
         }

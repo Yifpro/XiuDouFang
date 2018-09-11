@@ -1,5 +1,6 @@
 package com.example.administrator.xiudoufang.product.ui;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import com.example.administrator.xiudoufang.bean.ProductFilter;
 import com.example.administrator.xiudoufang.bean.ProductListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.product.adapter.ProductListAdapter;
 import com.example.administrator.xiudoufang.product.logic.ProductLogic;
@@ -27,10 +29,14 @@ import com.lzy.okgo.model.Response;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import io.reactivex.functions.Consumer;
 
 public class ProductListActivity extends AppCompatActivity implements IActivityBase {
 
@@ -38,6 +44,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
     private static final int RESULT_FOR_PRODUCT_QUERY = 114;
     public static final String PRODUCT_ITEM = "product_item";
     private static final int RESULT_FOR_PRODUCT_DETAILS = 126;
+    private static final int RESULT_FOR_SCAN_BAR_CODE = 128; //******** 扫描条形码 ********
 
     private RefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -74,6 +81,8 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         } else if (requestCode == RESULT_FOR_PRODUCT_DETAILS && data != null) { //******** 返回更改的产品图片 ********
             mList.get(mIndex).setPhotourl(data.getStringExtra(ProductEditActivity.PRODUCT_ICON));
             mAdapter.notifyItemChanged(mIndex);
+        } else if (requestCode == ScanActivity.PRODUCT_LIST && data != null) { //******** 返回扫码产品 ********
+
         }
     }
 
@@ -154,7 +163,19 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toolbar_scan:
-                startActivity(new Intent(this, ScanActivity.class));
+                new RxPermissions(this)
+                        .requestEach(Manifest.permission.CAMERA)
+                        .subscribe(new Consumer<Permission>() {
+                            @Override
+                            public void accept(Permission permission) throws Exception {
+                                if (permission.granted) {
+                                    startActivityForResult(new Intent(ProductListActivity.this, ScanActivity.class)
+                                            .putExtra(ScanActivity.FROM_CLASS, ScanActivity.PRODUCT_LIST), RESULT_FOR_SCAN_BAR_CODE);
+                                } else {
+                                    ToastUtils.show(ProductListActivity.this, "请开启权限后重新尝试");
+                                }
+                            }
+                        });
                 break;
             case R.id.toolbar_filter:
                 startActivityForResult(new Intent(this, ProductQueryActivity.class), RESULT_FOR_PRODUCT_QUERY);

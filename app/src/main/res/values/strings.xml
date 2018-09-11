@@ -164,4 +164,5 @@
     <string name="stop_produce_tip">当前商品已停止生产，请选择其他商品</string>
     <string name="not_replace">不替换</string>
     <string name="replace">替换</string>
+    <string name="result_for_scan">扫描结果如下</string>
 </resources>

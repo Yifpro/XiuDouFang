@@ -1,5 +1,6 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,6 +50,8 @@ import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.lzy.okgo.model.Response;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
@@ -65,12 +68,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.functions.Consumer;
+
 import static com.example.administrator.xiudoufang.purchase.ui.NewPurchaseOrderActivity.RESULT_PRODUCT_LIST;
 import static com.example.administrator.xiudoufang.purchase.ui.NewPurchaseOrderActivity.SELECTED_PRODUCT_LIST;
 
 public class PurchaseDetailsActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
     private static final int RESULT_WAREHOUSE = 104;
+    private static final int RESULT_FOR_SCAN_BAR_CODE = 131; //******** 扫描条形码 ********
     public static final String TAG = PurchaseDetailsActivity.class.getSimpleName();
 
     private SearchInfoView mSivOrderId;
@@ -327,16 +333,14 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             mIvClear.setVisibility(View.VISIBLE);
         } else if (requestCode == RESULT_PRODUCT_LIST && data != null) { //******** 返回选择的产品列表 ********
             ArrayList<ProductItem> items = data.getParcelableArrayListExtra(SELECTED_PRODUCT_LIST);
-            if (mList == null) {
-                mList = new ArrayList<>();
-            } else {
-                mList.clear();
-            }
+            if (mList == null) mList = new ArrayList<>();
             mList.addAll(items);
             mAdapter.setNewData(items);
             mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
             mTvBottomRight.setBackgroundResource(R.drawable.rect_4_blue);
             caculateTotalPrice();
+        } else if (requestCode == ScanActivity.CREATE_PURCHASE_ORDER && data != null) { //******** 返回扫码产品 ********
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -598,6 +602,19 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                         .putExtra(SupplierProductListActivity.SUPPLIER_ID, mSupplier.getC_id()), RESULT_PRODUCT_LIST);
                 break;
             case R.id.tv_scan_product:
+                new RxPermissions(this)
+                        .requestEach(Manifest.permission.CAMERA)
+                        .subscribe(new Consumer<Permission>() {
+                            @Override
+                            public void accept(Permission permission) throws Exception {
+                                if (permission.granted) {
+                                    startActivityForResult(new Intent(PurchaseDetailsActivity.this, ScanActivity.class)
+                                            .putExtra(ScanActivity.FROM_CLASS, ScanActivity.CREATE_PURCHASE_ORDER), RESULT_FOR_SCAN_BAR_CODE);
+                                } else {
+                                    ToastUtils.show(PurchaseDetailsActivity.this, "请开启权限后重新尝试");
+                                }
+                            }
+                        });
                 break;
             case R.id.tv_bottom_left:
             case R.id.tv_bottom_right:

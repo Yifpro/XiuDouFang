@@ -1,5 +1,6 @@
 package com.example.administrator.xiudoufang.stock.ui;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,16 +24,21 @@ import com.example.administrator.xiudoufang.bean.StockListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.purchase.ui.ScanActivity;
 import com.example.administrator.xiudoufang.stock.adapter.StockListAdapter;
 import com.example.administrator.xiudoufang.stock.logic.StockLogic;
 import com.lzy.okgo.model.Response;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import io.reactivex.functions.Consumer;
 
 public class StockActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
@@ -40,6 +46,7 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
     public static final String PRODUCT_NO = "product_no";
     public static final String UNITVALUE = "unitvalue";
     private static final int RESULT_FOR_STOCK_QUERY = 112;
+    private static final int RESULT_FOR_SCAN_BAR_CODE = 129; //******** 扫描条形码 ********
 
     private EditText mEtFilter;
     private RefreshLayout mRefreshLayout;
@@ -80,6 +87,8 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
             mParams.put("subchild", filter.getIsIncludeSubclass());
             LoadingViewDialog.getInstance().show(this);
             loadStockList(true);
+        } else if (requestCode == ScanActivity.STOCK_LIST && data != null) { //******** 返回扫码产品 ********
+
         }
     }
 
@@ -156,7 +165,7 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
         mParams.put("pinpai", ""); //品牌
         mParams.put("qtystr", "1"); //数量
         mParams.put("detail", ""); //详述
-        mParams.put("scanner", ""); //扫描动作
+        mParams.put("scanner", "0"); //扫描动作
         mParams.put("unitvalue", ""); //辅助单位
         mParams.put("searchstr", mFilterText); //检索内容
         mParams.put("count", String.valueOf(COUNT)); //个数
@@ -170,7 +179,19 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
                 mEtFilter.setCursorVisible(true);
                 break;
             case R.id.iv_scan:
-                startActivity(new Intent(this, ScanActivity.class));
+                new RxPermissions(this)
+                        .requestEach(Manifest.permission.CAMERA)
+                        .subscribe(new Consumer<Permission>() {
+                            @Override
+                            public void accept(Permission permission) throws Exception {
+                                if (permission.granted) {
+                                    startActivityForResult(new Intent(StockActivity.this, ScanActivity.class)
+                                            .putExtra(ScanActivity.FROM_CLASS, ScanActivity.STOCK_LIST), RESULT_FOR_SCAN_BAR_CODE);
+                                } else {
+                                    ToastUtils.show(StockActivity.this, "请开启权限后重新尝试");
+                                }
+                            }
+                        });
                 break;
             case R.id.iv_filter:
                 startActivityForResult(new Intent(this, StockQueryActivity.class), RESULT_FOR_STOCK_QUERY);
