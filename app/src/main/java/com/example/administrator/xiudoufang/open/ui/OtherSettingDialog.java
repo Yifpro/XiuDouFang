@@ -79,6 +79,8 @@ public class OtherSettingDialog extends DialogFragment {
         List<OtherSettingItem> wuliuList = new ArrayList<>();
         JSONArray fahuodian = jsonObject.getJSONArray("fahuodian");
         JSONArray ordertype = jsonObject.getJSONArray("ordertype");
+        LogUtils.e("发货店->"+fahuodian.toJSONString());
+        LogUtils.e("订单类型->"+ordertype.toJSONString());
         JSONArray huoyun = jsonObject.getJSONArray("huoyun");
         JSONArray wuliu = jsonObject.getJSONArray("wuliu");
         int fahuoIndex = 0;

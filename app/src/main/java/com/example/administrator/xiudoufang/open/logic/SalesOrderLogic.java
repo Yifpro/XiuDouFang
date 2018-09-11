@@ -9,6 +9,7 @@ import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.lzy.okgo.OkGo;
+import com.lzy.okgo.request.PostRequest;
 
 import java.io.File;
 import java.util.HashMap;
@@ -31,11 +32,12 @@ public class SalesOrderLogic {
     public void saveOrCreateOrder(Context context, HashMap<String, String> params, String path, JsonCallback<String> callback) {
         String json = JSONObject.toJSONString(params);
         LogUtils.e("提交订单 -> " + json);
-        OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/postorderall?postiorder=0")
+        PostRequest<String> request = OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/postorderall?postiorder=0")
                 .tag(context)
                 .headers("Content-Type", "application/json")
-                .upJson(json)
-                .params("fujian", new File(path))
-                .execute(callback);
+                .upJson(json);
+        if (path != null)
+            request.params("fujian", new File(path));
+        request.execute(callback);
     }
 }

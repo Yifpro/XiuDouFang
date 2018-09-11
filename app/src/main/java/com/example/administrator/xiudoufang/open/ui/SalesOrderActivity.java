@@ -209,9 +209,9 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
         switch (item.getItemId()) {
             case R.id.toolbar_type:
                 if (mPriceTypePopup == null) {
-                    View contentView = LayoutInflater.from(SalesOrderActivity.this).inflate(R.layout.layout_menu_open_bill, null);
+                    View view = LayoutInflater.from(SalesOrderActivity.this).inflate(R.layout.layout_menu_open_bill, null);
                     mPriceTypePopup = new CustomPopWindow.PopupWindowBuilder(this)
-                            .setView(contentView)
+                            .setView(view)
                             .setFocusable(true)
                             .setOutsideTouchable(true)
                             .create();

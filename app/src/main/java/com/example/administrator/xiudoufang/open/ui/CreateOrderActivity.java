@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.example.administrator.xiudoufang.bean.OtherSetting;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
 import com.example.administrator.xiudoufang.bean.StringPair;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -49,7 +51,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2018/9/4
@@ -228,7 +232,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
 
     private void saveOrCreateOrder(boolean isConfirm, OrderInfo info) {
         SharedPreferences preferences = PreferencesUtils.getPreferences();
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new LinkedHashMap<>();
         params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, "")); //店id
         params.put("iid", "0"); //订单id
         params.put("c_id", mCustomerBean.getC_id()); //客户id
@@ -241,12 +245,11 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         params.put("weixinhao", mCustomerBean.getWeixinhao().size() > 0 ? mCustomerBean.getWeixinhao().get(0).getWeixinhao() : ""); //微信
         params.put("fahuodizhi", mCustomerBean.getFahuodizhi().size() > 0 ? mCustomerBean.getFahuodizhi().get(0).getFahuodizhi() : ""); //发货地址
         params.put("shouhuodizhi", mCustomerBean.getShouhuodizhi().size() > 0 ? mCustomerBean.getShouhuodizhi().get(0).getShouhuodizhi() : ""); //收货地址
-
-        params.put("shishou_amt", info.getBencishoukuan()); //本次收款
+        params.put("shishou_amt", TextUtils.isEmpty(info.getBencishoukuan()) ? "0" : info.getBencishoukuan()); //本次收款
         params.put("yingshou_amt", info.getYingshou()); //应收 金额+其他费用
         params.put("userid", preferences.getString(PreferencesUtils.USER_ID, "")); //用户id
         params.put("remark", mEtTip.getText().toString()); //备注
-        params.put("free", info.getDiscount()); //优惠金额
+        params.put("free", TextUtils.isEmpty(info.getDiscount()) ? "0" : info.getDiscount()); //优惠金额
         params.put("allname", mCustomerBean.getQuancheng()); //全称
         params.put("freight", mCustomerBean.getFreight().size() > 0 ? mCustomerBean.getFreight().get(0).getFreight() : ""); //货运站
         int receiptTypeIndex = mReceiptTypeList.indexOf(new StringPair(mTvReceiptType.getText().toString()));
@@ -282,15 +285,15 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         params.put("huoyunleixing", mOtherSetting == null ? "0" : mOtherSetting.getHuoyunType()); //货运类型
         params.put("kuaidiid", mOtherSetting == null ? "0" : mOtherSetting.getLogistics()); //快递id
         params.put("yuji_jiaohuoriqi", mOtherSetting == null ? "" : mOtherSetting.getForcastDate()); //预计交货日期
-        params.put("teshu", mOtherSetting == null ? "" : mOtherSetting.getSpecialOrder()); //特殊订单
+        params.put("teshu", mOtherSetting == null ? "0" : mOtherSetting.getSpecialOrder()); //特殊订单
         params.put("fujia_memo", mOtherSetting == null ? "" : mOtherSetting.getAdditionalInstructions()); //附加说明
         params.put("cust_orderno", mOtherSetting == null ? "" : mOtherSetting.getCustomerContract()); //客户合同
         params.put("xiadanriqi", mTvCreateOrderDate.getText().toString()); //下单日期
         params.put("jiaohuoriqi", mTvDeliveryDate.getText().toString()); //交货日期
-        params.put("feiyong", info.getOtherFree()); //费用
+        params.put("feiyong", TextUtils.isEmpty(info.getOtherFree()) ? "0" : info.getOtherFree()); //费用
         params.put("songhuo_time", ""); //最佳送货
         params.put("confirm", isConfirm ? "1" : "0"); //是否确认订单
-        params.put("pay_yueamt", info.getBalancePayment()); //余额支付金额
+        params.put("pay_yueamt", TextUtils.isEmpty(info.getBalancePayment()) ? "0" : info.getBalancePayment()); //余额支付金额
         params.put("cpjsonstr", JSONObject.toJSONString(mList)); //产品json
         mLogic.saveOrCreateOrder(this, params, mOtherSetting == null ? null : mOtherSetting.getExtra(), new JsonCallback<String>() {
             @Override
