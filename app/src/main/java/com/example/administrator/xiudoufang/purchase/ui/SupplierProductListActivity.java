@@ -22,7 +22,6 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseTextWatcher;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.ProductItem;
-import com.example.administrator.xiudoufang.bean.SupplierProductListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SoftInputHelper;
@@ -117,9 +116,9 @@ public class SupplierProductListActivity extends AppCompatActivity implements IA
     private void loadProductList(final boolean isFiltering) {
         mParams.put("serchitem", mFilterText);
         mParams.put("pagenum", String.valueOf(mCurrentPage++));
-        mLogic.requestProductList(this, mParams, new JsonCallback<SupplierProductListBean>() {
+        mLogic.requestProductList(this, mParams, new JsonCallback<String>() {
             @Override
-            public void onSuccess(Response<SupplierProductListBean> response) {
+            public void onSuccess(Response<String> response) {
                 LoadingViewDialog.getInstance().dismiss();
                 List<SupplierProductListBean.SupplierProductBean> temp = response.body().getPo_chanpinlist();
                 if (isFiltering) {

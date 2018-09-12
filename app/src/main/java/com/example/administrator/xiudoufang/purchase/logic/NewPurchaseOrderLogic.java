@@ -2,8 +2,9 @@ package com.example.administrator.xiudoufang.purchase.logic;
 
 import android.content.Context;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.administrator.xiudoufang.bean.SupplierProductListBean;
+import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.bean.SupplierListBean;
 import com.example.administrator.xiudoufang.bean.WarehouseListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
@@ -14,7 +15,9 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.HttpParams;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,14 +66,66 @@ public class NewPurchaseOrderLogic {
     }
 
     //******** 获取产品列表 ********
-    public void requestProductList(Context context, HashMap<String, String> params, JsonCallback<SupplierProductListBean> callback) {
+    public void requestProductList(Context context, HashMap<String, String> params, JsonCallback<String> callback) {
         String json = JSONObject.toJSONString(params);
         LogUtils.e("产品列表 -> " + json);
-        OkGo.<SupplierProductListBean>post(StringUtils.BASE_URL + "/Api/products/requset_poproductdata?requset_poproductdata=0")
+        OkGo.<String>post(StringUtils.BASE_URL + "/Api/products/requset_poproductdata?requset_poproductdata=0")
                 .tag(context)
                 .headers("Content-Type", "application/json")
                 .upJson(json)
                 .execute(callback);
+    }
+
+    public List<ProductItem> parseProductListJson(JSONObject jsonObject) {
+        ArrayList<ProductItem> list = new ArrayList<>();
+        JSONArray po_chanpinlist = jsonObject.getJSONArray("po_chanpinlist");
+        for (int i = 0; i < po_chanpinlist.size(); i++) {
+            JSONObject object = po_chanpinlist.getJSONObject(i);
+            ProductItem productItem = new ProductItem();
+            productItem.setCpid(object.getString("dianid"));
+            productItem.setCpid(object.getString("cpid"));
+            productItem.setCpid(object.getString("styleno"));
+            productItem.setCpid(object.getString("barcode"));
+            productItem.setCpid(object.getString("stylename"));
+            productItem.setCpid(object.getString("classname"));
+            productItem.setCpid(object.getString("photourl"));
+            productItem.setCpid(object.getString("xinghao"));
+            productItem.setCpid(object.getString("pinpai"));
+            productItem.setCpid(object.getString("detail"));
+            productItem.setCpid(object.getString("kucunqty"));
+            productItem.setCpid(object.getString("ziyouqty"));
+            productItem.setCpid(object.getString("stop_produce"));
+            productItem.setCpid(object.getString("stop_sales"));
+            productItem.setCpid(object.getString("pounitname"));
+            JSONArray colorlist = object.getJSONArray("colorlist");
+            List<ProductItem.ColorlistBean> colorlistBeen = null;
+            if (colorlist.size() > 0) {
+                colorlistBeen = new ArrayList<>();
+                for (int j = 0; j < colorlist.size(); j++) {
+                    String color = colorlist.getJSONObject(j).getString("color");
+                    colorlistBeen.add(new ProductItem.ColorlistBean(color));
+                }
+            }
+            productItem.setColorlist(colorlistBeen);
+            List<ProductItem.ColorlistBean> packlistBeen = null;
+            JSONArray packlist = object.getJSONArray("packlist");
+            if (packlist.size() > 0) {
+                packlistBeen = new ArrayList<>();
+                for (int j = 0; j < packlist.size(); j++) {
+                    JSONObject pack = colorlist.getJSONObject(i);
+                    ProductItem.PacklistBean packlistBean = new ProductItem.PacklistBean(pack.getString("unit_bilv"), pack.getString("unitname"), pack.getString("check"));
+                    packlistBeen.add(packlistBean);
+                }
+            }
+            productItem.setPacklist(packlistBeen);
+            productItem.setSizxlist(object.getString("sizxlist"));
+            productItem.setPiclist(object.getString("piclist"));
+            productItem.setLishijialist(object.getString("lishijialist"));
+            productItem.setChengbenjialist(object.getString("chengbenjialist"));
+            productItem.setCankaoshoujialist(object.getString("cankaoshoujialist"));
+            productItem.setChuchangjialist(object.getString("chuchangjialist"));
+        }
+        return list;
     }
 
 }

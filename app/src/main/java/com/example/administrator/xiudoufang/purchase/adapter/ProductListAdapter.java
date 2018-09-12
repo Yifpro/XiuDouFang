@@ -9,7 +9,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.GlideApp;
-import com.example.administrator.xiudoufang.bean.SupplierProductListBean;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 
 import java.util.List;

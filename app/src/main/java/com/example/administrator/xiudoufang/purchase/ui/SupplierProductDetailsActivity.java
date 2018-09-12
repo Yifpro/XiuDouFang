@@ -16,7 +16,6 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.ProductItem;
-import com.example.administrator.xiudoufang.bean.SupplierProductListBean;
 import com.example.administrator.xiudoufang.common.utils.ExpressionUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
@@ -230,7 +229,7 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
     public void initData() {
         if (getIntent() != null) {
             String photoUrl, productNo, productName, stockAmount, freeAmount, type, brand, model, barCode, details,
-                    singlePrice = "", amount = "", goodsNo = "", tip = "";
+                    singlePrice = "", unitPrice = "", amount = "", goodsNo = "", tip = "";
             boolean isNotGift = true;
             mPurchaseUnitList = new ArrayList<>();
             Parcelable extra = getIntent().getParcelableExtra(SELECTED_PRODUCT_ITEM);
@@ -263,8 +262,9 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
                 }
                 if (mProductItem.getLishijialist() != null) {
                     for (ProductItem.LishijialistBean bean : mProductItem.getLishijialist()) {
-                        if (mFactor.equals(bean.getUnit_bilv()) && mUnit.equals(bean.getUnitname()))
-                            singlePrice = bean.getPrice();
+                        if (mFactor.equals(bean.getUnit_bilv()) && mUnit.equals(bean.getUnitname())) {
+                            unitPrice = singlePrice = bean.getPrice();
+                        }
                         if ("1".equals(bean.getUnit_bilv())) mHistoryPrice = bean.getPrice();
                     }
                 }
@@ -311,7 +311,7 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
                 if (mSupplierProductBean.getLishijialist() != null) {
                     for (SupplierProductListBean.SupplierProductBean.LishijialistBean bean : mSupplierProductBean.getLishijialist()) {
                         if (mFactor.equals(bean.getUnit_bilv()) && mUnit.equals(bean.getUnitname())) {
-                            singlePrice = bean.getPrice();
+                            unitPrice = singlePrice = bean.getPrice();
                         }
                         if ("1".equals(bean.getUnit_bilv())) {
                             mHistoryPrice = bean.getPrice();
@@ -349,7 +349,7 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
             mSivDetails.setValue(details);
             mSivPurchaseUnit.setValue(mFactor + mUnit);
             mSivSinglePrice.setValue(singlePrice);
-            mSivUnitPrice.setValue(singlePrice);
+            mSivUnitPrice.setValue(unitPrice);
             mSivPurchaseAmount.setValue(amount);
             mSivGift.setStatus(isNotGift);
             mSivGoodsNo.setValue(goodsNo);

@@ -68,49 +68,50 @@ public class PurchaseLogic {
                 .execute(callback);
     }
 
-    public List<ProductItem> parseProductListJson(JSONObject result) {
+    //******** 解析采购单返回的产品json ********
+    public List<ProductItem> parsePurchaseDetailsJson(JSONObject result) {
         List<ProductItem> list = new ArrayList<>();
         JSONArray puiasm = result.getJSONArray("puiasm");
         for (int i = 0; i < puiasm.size(); i++) {
             JSONObject object = puiasm.getJSONObject(i);
             ProductItem item = new ProductItem();
-            item.setPhotourl(object.getString("photourl"));
-            item.setProductNo(object.getString("styleno"));
-            item.setStylename(object.getString("stylename"));
-            item.setStockAmount(object.getString("kucunqty"));
-            item.setFreeAmount(object.getString("ziyouqty"));
-            item.setType(object.getString("classname"));
-            item.setBrand(object.getString("pinpai"));
-            item.setModel(object.getString("xinghao"));
-            item.setPriceCode(object.getString("barcode"));
-            item.setDetails(object.getString("detail"));
-            item.setAmount(object.getString("cp_qty"));
-            item.setGift(!"0".equals(object.getString("zengpin")));
-            item.setGoodsNo(object.getString("huohao"));
-            item.setTip(object.getString("bz"));
-            item.setStatus(object.getString("statusstr"));
-            item.setCpid(object.getString("cpid"));
-            item.setFactor(object.getString("factor"));
-            item.setUnit(object.getString("unitname"));
-            item.setSinglePrice(object.getString("order_prc"));
-            item.setUnitPrice(object.getString("s_jiage2"));
+            item.setPhotourl(object.getString("photourl")); //******** 图片 ********
+            item.setProductNo(object.getString("styleno")); //******** 产品编号 ********
+            item.setStylename(object.getString("stylename")); //******** 产品名称 ********
+            item.setStockAmount(object.getString("kucunqty")); //******** 库存数 ********
+            item.setFreeAmount(object.getString("ziyouqty")); //******** 自由数 ********
+            item.setType(object.getString("classname")); //******** 产品类别 ********
+            item.setBrand(object.getString("pinpai")); //******** 品牌 ********
+            item.setModel(object.getString("xinghao")); //******** 型号 ********
+            item.setPriceCode(object.getString("barcode")); //******** 条形码 ********
+            item.setDetails(object.getString("detail")); //******** 明细 ********
+            item.setAmount(object.getString("cp_qty")); //******** 数量 ********
+            item.setGift(!"0".equals(object.getString("zengpin"))); //******** 赠品 ********
+            item.setGoodsNo(object.getString("huohao")); //******** 货号 ********
+            item.setTip(object.getString("bz")); //******** 备注 ********
+            item.setStatus(object.getString("statusstr")); //******** 产品状态 ********
+            item.setCpid(object.getString("cpid")); //******** 产品id ********
+            item.setFactor(object.getString("factor")); //******** 比率 ********
+            item.setUnit(object.getString("unitname")); //******** 单位 ********
+            item.setSinglePrice(object.getString("order_prc")); //******** 单品价 ********
+            item.setUnitPrice(object.getString("s_jiage2")); //******** 单位价 ********
             item.setDianid(object.getString("dianid"));
-            item.setPounitname(object.getString("pounitname"));
-            item.setStopProduce(!"0".equals(object.getString("stop_produce")));
-            item.setStopSales(!"0".equals(object.getString("stop_sales")));
-            item.setIid(object.getString("iid"));
-            item.setPnid(object.getString("pnid"));
-            item.setPuOrderNo(object.getString("puOrderNo"));
-            item.setColor(object.getString("yanse"));
-            item.setSize(object.getString("guige"));
-            item.setPriceSource(object.getString("jiagelaiyuan"));
-            item.setPriceCode(object.getString("pricecode"));
-            item.setOrderqty(object.getString("orderqty"));
-            item.setOrderamt(object.getString("orderamt"));
-            item.setRcvqty(object.getString("rcvqty"));
+            item.setPounitname(object.getString("pounitname")); //******** 单个的单位 ********
+            item.setStopProduce(!"0".equals(object.getString("stop_produce"))); //******** 停产 ********
+            item.setStopSales(!"0".equals(object.getString("stop_sales"))); //******** 停售 ********
+            item.setIid(object.getString("iid")); //******** 采购单id ********
+            item.setPnid(object.getString("pnid")); //******** 当前行id ********
+            item.setPuOrderNo(object.getString("puOrderNo")); //******** 采购单编号 ********
+            item.setColor(object.getString("yanse")); //******** 颜色 ********
+            item.setSize(object.getString("guige")); //******** 规格 ********
+            item.setPriceSource(object.getString("jiagelaiyuan")); //******** 价格来源 ********
+            item.setPriceCode(object.getString("pricecode")); //******** 价码 ********
+            item.setOrderqty(object.getString("orderqty")); //******** 采购数量 ********
+            item.setOrderamt(object.getString("orderamt")); //******** 金额 ********
+            item.setRcvqty(object.getString("rcvqty")); //******** 收货数量 ********
             item.setZhuancaigou_pnid(object.getString("zhuancaigou_pnid"));
-            item.setFujian(object.getString("fujian"));
-            item.setButtonstatus_str(object.getString("buttonstatus_str"));
+            item.setFujian(object.getString("fujian")); //******** 附件 ********
+            item.setButtonstatus_str(object.getString("buttonstatus_str")); //******** 按钮显示文本 ********
             item.setColorlist(JSONObject.parseArray(object.getJSONArray("colorlist").toJSONString(), ProductItem.ColorlistBean.class));
             item.setPacklist(JSONObject.parseArray(object.getJSONArray("packlist").toJSONString(), ProductItem.PacklistBean.class));
             item.setSizxlist(JSONObject.parseArray(object.getJSONArray("sizxlist").toJSONString(), ProductItem.SizxlistBean.class));

@@ -527,7 +527,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 mSivWarehourse.setValue(result.getString("warehouse"));
                 if (!TextUtils.isEmpty(result.getString("fujian")))
                     GlideApp.with(PurchaseDetailsActivity.this).load(StringUtils.FILE_URL + result.getString("fujian")).error(R.mipmap.ic_error).into(mIvExtra);
-                mList = mPurchaseLogic.parseProductListJson(mJsonObject);
+                mList = mPurchaseLogic.parsePurchaseDetailsJson(mJsonObject);
                 mAdapter.setNewData(mList);
                 if (mList.size() == 0) {
                     mTvBottomRight.setClickable(false);
