@@ -81,9 +81,38 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         } else if (requestCode == RESULT_FOR_PRODUCT_DETAILS && data != null) { //******** 返回更改的产品图片 ********
             mList.get(mIndex).setPhotourl(data.getStringExtra(ProductEditActivity.PRODUCT_ICON));
             mAdapter.notifyItemChanged(mIndex);
-        } else if (requestCode == ScanActivity.PRODUCT_LIST && data != null) { //******** 返回扫码产品 ********
-
+        } else if (requestCode == RESULT_FOR_SCAN_BAR_CODE && data != null) { //******** 返回扫码产品 ********
+            loadBarcodeProduct(data);
         }
+    }
+
+    private void loadBarcodeProduct(@Nullable Intent data) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
+        params.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
+        params.put("dqcpid", ""); //******** 产品id ********
+        params.put("tiaoxingma", data.getStringExtra(ScanActivity.BARCODE_PRODUCT)); //******** 条形码 ********
+        params.put("searchitem", "");
+        params.put("classid", ""); //******** 类别id ********
+        params.put("action", ""); //******** 是否包含子级 ********
+        params.put("nopic", ""); //******** 是否有图片 ********
+        params.put("c_id", ""); //******** 供应商id ********
+        params.put("pagenum", "1");
+        params.put("count", String.valueOf(COUNT));
+        mLogic.requestProductList(this, params, new JsonCallback<ProductListBean>() {
+            @Override
+            public void onSuccess(Response<ProductListBean> response) {
+                LoadingViewDialog.getInstance().dismiss();
+                List<ProductListBean.ChanpinpicBean> temp = response.body().getChanpinpic();
+                if (mList == null) {
+                    mList = new ArrayList<>();
+                } else {
+                    mList.clear();
+                }
+                mList.addAll(temp);
+                mAdapter.setNewData(mList);
+            }
+        });
     }
 
     @Override

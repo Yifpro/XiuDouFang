@@ -23,6 +23,7 @@ import com.example.administrator.xiudoufang.bean.SalesProductListBean;
 import com.example.administrator.xiudoufang.bean.StockListBean;
 import com.example.administrator.xiudoufang.bean.SupplierProductListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.utils.TintUtils;
@@ -30,6 +31,7 @@ import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.open.logic.SalesOrderLogic;
 import com.example.administrator.xiudoufang.open.ui.SalesOrderActivity;
+import com.example.administrator.xiudoufang.open.ui.SameBarcodeSalesProductDialog;
 import com.example.administrator.xiudoufang.product.logic.ProductLogic;
 import com.example.administrator.xiudoufang.purchase.logic.NewPurchaseOrderLogic;
 import com.example.administrator.xiudoufang.stock.logic.StockLogic;
@@ -52,7 +54,6 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
 
     public static final String FROM_CLASS = "from_class";
     public static final String BARCODE_PRODUCT = "barcode_product";
-    public static final String BARCODE_PRODUCT_LIST = "barcode_product_list";
     public static final int SALES_ORDER = 0;
     public static final int PRODUCT_LIST = 1;
     public static final int STOCK_LIST = 2;
@@ -125,7 +126,6 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
 
     @Override
     public void onScanQRCodeSuccess(String result) {
-        ToastUtils.show(this, result);
         final int fromClass = getIntent().getIntExtra(FROM_CLASS, 0);
         switch (fromClass) {
             case SALES_ORDER: //******** 开单首页 ********
@@ -157,59 +157,44 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
                                 }
                             }
 
+                        }if (temp.size() > 0) {
+                            if (temp.size() > 1) {
+                                //******** 返回多个同条形码的产品 ********
+                                ArrayList<SalesProductListBean.SalesProductBean> list = new ArrayList<>(temp.size());
+                                for (SalesProductListBean.SalesProductBean bean : temp) {
+                                    list.add(bean);
+                                }
+                                SameBarcodeSalesProductDialog.newInstance(fromClass, list)
+                                        .setOnItemClickListener(new SameBarcodeSalesProductDialog.OnItemClickListener() {
+                                            @Override
+                                            public void onSubmit(ArrayList<SalesProductListBean.SalesProductBean> result) {
+                                                setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(BARCODE_PRODUCT, result));
+                                                finish();
+                                            }
+
+                                            @Override
+                                            public void onDismiss() {
+                                                mZXingView.startSpot();
+                                            }
+                                        })
+                                        .show(getSupportFragmentManager(), "");
+                            } else {
+                                //******** 返回单个产品 ********
+                                Intent intent = new Intent();
+                                ArrayList<SalesProductListBean.SalesProductBean> list = new ArrayList<>();
+                                list.add(temp.get(0));
+                                intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, list);
+                                setResult(Activity.RESULT_OK, intent);
+                                finish();
+                            }
                         }
                     }
                 });
                 break;
             case PRODUCT_LIST: //******** 产品模块的产品列表 ********
-                ProductLogic productLogic = new ProductLogic();
-                HashMap<String, String> params_2 = new HashMap<>();
-                params_2.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
-                params_2.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
-                params_2.put("dqcpid", ""); //******** 产品id ********
-                params_2.put("tiaoxingma", result); //******** 条形码 ********
-                params_2.put("searchitem", "");
-                params_2.put("classid", ""); //******** 类别id ********
-                params_2.put("action", ""); //******** 是否包含子级 ********
-                params_2.put("nopic", ""); //******** 是否有图片 ********
-                params_2.put("c_id", ""); //******** 供应商id ********
-                params_2.put("pagenum", String.valueOf(PAGENUM));
-                params_2.put("count", String.valueOf(COUNT));
-                productLogic.requestProductList(this, params_2, new JsonCallback<ProductListBean>() {
-                    @Override
-                    public void onSuccess(Response<ProductListBean> response) {
-                        LoadingViewDialog.getInstance().dismiss();
-                        List<ProductListBean.ChanpinpicBean> temp = response.body().getChanpinpic();
-                    }
-                });
-                break;
             case STOCK_LIST: //******** 库存列表 ********
-                StockLogic stockLogic = new StockLogic();
-                HashMap<String, String> params_3 = new HashMap<>();
-                params_3.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
-                params_3.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
-                params_3.put("code", ""); //产品编号
-                params_3.put("sn", ""); //产品名称
-                params_3.put("classname", ""); //类别
-                params_3.put("supp", ""); //供应商
-                params_3.put("xinghao", ""); //型号
-                params_3.put("tiaoxingma", ""); //条形码
-                params_3.put("pinpai", ""); //品牌
-                params_3.put("qtystr", "1"); //数量
-                params_3.put("detail", ""); //详述
-                params_3.put("scanner", "1"); //扫描动作
-                params_3.put("unitvalue", ""); //辅助单位
-                params_3.put("searchstr", ""); //检索内容
-                params_3.put("count", String.valueOf(COUNT)); //个数
-                params_3.put("subchild", ""); //是否包含子集
-                params_3.put("pagenum", String.valueOf(PAGENUM));
-                stockLogic.requestStockList(this, params_3, new JsonCallback<StockListBean>() {
-                    @Override
-                    public void onSuccess(Response<StockListBean> response) {
-                        LoadingViewDialog.getInstance().dismiss();
-                        List<StockListBean.StockBean> temp = response.body().getInvlists();
-                    }
-                });
+                setResult(Activity.RESULT_OK, new Intent().putExtra(BARCODE_PRODUCT, result));
+                finish();
                 break;
             case CREATE_PURCHASE_ORDER: //******** 新开采购单 ********
             case PURCHASE_ORDER_DETAILS: //******** 采购单详情 ********
@@ -230,26 +215,28 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
                         List<SupplierProductListBean.SupplierProductBean> temp = response.body().getPo_chanpinlist();
                         if (temp.size() > 0) {
                             if (temp.size() > 1) {
+                                //******** 返回多个同条形码的产品 ********
                                 ArrayList<SupplierProductListBean.SupplierProductBean> list = new ArrayList<>(temp.size());
                                 for (SupplierProductListBean.SupplierProductBean bean : temp) {
                                     list.add(bean);
                                 }
-                                RepeatingBarcodeProductDialog.newInstance(fromClass, list)
-                                        .setOnItemClickListener(new RepeatingBarcodeProductDialog.OnItemClickListener() {
+                                SameBarcodeSupplierProductDialog.newInstance(fromClass, list)
+                                        .setOnItemClickListener(new SameBarcodeSupplierProductDialog.OnItemClickListener() {
                                             @Override
-                                            public void onSubmit(ArrayList<ProductItem> list) {
-                                                setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT_LIST, list));
+                                            public void onSubmit(ArrayList<ProductItem> result) {
+                                                setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT_LIST, result));
                                                 finish();
                                             }
 
                                             @Override
-                                            public void onCancel() {
+                                            public void onDismiss() {
                                                 mZXingView.startSpot();
                                             }
                                         })
                                         .show(getSupportFragmentManager(), "");
                             } else {
-                                Intent intent = new Intent(ScanActivity.this, NewPurchaseOrderActivity.class);
+                                //******** 返回单个产品 ********
+                                Intent intent = new Intent();
                                 ProductItem item = new ProductItem();
                                 SupplierProductListBean.SupplierProductBean bean = temp.get(0);
                                 item.setPhotourl(bean.getPhotourl());
@@ -275,15 +262,17 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
                                 item.setGoodsNo("");
                                 item.setPriceCode(historyBean.getPricecode());
                                 item.setPriceSource("历史价");
-                                intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, item);
-                                startActivity(intent);
+                                ArrayList<ProductItem> list = new ArrayList<>();
+                                list.add(item);
+                                intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, list);
+                                setResult(Activity.RESULT_OK, intent);
+                                finish();
                             }
                         }
                     }
                 });
                 break;
         }
-        mZXingView.startSpot();
     }
 
     @Override

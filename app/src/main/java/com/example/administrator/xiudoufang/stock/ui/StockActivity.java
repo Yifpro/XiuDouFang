@@ -87,9 +87,46 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
             mParams.put("subchild", filter.getIsIncludeSubclass());
             LoadingViewDialog.getInstance().show(this);
             loadStockList(true);
-        } else if (requestCode == ScanActivity.STOCK_LIST && data != null) { //******** 返回扫码产品 ********
-
+        } else if (requestCode == RESULT_FOR_SCAN_BAR_CODE && data != null) { //******** 返回扫码得到的条形码 ********
+            loadBarcodeProduct(data);
         }
+    }
+
+    //******** 加载条形码产品 ********
+    private void loadBarcodeProduct(@Nullable Intent data) {
+        LoadingViewDialog.getInstance().show(this);
+        HashMap<String, String> params_3 = new HashMap<>();
+        params_3.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
+        params_3.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
+        params_3.put("code", ""); //产品编号
+        params_3.put("sn", ""); //产品名称
+        params_3.put("classname", ""); //类别
+        params_3.put("supp", ""); //供应商
+        params_3.put("xinghao", ""); //型号
+        params_3.put("tiaoxingma", ""); //条形码
+        params_3.put("pinpai", ""); //品牌
+        params_3.put("qtystr", "1"); //数量
+        params_3.put("detail", ""); //详述
+        params_3.put("scanner", "1"); //扫描动作
+        params_3.put("unitvalue", "4"); //辅助单位
+        params_3.put("searchstr", data.getStringExtra(ScanActivity.BARCODE_PRODUCT)); //检索内容
+        params_3.put("count", String.valueOf(COUNT)); //个数
+        params_3.put("subchild", ""); //是否包含子集
+        params_3.put("pagenum", "1");
+        mLogic.requestStockList(this, params_3, new JsonCallback<StockListBean>() {
+            @Override
+            public void onSuccess(Response<StockListBean> response) {
+                LoadingViewDialog.getInstance().dismiss();
+                List<StockListBean.StockBean> temp = response.body().getInvlists();
+                if (mList == null) {
+                    mList = new ArrayList<>();
+                } else {
+                    mList.clear();
+                }
+                mList.addAll(temp);
+                mAdapter.setNewData(mList);
+            }
+        });
     }
 
     @Override

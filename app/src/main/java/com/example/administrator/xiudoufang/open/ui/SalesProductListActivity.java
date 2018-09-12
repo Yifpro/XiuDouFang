@@ -211,7 +211,7 @@ public class SalesProductListActivity extends AppCompatActivity implements IActi
                 break;
             case R.id.fab_complete:
                 Intent intent = new Intent();
-                ArrayList<SalesProductListBean.SalesProductBean> list = new ArrayList<>();
+                ArrayList<SalesProductListBean.SalesProductBean> list = new ArrayList<>(mList.size());
                 for (SalesProductListBean.SalesProductBean bean : mList) {
                     if (bean.isSelected()) {
                         list.add(bean);

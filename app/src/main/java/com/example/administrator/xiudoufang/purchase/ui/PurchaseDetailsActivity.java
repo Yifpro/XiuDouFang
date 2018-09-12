@@ -331,7 +331,8 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             mImgPath = selectList.get(0).getCompressPath();
             GlideApp.with(this).load(mImgPath).into(mIvExtra);
             mIvClear.setVisibility(View.VISIBLE);
-        } else if (requestCode == RESULT_PRODUCT_LIST && data != null) { //******** 返回选择的产品列表 ********
+        } else if (requestCode == RESULT_PRODUCT_LIST || requestCode == RESULT_FOR_SCAN_BAR_CODE && data != null) {
+            //******** 返回选择或扫描的多个产品 ********
             ArrayList<ProductItem> items = data.getParcelableArrayListExtra(SELECTED_PRODUCT_LIST);
             if (mList == null) mList = new ArrayList<>();
             mList.addAll(items);
@@ -339,8 +340,6 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
             mTvBottomRight.setBackgroundResource(R.drawable.rect_4_blue);
             caculateTotalPrice();
-        } else if (requestCode == ScanActivity.CREATE_PURCHASE_ORDER && data != null) { //******** 返回扫码产品 ********
-
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

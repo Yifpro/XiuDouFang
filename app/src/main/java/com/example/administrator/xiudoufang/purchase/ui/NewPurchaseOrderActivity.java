@@ -30,7 +30,6 @@ import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -100,7 +99,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     private NewPurchaseOrderLogic mNewPurchaseOrderLogic;
     private CustomerListLogic mCustomerListLogic;
     private ArrayList<SubjectListBean.AccounttypesBean> mSubjectList;
-    private List<ProductItem> mProductItemList;
+    private List<ProductItem> mList;
     private Supplier mSupplier;
     private String mWarehouseId = "";
     private String mSubjectId = "";
@@ -124,10 +123,10 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             mSivDebt.setValue(supplier.getDebt());
             mSupplier = supplier;
         } else if (item != null) { //******** 返回选中的单个产品 ********
-            if (mProductItemList == null)
-                mProductItemList = new ArrayList<>();
-            mProductItemList.add(item);
-            mAdapter.setNewData(mProductItemList);
+            if (mList == null)
+                mList = new ArrayList<>();
+            mList.add(item);
+            mAdapter.setNewData(mList);
             mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
             caculateTotalPrice();
         }
@@ -178,7 +177,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         ((Toolbar) findViewById(R.id.tool_bar)).setNavigationOnClickListener(new NavigationClickListener());
         mNewPurchaseOrderLogic = new NewPurchaseOrderLogic();
         mCustomerListLogic = new CustomerListLogic();
-        mAdapter = new SelectedProductListAdapter(R.layout.layout_list_item_selected_product, mProductItemList, "1");
+        mAdapter = new SelectedProductListAdapter(R.layout.layout_list_item_selected_product, mList, "1");
         SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
             @Override
             public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int viewType) {
@@ -197,7 +196,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             public void onItemClick(SwipeMenuBridge menuBridge) {
                 menuBridge.closeMenu();
                 int adapterPosition = menuBridge.getAdapterPosition();
-                mProductItemList.remove(adapterPosition);
+                mList.remove(adapterPosition);
                 mAdapter.notifyItemChanged(adapterPosition);
                 caculateTotalPrice();
                 if (mAdapter.getItemCount() == 1) {
@@ -221,8 +220,8 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
 
     private void caculateTotalPrice() {
         double result = 0;
-        for (int i = 0; i < mProductItemList.size(); i++) {
-            double totalPrice = Double.parseDouble(mProductItemList.get(i).getUnitPrice()) * Double.parseDouble(mProductItemList.get(i).getAmount());
+        for (int i = 0; i < mList.size(); i++) {
+            double totalPrice = Double.parseDouble(mList.get(i).getUnitPrice()) * Double.parseDouble(mList.get(i).getAmount());
             result += totalPrice;
         }
         DecimalFormat mFormat = new DecimalFormat("0.00");
@@ -293,14 +292,14 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             mImgPath = selectList.get(0).getCompressPath();
             GlideApp.with(this).load(mImgPath).into(mIvExtra);
             mIvClear.setVisibility(View.VISIBLE);
-        } else if (requestCode == RESULT_PRODUCT_LIST && data != null) { //******** 返回选择的产品列表 ********
+        } else if (requestCode == RESULT_PRODUCT_LIST || requestCode == RESULT_FOR_SCAN_BAR_CODE && data != null) {
+            //******** 返回选择或扫描的多个产品 ********
             ArrayList<ProductItem> items = data.getParcelableArrayListExtra(SELECTED_PRODUCT_LIST);
-            if (mProductItemList == null) mProductItemList = new ArrayList<>();
-            mAdapter.setNewData(mProductItemList);
+            if (mList == null) mList = new ArrayList<>();
+            mList.addAll(items);
+            mAdapter.setNewData(mList);
             mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
             caculateTotalPrice();
-        } else if (requestCode == ScanActivity.CREATE_PURCHASE_ORDER && data != null) { //******** 返回扫码产品 ********
-
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -401,9 +400,9 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         params.put("poprice_mode", jsonObject.getString("poprice_mode")); //******** 用户显示的是价格还是价码 ********
         params.put("youhuijine", mSivDiscountAmount.getValue()); //******** 优惠金额 ********
         ArrayList<HashMap<String, String>> maps = new ArrayList<>();
-        if (mProductItemList != null && mProductItemList.size() > 0) {
+        if (mList != null && mList.size() > 0) {
             HashMap<String, String> map;
-            for (ProductItem item : mProductItemList) {
+            for (ProductItem item : mList) {
                 map = new HashMap<>();
                 map.put("pnid", "0"); //******** 当前id ********
                 map.put("cpid", item.getCpid()); //******** 产品id ********
@@ -579,9 +578,9 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                     break;
             }
             tvAmount.setText(String.valueOf(i));
-            ProductItem item = mProductItemList.get(position);
+            ProductItem item = mList.get(position);
             item.setAmount(String.valueOf(i));
-            double totalPrice = Double.parseDouble(item.getUnitPrice()) * Double.parseDouble(mProductItemList.get(position).getAmount());
+            double totalPrice = Double.parseDouble(item.getUnitPrice()) * Double.parseDouble(mList.get(position).getAmount());
             DecimalFormat mFormat = new DecimalFormat("0.00");
             tvTotalPrice.setText(mFormat.format(totalPrice));
             tvAmount.setText(String.valueOf(i));
@@ -595,7 +594,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
             Intent intent = new Intent(NewPurchaseOrderActivity.this, SupplierProductDetailsActivity.class);
             intent.putExtra(SupplierProductDetailsActivity.FROM_CLASS, TAG);
-            intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM, mProductItemList.get(position));
+            intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
             startActivity(intent);
         }
     }

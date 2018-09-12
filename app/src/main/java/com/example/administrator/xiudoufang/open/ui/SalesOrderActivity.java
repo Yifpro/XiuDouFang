@@ -113,11 +113,9 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
                 ArrayList<SalesProductListBean.SalesProductBean> items = data.getParcelableArrayListExtra(SalesProductListActivity.SELECTED_PRODUCT_LIST);
                 if (mList == null) {
                     mList = new ArrayList<>();
-                } else {
-                    mList.clear();
                 }
                 mList.addAll(items);
-                mAdapter.setNewData(items);
+                mAdapter.setNewData(mList);
                 calculateAmountAndSums();
             } else {
                 mEtFilter.setText("");
@@ -135,8 +133,15 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
             mList.addAll(temp);
             mAdapter.setNewData(mList);
             calculateAmountAndSums();
-        } else if (requestCode == ScanActivity.SALES_ORDER && data != null) { //******** 返回扫码产品 ********
-
+        } else if (requestCode == RESULT_FOR_SCAN_BAR_CODE && data != null) { //******** 返回扫码产品 ********
+            ArrayList<SalesProductListBean.SalesProductBean> items = data.getParcelableArrayListExtra(ScanActivity.BARCODE_PRODUCT);
+            LogUtils.e("list size->"+items.size());
+            if (mList == null) {
+                mList = new ArrayList<>();
+            }
+            mList.addAll(items);
+            mAdapter.setNewData(mList);
+            calculateAmountAndSums();
         }
     }
 
@@ -293,19 +298,24 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
                         .putExtra(CustomerListActivity.FROM_CLASS, TAG));
                 break;
             case R.id.iv_scan:
-                new RxPermissions(this)
-                        .requestEach(Manifest.permission.CAMERA)
-                        .subscribe(new Consumer<Permission>() {
-                            @Override
-                            public void accept(Permission permission) throws Exception {
-                                if (permission.granted) {
-                                    startActivityForResult(new Intent(SalesOrderActivity.this, ScanActivity.class)
-                                            .putExtra(ScanActivity.FROM_CLASS, ScanActivity.SALES_ORDER), RESULT_FOR_SCAN_BAR_CODE);
-                                } else {
-                                    ToastUtils.show(SalesOrderActivity.this, "请开启权限后重新尝试");
+                if (mCustomerBean == null) {
+                    ToastUtils.show(this, "请先选择购买产品的客户");
+                } else {
+                    new RxPermissions(this)
+                            .requestEach(Manifest.permission.CAMERA)
+                            .subscribe(new Consumer<Permission>() {
+                                @Override
+                                public void accept(Permission permission) throws Exception {
+                                    if (permission.granted) {
+                                        startActivityForResult(new Intent(SalesOrderActivity.this, ScanActivity.class)
+                                                .putExtra(ScanActivity.FROM_CLASS, ScanActivity.SALES_ORDER)
+                                                .putExtra(C_ID, TextUtils.isEmpty(mCustomerBean.getC_id()) ? "0" : mCustomerBean.getC_id()), RESULT_FOR_SCAN_BAR_CODE);
+                                    } else {
+                                        ToastUtils.show(SalesOrderActivity.this, "请开启权限后重新尝试");
+                                    }
                                 }
-                            }
-                        });
+                            });
+                }
                 break;
             case R.id.et_filter:
                 if (!mEtFilter.isCursorVisible())
