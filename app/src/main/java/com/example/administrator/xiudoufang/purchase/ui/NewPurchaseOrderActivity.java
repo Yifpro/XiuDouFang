@@ -30,6 +30,7 @@ import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -295,8 +296,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         } else if (requestCode == RESULT_PRODUCT_LIST && data != null) { //******** 返回选择的产品列表 ********
             ArrayList<ProductItem> items = data.getParcelableArrayListExtra(SELECTED_PRODUCT_LIST);
             if (mProductItemList == null) mProductItemList = new ArrayList<>();
-            mProductItemList.addAll(items);
-            mAdapter.setNewData(items);
+            mAdapter.setNewData(mProductItemList);
             mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
             caculateTotalPrice();
         } else if (requestCode == ScanActivity.CREATE_PURCHASE_ORDER && data != null) { //******** 返回扫码产品 ********

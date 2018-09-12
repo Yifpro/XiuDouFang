@@ -335,7 +335,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             ArrayList<ProductItem> items = data.getParcelableArrayListExtra(SELECTED_PRODUCT_LIST);
             if (mList == null) mList = new ArrayList<>();
             mList.addAll(items);
-            mAdapter.setNewData(items);
+            mAdapter.setNewData(mList);
             mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
             mTvBottomRight.setBackgroundResource(R.drawable.rect_4_blue);
             caculateTotalPrice();
