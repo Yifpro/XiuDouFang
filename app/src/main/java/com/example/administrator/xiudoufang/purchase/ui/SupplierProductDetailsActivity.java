@@ -118,10 +118,10 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         mSivGift.setStatus(true);
         mSivUnitPrice.setKey(StringUtils.getSpannableString("单位价*", 3));
         mSivPurchaseAmount.setKey(StringUtils.getSpannableString("采购数量*", 4));
-        boolean isFromPurchaseDetails = PurchaseDetailsActivity.TAG.equals(getIntent().getStringExtra(FROM_CLASS));
+        boolean isShowAdd = SupplierProductListActivity.TAG.equals(getIntent().getStringExtra(FROM_CLASS));
         mSivPriceSource.setValue("历史价");
-        mTvBottomLeft.setText(isFromPurchaseDetails ? "完成编辑" : "添加");
-        mTvBottomRight.setVisibility(isFromPurchaseDetails ? View.GONE : View.VISIBLE);
+        mTvBottomLeft.setText(isShowAdd ? "添加" : "完成编辑");
+        mTvBottomRight.setVisibility(View.GONE);
 
         findViewById(R.id.tv_expand).setOnClickListener(this);
         findViewById(R.id.tv_collapse).setOnClickListener(this);

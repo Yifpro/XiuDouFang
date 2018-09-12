@@ -213,15 +213,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         mAdapter.getFooterLayout().setVisibility(View.GONE);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(NewPurchaseOrderActivity.this, SupplierProductDetailsActivity.class);
-                intent.putExtra(SupplierProductDetailsActivity.FROM_CLASS, TAG);
-                intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM, mProductItemList.get(position));
-                startActivity(intent);
-            }
-        });
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
         LoadingViewDialog.getInstance().show(this);
         loadSubjectList();
     }
@@ -594,6 +586,17 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             tvTotalPrice.setText(mFormat.format(totalPrice));
             tvAmount.setText(String.valueOf(i));
             caculateTotalPrice();
+        }
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            Intent intent = new Intent(NewPurchaseOrderActivity.this, SupplierProductDetailsActivity.class);
+            intent.putExtra(SupplierProductDetailsActivity.FROM_CLASS, TAG);
+            intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM, mProductItemList.get(position));
+            startActivity(intent);
         }
     }
 }
