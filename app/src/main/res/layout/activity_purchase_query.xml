@@ -10,7 +10,7 @@
     <include layout="@layout/layout_toolbar"/>
 
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
-        android:id="@+id/siv_order_num"
+        android:id="@+id/siv_order_no"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:siv_hint="@string/input_order_no"

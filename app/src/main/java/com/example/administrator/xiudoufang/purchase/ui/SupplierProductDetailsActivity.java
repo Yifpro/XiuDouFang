@@ -1,7 +1,6 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -16,11 +15,11 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.ProductItem;
+import com.example.administrator.xiudoufang.bean.StringPair;
 import com.example.administrator.xiudoufang.common.utils.ExpressionUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
-import com.example.administrator.xiudoufang.common.widget.SingleLineTextDialog;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -32,11 +31,10 @@ import java.util.StringTokenizer;
 
 public class SupplierProductDetailsActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
+    private static final String DEFAULT_FACTOR = "1";
     public static final String FROM_CLASS = "from_class";
     public static final String SELECTED_PRODUCT_ITEM = "selected_product_item";
-    public static final String SELECTED_PRODUCT_BEAN = "selected_product_bean";
 
-    private ImageView mIvIcon;
     private TextView mTvExpand;
     private EditText mEtTip;
     private LinearLayout mLinearLayout;
@@ -53,33 +51,28 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
     private SearchInfoView mSivPriceSource;
     private SearchInfoView mSivSinglePrice;
     private SearchInfoView mSivUnitPrice;
-    private SearchInfoView mSivProcutColor;
+    private SearchInfoView mSivColor;
     private SearchInfoView mSivSize;
     private SearchInfoView mSivPurchaseAmount;
     private SearchInfoView mSivGift;
     private SearchInfoView mSivGoodsNo;
     private MoreRateDialog mMoreRateDialog;
-    private SingleLineTextDialog mPurchaseUnitDialog;
+    private PurchaseUnitDialog mPurchaseUnitDialog;
     private SingleLineTextDialog mPriceSourceDialog;
-    private SingleLineTextDialog mSpecDialog;
+    private SingleLineTextDialog mSizxDialog;
     private SingleLineTextDialog mColorDialog;
     private StopProduceDialog mStopProduceDialog;
-    private TextView mTvBottomLeft;
-    private TextView mTvBottomRight;
 
-    private String mFactor;
-    private String mUnit;
-    private String mHistoryPrice;
-    private SupplierProductListBean.SupplierProductBean mSupplierProductBean;
     private ProductItem mProductItem;
-    private ArrayList<String> mPurchaseUnitList;
+    private ArrayList<StringPair> mPurchaseUnitList;
     private ArrayList<String> mPriceSourceList;
     private ArrayList<String> mColorList;
-    private ArrayList<String> mSpecList;
-    private int mPurchaseUnitPosition;
-    private String mColor;
-    private String mSize;
-    private boolean mIsLeft;
+    private ArrayList<String> mSizxList;
+    private String mBilv; //******** 当前比率 ********
+    private String mColor; //******** 当前颜色 ********
+    private String mSize; //******** 当前规格 ********
+    private int mPriceSourceIndex; //******** 当前价格来源 ********
+    private boolean mIsNotGift; //******** true: 当前产品非赠品 ********
 
     @Override
     public int getLayoutId() {
@@ -89,7 +82,6 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
     @Override
     public void initView() {
         setTitle("产品详情");
-        mIvIcon = findViewById(R.id.iv_icon);
         mEtTip = findViewById(R.id.et_tip);
         mTvExpand = findViewById(R.id.tv_expand);
         mLinearLayout = findViewById(R.id.linear_layout);
@@ -106,58 +98,95 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         mSivPriceSource = findViewById(R.id.siv_price_source);
         mSivSinglePrice = findViewById(R.id.siv_single_price);
         mSivUnitPrice = findViewById(R.id.siv_unit_price);
-        mSivProcutColor = findViewById(R.id.siv_product_color);
+        mSivColor = findViewById(R.id.siv_product_color);
         mSivSize = findViewById(R.id.siv_size);
         mSivPurchaseAmount = findViewById(R.id.siv_purchase_amount);
         mSivGift = findViewById(R.id.siv_gift);
         mSivGoodsNo = findViewById(R.id.siv_goods_no);
-        mTvBottomLeft = findViewById(R.id.tv_bottom_left);
-        mTvBottomRight = findViewById(R.id.tv_bottom_right);
+        TextView tvBottomLeft = findViewById(R.id.tv_bottom_left);
+        TextView tvBottomRight = findViewById(R.id.tv_bottom_right);
 
         mSivGift.setStatus(true);
         mSivUnitPrice.setKey(StringUtils.getSpannableString("单位价*", 3));
         mSivPurchaseAmount.setKey(StringUtils.getSpannableString("采购数量*", 4));
         boolean isShowAdd = SupplierProductListActivity.TAG.equals(getIntent().getStringExtra(FROM_CLASS));
         mSivPriceSource.setValue("历史价");
-        mTvBottomLeft.setText(isShowAdd ? "添加" : "完成编辑");
-        mTvBottomRight.setVisibility(View.GONE);
+        tvBottomLeft.setText(isShowAdd ? "添加" : "完成编辑");
+        tvBottomRight.setVisibility(View.GONE);
 
-        findViewById(R.id.tv_expand).setOnClickListener(this);
-        findViewById(R.id.tv_collapse).setOnClickListener(this);
-        mTvBottomLeft.setOnClickListener(this);
-        mTvBottomRight.setOnClickListener(this);
+        mSivSize.setOnClickListener(this);
         mSivPurchaseUnit.setOnClickListener(this);
         mSivPriceSource.setOnClickListener(this);
-        mSivProcutColor.setOnClickListener(this);
-        mSivSize.setOnClickListener(this);
+        mSivColor.setOnClickListener(this);
+        tvBottomLeft.setOnClickListener(this);
+        tvBottomRight.setOnClickListener(this);
+        findViewById(R.id.tv_expand).setOnClickListener(this);
+        findViewById(R.id.tv_collapse).setOnClickListener(this);
         mSivGift.setOnItemChangeListener(new InnerItemChangeListener());
+    }
+
+    @Override
+    public void initData() {
+        mProductItem = getIntent().getParcelableExtra(SELECTED_PRODUCT_ITEM);
+        if (TextUtils.isEmpty(mProductItem.getYanse())) mSivColor.setVisibility(View.GONE);
+        if (TextUtils.isEmpty(mProductItem.getGuige())) mSivSize.setVisibility(View.GONE);
+
+        mBilv = mProductItem.getFactor();
+        GlideApp.with(this).load(StringUtils.PIC_URL + mProductItem.getPhotourl()).error(R.mipmap.ic_error).into((ImageView) findViewById(R.id.iv_icon));
+        mSivProductNo.setValue(mProductItem.getStyleno());
+        mSivProductName.setValue(mProductItem.getStylename());
+        mSivStockAmount.setValue(mProductItem.getKucunqty());
+        mSivFreeAmount.setValue(mProductItem.getZiyouqty());
+        mSivType.setValue(mProductItem.getClassname());
+        mSivBrand.setValue(mProductItem.getPinpai());
+        mSivModel.setValue(mProductItem.getXinghao());
+        mSivBarCode.setValue(mProductItem.getBarcode());
+        mSivDetails.setValue(mProductItem.getDetail());
+        mSivPurchaseUnit.setValue(mProductItem.getFactor() + mProductItem.getUnitname());
+        mSivSinglePrice.setValue(mProductItem.getOrder_prc());
+        mSivUnitPrice.setValue(mProductItem.getS_jiage2());
+        mSivPurchaseAmount.setValue(mProductItem.getCp_qty());
+        mSivGift.setStatus("0".equals(mProductItem.getZengpin()));
+        mSivGoodsNo.setValue(mProductItem.getHuohao());
+        mEtTip.setText(mProductItem.getBz());
     }
 
     //******** 规格选择框 ********
     private void showSizeDialog() {
-        if (mSpecDialog == null) {
-            mSpecDialog = SingleLineTextDialog.newInstance(mSpecList);
-            mSpecDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
+        if (mSizxDialog == null) {
+             mSizxList = new ArrayList<>();
+            for(ProductItem.SizxlistBean bean : mProductItem.getSizxlist()) {
+                mSizxList.add(bean.getSizx());
+            }
+            for (ProductItem.ColorlistBean bean : mProductItem.getColorlist()) {
+                mColorList.add(bean.getColor());
+            }
+            mSizxDialog = SingleLineTextDialog.newInstance(mSizxList);
+            mSizxDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
-                    mSize = mSpecList.get(position);
+                    mSize = mSizxList.get(position);
                     mSivModel.setValue(mSize);
                     mPurchaseUnitDialog.dismiss();
                 }
             });
         }
-        mSpecDialog.show(getSupportFragmentManager(), "SizeDialog");
+        mSizxDialog.show(getSupportFragmentManager(), "SizxDialog");
     }
 
     //******** 产品颜色选择框 ********
     private void showProductColorDialog() {
         if (mColorDialog == null) {
+            mColorList = new ArrayList<>();
+            for (ProductItem.ColorlistBean bean : mProductItem.getColorlist()) {
+                mColorList.add(bean.getColor());
+            }
             mColorDialog = SingleLineTextDialog.newInstance(mColorList);
             mColorDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
                     mColor = mColorList.get(position);
-                    mSivProcutColor.setValue(mColor);
+                    mSivColor.setValue(mColor);
                     mColorDialog.dismiss();
                 }
             });
@@ -178,31 +207,44 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
             mPriceSourceDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
-                    mSivPriceSource.setValue(mPriceSourceList.get(position));
-                    String singlePrice = null;
+                    String singlePrice = "", unitPrice = "", priceCode = "";
                     switch (position) {
                         case 0:
-                            singlePrice = mProductItem == null ? mSupplierProductBean.getLishijialist().get(mPurchaseUnitPosition).getPrice() :
-                                    mProductItem.getLishijialist().get(mPurchaseUnitPosition).getPrice();
+                            int lishiSingleIndex = mProductItem.getLishijialist().indexOf(new ProductItem.LishijialistBean(DEFAULT_FACTOR));
+                            singlePrice = mProductItem.getLishijialist().get(lishiSingleIndex).getPrice();
+                            int lishiUnitIndex = mProductItem.getLishijialist().indexOf(new ProductItem.LishijialistBean(mBilv));
+                            unitPrice = mProductItem.getLishijialist().get(lishiUnitIndex).getPrice();
+                            priceCode = mProductItem.getLishijialist().get(lishiUnitIndex).getPricecode();
                             break;
                         case 1:
-                            singlePrice = mProductItem == null ? mSupplierProductBean.getChengbenjialist().get(mPurchaseUnitPosition).getPrice() :
-                                    mProductItem.getChengbenjialist().get(mPurchaseUnitPosition).getPrice();
+                            int chengbenSingleIndex = mProductItem.getChengbenjialist().indexOf(new ProductItem.ChengbenjialistBean(DEFAULT_FACTOR));
+                            singlePrice = mProductItem.getChengbenjialist().get(chengbenSingleIndex).getPrice();
+                            int chengbenUnitIndex = mProductItem.getChengbenjialist().indexOf(new ProductItem.ChengbenjialistBean(mBilv));
+                            unitPrice = mProductItem.getChengbenjialist().get(chengbenUnitIndex).getPrice();
+                            priceCode = mProductItem.getChengbenjialist().get(chengbenUnitIndex).getPricecode();
                             break;
                         case 2:
-                            singlePrice = mProductItem == null ? mSupplierProductBean.getChuchangjialist().get(mPurchaseUnitPosition).getPrice() :
-                                    mProductItem.getChuchangjialist().get(mPurchaseUnitPosition).getPrice();
+                            int chuchangSingleIndex = mProductItem.getChuchangjialist().indexOf(new ProductItem.ChuchangjialistBean(DEFAULT_FACTOR));
+                            singlePrice = mProductItem.getChuchangjialist().get(chuchangSingleIndex).getPrice();
+                            int chuchangUnitIndex = mProductItem.getChuchangjialist().indexOf(new ProductItem.ChuchangjialistBean(mBilv));
+                            unitPrice = mProductItem.getChuchangjialist().get(chuchangUnitIndex).getPrice();
+                            priceCode = mProductItem.getChuchangjialist().get(chuchangUnitIndex).getPricecode();
                             break;
                         case 3:
-                            singlePrice = mProductItem == null ? mSupplierProductBean.getCankaoshoujialist().get(mPurchaseUnitPosition).getPrice() :
-                                    mProductItem.getCankaoshoujialist().get(mPurchaseUnitPosition).getPrice();
+                            int cankaoSingleIndex = mProductItem.getCankaoshoujialist().indexOf(new ProductItem.CankaoshoujialistBean(DEFAULT_FACTOR));
+                            singlePrice = mProductItem.getCankaoshoujialist().get(cankaoSingleIndex).getPrice();
+                            int cankaoUnitIndex = mProductItem.getCankaoshoujialist().indexOf(new ProductItem.CankaoshoujialistBean(mBilv));
+                            unitPrice = mProductItem.getCankaoshoujialist().get(cankaoUnitIndex).getPrice();
+                            priceCode = mProductItem.getCankaoshoujialist().get(cankaoUnitIndex).getPricecode();
                             break;
                         case 4:
-                            singlePrice = "";
                             break;
                     }
+                    mSivPriceSource.setValue(mPriceSourceList.get(position));
                     mSivSinglePrice.setValue(singlePrice);
-                    mSivUnitPrice.setValue(singlePrice);
+                    mSivUnitPrice.setValue(unitPrice);
+                    mProductItem.setPricecode(priceCode);
+                    mPriceSourceIndex = position;
                 }
             });
         }
@@ -212,149 +254,46 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
     //******** 采购单位选择框 ********
     private void showPurchaseUnitDialog() {
         if (mPurchaseUnitDialog == null) {
-            mPurchaseUnitDialog = SingleLineTextDialog.newInstance(mPurchaseUnitList);
-            mPurchaseUnitDialog.setOnItemChangedListener(new SingleLineTextDialog.OnItemClickListener() {
+            mPurchaseUnitList = new ArrayList<>();
+            for (ProductItem.PacklistBean bean : mProductItem.getPacklist()) {
+                mPurchaseUnitList.add(new StringPair(bean.getUnit_bilv(), bean.getUnitname()));
+            }
+            mPurchaseUnitDialog = PurchaseUnitDialog.newInstance(mPurchaseUnitList);
+            mPurchaseUnitDialog.setOnItemChangedListener(new PurchaseUnitDialog.OnItemClickListener() {
                 @Override
-                public void onItemClick(int position) {
-                    mPurchaseUnitPosition = position;
-                    mSivPurchaseUnit.setValue(mPurchaseUnitList.get(position));
-                    mPurchaseUnitDialog.dismiss();
+                public void onItemClick(int position, String bilv) {
+                    StringPair pair = mPurchaseUnitList.get(position);
+                    String unitPrice= "", priceCode = "";
+                    switch (mPriceSourceIndex) {
+                        case 0:
+                            int lishiUnitIndex = mProductItem.getLishijialist().indexOf(new ProductItem.LishijialistBean(bilv));
+                            unitPrice = mProductItem.getLishijialist().get(lishiUnitIndex).getPrice();
+                            priceCode = mProductItem.getLishijialist().get(lishiUnitIndex).getPricecode();
+                            break;
+                        case 1:
+                            int chengbenUnitIndex = mProductItem.getChengbenjialist().indexOf(new ProductItem.ChengbenjialistBean(mBilv));
+                            unitPrice = mProductItem.getChengbenjialist().get(chengbenUnitIndex).getPrice();
+                            priceCode = mProductItem.getChengbenjialist().get(chengbenUnitIndex).getPricecode();
+                            break;
+                        case 2:
+                            int chuchangUnitIndex = mProductItem.getChuchangjialist().indexOf(new ProductItem.ChuchangjialistBean(mBilv));
+                            unitPrice = mProductItem.getChuchangjialist().get(chuchangUnitIndex).getPrice();
+                            priceCode = mProductItem.getChuchangjialist().get(chuchangUnitIndex).getPricecode();
+                            break;
+                        case 3:
+                            int cankaoUnitIndex = mProductItem.getCankaoshoujialist().indexOf(new ProductItem.CankaoshoujialistBean(mBilv));
+                            unitPrice = mProductItem.getCankaoshoujialist().get(cankaoUnitIndex).getPrice();
+                            priceCode = mProductItem.getCankaoshoujialist().get(cankaoUnitIndex).getPricecode();
+                            break;
+                    }
+                    mSivPurchaseUnit.setValue(pair.getKey() + pair.getValue());
+                    mSivUnitPrice.setValue(unitPrice);
+                    mProductItem.setPricecode(priceCode);
+                    mBilv = bilv;
                 }
             });
         }
         mPurchaseUnitDialog.show(getSupportFragmentManager(), "PurchaseUnitDialog");
-    }
-
-    @Override
-    public void initData() {
-        if (getIntent() != null) {
-            String photoUrl, productNo, productName, stockAmount, freeAmount, type, brand, model, barCode, details,
-                    singlePrice = "", unitPrice = "", amount = "", goodsNo = "", tip = "";
-            boolean isNotGift = true;
-            mPurchaseUnitList = new ArrayList<>();
-            Parcelable extra = getIntent().getParcelableExtra(SELECTED_PRODUCT_ITEM);
-            if (extra instanceof ProductItem) {
-                mProductItem = (ProductItem) extra;
-                photoUrl = mProductItem.getPhotourl();
-                productNo = mProductItem.getProductNo();
-                productName = mProductItem.getStylename();
-                stockAmount = mProductItem.getStockAmount();
-                freeAmount = mProductItem.getFreeAmount();
-                type = mProductItem.getType();
-                brand = mProductItem.getBrand();
-                model = mProductItem.getModel();
-                barCode = mProductItem.getPriceCode();
-                details = mProductItem.getDetails();
-                amount = mProductItem.getAmount();
-                isNotGift = !mProductItem.isGift();
-                goodsNo = mProductItem.getGoodsNo();
-                tip = mProductItem.getTip();
-                if (mProductItem.getPacklist() != null) {
-                    for (int i = 0; i < mProductItem.getPacklist().size(); i++) {
-                        ProductItem.PacklistBean bean = mProductItem.getPacklist().get(i);
-                        if ("1".equals(bean.getCheck())) {
-                            mFactor = bean.getUnit_bilv();
-                            mUnit = bean.getUnitname();
-                            mPurchaseUnitPosition = i;
-                        }
-                        mPurchaseUnitList.add(bean.getUnit_bilv() + bean.getUnitname());
-                    }
-                }
-                if (mProductItem.getLishijialist() != null) {
-                    for (ProductItem.LishijialistBean bean : mProductItem.getLishijialist()) {
-                        if (mFactor.equals(bean.getUnit_bilv()) && mUnit.equals(bean.getUnitname())) {
-                            unitPrice = singlePrice = bean.getPrice();
-                        }
-                        if ("1".equals(bean.getUnit_bilv())) mHistoryPrice = bean.getPrice();
-                    }
-                }
-                if (mProductItem.getSizxlist() == null || mProductItem.getSizxlist().size() == 0) {
-                    mSivSize.setVisibility(View.GONE);
-                } else {
-                    mSpecList = new ArrayList<>();
-                    for (ProductItem.SizxlistBean bean : mProductItem.getSizxlist()) {
-                        mSpecList.add(bean.getSizx());
-                    }
-                }
-                if (mProductItem.getColorlist() == null || mProductItem.getColorlist().size() == 0) {
-                    mSivProcutColor.setVisibility(View.GONE);
-                } else {
-                    mColorList = new ArrayList<>();
-                    mColorList.add("无");
-                    for (ProductItem.ColorlistBean bean : mProductItem.getColorlist()) {
-                        mColorList.add(bean.getColor());
-                    }
-                }
-            } else {
-                mSupplierProductBean = getIntent().getParcelableExtra(SELECTED_PRODUCT_BEAN);
-                photoUrl = StringUtils.PIC_URL + mSupplierProductBean.getPhotourl();
-                productNo = mSupplierProductBean.getStyleno();
-                productName = mSupplierProductBean.getStylename();
-                stockAmount = mSupplierProductBean.getKucunqty();
-                freeAmount = mSupplierProductBean.getZiyouqty();
-                type = mSupplierProductBean.getClassname();
-                brand = mSupplierProductBean.getPinpai();
-                model = mSupplierProductBean.getXinghao();
-                barCode = mSupplierProductBean.getBarcode();
-                details = mSupplierProductBean.getDetail();
-                if (mSupplierProductBean.getPacklist() != null) {
-                    for (int i = 0; i < mSupplierProductBean.getPacklist().size(); i++) {
-                        SupplierProductListBean.SupplierProductBean.PacklistBean bean = mSupplierProductBean.getPacklist().get(i);
-                        if ("1".equals(bean.getCheck())) {
-                            mFactor = bean.getUnit_bilv();
-                            mUnit = bean.getUnitname();
-                            mPurchaseUnitPosition = i;
-                        }
-                        mPurchaseUnitList.add(bean.getUnit_bilv() + bean.getUnitname());
-                    }
-                }
-                if (mSupplierProductBean.getLishijialist() != null) {
-                    for (SupplierProductListBean.SupplierProductBean.LishijialistBean bean : mSupplierProductBean.getLishijialist()) {
-                        if (mFactor.equals(bean.getUnit_bilv()) && mUnit.equals(bean.getUnitname())) {
-                            unitPrice = singlePrice = bean.getPrice();
-                        }
-                        if ("1".equals(bean.getUnit_bilv())) {
-                            mHistoryPrice = bean.getPrice();
-                        }
-                    }
-                }
-
-                if (mSupplierProductBean.getSizxlist() != null && mSupplierProductBean.getSizxlist().size() == 0) {
-                    mSivSize.setVisibility(View.GONE);
-                } else {
-                    mSpecList = new ArrayList<>();
-                    for (SupplierProductListBean.SupplierProductBean.SizxlistBean bean : mSupplierProductBean.getSizxlist()) {
-                        mSpecList.add(bean.getSizx());
-                    }
-                }
-                if (mSupplierProductBean.getColorlist() != null && mSupplierProductBean.getColorlist().size() == 0) {
-                    mSivProcutColor.setVisibility(View.GONE);
-                } else {
-                    mColorList = new ArrayList<>();
-                    mColorList.add("无");
-                    for (SupplierProductListBean.SupplierProductBean.ColorlistBean bean : mSupplierProductBean.getColorlist()) {
-                        mColorList.add(bean.getColor());
-                    }
-                }
-            }
-            GlideApp.with(this).load(photoUrl).error(R.mipmap.ic_error).into(mIvIcon);
-            mSivProductNo.setValue(productNo);
-            mSivProductName.setValue(productName);
-            mSivStockAmount.setValue(stockAmount);
-            mSivFreeAmount.setValue(freeAmount);
-            mSivType.setValue(type);
-            mSivBrand.setValue(brand);
-            mSivModel.setValue(model);
-            mSivBarCode.setValue(barCode);
-            mSivDetails.setValue(details);
-            mSivPurchaseUnit.setValue(mFactor + mUnit);
-            mSivSinglePrice.setValue(singlePrice);
-            mSivUnitPrice.setValue(unitPrice);
-            mSivPurchaseAmount.setValue(amount);
-            mSivGift.setStatus(isNotGift);
-            mSivGoodsNo.setValue(goodsNo);
-            mEtTip.setText(tip);
-        }
     }
 
     @Override
@@ -383,18 +322,20 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
             case R.id.tv_bottom_right:
                 break;
             case R.id.tv_bottom_left:
-                if (TextUtils.isEmpty(mSivUnitPrice.getValue())) {
+                if (TextUtils.isEmpty(mSivUnitPrice.getValue())) { //******** 单位价是否为空 ********
                     mSivUnitPrice.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
-                } else if (TextUtils.isEmpty(mSivPurchaseAmount.getValue())) {
+                } else if (TextUtils.isEmpty(mSivPurchaseAmount.getValue())) { //******** 采购数量是否为空 ********
                     mSivPurchaseAmount.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
-                } else if ("0".equals(mSivPurchaseAmount.getValue()) || TextUtils.isEmpty(mSivPurchaseAmount.getValue())) {
+                } else if ("0".equals(mSivPurchaseAmount.getValue()) || TextUtils.isEmpty(mSivPurchaseAmount.getValue())) { //******** 产品数量是否小于1 ********
                     ToastUtils.show(this, "商品数量不能小于 1");
-                } else if (checkStopProduce()) {
+                } else if (checkStopProduce()) { //******** 是否为停产产品 ********
                     if (mStopProduceDialog == null)
                         mStopProduceDialog = new StopProduceDialog();
                     mStopProduceDialog.show(getSupportFragmentManager(), "StopProduceDialog");
                 } else {
-                    double historyPrice = Double.parseDouble(mHistoryPrice);
+                    //******** 历史价大于0时，弹出价格变动提示框 ********
+                    int index = mProductItem.getLishijialist().indexOf(new ProductItem.LishijialistBean(mProductItem.getFactor()));
+                    double historyPrice = Double.parseDouble(mProductItem.getLishijialist().get(index).getPrice());
                     if (historyPrice > 0) {
                         DecimalFormat decimalFormat = new DecimalFormat("0.00");
                         double unitPrice = Double.parseDouble(mSivUnitPrice.getValue());
@@ -424,22 +365,10 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
 
     //******** 检查产品是否停产 ********
     private boolean checkStopProduce() {
-        if (mProductItem == null && "1".equals(mSupplierProductBean.getStop_produce())) return true;
-        return mSupplierProductBean == null && mProductItem.isStopProduce();
+        return "1".equals(mProductItem.getStop_produce());
     }
 
     private void addProduct() {
-        ProductItem item = new ProductItem();
-        item.setCpid(mProductItem == null ? mSupplierProductBean.getCpid() : mProductItem.getCpid());
-        item.setPhotourl(mProductItem == null ? mSupplierProductBean.getPhotourl() : mProductItem.getPhotourl());
-        item.setProductNo(mSivProductNo.getValue());
-        item.setStylename(mSivProductName.getValue());
-        item.setStockAmount(mSivStockAmount.getValue());
-        item.setFreeAmount(mSivFreeAmount.getValue());
-        item.setType(mSivType.getValue());
-        item.setBrand(mSivBrand.getValue());
-        item.setModel(mSivModel.getValue());
-        item.setDetails(mSivDetails.getValue());
         char[] chars = mSivPurchaseUnit.getValue().toCharArray();
         StringBuilder sb = new StringBuilder();
         int unitIndex = 0;
@@ -450,16 +379,16 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
                 unitIndex = i;
             }
         }
-        item.setFactor(sb.toString());
-        item.setUnit(mSivPurchaseUnit.getValue().substring(unitIndex + 1));
-        item.setSinglePrice(mSivSinglePrice.getValue());
-        item.setUnitPrice(mSivUnitPrice.getValue());
-        item.setSize(mSivSize.getValue());
-        item.setColor(mSivProcutColor.getValue());
-        item.setAmount(mSivPurchaseAmount.getValue());
-        item.setGift(!mIsLeft);
-        item.setGoodsNo(mSivGoodsNo.getValue());
-        item.setTip(mEtTip.getText().toString());
+        mProductItem.setFactor(sb.toString());
+        mProductItem.setUnitname(mSivPurchaseUnit.getValue().substring(unitIndex + 1));
+        mProductItem.setOrder_prc(mSivSinglePrice.getValue());
+        mProductItem.setS_jiage2(mSivUnitPrice.getValue());
+        mProductItem.setGuige(mSivSize.getValue());
+        mProductItem.setYanse(mSivColor.getValue());
+        mProductItem.setCp_qty(mSivPurchaseAmount.getValue());
+        mProductItem.setZengpin(mIsNotGift ? "0" : "1");
+        mProductItem.setHuohao(mSivGoodsNo.getValue());
+        mProductItem.setBz(mEtTip.getText().toString());
         JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
         String fomula = jsonObject.getString("po_jiamae_gongshi").replace("价格", mSivUnitPrice.getValue());
         StringTokenizer tokenizer = new StringTokenizer(fomula, ",");
@@ -467,10 +396,10 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         while (tokenizer.hasMoreTokens()) {
             builder.append(tokenizer.nextToken());
         }
-        item.setPriceCode(ExpressionUtils.getInstance().caculate(builder.toString()));
-        item.setPriceSource(mSivPriceSource.getValue());
+        mProductItem.setPricecode(ExpressionUtils.getInstance().caculate(builder.toString()));
+        mProductItem.setJiagelaiyuan(mSivPriceSource.getValue());
         Intent intent = new Intent(SupplierProductDetailsActivity.this, NewPurchaseOrderActivity.class);
-        intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, item);
+        intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, mProductItem);
         startActivity(intent);
     }
 
@@ -478,7 +407,7 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
 
         @Override
         public void onItemchange(boolean isLeft) {
-            mIsLeft = isLeft;
+            mIsNotGift = isLeft;
         }
     }
 }

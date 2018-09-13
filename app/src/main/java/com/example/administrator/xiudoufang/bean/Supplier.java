@@ -9,35 +9,17 @@ import android.os.Parcelable;
 
 public class Supplier implements Parcelable {
 
-    private String c_id;
-    private String iid;
-    private String customerNo;
-    private String name;
-    private String totalName;
-    private String debt;
-    private String phoneNum;
-    private String newPhoneNum;
-    private String newTelephoneNum;
-    private String newContact;
-    private String areaNo;
-    private String areaName;
-    private String fendianid = "0";
-
-    public String getIid() {
-        return iid;
-    }
-
-    public void setIid(String iid) {
-        this.iid = iid;
-    }
-
-    public String getFendianid() {
-        return fendianid;
-    }
-
-    public void setFendianid(String fendianid) {
-        this.fendianid = fendianid;
-    }
+    private String c_id = "0"; //******** 供应商id ********
+    private String customerno = ""; //******** 供应商编号 ********
+    private String customername = ""; //******** 供应商名称 ********
+    private String quancheng; //******** 全称 ********
+    private String debt; //******** 前结欠 ********
+    private String lianxiren = ""; //******** 联系人 ********
+    private String telephone = ""; //******** 手机 ********
+    private String dianhua = ""; //******** 电话 ********
+    private String quyuno = ""; //******** 区域编号 ********
+    private String quyu = ""; //******** 区域名称 ********
+    private String fendianid = "0"; //******** 分店id ********
 
     public String getC_id() {
         return c_id;
@@ -47,28 +29,28 @@ public class Supplier implements Parcelable {
         this.c_id = c_id;
     }
 
-    public String getCustomerNo() {
-        return customerNo;
+    public String getCustomerno() {
+        return customerno;
     }
 
-    public void setCustomerNo(String customerNo) {
-        this.customerNo = customerNo;
+    public void setCustomerno(String customerno) {
+        this.customerno = customerno;
     }
 
-    public String getName() {
-        return name;
+    public String getCustomername() {
+        return customername;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCustomername(String customername) {
+        this.customername = customername;
     }
 
-    public String getTotalName() {
-        return totalName;
+    public String getQuancheng() {
+        return quancheng;
     }
 
-    public void setTotalName(String totalName) {
-        this.totalName = totalName;
+    public void setQuancheng(String quancheng) {
+        this.quancheng = quancheng;
     }
 
     public String getDebt() {
@@ -79,55 +61,52 @@ public class Supplier implements Parcelable {
         this.debt = debt;
     }
 
-    public String getPhoneNum() {
-        return phoneNum;
+    public String getLianxiren() {
+        return lianxiren;
     }
 
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
+    public void setLianxiren(String lianxiren) {
+        this.lianxiren = lianxiren;
     }
 
-    public String getNewPhoneNum() {
-        return newPhoneNum;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setNewPhoneNum(String newPhoneNum) {
-        this.newPhoneNum = newPhoneNum;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
-    public String getNewTelephoneNum() {
-        return newTelephoneNum;
+    public String getDianhua() {
+        return dianhua;
     }
 
-    public void setNewTelephoneNum(String newTelephoneNum) {
-        this.newTelephoneNum = newTelephoneNum;
+    public void setDianhua(String dianhua) {
+        this.dianhua = dianhua;
     }
 
-    public String getNewContact() {
-        return newContact;
+    public String getQuyuno() {
+        return quyuno;
     }
 
-    public void setNewContact(String newContact) {
-        this.newContact = newContact;
+    public void setQuyuno(String quyuno) {
+        this.quyuno = quyuno;
     }
 
-    public String getAreaNo() {
-        return areaNo;
+    public String getQuyu() {
+        return quyu;
     }
 
-    public void setAreaNo(String areaNo) {
-        this.areaNo = areaNo;
+    public void setQuyu(String quyu) {
+        this.quyu = quyu;
     }
 
-    public String getAreaName() {
-        return areaName;
+    public String getFendianid() {
+        return fendianid;
     }
 
-    public void setAreaName(String areaName) {
-        this.areaName = areaName;
-    }
-
-    public Supplier() {
+    public void setFendianid(String fendianid) {
+        this.fendianid = fendianid;
     }
 
     @Override
@@ -138,33 +117,32 @@ public class Supplier implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.c_id);
-        dest.writeString(this.iid);
-        dest.writeString(this.customerNo);
-        dest.writeString(this.name);
-        dest.writeString(this.totalName);
+        dest.writeString(this.customerno);
+        dest.writeString(this.customername);
+        dest.writeString(this.quancheng);
         dest.writeString(this.debt);
-        dest.writeString(this.phoneNum);
-        dest.writeString(this.newPhoneNum);
-        dest.writeString(this.newTelephoneNum);
-        dest.writeString(this.newContact);
-        dest.writeString(this.areaNo);
-        dest.writeString(this.areaName);
+        dest.writeString(this.lianxiren);
+        dest.writeString(this.telephone);
+        dest.writeString(this.dianhua);
+        dest.writeString(this.quyuno);
+        dest.writeString(this.quyu);
         dest.writeString(this.fendianid);
+    }
+
+    public Supplier() {
     }
 
     protected Supplier(Parcel in) {
         this.c_id = in.readString();
-        this.iid = in.readString();
-        this.customerNo = in.readString();
-        this.name = in.readString();
-        this.totalName = in.readString();
+        this.customerno = in.readString();
+        this.customername = in.readString();
+        this.quancheng = in.readString();
         this.debt = in.readString();
-        this.phoneNum = in.readString();
-        this.newPhoneNum = in.readString();
-        this.newTelephoneNum = in.readString();
-        this.newContact = in.readString();
-        this.areaNo = in.readString();
-        this.areaName = in.readString();
+        this.lianxiren = in.readString();
+        this.telephone = in.readString();
+        this.dianhua = in.readString();
+        this.quyuno = in.readString();
+        this.quyu = in.readString();
         this.fendianid = in.readString();
     }
 

@@ -37,26 +37,61 @@ public class ProductItem implements Parcelable {
 
     private String unitname; //******** 单位 ********
     private String iid; //******** 采购单id ********
-    private String pnid; //******** 当前行id ********
+    private String pnid = "0"; //******** 当前行id ********
     private String puOrderNo; //******** 采购单编号 ********
-    private String yanse; //******** 颜色 ********
-    private String guige; //******** 规格 ********
+    private String yanse = ""; //******** 颜色 ********
+    private String guige = ""; //******** 规格 ********
     private String order_prc; //******** 单品价格 ********
     private String factor; //******** 比率 ********
     private String s_jiage2; //******** 单位价格 ********
     private String pricecode; //******** 单位价价码 ********
-    private String orderqty; //******** 采购数量 ********
-    private String cp_qty; //******** 数量 ********
+    private String orderqty; //******** 采购数量（单品） ********
+    private String cp_qty; //******** 数量（单位） ********
     private String orderamt; //******** 金额 ********
     private String rcvqty; //******** 收货数量 ********
     private String rcvamt; //******** 收货金额 ********
     private String statusstr; //******** 当前产品状态 ********
-    private String bz; //******** 备注 ********
+    private String bz = ""; //******** 备注 ********
     private String zhuancaigou_pnid; //******** 暂时没用 ********
     private String fujian; //******** 附件 ********
+    private String huohao = ""; //******** 货号 ********
     private String zengpin; //******** 赠品 ********
-    private String jiagelaiyuan; //******** 价格来源 ********
+    private String jiagelaiyuan = "历史价"; //******** 价格来源 ********
     private String buttonstatus_str; //******** 按钮显示的文本 ********
+
+    private boolean isShowSelect;
+    private boolean isSelected;
+
+    public ProductItem() {
+    }
+
+    public ProductItem(String cpid) {
+        this.cpid = cpid;
+    }
+
+    public boolean isShowSelect() {
+        return isShowSelect;
+    }
+
+    public void setShowSelect(boolean showSelect) {
+        isShowSelect = showSelect;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public String getHuohao() {
+        return huohao;
+    }
+
+    public void setHuohao(String huohao) {
+        this.huohao = huohao;
+    }
 
     public String getDianid() {
         return dianid;
@@ -418,13 +453,12 @@ public class ProductItem implements Parcelable {
         this.buttonstatus_str = buttonstatus_str;
     }
 
-    public static Creator<ProductItem> getCREATOR() {
-        return CREATOR;
-    }
-
     public static class ColorlistBean implements Parcelable {
 
         private String color;
+
+        public ColorlistBean() {
+        }
 
         public ColorlistBean(String color) {
             this.color = color;
@@ -446,9 +480,6 @@ public class ProductItem implements Parcelable {
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(this.color);
-        }
-
-        public ColorlistBean() {
         }
 
         protected ColorlistBean(Parcel in) {
@@ -542,6 +573,9 @@ public class ProductItem implements Parcelable {
 
         private String sizx;
 
+        public SizxlistBean() {
+        }
+
         public SizxlistBean(String sizx) {
             this.sizx = sizx;
         }
@@ -562,9 +596,6 @@ public class ProductItem implements Parcelable {
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(this.sizx);
-        }
-
-        public SizxlistBean() {
         }
 
         protected SizxlistBean(Parcel in) {
@@ -588,6 +619,9 @@ public class ProductItem implements Parcelable {
 
         private String pic;
 
+        public PiclistBean() {
+        }
+
         public PiclistBean(String pic) {
             this.pic = pic;
         }
@@ -608,9 +642,6 @@ public class ProductItem implements Parcelable {
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(this.pic);
-        }
-
-        public PiclistBean() {
         }
 
         protected PiclistBean(Parcel in) {
@@ -636,6 +667,33 @@ public class ProductItem implements Parcelable {
         private String unitname;
         private String price;
         private String pricecode;
+
+        public LishijialistBean() {
+        }
+
+        public LishijialistBean(String unit_bilv) {
+            this.unit_bilv = unit_bilv;
+        }
+
+        public LishijialistBean(String unit_bilv, String unitname) {
+            this.unit_bilv = unit_bilv;
+            this.unitname = unitname;
+        }
+
+        public LishijialistBean(String unit_bilv, String unitname, String price, String pricecode) {
+            this.unit_bilv = unit_bilv;
+            this.unitname = unitname;
+            this.price = price;
+            this.pricecode = pricecode;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof LishijialistBean) {
+                return getUnit_bilv().equals(((LishijialistBean) obj).getUnit_bilv());
+            }
+            return false;
+        }
 
         public String getUnit_bilv() {
             return unit_bilv;
@@ -680,9 +738,6 @@ public class ProductItem implements Parcelable {
             dest.writeString(this.unitname);
             dest.writeString(this.price);
             dest.writeString(this.pricecode);
-        }
-
-        public LishijialistBean() {
         }
 
         protected LishijialistBean(Parcel in) {
@@ -712,6 +767,28 @@ public class ProductItem implements Parcelable {
         private String price;
         private String pricecode;
 
+        public ChengbenjialistBean() {
+        }
+
+        public ChengbenjialistBean(String unit_bilv) {
+            this.unit_bilv = unit_bilv;
+        }
+
+        public ChengbenjialistBean(String unit_bilv, String unitname, String price, String pricecode) {
+            this.unit_bilv = unit_bilv;
+            this.unitname = unitname;
+            this.price = price;
+            this.pricecode = pricecode;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof ChengbenjialistBean) {
+                return getUnit_bilv().equals(((ChengbenjialistBean) obj).getUnit_bilv());
+            }
+            return false;
+        }
+
         public String getUnit_bilv() {
             return unit_bilv;
         }
@@ -755,9 +832,6 @@ public class ProductItem implements Parcelable {
             dest.writeString(this.unitname);
             dest.writeString(this.price);
             dest.writeString(this.pricecode);
-        }
-
-        public ChengbenjialistBean() {
         }
 
         protected ChengbenjialistBean(Parcel in) {
@@ -787,6 +861,28 @@ public class ProductItem implements Parcelable {
         private String price;
         private String pricecode;
 
+        public CankaoshoujialistBean() {
+        }
+
+        public CankaoshoujialistBean(String unit_bilv) {
+            this.unit_bilv = unit_bilv;
+        }
+
+        public CankaoshoujialistBean(String unit_bilv, String unitname, String price, String pricecode) {
+            this.unit_bilv = unit_bilv;
+            this.unitname = unitname;
+            this.price = price;
+            this.pricecode = pricecode;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof CankaoshoujialistBean) {
+                return getUnit_bilv().equals(((CankaoshoujialistBean) obj).getUnit_bilv());
+            }
+            return false;
+        }
+
         public String getUnit_bilv() {
             return unit_bilv;
         }
@@ -830,9 +926,6 @@ public class ProductItem implements Parcelable {
             dest.writeString(this.unitname);
             dest.writeString(this.price);
             dest.writeString(this.pricecode);
-        }
-
-        public CankaoshoujialistBean() {
         }
 
         protected CankaoshoujialistBean(Parcel in) {
@@ -862,6 +955,28 @@ public class ProductItem implements Parcelable {
         private String price;
         private String pricecode;
 
+        public ChuchangjialistBean() {
+        }
+
+        public ChuchangjialistBean(String unit_bilv) {
+            this.unit_bilv = unit_bilv;
+        }
+
+        public ChuchangjialistBean(String unit_bilv, String unitname, String price, String pricecode) {
+            this.unit_bilv = unit_bilv;
+            this.unitname = unitname;
+            this.price = price;
+            this.pricecode = pricecode;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof ChuchangjialistBean) {
+                return getUnit_bilv().equals(((ChuchangjialistBean) obj).getUnit_bilv());
+            }
+            return false;
+        }
+
         public String getUnit_bilv() {
             return unit_bilv;
         }
@@ -905,9 +1020,6 @@ public class ProductItem implements Parcelable {
             dest.writeString(this.unitname);
             dest.writeString(this.price);
             dest.writeString(this.pricecode);
-        }
-
-        public ChuchangjialistBean() {
         }
 
         protected ChuchangjialistBean(Parcel in) {
@@ -979,12 +1091,12 @@ public class ProductItem implements Parcelable {
         dest.writeString(this.bz);
         dest.writeString(this.zhuancaigou_pnid);
         dest.writeString(this.fujian);
+        dest.writeString(this.huohao);
         dest.writeString(this.zengpin);
         dest.writeString(this.jiagelaiyuan);
         dest.writeString(this.buttonstatus_str);
-    }
-
-    public ProductItem() {
+        dest.writeByte(this.isShowSelect ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
     }
 
     protected ProductItem(Parcel in) {
@@ -1030,9 +1142,12 @@ public class ProductItem implements Parcelable {
         this.bz = in.readString();
         this.zhuancaigou_pnid = in.readString();
         this.fujian = in.readString();
+        this.huohao = in.readString();
         this.zengpin = in.readString();
         this.jiagelaiyuan = in.readString();
         this.buttonstatus_str = in.readString();
+        this.isShowSelect = in.readByte() != 0;
+        this.isSelected = in.readByte() != 0;
     }
 
     public static final Creator<ProductItem> CREATOR = new Creator<ProductItem>() {

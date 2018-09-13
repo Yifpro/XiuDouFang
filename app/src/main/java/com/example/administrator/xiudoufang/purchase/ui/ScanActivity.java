@@ -191,7 +191,7 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
                 break;
             case CREATE_PURCHASE_ORDER: //******** 新开采购单 ********
             case PURCHASE_ORDER_DETAILS: //******** 采购单详情 ********
-                NewPurchaseOrderLogic newPurchaseOrderLogic = new NewPurchaseOrderLogic();
+                final NewPurchaseOrderLogic newPurchaseOrderLogic = new NewPurchaseOrderLogic();
                 HashMap<String, String> params_4 = new HashMap<>();
                 params_4.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
                 params_4.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
@@ -201,19 +201,15 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
                 params_4.put("dqcpid", "0"); //******** 产品id ********
                 params_4.put("serchitem", result);
                 params_4.put("pagenum", String.valueOf(PAGENUM));
-                newPurchaseOrderLogic.requestProductList(this, params_4, new JsonCallback<SupplierProductListBean>() {
+                newPurchaseOrderLogic.requestProductList(this, params_4, new JsonCallback<String>() {
                     @Override
-                    public void onSuccess(Response<SupplierProductListBean> response) {
+                    public void onSuccess(Response<String> response) {
                         LoadingViewDialog.getInstance().dismiss();
-                        List<SupplierProductListBean.SupplierProductBean> temp = response.body().getPo_chanpinlist();
+                        ArrayList<ProductItem> temp = newPurchaseOrderLogic.parseProductListJson(JSONObject.parseObject(response.body()));
                         if (temp.size() > 0) {
                             if (temp.size() > 1) {
                                 //******** 返回多个同条形码的产品 ********
-                                ArrayList<SupplierProductListBean.SupplierProductBean> list = new ArrayList<>(temp.size());
-                                for (SupplierProductListBean.SupplierProductBean bean : temp) {
-                                    list.add(bean);
-                                }
-                                SameBarcodeSupplierProductDialog.newInstance(fromClass, list)
+                                SameBarcodeSupplierProductDialog.newInstance(fromClass, temp)
                                         .setOnItemClickListener(new SameBarcodeSupplierProductDialog.OnItemClickListener() {
                                             @Override
                                             public void onSubmit(ArrayList<ProductItem> result) {
@@ -230,34 +226,7 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
                             } else {
                                 //******** 返回单个产品 ********
                                 Intent intent = new Intent();
-                                ProductItem item = new ProductItem();
-                                SupplierProductListBean.SupplierProductBean bean = temp.get(0);
-                                item.setPhotourl(bean.getPhotourl());
-                                item.setCpid(bean.getCpid());
-                                item.setProductNo(bean.getStyleno());
-                                item.setStylename(bean.getStylename());
-                                item.setColor("");
-                                item.setSize("");
-                                String factor = "", unit = "";
-                                for (SupplierProductListBean.SupplierProductBean.PacklistBean b : bean.getPacklist()) {
-                                    if ("1".equals(b.getCheck())) {
-                                        factor = b.getUnit_bilv();
-                                        unit = b.getUnitname();
-                                    }
-                                }
-                                SupplierProductListBean.SupplierProductBean.LishijialistBean historyBean = bean.getLishijialist().get(bean.getLishijialist().indexOf(new SupplierProductListBean.SupplierProductBean.LishijialistBean(factor, unit)));
-                                item.setFactor(factor);
-                                item.setUnit(unit);
-                                item.setAmount("1");
-                                item.setSinglePrice(historyBean.getPrice());
-                                item.setUnitPrice(historyBean.getPrice());
-                                item.setTip("");
-                                item.setGoodsNo("");
-                                item.setPriceCode(historyBean.getPricecode());
-                                item.setPriceSource("历史价");
-                                ArrayList<ProductItem> list = new ArrayList<>();
-                                list.add(item);
-                                intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, list);
+                                intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, temp);
                                 setResult(Activity.RESULT_OK, intent);
                                 finish();
                             }

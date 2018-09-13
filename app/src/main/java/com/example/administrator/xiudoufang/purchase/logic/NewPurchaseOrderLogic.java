@@ -1,6 +1,7 @@
 package com.example.administrator.xiudoufang.purchase.logic;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -76,54 +77,54 @@ public class NewPurchaseOrderLogic {
                 .execute(callback);
     }
 
-    public List<ProductItem> parseProductListJson(JSONObject jsonObject) {
+    //******** 解析产品列表返回的json ********
+    public ArrayList<ProductItem> parseProductListJson(JSONObject jsonObject) {
         ArrayList<ProductItem> list = new ArrayList<>();
         JSONArray po_chanpinlist = jsonObject.getJSONArray("po_chanpinlist");
         for (int i = 0; i < po_chanpinlist.size(); i++) {
             JSONObject object = po_chanpinlist.getJSONObject(i);
-            ProductItem productItem = new ProductItem();
-            productItem.setCpid(object.getString("dianid"));
-            productItem.setCpid(object.getString("cpid"));
-            productItem.setCpid(object.getString("styleno"));
-            productItem.setCpid(object.getString("barcode"));
-            productItem.setCpid(object.getString("stylename"));
-            productItem.setCpid(object.getString("classname"));
-            productItem.setCpid(object.getString("photourl"));
-            productItem.setCpid(object.getString("xinghao"));
-            productItem.setCpid(object.getString("pinpai"));
-            productItem.setCpid(object.getString("detail"));
-            productItem.setCpid(object.getString("kucunqty"));
-            productItem.setCpid(object.getString("ziyouqty"));
-            productItem.setCpid(object.getString("stop_produce"));
-            productItem.setCpid(object.getString("stop_sales"));
-            productItem.setCpid(object.getString("pounitname"));
-            JSONArray colorlist = object.getJSONArray("colorlist");
-            List<ProductItem.ColorlistBean> colorlistBeen = null;
-            if (colorlist.size() > 0) {
-                colorlistBeen = new ArrayList<>();
-                for (int j = 0; j < colorlist.size(); j++) {
-                    String color = colorlist.getJSONObject(j).getString("color");
-                    colorlistBeen.add(new ProductItem.ColorlistBean(color));
+            ProductItem item = new ProductItem();
+            item.setDianid(object.getString("dianid"));
+            item.setCpid(object.getString("cpid"));
+            item.setStyleno(object.getString("styleno"));
+            item.setBarcode(object.getString("barcode"));
+            item.setStylename(object.getString("stylename"));
+            item.setClassname(object.getString("classname"));
+            item.setPhotourl(object.getString("photourl"));
+            item.setXinghao(object.getString("xinghao"));
+            item.setPinpai(object.getString("pinpai"));
+            item.setDetail(object.getString("detail"));
+            item.setKucunqty(object.getString("kucunqty"));
+            item.setZiyouqty(object.getString("ziyouqty"));
+            item.setStop_produce(object.getString("stop_produce"));
+            item.setStop_sales(object.getString("stop_sales"));
+            item.setPounitname(object.getString("pounitname"));
+            item.setColorlist(JSONArray.parseArray(object.getJSONArray("colorlist").toJSONString(), ProductItem.ColorlistBean.class));
+            item.setPacklist(JSONArray.parseArray(object.getJSONArray("packlist").toJSONString(), ProductItem.PacklistBean.class));
+            item.setSizxlist(JSONArray.parseArray(object.getJSONArray("sizxlist").toJSONString(), ProductItem.SizxlistBean.class));
+            item.setPiclist(JSONArray.parseArray(object.getJSONArray("piclist").toJSONString(), ProductItem.PiclistBean.class));
+            item.setLishijialist(JSONArray.parseArray(object.getJSONArray("lishijialist").toJSONString(), ProductItem.LishijialistBean.class));
+            item.setChengbenjialist(JSONArray.parseArray(object.getJSONArray("chengbenjialist").toJSONString(), ProductItem.ChengbenjialistBean.class));
+            item.setCankaoshoujialist(JSONArray.parseArray(object.getJSONArray("cankaoshoujialist").toJSONString(), ProductItem.CankaoshoujialistBean.class));
+            item.setChuchangjialist(JSONArray.parseArray(object.getJSONArray("chuchangjialist").toJSONString(), ProductItem.ChuchangjialistBean.class));
+
+            //******** 设置默认比率、单位、单品价、单位价、价码、颜色、规格 ********
+            String unitBilv = "";
+            for (ProductItem.PacklistBean bean : item.getPacklist()) {
+                if ("1".equals(bean.getCheck())) {
+                    unitBilv = bean.getUnit_bilv();
+                    item.setFactor(unitBilv);
+                    item.setUnitname(bean.getUnitname());
                 }
             }
-            productItem.setColorlist(colorlistBeen);
-            List<ProductItem.ColorlistBean> packlistBeen = null;
-            JSONArray packlist = object.getJSONArray("packlist");
-            if (packlist.size() > 0) {
-                packlistBeen = new ArrayList<>();
-                for (int j = 0; j < packlist.size(); j++) {
-                    JSONObject pack = colorlist.getJSONObject(i);
-                    ProductItem.PacklistBean packlistBean = new ProductItem.PacklistBean(pack.getString("unit_bilv"), pack.getString("unitname"), pack.getString("check"));
-                    packlistBeen.add(packlistBean);
-                }
-            }
-            productItem.setPacklist(packlistBeen);
-            productItem.setSizxlist(object.getString("sizxlist"));
-            productItem.setPiclist(object.getString("piclist"));
-            productItem.setLishijialist(object.getString("lishijialist"));
-            productItem.setChengbenjialist(object.getString("chengbenjialist"));
-            productItem.setCankaoshoujialist(object.getString("cankaoshoujialist"));
-            productItem.setChuchangjialist(object.getString("chuchangjialist"));
+            int index = item.getLishijialist().indexOf(new ProductItem.LishijialistBean(unitBilv));
+            item.setOrder_prc(item.getLishijialist().get(index).getPrice());
+            item.setS_jiage2(item.getLishijialist().get(index).getPrice());
+            item.setPricecode(item.getLishijialist().get(index).getPricecode());
+            if (item.getColorlist().size() > 0 && TextUtils.isEmpty(item.getYanse())) item.setYanse("无");
+            if (item.getSizxlist().size() > 0 && TextUtils.isEmpty(item.getGuige())) item.setGuige("无");
+
+            list.add(item);
         }
         return list;
     }

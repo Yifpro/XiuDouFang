@@ -36,12 +36,12 @@ public class SameBarcodeSupplierProductDialog extends DialogFragment implements 
     private FloatingActionButton mFabComplete;
 
     private ProductListAdapter mAdapter;
-    private List<SupplierProductListBean.SupplierProductBean> mList;
+    private List<ProductItem> mList;
     private OnItemClickListener mListener;
     private AnimatorSet menuAnim;
     private boolean mIsShowMenu;
 
-    public static SameBarcodeSupplierProductDialog newInstance(int type, ArrayList<SupplierProductListBean.SupplierProductBean> list) {
+    public static SameBarcodeSupplierProductDialog newInstance(int type, ArrayList<ProductItem> list) {
         SameBarcodeSupplierProductDialog dialog = new SameBarcodeSupplierProductDialog();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
@@ -89,13 +89,13 @@ public class SameBarcodeSupplierProductDialog extends DialogFragment implements 
                     mFabComplete.setVisibility(View.VISIBLE);
                     menuAnim.setStartDelay(350);
                     menuAnim.start();
-                    for (SupplierProductListBean.SupplierProductBean bean : mList) {
+                    for (ProductItem bean : mList) {
                         bean.setShowSelect(true);
                     }
                     mAdapter.setNewData(mList);
                 } else {
                     mFabComplete.setVisibility(View.GONE);
-                    for (SupplierProductListBean.SupplierProductBean bean : mList) {
+                    for (ProductItem bean : mList) {
                         bean.setShowSelect(false);
                     }
                     mAdapter.setNewData(mList);
@@ -103,34 +103,8 @@ public class SameBarcodeSupplierProductDialog extends DialogFragment implements 
                 break;
             case R.id.fab_complete:
                 ArrayList<ProductItem> list = new ArrayList<>();
-                for (SupplierProductListBean.SupplierProductBean bean : mList) {
-                    if (bean.isSelected()) {
-                        ProductItem item = new ProductItem();
-                        item.setPhotourl(bean.getPhotourl());
-                        item.setCpid(bean.getCpid());
-                        item.setProductNo(bean.getStyleno());
-                        item.setStylename(bean.getStylename());
-                        item.setColor("");
-                        item.setSize("");
-                        String factor = "", unit = "";
-                        for (SupplierProductListBean.SupplierProductBean.PacklistBean b : bean.getPacklist()) {
-                            if ("1".equals(b.getCheck())) {
-                                factor = b.getUnit_bilv();
-                                unit = b.getUnitname();
-                            }
-                        }
-                        SupplierProductListBean.SupplierProductBean.LishijialistBean historyBean = bean.getLishijialist().get(bean.getLishijialist().indexOf(new SupplierProductListBean.SupplierProductBean.LishijialistBean(factor, unit)));
-                        item.setFactor(factor);
-                        item.setUnit(unit);
-                        item.setAmount("1");
-                        item.setSinglePrice(historyBean.getPrice());
-                        item.setUnitPrice(historyBean.getPrice());
-                        item.setTip("");
-                        item.setGoodsNo("");
-                        item.setPriceCode(historyBean.getPricecode());
-                        item.setPriceSource("历史价");
-                        list.add(item);
-                    }
+                for (ProductItem bean : mList) {
+                    if (bean.isSelected()) list.add(bean);
                 }
                 mListener.onSubmit(list);
                 break;

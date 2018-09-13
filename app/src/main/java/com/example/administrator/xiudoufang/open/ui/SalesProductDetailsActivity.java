@@ -20,12 +20,10 @@ import com.example.administrator.xiudoufang.bean.SalesProductDetailsItem_2;
 import com.example.administrator.xiudoufang.bean.SalesProductDetailsItem_3;
 import com.example.administrator.xiudoufang.bean.SalesProductDetailsItem_4;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
-import com.example.administrator.xiudoufang.common.widget.SingleLineTextDialog;
+import com.example.administrator.xiudoufang.purchase.ui.SingleLineTextDialog;
 import com.example.administrator.xiudoufang.open.adapter.SalesProductDetailsAdapter;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**

@@ -13,7 +13,7 @@ import com.example.administrator.xiudoufang.bean.ProductFilter;
 import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.bean.TypeListBean;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
-import com.example.administrator.xiudoufang.common.widget.SingleLineTextDialog;
+import com.example.administrator.xiudoufang.purchase.ui.SingleLineTextDialog;
 import com.example.administrator.xiudoufang.purchase.ui.SupplierDetailsActivity;
 import com.example.administrator.xiudoufang.purchase.ui.SupplierListActivity;
 import com.example.administrator.xiudoufang.stock.ui.TypeListActivity;
@@ -68,7 +68,7 @@ public class ProductQueryActivity extends AppCompatActivity implements IActivity
         //******** 返回供应商 ********
         Supplier supplier = getIntent().getParcelableExtra(SupplierDetailsActivity.SELECTED_SUPPLIER);
         if (supplier != null) {
-            mSivSupplier.setValue(supplier.getName());
+            mSivSupplier.setValue(supplier.getCustomername());
             mSupplier = supplier;
         }
     }

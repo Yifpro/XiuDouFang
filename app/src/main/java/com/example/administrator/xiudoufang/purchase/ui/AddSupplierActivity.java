@@ -83,13 +83,13 @@ public class AddSupplierActivity extends AppCompatActivity implements IActivityB
                     Intent intent = new Intent(this, NewPurchaseOrderActivity.class);
                     Supplier supplier = new Supplier();
                     supplier.setC_id("0");
-                    supplier.setName(mSivName.getValue());
-                    supplier.setTotalName(mSivTotalName.getValue());
-                    supplier.setNewPhoneNum(mSivMobilePhoneNum.getValue());
-                    supplier.setNewTelephoneNum(mSivPhoneNum.getValue());
-                    supplier.setNewContact(mSivContact.getValue());
-                    supplier.setAreaNo(mSivAreaNo.getValue());
-                    supplier.setAreaName(mSivAreaName.getValue());
+                    supplier.setCustomername(mSivName.getValue());
+                    supplier.setQuancheng(mSivTotalName.getValue());
+                    supplier.setDianhua(mSivMobilePhoneNum.getValue());
+                    supplier.setTelephone(mSivPhoneNum.getValue());
+                    supplier.setLianxiren(mSivContact.getValue());
+                    supplier.setQuyuno(mSivAreaNo.getValue());
+                    supplier.setQuyu(mSivAreaName.getValue());
                     intent.putExtra(SupplierDetailsActivity.SELECTED_SUPPLIER, supplier);
                     startActivity(intent);
                 }

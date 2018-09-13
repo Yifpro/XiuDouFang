@@ -9,9 +9,9 @@ import com.example.administrator.xiudoufang.bean.ServerItem;
 
 import java.util.List;
 
-public class TransferPurchaseAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+public class SingleLineTextAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
-    public TransferPurchaseAdapter(int layoutResId, @Nullable List<String> data) {
+    public SingleLineTextAdapter(int layoutResId, @Nullable List<String> data) {
         super(layoutResId, data);
     }
 

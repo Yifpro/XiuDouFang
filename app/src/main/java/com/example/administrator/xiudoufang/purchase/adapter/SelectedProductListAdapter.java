@@ -34,16 +34,16 @@ public class SelectedProductListAdapter extends BaseItemDraggableAdapter<Product
     @Override
     protected void convert(final BaseViewHolder helper, final ProductItem item) {
         GlideApp.with(mContext).load(StringUtils.PIC_URL + item.getPhotourl()).error(R.mipmap.ic_error).into((ImageView) helper.getView(R.id.iv_icon));
-        helper.setText(R.id.tv_id, item.getProductNo());
+        helper.setText(R.id.tv_id, item.getStyleno());
         helper.setText(R.id.tv_name, item.getStylename());
-        helper.setText(R.id.tv_company_amount, item.getFactor() + item.getUnit());
-        helper.setText(R.id.tv_single_price, item.getSinglePrice());
-        helper.setText(R.id.tv_unit_price, item.getUnitPrice());
-        helper.setText(R.id.tv_amount, item.getAmount());
-        helper.setText(R.id.tv_total_price, mFormat.format(Double.parseDouble(item.getUnitPrice()) * Double.parseDouble(item.getAmount())));
+        helper.setText(R.id.tv_company_amount, item.getFactor() + item.getUnitname());
+        helper.setText(R.id.tv_single_price, item.getOrder_prc());
+        helper.setText(R.id.tv_unit_price, item.getS_jiage2());
+        helper.setText(R.id.tv_amount, item.getCp_qty());
+        helper.setText(R.id.tv_total_price, mFormat.format(Double.parseDouble(item.getS_jiage2()) * Double.parseDouble(item.getCp_qty())));
 
         if (!"1".equals(mStatus)) {
-            String statusstr = item.getStatus();
+            String statusstr = item.getStatusstr();
             if (!TextUtils.isEmpty(statusstr)) {
                 helper.getView(R.id.tv_discount_sums).setVisibility(View.VISIBLE);
                 helper.setText(R.id.tv_discount_sums, statusstr);

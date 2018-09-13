@@ -1,4 +1,4 @@
-package com.example.administrator.xiudoufang.common.widget;
+package com.example.administrator.xiudoufang.purchase.ui;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.purchase.adapter.TransferPurchaseAdapter;
+import com.example.administrator.xiudoufang.purchase.adapter.SingleLineTextAdapter;
 
 import java.util.ArrayList;
 
@@ -38,7 +38,7 @@ public class SingleLineTextDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_transfer_purchase_selector, container);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         ArrayList<String> items = new ArrayList<>(getArguments().getStringArrayList("list"));
-        TransferPurchaseAdapter adapter = new TransferPurchaseAdapter(R.layout.layout_list_item_transfer_purchase, items);
+        SingleLineTextAdapter adapter = new SingleLineTextAdapter(R.layout.layout_list_item_transfer_purchase, items);
         adapter.bindToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

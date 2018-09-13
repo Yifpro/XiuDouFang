@@ -11,7 +11,7 @@ import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.StockFilter;
 import com.example.administrator.xiudoufang.bean.TypeListBean;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
-import com.example.administrator.xiudoufang.common.widget.SingleLineTextDialog;
+import com.example.administrator.xiudoufang.purchase.ui.SingleLineTextDialog;
 
 import java.util.ArrayList;
 import java.util.Collections;

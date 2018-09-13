@@ -79,7 +79,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     private static final int RESULT_FOR_SCAN_BAR_CODE = 131; //******** 扫描条形码 ********
     public static final String TAG = PurchaseDetailsActivity.class.getSimpleName();
 
-    private SearchInfoView mSivOrderId;
+    private SearchInfoView mSivOrderNo;
     private SearchInfoView mSivSupplier;
     private SearchInfoView mSivDebt;
     private SearchInfoView mSivBillingDate;
@@ -96,7 +96,6 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     private ImageView mIvExtra;
     private ImageView mIvClear;
     private EditText mEtTip;
-    private LinearLayout mBottomLayout;
     private TextView mTvBottomLeft;
     private TextView mTvBottomRight;
     private TimePickerView mPvSetupOrderTime;
@@ -117,7 +116,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     private Supplier mSupplier;
     private SelectedProductListAdapter mAdapter;
     private String mImgPath;
-    private JSONObject mJsonObject;
+    private String mIid;
 
     @Override
     public int getLayoutId() {
@@ -127,7 +126,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     @Override
     public void initView() {
         setTitle("采购单详情");
-        mSivOrderId = findViewById(R.id.siv_order_id);
+        mSivOrderNo = findViewById(R.id.siv_order_no);
         mSivSupplier = findViewById(R.id.siv_supplier);
         mSivDebt = findViewById(R.id.siv_debt);
         mSivBillingDate = findViewById(R.id.siv_setup_order_date);
@@ -143,7 +142,6 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         mSivPaymentAccount = findViewById(R.id.siv_payment_account);
         mIvExtra = findViewById(R.id.iv_extra);
         mEtTip = findViewById(R.id.et_tip);
-        mBottomLayout = findViewById(R.id.bottom_layout);
         mTvBottomLeft = findViewById(R.id.tv_bottom_left);
         mTvBottomRight = findViewById(R.id.tv_bottom_right);
         mIvClear = findViewById(R.id.iv_clear);
@@ -164,35 +162,38 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 mTvBottomLeft.setText("存为草稿");
                 mTvBottomRight.setText("确认单据");
                 mAddProductLayout.setVisibility(View.VISIBLE);
-                findViewById(R.id.tv_add_product).setOnClickListener(this);
-                findViewById(R.id.tv_scan_product).setOnClickListener(this);
-                findViewById(R.id.tv_bottom_left).setOnClickListener(this);
-                findViewById(R.id.tv_bottom_right).setOnClickListener(this);
+
                 mSivSupplier.setOnClickListener(this);
                 mSivBillingDate.setOnClickListener(this);
                 mSivArrivalDate.setOnClickListener(this);
                 mSivWarehourse.setOnClickListener(this);
                 mSivSubject.setOnClickListener(this);
                 mSivPaymentType.setOnClickListener(this);
+                findViewById(R.id.tv_add_product).setOnClickListener(this);
+                findViewById(R.id.tv_scan_product).setOnClickListener(this);
+                findViewById(R.id.tv_bottom_left).setOnClickListener(this);
+                findViewById(R.id.tv_bottom_right).setOnClickListener(this);
                 break;
             case "2":
                 setStatus();
                 mTvBottomLeft.setText("反确认");
                 mTvBottomRight.setText("确认单据");
                 mAddProductLayout.setVisibility(View.GONE);
+
                 findViewById(R.id.tv_bottom_left).setOnClickListener(this);
                 findViewById(R.id.tv_bottom_right).setOnClickListener(this);
                 break;
             case "3":
                 setStatus();
                 mAddProductLayout.setVisibility(View.GONE);
-                mBottomLayout.setVisibility(View.GONE);
+                findViewById(R.id.bottom_layout).setVisibility(View.GONE);
                 break;
             case "4":
                 setStatus();
                 mTvBottomLeft.setText("反确认");
                 mTvBottomRight.setText("提交分店");
                 mAddProductLayout.setVisibility(View.GONE);
+
                 findViewById(R.id.tv_bottom_left).setOnClickListener(this);
                 findViewById(R.id.tv_bottom_right).setOnClickListener(this);
                 break;
@@ -201,6 +202,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 mTvBottomRight.setText("取消提交");
                 mAddProductLayout.setVisibility(View.GONE);
                 mTvBottomLeft.setVisibility(View.GONE);
+
                 findViewById(R.id.tv_bottom_right).setOnClickListener(this);
                 break;
             case "6":
@@ -208,6 +210,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 mTvBottomRight.setText("取消收货");
                 mAddProductLayout.setVisibility(View.GONE);
                 mTvBottomLeft.setVisibility(View.GONE);
+
                 findViewById(R.id.tv_bottom_right).setOnClickListener(this);
                 break;
         }
@@ -253,14 +256,14 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                     @Override
                     public void onReplace() {
                         reloadHistoryPrice();
-                        mSivSupplier.setValue(supplier.getName());
+                        mSivSupplier.setValue(supplier.getCustomername());
                         mSivDebt.setValue(supplier.getDebt());
                         mSupplier = supplier;
                     }
                 });
                 mReloadHistoryPriceDialog.show(getSupportFragmentManager(), "ReloadHistoryPriceDialog");
             } else {
-                mSivSupplier.setValue(supplier.getName());
+                mSivSupplier.setValue(supplier.getCustomername());
                 mSivDebt.setValue(supplier.getDebt());
                 mSupplier = supplier;
             }
@@ -282,9 +285,8 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         for (ProductItem item : mList) {
             list.add(new ReloadHistoryPriceBean(item.getFactor(), item.getCpid()));
         }
-
         HashMap<String, String> params = new HashMap<>();
-        params.put("iid", mSupplier.getIid()); //******** 采购单id ********
+        params.put("iid", mIid); //******** 采购单id ********
         params.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
         params.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
         params.put("c_id", mSupplier.getC_id()); //******** 供应商id ********
@@ -484,52 +486,51 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     private void caculateTotalPrice() {
         double result = 0;
         for (int i = 0; i < mList.size(); i++) {
-            double totalPrice = Double.parseDouble(mList.get(i).getUnitPrice()) * Double.parseDouble(mList.get(i).getAmount());
+            double totalPrice = Double.parseDouble(mList.get(i).getS_jiage2()) * Double.parseDouble(mList.get(i).getCp_qty());
             result += totalPrice;
         }
         DecimalFormat mFormat = new DecimalFormat("0.00");
         ((TextView) mAdapter.getFooterLayout().findViewById(R.id.tv)).setText(mFormat.format(result));
     }
 
+    //******** 加载采购单明细 ********
     private void loadPurchaseDetails() {
         LoadingViewDialog.getInstance().show(this);
         mPurchaseLogic.requestPurchaseDetails(this, getIntent().getStringExtra(PurchaseSubFragment.ORDER_ID), new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
-                mJsonObject = JSONObject.parseObject(response.body());
-                JSONObject result = mJsonObject.getJSONObject("results");
+                JSONObject jsonObject = JSONObject.parseObject(response.body());
+                JSONObject result = jsonObject.getJSONObject("results");
                 mSupplier = new Supplier();
-                mSupplier.setIid(result.getString("iid"));
-                mSupplier.setC_id(result.getString("c_id"));
-                mSupplier.setCustomerNo(result.getString("customerno"));
-                mSupplier.setName(result.getString("customername"));
-                mSupplier.setNewPhoneNum(result.getString("telephone"));
-                mSupplier.setNewTelephoneNum(result.getString("tel"));
-                mSupplier.setNewContact(result.getString("lianxiren"));
-                mSupplier.setAreaNo(result.getString("quyuno"));
-                mSupplier.setAreaName(result.getString("quyu"));
-                mSupplier.setFendianid(result.getString("fendianid"));
-
-                mSivOrderId.setValue(result.getString("puOrderNo"));
-                mSivSupplier.setValue(result.getString("customername"));
-                mSivDebt.setValue(result.getString("debt"));
-                mSivBillingDate.setValue(result.getString("issDate").substring(0, 9));
-                String etadate = result.getString("etadate");
+                mIid = result.getString("iid"); //******** 采购单id ********
+                mSivOrderNo.setValue(result.getString("puOrderNo")); //******** 采购单编号 ********
+                mSupplier.setC_id(result.getString("c_id")); //******** 供应商id ********
+                mSupplier.setCustomerno(result.getString("customerno")); //******** 供应商编号 ********
+                mSupplier.setCustomername(result.getString("customername")); //******** 供应商名称 ********
+                mSupplier.setLianxiren(result.getString("lianxiren")); //******** 联系人 ********
+                mSupplier.setDianhua(result.getString("tel")); //******** 电话 ********
+                mSupplier.setTelephone(result.getString("telephone")); //******** 手机号 ********
+                mSivBillingDate.setValue(result.getString("issDate").substring(0, 9)); //******** 发单日期 ********
+                String etadate = result.getString("etadate"); //******** 预计到货 ********
                 mSivArrivalDate.setValue(etadate.length() > 8 ? etadate.substring(0, 9) : etadate);
-                if (Double.parseDouble(result.getString("benci_amt")) > 0)
+                mWarehouseId = result.getString("warehouseid"); //******** 仓位id ********
+                mSivWarehourse.setValue(result.getString("warehouse")); //******** 仓位名称 ********
+                mSupplier.setQuyuno(result.getString("quyuno")); //******** 区域编号 ********
+                mSupplier.setQuyu(result.getString("quyu")); //******** 区域 ********
+                mSupplier.setFendianid(result.getString("fendianid")); //******** 分店id ********
+                mSivSupplier.setValue(result.getString("customername")); //******** 供应商名称 ********
+                mEtTip.setText(result.getString("remark")); //******** 备注 ********
+                if (Double.parseDouble(result.getString("benci_amt")) > 0) //******** 付款金额 ********
                     mSivPaymentAmount.setValue(result.getString("benci_amt"));
-                if (Double.parseDouble(result.getString("youhuijine")) > 0)
+                mPayId = result.getString("bankid"); //******** 支付方式id ********
+                mSubjectId = result.getString("accountid"); //******** 会计科目id ********
+                mSivDebt.setValue(result.getString("debt")); //******** 前结欠 ********
+                if (Double.parseDouble(result.getString("youhuijine")) > 0) //******** 优惠金额 ********
                     mSivDiscountAmount.setValue(result.getString("youhuijine"));
-                mEtTip.setText(result.getString("remark"));
-                mWarehouseId = result.getString("warehouseid");
-                mPayId = result.getString("bankid");
-                mSubjectId = result.getString("accountid");
-                mSivWarehourse.setValue(result.getString("warehouse"));
-                if (!TextUtils.isEmpty(result.getString("fujian")))
+                if (!TextUtils.isEmpty(result.getString("fujian"))) //******** 附件 ********
                     GlideApp.with(PurchaseDetailsActivity.this).load(StringUtils.FILE_URL + result.getString("fujian")).error(R.mipmap.ic_error).into(mIvExtra);
-                mList = mPurchaseLogic.parsePurchaseDetailsJson(mJsonObject);
-                mAdapter.setNewData(mList);
-                if (mList.size() == 0) {
+                mList = mPurchaseLogic.parsePurchaseDetailsJson(jsonObject); //******** 解析产品json ********
+                if (mList.size() == 0) { //******** 产品数组为0时，不可确认订单 ********
                     mTvBottomRight.setClickable(false);
                     mTvBottomRight.setBackgroundResource(R.drawable.rect_4_gray_888888);
                 } else {
@@ -626,27 +627,27 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         }
     }
 
+    //******** 存为草稿 ********
     private void saveAsDraft() {
-        SharedPreferences preferences = PreferencesUtils.getPreferences();
-        JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
         HashMap<String, String> params = new HashMap<>();
-        params.put("iid", mJsonObject.getJSONObject("result").getString("iid")); //******** 采购单id，新单为0 ********
-        params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
-        params.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
-        params.put("c_id", StringUtils.checkEmpty(mSupplier.getC_id(), "0")); //******** 供应商id ********
-        params.put("customerno", StringUtils.checkEmpty(mSupplier.getCustomerNo(), "0")); //******** 供应商编号 ********
-        params.put("customername", StringUtils.checkEmpty(mSupplier.getName(), "")); //******** 供应商名称 ********
-        params.put("telephone", StringUtils.checkEmpty(mSupplier.getNewPhoneNum(), "")); //******** 手机号 ********
-        params.put("tel", StringUtils.checkEmpty(mSupplier.getNewTelephoneNum(), "")); //******** 电话 ********
-        params.put("lianxiren", StringUtils.checkEmpty(mSupplier.getNewContact(), "")); //******** 联系人 ********
+        params.put("iid", mIid); //******** 采购单id，新单为0 ********
+        params.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
+        params.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
+        params.put("c_id", mSupplier.getC_id()); //******** 供应商id ********
+        params.put("customerno", mSupplier.getCustomerno()); //******** 供应商编号 ********
+        params.put("customername", mSupplier.getCustomername()); //******** 供应商名称 ********
+        params.put("telephone", mSupplier.getTelephone()); //******** 手机号 ********
+        params.put("tel", mSupplier.getDianhua()); //******** 电话 ********
+        params.put("lianxiren", mSupplier.getLianxiren()); //******** 联系人 ********
         params.put("remark", mEtTip.getText().toString()); //******** 备注 ********
-        params.put("quyuno", StringUtils.checkEmpty(mSupplier.getAreaNo(), "")); //******** 区域编号 ********
-        params.put("quyu", StringUtils.checkEmpty(mSupplier.getAreaName(), "")); //******** 区域名称 ********
+        params.put("quyuno", mSupplier.getQuyuno()); //******** 区域编号 ********
+        params.put("quyu", mSupplier.getQuyu()); //******** 区域名称 ********
         params.put("action", "0"); //******** 0：默认 1：改单 ********
         params.put("IssDate", mSivBillingDate.getValue()); //******** 发单日期 ********
         params.put("yuji_jiaohuoriqi", mSivArrivalDate.getValue()); //******** 预计交货日期 ********
         params.put("confirm", "0"); //******** 确认订单 ********
-        params.put("fendianid", StringUtils.checkEmpty(mSupplier.getFendianid(), "")); //******** 分店id ********
+        params.put("fendianid", mSupplier.getFendianid()); //******** 分店id ********
+        JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
         params.put("poprice_mode", jsonObject.getString("poprice_mode")); //******** 用户显示的是价格还是价码 ********
         params.put("youhuijine", mSivDiscountAmount.getValue()); //******** 优惠金额 ********
         ArrayList<HashMap<String, String>> maps = new ArrayList<>();
@@ -654,20 +655,20 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             HashMap<String, String> map;
             for (ProductItem item : mList) {
                 map = new HashMap<>();
-                map.put("pnid", "0"); //******** 当前id ********
+                map.put("pnid", item.getPnid()); //******** 当前id ********
                 map.put("cpid", item.getCpid()); //******** 产品id ********
-                map.put("yanse", item.getColor()); //******** 颜色 ********
-                map.put("guige", item.getSize()); //******** 规格 ********
+                map.put("yanse", item.getYanse()); //******** 颜色 ********
+                map.put("guige", item.getGuige()); //******** 规格 ********
                 map.put("factor", item.getFactor()); //******** 比率 ********
-                map.put("unitname", item.getUnit()); //******** 单位 ********
-                map.put("cp_qty", item.getAmount()); //******** 数量 ********
-                map.put("order_prc", item.getSinglePrice()); //******** 单品价格 ********
-                map.put("s_jiage2", item.getUnitPrice()); //******** 单位价格 ********
-                map.put("zengpin", item.isGift() ? "1" : "0"); //******** 赠品 ********
-                map.put("bz", item.getTip()); //******** 备注 ********
-                map.put("huohao", item.getGoodsNo()); //******** 货号 ********
-                map.put("pricecode", item.getPriceCode()); //******** 价码 ********
-                map.put("jiagelaiyuan", item.getPriceSource()); //******** 价格来源 ********
+                map.put("unitname", item.getUnitname()); //******** 单位 ********
+                map.put("cp_qty", item.getCp_qty()); //******** 数量 ********
+                map.put("order_prc", item.getOrder_prc()); //******** 单品价格 ********
+                map.put("s_jiage2", item.getS_jiage2()); //******** 单位价格 ********
+                map.put("zengpin", item.getZengpin()); //******** 赠品 ********
+                map.put("bz", item.getBz()); //******** 备注 ********
+                map.put("huohao", item.getHuohao()); //******** 货号 ********
+                map.put("pricecode", item.getPricecode()); //******** 价码 ********
+                map.put("jiagelaiyuan", item.getJiagelaiyuan()); //******** 价格来源 ********
                 maps.add(map);
             }
         }
@@ -722,7 +723,6 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         @Override
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
             Intent intent = new Intent(PurchaseDetailsActivity.this, SupplierProductDetailsActivity.class);
-            intent.putExtra(SupplierProductDetailsActivity.FROM_CLASS, TAG);
             intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
             startActivity(intent);
         }
@@ -747,8 +747,8 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             }
             tvAmount.setText(String.valueOf(i));
             ProductItem item = mList.get(position);
-            item.setAmount(String.valueOf(i));
-            double totalPrice = Double.parseDouble(item.getUnitPrice()) * Double.parseDouble(mList.get(position).getAmount());
+            item.setCp_qty(String.valueOf(i));
+            double totalPrice = Double.parseDouble(item.getS_jiage2()) * Double.parseDouble(mList.get(position).getCp_qty());
             DecimalFormat mFormat = new DecimalFormat("0.00");
             tvTotalPrice.setText(mFormat.format(totalPrice));
             tvAmount.setText(String.valueOf(i));

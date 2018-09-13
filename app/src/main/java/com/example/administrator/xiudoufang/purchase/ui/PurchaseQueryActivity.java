@@ -15,7 +15,6 @@ import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
-import com.example.administrator.xiudoufang.purchase.logic.PurchaseLogic;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,20 +24,17 @@ import java.util.Locale;
 
 public class PurchaseQueryActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
-    private final int COUNT = 20;
-
     private TransferPurchaseDialog mTransferPurchaseDialog;
     private SearchInfoView mSivTransferPurchase;
     private SearchInfoView mSivStartTime;
     private SearchInfoView mSivEndTime;
     private TimePickerView mPvStartTime;
     private TimePickerView mPvEndTime;
-    private SearchInfoView mSivOrderNum;
+    private SearchInfoView mSivOrderNo;
     private SearchInfoView mSivCustomer;
     private SearchInfoView mSivOperator;
     private SearchInfoView mSivTip;
 
-    private PurchaseLogic mLogic;
     private ArrayList<String> mList;
     private String mTransferPurchase;
 
@@ -50,7 +46,7 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
     @Override
     public void initView() {
         setTitle("采购查询");
-        mSivOrderNum = findViewById(R.id.siv_order_num);
+        mSivOrderNo = findViewById(R.id.siv_order_no);
         mSivCustomer = findViewById(R.id.siv_customer);
         mSivStartTime = findViewById(R.id.siv_start_time);
         mSivEndTime = findViewById(R.id.siv_end_time);
@@ -59,11 +55,11 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
         mSivTransferPurchase = findViewById(R.id.siv_transfer_purchase);
 
         mTransferPurchase = "全部";
-        findViewById(R.id.tv_query).setOnClickListener(this);
-        findViewById(R.id.tv_reset).setOnClickListener(this);
         mSivStartTime.setOnClickListener(this);
         mSivEndTime.setOnClickListener(this);
         mSivTransferPurchase.setOnClickListener(this);
+        findViewById(R.id.tv_query).setOnClickListener(this);
+        findViewById(R.id.tv_reset).setOnClickListener(this);
     }
 
     //******** 订单转采购选择框 ********
@@ -204,7 +200,7 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
 
     private void queryOrder() {
         ArrayList<String> list = new ArrayList<>();
-        list.add(mSivOrderNum.getValue());
+        list.add(mSivOrderNo.getValue());
         list.add(mSivCustomer.getValue());
         list.add(mSivStartTime.getValue());
         list.add(mSivEndTime.getValue());
@@ -218,7 +214,7 @@ public class PurchaseQueryActivity extends AppCompatActivity implements IActivit
     }
 
     private void reset() {
-        mSivOrderNum.setValue("");
+        mSivOrderNo.setValue("");
         mSivCustomer.setValue("");
         initTime();
         mSivOperator.setValue("");

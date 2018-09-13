@@ -9,6 +9,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.GlideApp;
+import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 
 import java.util.List;
@@ -17,14 +18,14 @@ import java.util.List;
  * Created by Administrator on 2018/8/18
  */
 
-public class ProductListAdapter extends BaseQuickAdapter<SupplierProductListBean.SupplierProductBean, BaseViewHolder> {
+public class ProductListAdapter extends BaseQuickAdapter<ProductItem, BaseViewHolder> {
 
-    public ProductListAdapter(@LayoutRes int layoutResId, @Nullable List<SupplierProductListBean.SupplierProductBean> data) {
+    public ProductListAdapter(@LayoutRes int layoutResId, @Nullable List<ProductItem> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, SupplierProductListBean.SupplierProductBean item) {
+    protected void convert(BaseViewHolder helper, ProductItem item) {
         if (item.isShowSelect()) {
             helper.getView(R.id.iv_select).setVisibility(View.VISIBLE);
             if (item.isSelected()) {

@@ -27,9 +27,11 @@ import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.PayBean;
 import com.example.administrator.xiudoufang.bean.ProductItem;
+import com.example.administrator.xiudoufang.bean.StringPair;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -119,7 +121,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         Supplier supplier = getIntent().getParcelableExtra(SupplierDetailsActivity.SELECTED_SUPPLIER);
         ProductItem item = getIntent().getParcelableExtra(SELECTED_PRODUCT);
         if (supplier != null) { //******** 返回选择的供应商 ********
-            mSivSupplier.setValue(supplier.getName());
+            mSivSupplier.setValue(supplier.getCustomername());
             mSivDebt.setValue(supplier.getDebt());
             mSupplier = supplier;
         } else if (item != null) { //******** 返回选中的单个产品 ********
@@ -221,7 +223,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     private void caculateTotalPrice() {
         double result = 0;
         for (int i = 0; i < mList.size(); i++) {
-            double totalPrice = Double.parseDouble(mList.get(i).getUnitPrice()) * Double.parseDouble(mList.get(i).getAmount());
+            double totalPrice = Double.parseDouble(mList.get(i).getS_jiage2()) * Double.parseDouble(mList.get(i).getCp_qty());
             result += totalPrice;
         }
         DecimalFormat mFormat = new DecimalFormat("0.00");
@@ -384,14 +386,14 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
         params.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
         params.put("c_id", StringUtils.checkEmpty(mSupplier.getC_id(), "0")); //******** 供应商id ********
-        params.put("customerno", StringUtils.checkEmpty(mSupplier.getCustomerNo(), "0")); //******** 供应商编号 ********
-        params.put("customername", StringUtils.checkEmpty(mSupplier.getName(), "")); //******** 供应商名称 ********
-        params.put("telephone", StringUtils.checkEmpty(mSupplier.getNewPhoneNum(), "")); //******** 手机号 ********
-        params.put("tel", StringUtils.checkEmpty(mSupplier.getNewTelephoneNum(), "")); //******** 电话 ********
-        params.put("lianxiren", StringUtils.checkEmpty(mSupplier.getNewContact(), "")); //******** 联系人 ********
+        params.put("customerno", mSupplier.getCustomerno()); //******** 供应商编号 ********
+        params.put("customername", StringUtils.checkEmpty(mSupplier.getCustomername(), "")); //******** 供应商名称 ********
+        params.put("telephone", StringUtils.checkEmpty(mSupplier.getTelephone(), "")); //******** 手机号 ********
+        params.put("tel", StringUtils.checkEmpty(mSupplier.getDianhua(), "")); //******** 电话 ********
+        params.put("lianxiren", StringUtils.checkEmpty(mSupplier.getLianxiren(), "")); //******** 联系人 ********
         params.put("remark", mEtTip.getText().toString()); //******** 备注 ********
-        params.put("quyuno", StringUtils.checkEmpty(mSupplier.getAreaNo(), "")); //******** 区域编号 ********
-        params.put("quyu", StringUtils.checkEmpty(mSupplier.getAreaName(), "")); //******** 区域名称 ********
+        params.put("quyuno", StringUtils.checkEmpty(mSupplier.getQuyuno(), "")); //******** 区域编号 ********
+        params.put("quyu", StringUtils.checkEmpty(mSupplier.getQuyu(), "")); //******** 区域名称 ********
         params.put("action", "0"); //******** 0：默认 1：改单 ********
         params.put("IssDate", mSivSetupOrderDate.getValue()); //******** 发单日期 ********
         params.put("yuji_jiaohuoriqi", mSivArrivalDate.getValue()); //******** 预计交货日期 ********
@@ -406,18 +408,18 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                 map = new HashMap<>();
                 map.put("pnid", "0"); //******** 当前id ********
                 map.put("cpid", item.getCpid()); //******** 产品id ********
-                map.put("yanse", item.getColor()); //******** 颜色 ********
-                map.put("guige", item.getSize()); //******** 规格 ********
+                map.put("yanse", item.getYanse()); //******** 颜色 ********
+                map.put("guige", item.getGuige()); //******** 规格 ********
                 map.put("factor", item.getFactor()); //******** 比率 ********
-                map.put("unitname", item.getUnit()); //******** 单位 ********
-                map.put("cp_qty", item.getAmount()); //******** 数量 ********
-                map.put("order_prc", item.getSinglePrice()); //******** 单品价格 ********
-                map.put("s_jiage2", item.getUnitPrice()); //******** 单位价格 ********
-                map.put("zengpin", item.isGift() ? "1" : "0"); //******** 赠品 ********
-                map.put("bz", item.getTip()); //******** 备注 ********
-                map.put("huohao", item.getGoodsNo()); //******** 货号 ********
-                map.put("pricecode", item.getPriceCode()); //******** 价码 ********
-                map.put("jiagelaiyuan", item.getPriceSource()); //******** 价格来源 ********
+                map.put("unitname", item.getUnitname()); //******** 单位 ********
+                map.put("cp_qty", item.getCp_qty()); //******** 数量 ********
+                map.put("order_prc", item.getOrder_prc()); //******** 单品价格 ********
+                map.put("s_jiage2", item.getS_jiage2()); //******** 单位价格 ********
+                map.put("zengpin", item.getZengpin()); //******** 赠品 ********
+                map.put("bz", item.getBz()); //******** 备注 ********
+                map.put("huohao", item.getHuohao()); //******** 货号 ********
+                map.put("pricecode", item.getPricecode()); //******** 价码 ********
+                map.put("jiagelaiyuan", item.getJiagelaiyuan()); //******** 价格来源 ********
                 maps.add(map);
             }
         }
@@ -579,8 +581,8 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             }
             tvAmount.setText(String.valueOf(i));
             ProductItem item = mList.get(position);
-            item.setAmount(String.valueOf(i));
-            double totalPrice = Double.parseDouble(item.getUnitPrice()) * Double.parseDouble(mList.get(position).getAmount());
+            item.setCp_qty(String.valueOf(i));
+            double totalPrice = Double.parseDouble(item.getS_jiage2()) * Double.parseDouble(mList.get(position).getCp_qty());
             DecimalFormat mFormat = new DecimalFormat("0.00");
             tvTotalPrice.setText(mFormat.format(totalPrice));
             tvAmount.setText(String.valueOf(i));
@@ -593,7 +595,6 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         @Override
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
             Intent intent = new Intent(NewPurchaseOrderActivity.this, SupplierProductDetailsActivity.class);
-            intent.putExtra(SupplierProductDetailsActivity.FROM_CLASS, TAG);
             intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
             startActivity(intent);
         }

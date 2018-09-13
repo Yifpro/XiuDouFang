@@ -1,6 +1,7 @@
 package com.example.administrator.xiudoufang.purchase.logic;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -75,43 +76,21 @@ public class PurchaseLogic {
         for (int i = 0; i < puiasm.size(); i++) {
             JSONObject object = puiasm.getJSONObject(i);
             ProductItem item = new ProductItem();
-            item.setPhotourl(object.getString("photourl")); //******** 图片 ********
-            item.setProductNo(object.getString("styleno")); //******** 产品编号 ********
-            item.setStylename(object.getString("stylename")); //******** 产品名称 ********
-            item.setStockAmount(object.getString("kucunqty")); //******** 库存数 ********
-            item.setFreeAmount(object.getString("ziyouqty")); //******** 自由数 ********
-            item.setType(object.getString("classname")); //******** 产品类别 ********
-            item.setBrand(object.getString("pinpai")); //******** 品牌 ********
-            item.setModel(object.getString("xinghao")); //******** 型号 ********
-            item.setPriceCode(object.getString("barcode")); //******** 条形码 ********
-            item.setDetails(object.getString("detail")); //******** 明细 ********
-            item.setAmount(object.getString("cp_qty")); //******** 数量 ********
-            item.setGift(!"0".equals(object.getString("zengpin"))); //******** 赠品 ********
-            item.setGoodsNo(object.getString("huohao")); //******** 货号 ********
-            item.setTip(object.getString("bz")); //******** 备注 ********
-            item.setStatus(object.getString("statusstr")); //******** 产品状态 ********
-            item.setCpid(object.getString("cpid")); //******** 产品id ********
-            item.setFactor(object.getString("factor")); //******** 比率 ********
-            item.setUnit(object.getString("unitname")); //******** 单位 ********
-            item.setSinglePrice(object.getString("order_prc")); //******** 单品价 ********
-            item.setUnitPrice(object.getString("s_jiage2")); //******** 单位价 ********
             item.setDianid(object.getString("dianid"));
+            item.setClassname(object.getString("classname")); //******** 产品类别 ********
+            item.setCpid(object.getString("cpid")); //******** 产品id ********
+            item.setStyleno(object.getString("styleno")); //******** 产品编号 ********
+            item.setStylename(object.getString("stylename")); //******** 产品名称 ********
             item.setPounitname(object.getString("pounitname")); //******** 单个的单位 ********
-            item.setStopProduce(!"0".equals(object.getString("stop_produce"))); //******** 停产 ********
-            item.setStopSales(!"0".equals(object.getString("stop_sales"))); //******** 停售 ********
-            item.setIid(object.getString("iid")); //******** 采购单id ********
-            item.setPnid(object.getString("pnid")); //******** 当前行id ********
-            item.setPuOrderNo(object.getString("puOrderNo")); //******** 采购单编号 ********
-            item.setColor(object.getString("yanse")); //******** 颜色 ********
-            item.setSize(object.getString("guige")); //******** 规格 ********
-            item.setPriceSource(object.getString("jiagelaiyuan")); //******** 价格来源 ********
-            item.setPriceCode(object.getString("pricecode")); //******** 价码 ********
-            item.setOrderqty(object.getString("orderqty")); //******** 采购数量 ********
-            item.setOrderamt(object.getString("orderamt")); //******** 金额 ********
-            item.setRcvqty(object.getString("rcvqty")); //******** 收货数量 ********
-            item.setZhuancaigou_pnid(object.getString("zhuancaigou_pnid"));
-            item.setFujian(object.getString("fujian")); //******** 附件 ********
-            item.setButtonstatus_str(object.getString("buttonstatus_str")); //******** 按钮显示文本 ********
+            item.setBarcode(object.getString("barcode")); //******** 条形码 ********
+            item.setPhotourl(object.getString("photourl")); //******** 图片 ********
+            item.setXinghao(object.getString("xinghao")); //******** 型号 ********
+            item.setPinpai(object.getString("pinpai")); //******** 品牌 ********
+            item.setDetail(object.getString("detail")); //******** 明细 ********
+            item.setStop_produce(object.getString("stop_produce")); //******** 停产 ********
+            item.setStop_sales(object.getString("stop_sales")); //******** 停售 ********
+            item.setKucunqty(object.getString("kucunqty")); //******** 库存数 ********
+            item.setZiyouqty(object.getString("ziyouqty")); //******** 自由数 ********
             item.setColorlist(JSONObject.parseArray(object.getJSONArray("colorlist").toJSONString(), ProductItem.ColorlistBean.class));
             item.setPacklist(JSONObject.parseArray(object.getJSONArray("packlist").toJSONString(), ProductItem.PacklistBean.class));
             item.setSizxlist(JSONObject.parseArray(object.getJSONArray("sizxlist").toJSONString(), ProductItem.SizxlistBean.class));
@@ -120,12 +99,40 @@ public class PurchaseLogic {
             item.setChengbenjialist(JSONObject.parseArray(object.getJSONArray("chengbenjialist").toJSONString(), ProductItem.ChengbenjialistBean.class));
             item.setCankaoshoujialist(JSONObject.parseArray(object.getJSONArray("cankaoshoujialist").toJSONString(), ProductItem.CankaoshoujialistBean.class));
             item.setChuchangjialist(JSONObject.parseArray(object.getJSONArray("chuchangjialist").toJSONString(), ProductItem.ChuchangjialistBean.class));
+
+            //******** 设置默认显示的颜色规格 ********
+            if (item.getColorlist().size() > 0 && TextUtils.isEmpty(item.getYanse())) item.setYanse("无");
+            if (item.getSizxlist().size() > 0 && TextUtils.isEmpty(item.getGuige())) item.setGuige("无");
+
+            item.setUnitname(object.getString("unitname")); //******** 单位 ********
+            item.setIid(object.getString("iid")); //******** 采购单id ********
+            item.setPnid(object.getString("pnid")); //******** 当前行id ********
+            item.setPuOrderNo(object.getString("puOrderNo")); //******** 采购单编号 ********
+            item.setYanse(object.getString("yanse")); //******** 颜色 ********
+            item.setGuige(object.getString("guige")); //******** 规格 ********
+            item.setOrder_prc(object.getString("order_prc")); //******** 单品价格 ********
+            item.setFactor(object.getString("factor")); //******** 比率 ********
+            item.setS_jiage2(object.getString("s_jiage2")); //******** 单位价格 ********
+            item.setPricecode(object.getString("pricecode")); //******** 单位价价码 ********
+            item.setOrderqty(object.getString("orderqty")); //******** 采购数量 ********
+            item.setCp_qty(object.getString("cp_qty")); //******** 数量 ********
+            item.setOrderamt(object.getString("orderamt")); //******** 金额 ********
+            item.setRcvqty(object.getString("rcvqty")); //******** 收货数量 ********
+            item.setRcvamt(object.getString("rcvamt")); //******** 收货金额 ********
+            item.setStatusstr(object.getString("statusstr")); //******** 当前产品状态 ********
+            item.setBz(object.getString("bz")); //******** 备注 ********
+            item.setZhuancaigou_pnid(object.getString("zhuancaigou_pnid")); //******** 暂时没用 ********
+            item.setFujian(object.getString("fujian")); //******** 附件 ********
+            item.setHuohao(object.getString("huohao")); //******** 货号 ********
+            item.setZengpin(object.getString("zengpin")); //******** 赠品 ********
+            item.setJiagelaiyuan(object.getString("jiagelaiyuan")); //******** 价格来源 ********
+            item.setButtonstatus_str(object.getString("buttonstatus_str")); //******** 按钮显示文本 ********
             list.add(item);
         }
         return list;
     }
 
-    //******** 获取对应dongzuo ********
+    //******** 获取对应动作 ********
     public String getAction(int id, String type) {
         String action = "";
         switch (id) {

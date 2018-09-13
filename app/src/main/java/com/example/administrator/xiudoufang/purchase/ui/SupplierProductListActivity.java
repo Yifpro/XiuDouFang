@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseTextWatcher;
@@ -59,7 +60,7 @@ public class SupplierProductListActivity extends AppCompatActivity implements IA
     private AnimatorSet menuAnim;
     private NewPurchaseOrderLogic mLogic;
     private ProductListAdapter mAdapter;
-    private List<SupplierProductListBean.SupplierProductBean> mList;
+    private List<ProductItem> mList;
     private HashMap<String, String> mParams;
     private String mFilterText = "";
     private boolean mIsShowSoftInput;
@@ -120,7 +121,7 @@ public class SupplierProductListActivity extends AppCompatActivity implements IA
             @Override
             public void onSuccess(Response<String> response) {
                 LoadingViewDialog.getInstance().dismiss();
-                List<SupplierProductListBean.SupplierProductBean> temp = response.body().getPo_chanpinlist();
+                ArrayList<ProductItem> temp = mLogic.parseProductListJson(JSONObject.parseObject(response.body()));
                 if (isFiltering) {
                     mList.clear();
                     mList.addAll(temp);
@@ -177,13 +178,13 @@ public class SupplierProductListActivity extends AppCompatActivity implements IA
                     mFabComplete.setVisibility(View.VISIBLE);
                     menuAnim.setStartDelay(350);
                     menuAnim.start();
-                    for (SupplierProductListBean.SupplierProductBean bean : mList) {
+                    for (ProductItem bean : mList) {
                         bean.setShowSelect(true);
                     }
                     mAdapter.setNewData(mList);
                 } else {
                     mFabComplete.setVisibility(View.GONE);
-                    for (SupplierProductListBean.SupplierProductBean bean : mList) {
+                    for (ProductItem bean : mList) {
                         bean.setShowSelect(false);
                     }
                     mAdapter.setNewData(mList);
@@ -192,33 +193,10 @@ public class SupplierProductListActivity extends AppCompatActivity implements IA
             case R.id.fab_complete:
                 Intent intent = new Intent();
                 ArrayList<ProductItem> list = new ArrayList<>();
-                for (SupplierProductListBean.SupplierProductBean bean : mList) {
+                for (ProductItem bean : mList) {
                     if (bean.isSelected()) {
-                        ProductItem item = new ProductItem();
-                        item.setPhotourl(bean.getPhotourl());
-                        item.setCpid(bean.getCpid());
-                        item.setProductNo(bean.getStyleno());
-                        item.setStylename(bean.getStylename());
-                        item.setColor("");
-                        item.setSize("");
-                        String factor = "", unit = "";
-                        for (SupplierProductListBean.SupplierProductBean.PacklistBean b : bean.getPacklist()) {
-                            if ("1".equals(b.getCheck())) {
-                                factor = b.getUnit_bilv();
-                                unit = b.getUnitname();
-                            }
-                        }
-                        SupplierProductListBean.SupplierProductBean.LishijialistBean historyBean = bean.getLishijialist().get(bean.getLishijialist().indexOf(new SupplierProductListBean.SupplierProductBean.LishijialistBean(factor, unit)));
-                        item.setFactor(factor);
-                        item.setUnit(unit);
-                        item.setAmount("1");
-                        item.setSinglePrice(historyBean.getPrice());
-                        item.setUnitPrice(historyBean.getPrice());
-                        item.setTip("");
-                        item.setGoodsNo("");
-                        item.setPriceCode(historyBean.getPricecode());
-                        item.setPriceSource("历史价");
-                        list.add(item);
+                        bean.setCp_qty("1");
+                        list.add(bean);
                     }
                 }
                 intent.putParcelableArrayListExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT_LIST, list);
@@ -293,8 +271,7 @@ public class SupplierProductListActivity extends AppCompatActivity implements IA
                 return;
             }
             Intent intent = new Intent(SupplierProductListActivity.this, SupplierProductDetailsActivity.class);
-            intent.putExtra(SupplierProductDetailsActivity.FROM_CLASS, TAG);
-            intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_BEAN, mList.get(position));
+            intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
             startActivity(intent);
         }
     }

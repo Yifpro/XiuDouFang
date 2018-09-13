@@ -20,7 +20,7 @@ import com.example.administrator.xiudoufang.bean.OrderFilter;
 import com.example.administrator.xiudoufang.bean.OrderQueryBean;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
-import com.example.administrator.xiudoufang.common.widget.SingleLineTextDialog;
+import com.example.administrator.xiudoufang.purchase.ui.SingleLineTextDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
