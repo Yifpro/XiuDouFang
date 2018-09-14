@@ -43,6 +43,7 @@
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_new_mobile_phone_num"
         app:siv_key="@string/new_mobile_phone_num"
+        app:siv_input_type="INPUT_NUMBER"
         app:siv_hint="@string/input_new_mobile_phone_num"
         app:siv_type="TYPE_EDIT"
         android:layout_width="match_parent"
@@ -50,6 +51,7 @@
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_new_phone_num"
         app:siv_key="@string/new_phone_num"
+        app:siv_input_type="INPUT_NUMBER"
         app:siv_hint="@string/input_new_phone_num"
         app:siv_type="TYPE_EDIT"
         android:layout_width="match_parent"
@@ -70,6 +72,7 @@
     <com.example.administrator.xiudoufang.common.widget.SearchInfoView
         android:id="@+id/siv_area_no"
         app:siv_key="@string/area_no"
+        app:siv_input_type="INPUT_NUMBER"
         app:siv_hint="@string/input_area_no"
         app:siv_type="TYPE_EDIT"
         android:layout_width="match_parent"

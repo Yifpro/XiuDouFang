@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:siv_hint="@string/input_mobile_phone_num"
+        app:siv_input_type="INPUT_NUMBER"
         app:siv_key="@string/mobile_phone_num"
         app:siv_type="TYPE_EDIT"/>
 
@@ -35,6 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:siv_hint="@string/input_phone_num"
+        app:siv_input_type="INPUT_NUMBER"
         app:siv_key="@string/phone_num"
         app:siv_type="TYPE_EDIT"/>
 

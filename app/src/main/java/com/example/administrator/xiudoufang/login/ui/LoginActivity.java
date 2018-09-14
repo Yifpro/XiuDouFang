@@ -3,6 +3,7 @@ package com.example.administrator.xiudoufang.login.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,6 +54,7 @@ public class LoginActivity extends AppCompatActivity implements IActivityBase, V
         mEtPassword = findViewById(R.id.et_password);
         mIvStatus = findViewById(R.id.iv_status);
 
+        mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         mIvStatus.setOnClickListener(this);
         findViewById(R.id.tv_server).setOnClickListener(this);
         findViewById(R.id.tv_status).setOnClickListener(this);

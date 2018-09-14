@@ -88,6 +88,7 @@ public class PurchaseSubFragment extends BaseFragment implements OnEventListener
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_FOR_PURCHASE_DETAILS && resultCode == Activity.RESULT_OK) {
+            //******** 将采购单存为草稿或确认订单时刷新页面 ********
             onEvent();
         }
     }

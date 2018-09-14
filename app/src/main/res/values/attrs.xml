@@ -5,7 +5,7 @@
         <attr name="setv_hint" format="string|reference" />
         <attr name="setv_value" format="string|reference" />
         <attr name="setv_inputType">
-            <enum name="TYPE_NULL" value="0" />
+            <enum name="TYPE_NUMBER" value="0" />
         </attr>
         <attr name="setv_is_password" format="boolean" />
         <attr name="setv_isEditable" format="boolean" />

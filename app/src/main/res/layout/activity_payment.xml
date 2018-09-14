@@ -118,6 +118,7 @@
                 android:id="@+id/siv_payment_amount"
                 app:siv_isShowNext="false"
                 app:siv_key="@string/payment_amount"
+                app:siv_input_type="INPUT_NUMBER"
                 app:siv_type="TYPE_EDIT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -126,6 +127,7 @@
                 android:id="@+id/siv_discount_amount"
                 app:siv_isShowNext="false"
                 app:siv_key="@string/discount_amount"
+                app:siv_input_type="INPUT_NUMBER"
                 app:siv_type="TYPE_EDIT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
