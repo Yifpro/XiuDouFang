@@ -6,6 +6,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
@@ -169,6 +170,10 @@ public class SearchInfoView extends LinearLayout {
 
     public void setRightSegmentSelected(boolean isSelected) {
         mTvRightSegment.setSelected(isSelected);
+    }
+
+    public void setOnTextChangeListener(TextWatcher textWatcher) {
+        mEtInput.addTextChangedListener(textWatcher);
     }
 
     public static class ViewType {

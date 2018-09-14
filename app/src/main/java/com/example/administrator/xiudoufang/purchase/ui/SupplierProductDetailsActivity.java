@@ -2,7 +2,9 @@ package com.example.administrator.xiudoufang.purchase.ui;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.xiudoufang.R;
+import com.example.administrator.xiudoufang.base.BaseTextWatcher;
 import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.ProductItem;
@@ -51,6 +54,7 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
     private SearchInfoView mSivPriceSource;
     private SearchInfoView mSivSinglePrice;
     private SearchInfoView mSivUnitPrice;
+    private SearchInfoView mSivUnitPricecode;
     private SearchInfoView mSivColor;
     private SearchInfoView mSivSize;
     private SearchInfoView mSivPurchaseAmount;
@@ -73,6 +77,8 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
     private String mSize; //******** 当前规格 ********
     private int mPriceSourceIndex; //******** 当前价格来源 ********
     private boolean mIsNotGift; //******** true: 当前产品非赠品 ********
+    private String mPriceMode; //******** 价格显示模式 ********
+    private JSONObject mLoginInfo;
 
     @Override
     public int getLayoutId() {
@@ -98,6 +104,7 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         mSivPriceSource = findViewById(R.id.siv_price_source);
         mSivSinglePrice = findViewById(R.id.siv_single_price);
         mSivUnitPrice = findViewById(R.id.siv_unit_price);
+        mSivUnitPricecode = findViewById(R.id.siv_unit_pricecode);
         mSivColor = findViewById(R.id.siv_product_color);
         mSivSize = findViewById(R.id.siv_size);
         mSivPurchaseAmount = findViewById(R.id.siv_purchase_amount);
@@ -106,12 +113,23 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         TextView tvBottomLeft = findViewById(R.id.tv_bottom_left);
         TextView tvBottomRight = findViewById(R.id.tv_bottom_right);
 
-        mSivGift.setStatus(true);
+        mLoginInfo = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
+        mPriceMode = mLoginInfo.getString("poprice_mode");
+        if ("0".equals(mPriceMode)) { //******** 只看见价格 ********
+            mSivUnitPricecode.setVisibility(View.GONE);
+        } else if ("1".equals(mPriceMode)) { //******** 只看见价码 ********
+            mSivSinglePrice.setVisibility(View.GONE);
+            mSivUnitPrice.setVisibility(View.GONE);
+        } else if ("3".equals(mPriceMode)) { //******** 都不能看到 ********
+            mSivSinglePrice.setVisibility(View.GONE);
+            mSivUnitPrice.setVisibility(View.GONE);
+            mSivUnitPricecode.setVisibility(View.GONE);
+        }
         mSivUnitPrice.setKey(StringUtils.getSpannableString("单位价*", 3));
         mSivPurchaseAmount.setKey(StringUtils.getSpannableString("采购数量*", 4));
-        boolean isShowAdd = SupplierProductListActivity.TAG.equals(getIntent().getStringExtra(FROM_CLASS));
         mSivPriceSource.setValue("历史价");
-        tvBottomLeft.setText(isShowAdd ? "添加" : "完成编辑");
+        mSivGift.setStatus(true);
+        tvBottomLeft.setText(SupplierProductListActivity.TAG.equals(getIntent().getStringExtra(FROM_CLASS)) ? "添加" : "完成编辑");
         tvBottomRight.setVisibility(View.GONE);
 
         mSivSize.setOnClickListener(this);
@@ -122,6 +140,7 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         tvBottomRight.setOnClickListener(this);
         findViewById(R.id.tv_expand).setOnClickListener(this);
         findViewById(R.id.tv_collapse).setOnClickListener(this);
+        mSivUnitPrice.setOnTextChangeListener(new InnerUnitPriceTextChangeListener());
         mSivGift.setOnItemChangeListener(new InnerItemChangeListener());
     }
 
@@ -243,7 +262,7 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
                     mSivPriceSource.setValue(mPriceSourceList.get(position));
                     mSivSinglePrice.setValue(singlePrice);
                     mSivUnitPrice.setValue(unitPrice);
-                    mProductItem.setPricecode(priceCode);
+                    mSivUnitPricecode.setValue(priceCode);
                     mPriceSourceIndex = position;
                 }
             });
@@ -288,7 +307,7 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
                     }
                     mSivPurchaseUnit.setValue(pair.getKey() + pair.getValue());
                     mSivUnitPrice.setValue(unitPrice);
-                    mProductItem.setPricecode(priceCode);
+                    mSivUnitPricecode.setValue(priceCode);
                     mBilv = bilv;
                 }
             });
@@ -369,35 +388,18 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
     }
 
     private void addProduct() {
-        char[] chars = mSivPurchaseUnit.getValue().toCharArray();
-        StringBuilder sb = new StringBuilder();
-        int unitIndex = 0;
-        for (int i = 0; i < chars.length; i++) {
-            char c = chars[i];
-            if (c >= '0' && c <= '9') {
-                sb.append(c);
-                unitIndex = i;
-            }
-        }
-        mProductItem.setFactor(sb.toString());
-        mProductItem.setUnitname(mSivPurchaseUnit.getValue().substring(unitIndex + 1));
+        mProductItem.setYanse(mSivColor.getValue());
+        mProductItem.setGuige(mSivSize.getValue());
+        mProductItem.setFactor(mBilv);
+        mProductItem.setUnitname(mPurchaseUnitList.get(mPurchaseUnitList.indexOf(new StringPair(mBilv))).getValue());
+        mProductItem.setJiagelaiyuan(mSivPriceSource.getValue());
         mProductItem.setOrder_prc(mSivSinglePrice.getValue());
         mProductItem.setS_jiage2(mSivUnitPrice.getValue());
-        mProductItem.setGuige(mSivSize.getValue());
-        mProductItem.setYanse(mSivColor.getValue());
+        mProductItem.setPricecode(mSivUnitPricecode.getValue());
         mProductItem.setCp_qty(mSivPurchaseAmount.getValue());
         mProductItem.setZengpin(mIsNotGift ? "0" : "1");
         mProductItem.setHuohao(mSivGoodsNo.getValue());
         mProductItem.setBz(mEtTip.getText().toString());
-        JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
-        String fomula = jsonObject.getString("po_jiamae_gongshi").replace("价格", mSivUnitPrice.getValue());
-        StringTokenizer tokenizer = new StringTokenizer(fomula, ",");
-        StringBuilder builder = new StringBuilder();
-        while (tokenizer.hasMoreTokens()) {
-            builder.append(tokenizer.nextToken());
-        }
-        mProductItem.setPricecode(ExpressionUtils.getInstance().caculate(builder.toString()));
-        mProductItem.setJiagelaiyuan(mSivPriceSource.getValue());
         Intent intent = new Intent(SupplierProductDetailsActivity.this, NewPurchaseOrderActivity.class);
         intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, mProductItem);
         startActivity(intent);
@@ -408,6 +410,26 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         @Override
         public void onItemchange(boolean isLeft) {
             mIsNotGift = isLeft;
+        }
+    }
+
+    private class InnerUnitPriceTextChangeListener extends BaseTextWatcher {
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if (editable.toString().length() > 0) {
+                char[] chars = editable.toString().toCharArray();
+                char c = chars[chars.length - 1];
+                if (c > '0' && c < '9') {
+                    String fomula = mLoginInfo.getString("po_jiamae_gongshi").replace("价格", editable.toString());
+                    StringTokenizer tokenizer = new StringTokenizer(fomula, ",");
+                    StringBuilder builder = new StringBuilder();
+                    while (tokenizer.hasMoreTokens()) {
+                        builder.append(tokenizer.nextToken());
+                    }
+                    mSivUnitPricecode.setValue(ExpressionUtils.getInstance().caculate(builder.toString()));
+                }
+            }
         }
     }
 }

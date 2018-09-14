@@ -165,4 +165,5 @@
     <string name="not_replace">不替换</string>
     <string name="replace">替换</string>
     <string name="result_for_scan">扫描结果如下</string>
+    <string name="unit_price_code">单位价码</string>
 </resources>
