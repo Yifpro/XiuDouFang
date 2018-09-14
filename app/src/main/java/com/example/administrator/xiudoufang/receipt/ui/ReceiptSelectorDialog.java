@@ -17,8 +17,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.bean.PayBean;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
-import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.receipt.adapter.ReceiptSelectorAdapter;
 
@@ -32,7 +30,7 @@ public class ReceiptSelectorDialog extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        View view = inflater.inflate(R.layout.fragment_receipt_selector, container);
+        View view = inflater.inflate(R.layout.fragment_receipt_success, container);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
         final List<PayBean> list = JSONObject.parseArray(jsonObject.getJSONArray("pay").toJSONString(), PayBean.class);

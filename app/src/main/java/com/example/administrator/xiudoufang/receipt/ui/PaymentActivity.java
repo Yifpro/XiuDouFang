@@ -22,6 +22,7 @@ import com.example.administrator.xiudoufang.bean.PayBean;
 import com.example.administrator.xiudoufang.bean.SingleCustomerItem;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
@@ -296,28 +297,36 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
     private void submitBill() {
         if (checkNotEmpty()) {
             if (mSingleCustomerItem != null) {
-                SharedPreferences preferences = PreferencesUtils.getPreferences();
                 HttpParams params = new HttpParams();
-                params.put("dianid", preferences.getString(PreferencesUtils.DIAN_ID, ""));
+                params.put("dianid", PreferencesUtils.getPreferences().getString(PreferencesUtils.DIAN_ID, ""));
                 params.put("c_id", mSingleCustomerItem.getC_id());
                 params.put("orderid", "0"); //******** 订单id ********
                 params.put("amt", mSivPaymentAmount.getValue()); //******** 收付款金额 ********
                 params.put("youhui", mSivDiscountAmount.getValue()); //******** 优惠金额 ********
                 params.put("shoukuanid", mPayId); //******** 银行支付方式id ********
                 params.put("memo", mEtTip.getText().toString()); //******** 备注 ********
-                params.put("dqman", preferences.getString(PreferencesUtils.USER_NAME, "")); //******** 操作人 ********
+                params.put("dqman", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_NAME, "")); //******** 操作人 ********
                 params.put("riqi", mSivPaymentDate.getValue()); //******** 日期 ********
-                params.put("userid", preferences.getString(PreferencesUtils.USER_ID, ""));
+                params.put("userid", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
                 params.put("accountid", mSubjectId); //******** 会计科目id ********
                 params.put("leixing", mDirection); //******** 1：收款 0：付款 ********
                 mLogic.requestReceipt(this, params, new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-
+                        JSONObject jsonObject = JSONObject.parseObject(response.body());
+                        if ("1".equals(jsonObject.getString("status")) && "1".equals(jsonObject.getString("messages"))) {
+                            ArrayList<String> list = new ArrayList<>();
+                            list.add(mSivPaymentAmount.getValue());
+                            list.add(mSivDiscountAmount.getValue());
+                            ReceiptSuccessDialog dialog = ReceiptSuccessDialog.newInstance(list);
+                            dialog.show(getSupportFragmentManager(), "ReceiptSuccessDialog");
+                        } else {
+                            ToastUtils.show(PaymentActivity.this, jsonObject.getString("messages"));
+                        }
                     }
                 });
             } else {
-                ToastUtils.show(this, "服务器繁忙");
+                ToastUtils.show(this, "服务器繁忙，请稍后重试");
             }
         }
     }
