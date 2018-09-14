@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.CompoundButton;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -17,6 +18,7 @@ import com.example.administrator.xiudoufang.bean.LoginStore;
 import com.example.administrator.xiudoufang.bean.StringPair;
 import com.example.administrator.xiudoufang.common.utils.CacheDataManager;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
+import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.login.ui.LoginActivity;
@@ -36,6 +38,7 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
     private ArrayList<StringPair> mList;
     private ArrayList<LoginStore> mLoginStores;
     private int mIndex; //******** 当前店的下标 ********
+    private boolean mIsOpen; //******** 是否开启连续扫描 ********
 
     public static void start(Context context) {
         context.startActivity(new Intent(context, SettingActivity.class));
@@ -52,6 +55,12 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
         mRecyclerView = findViewById(R.id.recycler_view);
 
         findViewById(R.id.tv_exit_login).setOnClickListener(new InnerClickListener());
+    }
+
+    @Override
+    public void onBackPressed() {
+        PreferencesUtils.save(PreferencesUtils.SEQUENTIAL_SCAN, mIsOpen);
+        super.onBackPressed();
     }
 
     @Override
@@ -82,30 +91,8 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
         mList.add(new StringPair("连续扫描模式", "").setToogleButton(true));
         mAdapter = new SettingAdapter(R.layout.layout_list_item_setting, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                switch (position) {
-                    case 6:
-                        //******** 切换店 ********
-                        Intent intent = new Intent(SettingActivity.this, ShopListActivity.class);
-                        intent.putParcelableArrayListExtra(STORE_LIST, mLoginStores);
-                        intent.putExtra(SELECTED_INDEX, mIndex);
-                        startActivityForResult(intent, RESULT_SORT_LIST);
-                        break;
-                    case 7:
-                        //******** 清除缓存 ********
-                        CacheDataManager.clearAllCache(SettingActivity.this);
-                        int index = mList.indexOf(new StringPair("清除缓存"));
-                        mList.get(index).setValue(CacheDataManager.getTotalCacheSize(SettingActivity.this));
-                        adapter.notifyItemChanged(index);
-                        ToastUtils.show(SettingActivity.this, "清除缓存完毕");
-                        break;
-                    case 8:
-                        break;
-                }
-            }
-        });
+        mAdapter.setOnCheckedChangeListener(new InnerCheckChangeListener());
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -130,6 +117,38 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
         public void onClick(View view) {
             LoginActivity.start(SettingActivity.this);
             SettingActivity.this.finish();
+        }
+    }
+
+    private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            switch (position) {
+                case 6:
+                    //******** 切换店 ********
+                    Intent intent = new Intent(SettingActivity.this, ShopListActivity.class);
+                    intent.putParcelableArrayListExtra(STORE_LIST, mLoginStores);
+                    intent.putExtra(SELECTED_INDEX, mIndex);
+                    startActivityForResult(intent, RESULT_SORT_LIST);
+                    break;
+                case 7:
+                    //******** 清除缓存 ********
+                    CacheDataManager.clearAllCache(SettingActivity.this);
+                    int index = mList.indexOf(new StringPair("清除缓存"));
+                    mList.get(index).setValue(CacheDataManager.getTotalCacheSize(SettingActivity.this));
+                    adapter.notifyItemChanged(index);
+                    ToastUtils.show(SettingActivity.this, "清除缓存完毕");
+                    break;
+            }
+        }
+    }
+
+    private class InnerCheckChangeListener implements CompoundButton.OnCheckedChangeListener {
+
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            mIsOpen = b;
         }
     }
 }

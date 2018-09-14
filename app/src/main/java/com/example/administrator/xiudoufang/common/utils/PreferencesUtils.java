@@ -19,6 +19,7 @@ public class PreferencesUtils {
     public static final String USER_ID = "user_id";
     public static final String DIAN_ID = "dian_id";
     public static final String TIME_REFRESH = "time_refresh";
+    public static final String SEQUENTIAL_SCAN = "sequential_scan";
 
     private PreferencesUtils() {}
 

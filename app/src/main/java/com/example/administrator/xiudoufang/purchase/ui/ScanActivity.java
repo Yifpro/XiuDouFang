@@ -45,6 +45,7 @@ import cn.bingoogolapple.qrcode.zxing.ZXingView;
 
 public class ScanActivity extends AppCompatActivity implements IActivityBase, QRCodeView.Delegate, View.OnClickListener {
 
+    private final boolean IS_OPEN_SEQUENTIAL_SCAN = PreferencesUtils.getPreferences().getBoolean(PreferencesUtils.SEQUENTIAL_SCAN, false);
     public static final String FROM_CLASS = "from_class";
     public static final String BARCODE_PRODUCT = "barcode_product";
     public static final int SALES_ORDER = 0;
@@ -59,7 +60,9 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
     private TextView mTvFlash;
 
     private SensorManager mSensorManager;
-    private boolean mIsOpen;
+    private boolean mIsOpenFlash; //******** 闪光灯状态 ********
+    private ArrayList<SalesProductListBean.SalesProductBean> mSalesProductBeans;
+    private ArrayList<ProductItem> mProductItems;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, ScanActivity.class);
@@ -99,7 +102,7 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_flash:
-                if (mIsOpen) {
+                if (mIsOpenFlash) {
                     mZXingView.closeFlashlight();
                     mTvFlash.setText("轻点打开");
                     mTvFlash.setTextColor(Color.WHITE);
@@ -112,7 +115,7 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
                     mTvFlash.setCompoundDrawablesWithIntrinsicBounds(null, TintUtils.tintDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_flash),
                             ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorPrimary))), null, null);
                 }
-                mIsOpen = !mIsOpen;
+                mIsOpenFlash = !mIsOpenFlash;
                 break;
         }
     }
@@ -160,9 +163,15 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
                                 SameBarcodeSalesProductDialog.newInstance(fromClass, list)
                                         .setOnItemClickListener(new SameBarcodeSalesProductDialog.OnItemClickListener() {
                                             @Override
-                                            public void onSubmit(ArrayList<SalesProductListBean.SalesProductBean> result) {
-                                                setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(BARCODE_PRODUCT, result));
-                                                finish();
+                                            public void onSubmit(ArrayList<SalesProductListBean.SalesProductBean> list) {
+                                                if (IS_OPEN_SEQUENTIAL_SCAN) {
+                                                    if (mSalesProductBeans == null) mSalesProductBeans = new ArrayList<>();
+                                                    mSalesProductBeans.addAll(list);
+                                                    mZXingView.startSpot();
+                                                } else {
+                                                    setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(BARCODE_PRODUCT, list));
+                                                    finish();
+                                                }
                                             }
 
                                             @Override
@@ -212,9 +221,15 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
                                 SameBarcodeSupplierProductDialog.newInstance(fromClass, temp)
                                         .setOnItemClickListener(new SameBarcodeSupplierProductDialog.OnItemClickListener() {
                                             @Override
-                                            public void onSubmit(ArrayList<ProductItem> result) {
-                                                setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT_LIST, result));
-                                                finish();
+                                            public void onSubmit(ArrayList<ProductItem> list) {
+                                                if (IS_OPEN_SEQUENTIAL_SCAN) {
+                                                    if (mProductItems == null) mProductItems = new ArrayList<>();
+                                                    mProductItems.addAll(list);
+                                                    mZXingView.startSpot();
+                                                } else {
+                                                    setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT_LIST, list));
+                                                    finish();
+                                                }
                                             }
 
                                             @Override
@@ -225,10 +240,15 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
                                         .show(getSupportFragmentManager(), "");
                             } else {
                                 //******** 返回单个产品 ********
-                                Intent intent = new Intent();
-                                intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, temp);
-                                setResult(Activity.RESULT_OK, intent);
-                                finish();
+                                if (IS_OPEN_SEQUENTIAL_SCAN) {
+                                    mProductItems.addAll(temp);
+                                    mZXingView.startSpot();
+                                } else {
+                                    Intent intent = new Intent();
+                                    intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, temp);
+                                    setResult(Activity.RESULT_OK, intent);
+                                    finish();
+                                }
                             }
                         }
                     }
