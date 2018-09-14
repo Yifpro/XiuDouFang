@@ -20,9 +20,11 @@ import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.utils.TintUtils;
+import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.open.logic.SalesOrderLogic;
 import com.example.administrator.xiudoufang.open.ui.SalesOrderActivity;
@@ -63,6 +65,7 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
     private boolean mIsOpenFlash; //******** 闪光灯状态 ********
     private ArrayList<SalesProductListBean.SalesProductBean> mSalesProductBeans;
     private ArrayList<ProductItem> mProductItems;
+    private int mFromClass = -1;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, ScanActivity.class);
@@ -72,6 +75,22 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
     @Override
     public int getLayoutId() {
         return R.layout.activity_scan;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (IS_OPEN_SEQUENTIAL_SCAN && mFromClass != -1) {
+            switch (mFromClass) {
+                case SALES_ORDER:
+                    setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(BARCODE_PRODUCT, mSalesProductBeans));
+                    break;
+                case CREATE_PURCHASE_ORDER:
+                case PURCHASE_ORDER_DETAILS:
+                    setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT_LIST, mProductItems));
+                    break;
+            }
+        }
+        super.onBackPressed();
     }
 
     @Override
@@ -122,8 +141,9 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
 
     @Override
     public void onScanQRCodeSuccess(String result) {
-        final int fromClass = getIntent().getIntExtra(FROM_CLASS, 0);
-        switch (fromClass) {
+        ToastUtils.show(this, result);
+        mFromClass = getIntent().getIntExtra(FROM_CLASS, 0);
+        switch (mFromClass) {
             case SALES_ORDER: //******** 开单首页 ********
                 SalesOrderLogic salesOrderLogic = new SalesOrderLogic();
                 HashMap<String, String> params_1 = new HashMap<>();
@@ -153,33 +173,36 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
                                 }
                             }
 
-                        }if (temp.size() > 0) {
+                        }
+                        if (temp.size() > 0) {
                             if (temp.size() > 1) {
                                 //******** 返回多个同条形码的产品 ********
                                 ArrayList<SalesProductListBean.SalesProductBean> list = new ArrayList<>(temp.size());
                                 for (SalesProductListBean.SalesProductBean bean : temp) {
                                     list.add(bean);
                                 }
-                                SameBarcodeSalesProductDialog.newInstance(fromClass, list)
-                                        .setOnItemClickListener(new SameBarcodeSalesProductDialog.OnItemClickListener() {
-                                            @Override
-                                            public void onSubmit(ArrayList<SalesProductListBean.SalesProductBean> list) {
-                                                if (IS_OPEN_SEQUENTIAL_SCAN) {
-                                                    if (mSalesProductBeans == null) mSalesProductBeans = new ArrayList<>();
-                                                    mSalesProductBeans.addAll(list);
-                                                    mZXingView.startSpot();
-                                                } else {
-                                                    setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(BARCODE_PRODUCT, list));
-                                                    finish();
-                                                }
-                                            }
+                                final SameBarcodeSalesProductDialog dialog = SameBarcodeSalesProductDialog.newInstance(mFromClass, list);
+                                dialog.setOnItemClickListener(new SameBarcodeSalesProductDialog.OnItemClickListener() {
+                                    @Override
+                                    public void onSubmit(ArrayList<SalesProductListBean.SalesProductBean> list) {
+                                        if (IS_OPEN_SEQUENTIAL_SCAN) {
+                                            if (mSalesProductBeans == null)
+                                                mSalesProductBeans = new ArrayList<>();
+                                            mSalesProductBeans.addAll(list);
+                                            dialog.dismiss();
+                                            mZXingView.startSpot();
+                                        } else {
+                                            setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(BARCODE_PRODUCT, list));
+                                            finish();
+                                        }
+                                    }
 
-                                            @Override
-                                            public void onDismiss() {
-                                                mZXingView.startSpot();
-                                            }
-                                        })
-                                        .show(getSupportFragmentManager(), "");
+                                    @Override
+                                    public void onDismiss() {
+                                        mZXingView.startSpot();
+                                    }
+                                });
+                                dialog.show(getSupportFragmentManager(), "");
                             } else {
                                 //******** 返回单个产品 ********
                                 Intent intent = new Intent();
@@ -214,30 +237,33 @@ public class ScanActivity extends AppCompatActivity implements IActivityBase, QR
                     @Override
                     public void onSuccess(Response<String> response) {
                         LoadingViewDialog.getInstance().dismiss();
+                        LogUtils.e("info->"+response.body());
                         ArrayList<ProductItem> temp = newPurchaseOrderLogic.parseProductListJson(JSONObject.parseObject(response.body()));
                         if (temp.size() > 0) {
                             if (temp.size() > 1) {
                                 //******** 返回多个同条形码的产品 ********
-                                SameBarcodeSupplierProductDialog.newInstance(fromClass, temp)
-                                        .setOnItemClickListener(new SameBarcodeSupplierProductDialog.OnItemClickListener() {
-                                            @Override
-                                            public void onSubmit(ArrayList<ProductItem> list) {
-                                                if (IS_OPEN_SEQUENTIAL_SCAN) {
-                                                    if (mProductItems == null) mProductItems = new ArrayList<>();
-                                                    mProductItems.addAll(list);
-                                                    mZXingView.startSpot();
-                                                } else {
-                                                    setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT_LIST, list));
-                                                    finish();
-                                                }
-                                            }
+                                final SameBarcodeSupplierProductDialog dialog = SameBarcodeSupplierProductDialog.newInstance(mFromClass, temp);
+                                dialog.setOnItemClickListener(new SameBarcodeSupplierProductDialog.OnItemClickListener() {
+                                    @Override
+                                    public void onSubmit(ArrayList<ProductItem> list) {
+                                        if (IS_OPEN_SEQUENTIAL_SCAN) {
+                                            if (mProductItems == null)
+                                                mProductItems = new ArrayList<>();
+                                            mProductItems.addAll(list);
+                                            dialog.dismiss();
+                                            mZXingView.startSpot();
+                                        } else {
+                                            setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT_LIST, list));
+                                            finish();
+                                        }
+                                    }
 
-                                            @Override
-                                            public void onDismiss() {
-                                                mZXingView.startSpot();
-                                            }
-                                        })
-                                        .show(getSupportFragmentManager(), "");
+                                    @Override
+                                    public void onDismiss() {
+                                        mZXingView.startSpot();
+                                    }
+                                });
+                                dialog.show(getSupportFragmentManager(), "");
                             } else {
                                 //******** 返回单个产品 ********
                                 if (IS_OPEN_SEQUENTIAL_SCAN) {

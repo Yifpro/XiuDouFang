@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.bean.StringPair;
 import com.example.administrator.xiudoufang.common.utils.LogUtils;
+import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class SettingAdapter extends BaseQuickAdapter<StringPair, BaseViewHolder>
         helper.getView(R.id.toggle).setVisibility(item.isToogleButton() ? View.VISIBLE : View.GONE);
         if (item.isToogleButton()) {
             Switch toggle = helper.getView(R.id.toggle);
+            toggle.setChecked(PreferencesUtils.getPreferences().getBoolean(PreferencesUtils.SEQUENTIAL_SCAN, false));
             toggle.setOnCheckedChangeListener(listener);
         }
     }

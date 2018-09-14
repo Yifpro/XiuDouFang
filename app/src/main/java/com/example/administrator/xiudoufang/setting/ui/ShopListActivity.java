@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.LoginStore;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
@@ -54,26 +55,25 @@ public class ShopListActivity extends AppCompatActivity implements IActivityBase
 
     @Override
     public void onBackPressed() {
-        if (getIntent().getIntExtra(SettingActivity.SELECTED_INDEX, 0) != mIndex) {
-            LoadingViewDialog.getInstance().show(this);
-            LoginLogic logic = new LoginLogic();
-            HashMap<String, String> map = new HashMap<>();
-            map.put("username", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_NAME, ""));
-            map.put("password", PreferencesUtils.getPreferences().getString(PreferencesUtils.PASSWORD, ""));
-            map.put("logdianid", mList.get(mIndex).getId());
-            map.put("phonecode", "");
-            map.put("changedian", "1");
-            logic.requestLogin(this, map, new StringCallback() {
+        LoadingViewDialog.getInstance().show(this);
+        LoginLogic logic = new LoginLogic();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("username", PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_NAME, ""));
+        map.put("password", PreferencesUtils.getPreferences().getString(PreferencesUtils.PASSWORD, ""));
+        map.put("logdianid", mList.get(mIndex).getId());
+        map.put("phonecode", "");
+        map.put("changedian", "1");
+        logic.requestLogin(this, map, new StringCallback() {
 
-                @Override
-                public void onSuccess(Response<String> response) {
-                    LoadingViewDialog.getInstance().dismiss();
-                    StringUtils.cacheInfoToFile(response.body(), StringUtils.LOGIN_INFO);
-                }
-            });
-            setResult(Activity.RESULT_OK, new Intent().putExtra("index", mIndex));
-        }
-        super.onBackPressed();
+            @Override
+            public void onSuccess(Response<String> response) {
+                LoadingViewDialog.getInstance().dismiss();
+                LogUtils.e("新信息->" + response.body());
+                StringUtils.cacheInfoToFile(response.body(), StringUtils.LOGIN_INFO);
+                setResult(Activity.RESULT_OK, new Intent().putExtra("index", mIndex));
+                ShopListActivity.super.onBackPressed();
+            }
+        });
     }
 
     private class InnerItemClickListener implements BaseQuickAdapter.OnItemClickListener {

@@ -77,6 +77,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
 
     private static final int RESULT_WAREHOUSE = 104;
     private static final int RESULT_FOR_SCAN_BAR_CODE = 131; //******** 扫描条形码 ********
+    private static final int RESULT_FOR_INFO_CHANGE = 133; //******** 修改产品信息 ********
     public static final String TAG = PurchaseDetailsActivity.class.getSimpleName();
 
     private SearchInfoView mSivOrderNo;
@@ -117,6 +118,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     private SelectedProductListAdapter mAdapter;
     private String mImgPath;
     private String mIid;
+    private int mPosition;
 
     @Override
     public int getLayoutId() {
@@ -342,6 +344,11 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
             mTvBottomRight.setBackgroundResource(R.drawable.rect_4_blue);
             caculateTotalPrice();
+        } else if (requestCode == RESULT_FOR_INFO_CHANGE && data != null) {
+            ProductItem temp = data.getParcelableExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM);
+            mList.remove(mPosition);
+            mList.add(mPosition, temp);
+            mAdapter.notifyItemChanged(mPosition);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -599,6 +606,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 break;
             case R.id.tv_add_product:
                 startActivityForResult(new Intent(this, SupplierProductListActivity.class)
+                        .putExtra(SupplierProductListActivity.FROM_CLASS, TAG)
                         .putExtra(SupplierProductListActivity.SUPPLIER_ID, mSupplier.getC_id()), RESULT_PRODUCT_LIST);
                 break;
             case R.id.tv_scan_product:
@@ -723,8 +731,10 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         @Override
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
             Intent intent = new Intent(PurchaseDetailsActivity.this, SupplierProductDetailsActivity.class);
+            intent.putExtra(SupplierProductDetailsActivity.TAG, SupplierProductDetailsActivity.INFO_CHANGE_FOR_PURCHASE_DETAILS);
             intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
-            startActivity(intent);
+            startActivityForResult(intent, RESULT_FOR_INFO_CHANGE);
+            mPosition = position;
         }
     }
 

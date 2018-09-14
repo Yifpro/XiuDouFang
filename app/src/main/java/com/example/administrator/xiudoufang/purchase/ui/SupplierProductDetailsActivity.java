@@ -1,10 +1,10 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -35,8 +35,12 @@ import java.util.StringTokenizer;
 public class SupplierProductDetailsActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
     private static final String DEFAULT_FACTOR = "1";
-    public static final String FROM_CLASS = "from_class";
     public static final String SELECTED_PRODUCT_ITEM = "selected_product_item";
+    public static final String TAG = SupplierProductDetailsActivity.class.getSimpleName();
+    public static final int ADD_PRODUCT_FOR_PURCHASE_DETAILS = 1000; //******** 采购单详情页添加产品 ********
+    public static final int ADD_PRODUCT_FOR_NEW_ORDER = 1001; //******** 新单添加产品 ********
+    public static final int INFO_CHANGE_FOR_PURCHASE_DETAILS = 1002; //******** 采购单详情页更改信息 ********
+    public static final int INFO_CHANGE_FOR_NEW_ORDER = 1003; //******** 新单更改信息 ********
 
     private TextView mTvExpand;
     private EditText mEtTip;
@@ -77,7 +81,6 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
     private String mSize; //******** 当前规格 ********
     private int mPriceSourceIndex; //******** 当前价格来源 ********
     private boolean mIsNotGift; //******** true: 当前产品非赠品 ********
-    private String mPriceMode; //******** 价格显示模式 ********
     private JSONObject mLoginInfo;
 
     @Override
@@ -114,22 +117,21 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         TextView tvBottomRight = findViewById(R.id.tv_bottom_right);
 
         mLoginInfo = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
-        mPriceMode = mLoginInfo.getString("poprice_mode");
-        if ("0".equals(mPriceMode)) { //******** 只看见价格 ********
+        String priceMode = mLoginInfo.getString("poprice_mode");
+        if ("0".equals(priceMode)) { //******** 只看见价格 ********
             mSivUnitPricecode.setVisibility(View.GONE);
-        } else if ("1".equals(mPriceMode)) { //******** 只看见价码 ********
+        } else if ("1".equals(priceMode)) { //******** 只看见价码 ********
             mSivSinglePrice.setVisibility(View.GONE);
             mSivUnitPrice.setVisibility(View.GONE);
-        } else if ("3".equals(mPriceMode)) { //******** 都不能看到 ********
+        } else if ("3".equals(priceMode)) { //******** 都不能看到 ********
             mSivSinglePrice.setVisibility(View.GONE);
             mSivUnitPrice.setVisibility(View.GONE);
             mSivUnitPricecode.setVisibility(View.GONE);
         }
         mSivUnitPrice.setKey(StringUtils.getSpannableString("单位价*", 3));
         mSivPurchaseAmount.setKey(StringUtils.getSpannableString("采购数量*", 4));
-        mSivPriceSource.setValue("历史价");
-        mSivGift.setStatus(true);
-        tvBottomLeft.setText(SupplierProductListActivity.TAG.equals(getIntent().getStringExtra(FROM_CLASS)) ? "添加" : "完成编辑");
+        int tag = getIntent().getIntExtra(TAG, 0);
+        tvBottomLeft.setText(tag == ADD_PRODUCT_FOR_PURCHASE_DETAILS || tag == ADD_PRODUCT_FOR_NEW_ORDER ? "添加" : "完成编辑");
         tvBottomRight.setVisibility(View.GONE);
 
         mSivSize.setOnClickListener(this);
@@ -149,6 +151,12 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         mProductItem = getIntent().getParcelableExtra(SELECTED_PRODUCT_ITEM);
         if (TextUtils.isEmpty(mProductItem.getYanse())) mSivColor.setVisibility(View.GONE);
         if (TextUtils.isEmpty(mProductItem.getGuige())) mSivSize.setVisibility(View.GONE);
+
+        mPurchaseUnitList = new ArrayList<>();
+        for (ProductItem.PacklistBean bean : mProductItem.getPacklist()) {
+            mPurchaseUnitList.add(new StringPair(bean.getUnit_bilv(), bean.getUnitname()));
+        }
+        mSivPriceSource.setValue(TextUtils.isEmpty(mProductItem.getJiagelaiyuan()) ? "历史价" : mProductItem.getJiagelaiyuan());
 
         mBilv = mProductItem.getFactor();
         GlideApp.with(this).load(StringUtils.PIC_URL + mProductItem.getPhotourl()).error(R.mipmap.ic_error).into((ImageView) findViewById(R.id.iv_icon));
@@ -273,10 +281,6 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
     //******** 采购单位选择框 ********
     private void showPurchaseUnitDialog() {
         if (mPurchaseUnitDialog == null) {
-            mPurchaseUnitList = new ArrayList<>();
-            for (ProductItem.PacklistBean bean : mProductItem.getPacklist()) {
-                mPurchaseUnitList.add(new StringPair(bean.getUnit_bilv(), bean.getUnitname()));
-            }
             mPurchaseUnitDialog = PurchaseUnitDialog.newInstance(mPurchaseUnitList);
             mPurchaseUnitDialog.setOnItemChangedListener(new PurchaseUnitDialog.OnItemClickListener() {
                 @Override
@@ -400,9 +404,21 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         mProductItem.setZengpin(mIsNotGift ? "0" : "1");
         mProductItem.setHuohao(mSivGoodsNo.getValue());
         mProductItem.setBz(mEtTip.getText().toString());
-        Intent intent = new Intent(SupplierProductDetailsActivity.this, NewPurchaseOrderActivity.class);
-        intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, mProductItem);
-        startActivity(intent);
+        int tag = getIntent().getIntExtra(TAG, 0);
+        if (tag == ADD_PRODUCT_FOR_PURCHASE_DETAILS) {
+            Intent intent = new Intent(SupplierProductDetailsActivity.this, PurchaseDetailsActivity.class);
+            intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, mProductItem);
+            startActivity(intent);
+        } else if (tag == ADD_PRODUCT_FOR_NEW_ORDER) {
+            Intent intent = new Intent(SupplierProductDetailsActivity.this, NewPurchaseOrderActivity.class);
+            intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, mProductItem);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent();
+            intent.putExtra(SELECTED_PRODUCT_ITEM, mProductItem);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        }
     }
 
     private class InnerItemChangeListener implements SearchInfoView.OnItemChangeListener {

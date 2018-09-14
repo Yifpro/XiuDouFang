@@ -104,7 +104,10 @@ public class SameBarcodeSupplierProductDialog extends DialogFragment implements 
             case R.id.fab_complete:
                 ArrayList<ProductItem> list = new ArrayList<>();
                 for (ProductItem bean : mList) {
-                    if (bean.isSelected()) list.add(bean);
+                    if (bean.isSelected()){
+                        bean.setCp_qty("1");
+                        list.add(bean);
+                    }
                 }
                 mListener.onSubmit(list);
                 break;
@@ -120,9 +123,8 @@ public class SameBarcodeSupplierProductDialog extends DialogFragment implements 
         super.onDismiss(dialog);
     }
 
-    public SameBarcodeSupplierProductDialog setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
-        return this;
     }
 
     public interface OnItemClickListener {

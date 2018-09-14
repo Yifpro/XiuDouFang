@@ -10,9 +10,9 @@
 
     <LinearLayout
         android:id="@+id/add_product_layout"
-        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:background="@color/white"
         android:orientation="horizontal">
 
@@ -21,23 +21,23 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawableTop="@mipmap/ic_add"
             android:gravity="center"
             android:padding="5dp"
-            android:textSize="14dp"
-            android:drawableTop="@mipmap/ic_add"
+            android:text="添加产品"
             android:textColor="@color/colorPrimary"
-            android:text="添加产品"/>
+            android:textSize="14dp"/>
 
         <TextView
             android:id="@+id/tv_scan_product"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawableTop="@mipmap/ic_scan_blue"
             android:gravity="center"
             android:padding="5dp"
-            android:textSize="14dp"
-            android:drawableTop="@mipmap/ic_scan_blue"
+            android:text="扫描产品"
             android:textColor="@color/colorPrimary"
-            android:text="扫描产品"/>
+            android:textSize="14dp"/>
     </LinearLayout>
 </merge>

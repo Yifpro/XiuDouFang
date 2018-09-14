@@ -46,7 +46,7 @@ import java.util.List;
 public class SupplierProductListActivity extends AppCompatActivity implements IActivityBase, View.OnClickListener {
 
     private final int COUNT = 20;
-    public static final String TAG = SupplierProductListActivity.class.getSimpleName();
+    public static final String FROM_CLASS = "from_class";
     public static final String SUPPLIER_ID = "supplier_id";
 
     private RefreshLayout mRefreshLayout;
@@ -271,6 +271,8 @@ public class SupplierProductListActivity extends AppCompatActivity implements IA
                 return;
             }
             Intent intent = new Intent(SupplierProductListActivity.this, SupplierProductDetailsActivity.class);
+            int tag = PurchaseDetailsActivity.TAG.equals(getIntent().getStringExtra(FROM_CLASS)) ? SupplierProductDetailsActivity.ADD_PRODUCT_FOR_PURCHASE_DETAILS : SupplierProductDetailsActivity.ADD_PRODUCT_FOR_NEW_ORDER;
+            intent.putExtra(SupplierProductDetailsActivity.TAG, tag);
             intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
             startActivity(intent);
         }

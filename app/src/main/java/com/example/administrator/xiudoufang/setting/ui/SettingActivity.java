@@ -38,7 +38,7 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
     private ArrayList<StringPair> mList;
     private ArrayList<LoginStore> mLoginStores;
     private int mIndex; //******** 当前店的下标 ********
-    private boolean mIsOpen; //******** 是否开启连续扫描 ********
+    private boolean mIsOpen = PreferencesUtils.getPreferences().getBoolean(PreferencesUtils.SEQUENTIAL_SCAN, false); //******** 是否开启连续扫描 ********
 
     public static void start(Context context) {
         context.startActivity(new Intent(context, SettingActivity.class));
@@ -100,13 +100,17 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == RESULT_SORT_LIST && data != null) {
-            int index = mList.indexOf(new StringPair("当前店"));
+            int shopIdIndex = mList.indexOf(new StringPair("店ID"));
+            JSONObject loginInfo = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
+            mList.get(shopIdIndex).setValue(loginInfo.getString("dianid"));
+            int currentShopIndex = mList.indexOf(new StringPair("当前店"));
             mLoginStores.get(mIndex).setSelected(false);
             mIndex = data.getIntExtra("index", 0);
             mLoginStores.get(mIndex).setSelected(true);
             String storeName = mLoginStores.get(mIndex).getName();
-            mList.get(index).setValue(storeName);
-            mAdapter.notifyItemChanged(index);
+            mList.get(currentShopIndex).setValue(storeName);
+            mAdapter.notifyItemChanged(shopIdIndex);
+            mAdapter.notifyItemChanged(currentShopIndex);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

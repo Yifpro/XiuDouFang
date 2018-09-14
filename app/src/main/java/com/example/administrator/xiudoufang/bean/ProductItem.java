@@ -55,7 +55,7 @@ public class ProductItem implements Parcelable {
     private String zhuancaigou_pnid; //******** 暂时没用 ********
     private String fujian; //******** 附件 ********
     private String huohao = ""; //******** 货号 ********
-    private String zengpin; //******** 赠品 ********
+    private String zengpin = "0"; //******** 赠品 ********
     private String jiagelaiyuan = "历史价"; //******** 价格来源 ********
     private String buttonstatus_str; //******** 按钮显示的文本 ********
 

@@ -27,11 +27,9 @@ import com.example.administrator.xiudoufang.base.GlideApp;
 import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.PayBean;
 import com.example.administrator.xiudoufang.bean.ProductItem;
-import com.example.administrator.xiudoufang.bean.StringPair;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -75,6 +73,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     public static final String SELECTED_PRODUCT_LIST = "selected_product_list";
     public static final String TAG = NewPurchaseOrderActivity.class.getSimpleName();
     private static final int RESULT_FOR_SCAN_BAR_CODE = 130; //******** 扫描条形码 ********
+    private static final int RESULT_FOR_INFO_CHANGE = 132; //******** 修改产品信息 ********
 
     private SearchInfoView mSivSupplier;
     private SearchInfoView mSivDebt;
@@ -101,13 +100,14 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
     private NewPurchaseOrderLogic mNewPurchaseOrderLogic;
     private CustomerListLogic mCustomerListLogic;
     private ArrayList<SubjectListBean.AccounttypesBean> mSubjectList;
+    private SelectedProductListAdapter mAdapter;
     private List<ProductItem> mList;
     private Supplier mSupplier;
     private String mWarehouseId = "";
     private String mSubjectId = "";
     private String mPayId = "";
-    private SelectedProductListAdapter mAdapter;
-    private String mImgPath;
+    private String mPicPath;
+    private int mPosition; //******** 最后一次进入采购详情的下标 ********
 
     @Override
     public int getLayoutId() {
@@ -291,8 +291,8 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             mSivWarehourse.setValue(data.getStringExtra(WarehouseListActivity.WAREHOUSE_NAME));
         } else if (requestCode == PictureConfig.CHOOSE_REQUEST && resultCode == RESULT_OK && data != null) { //******** 返回附件 ********
             List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
-            mImgPath = selectList.get(0).getCompressPath();
-            GlideApp.with(this).load(mImgPath).into(mIvExtra);
+            mPicPath = selectList.get(0).getCompressPath();
+            GlideApp.with(this).load(mPicPath).into(mIvExtra);
             mIvClear.setVisibility(View.VISIBLE);
         } else if (requestCode == RESULT_PRODUCT_LIST || requestCode == RESULT_FOR_SCAN_BAR_CODE && data != null) {
             //******** 返回选择或扫描的多个产品 ********
@@ -302,6 +302,11 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             mAdapter.setNewData(mList);
             mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
             caculateTotalPrice();
+        } else if (requestCode == RESULT_FOR_INFO_CHANGE && data != null) {
+            ProductItem temp = data.getParcelableExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM);
+            mList.remove(mPosition);
+            mList.add(mPosition, temp);
+            mAdapter.notifyItemChanged(mPosition);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -335,6 +340,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
                     return;
                 }
                 Intent intent = new Intent(this, SupplierProductListActivity.class);
+                intent.putExtra(SupplierProductListActivity.FROM_CLASS, TAG);
                 intent.putExtra(SupplierProductListActivity.SUPPLIER_ID, mSupplier.getC_id());
                 startActivityForResult(intent, RESULT_PRODUCT_LIST);
                 break;
@@ -356,7 +362,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             case R.id.iv_clear:
                 mIvExtra.setImageResource(R.mipmap.ic_extra_place);
                 mIvClear.setVisibility(View.GONE);
-                mImgPath = null;
+                mPicPath = null;
                 break;
             case R.id.iv_extra:
                 showImageDialog();
@@ -429,7 +435,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         params.put("bankid", mPayId); //******** 支付方式id ********
         params.put("accountid", mSubjectId); //******** 会计科目id ********
         LoadingViewDialog.getInstance().show(this);
-        mNewPurchaseOrderLogic.requestPostPurchaseOrder(this, params, mImgPath, new JsonCallback<String>() {
+        mNewPurchaseOrderLogic.requestPostPurchaseOrder(this, params, mPicPath, new JsonCallback<String>() {
             @Override
             public void onSuccess(Response<String> response) {
                 LoadingViewDialog.getInstance().dismiss();
@@ -595,8 +601,10 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         @Override
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
             Intent intent = new Intent(NewPurchaseOrderActivity.this, SupplierProductDetailsActivity.class);
+            intent.putExtra(SupplierProductDetailsActivity.TAG, SupplierProductDetailsActivity.INFO_CHANGE_FOR_NEW_ORDER);
             intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
-            startActivity(intent);
+            startActivityForResult(intent, RESULT_FOR_INFO_CHANGE);
+            mPosition = position;
         }
     }
 }
