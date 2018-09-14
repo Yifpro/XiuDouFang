@@ -32,6 +32,7 @@ import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.CustomPopWindow;
 import com.example.administrator.xiudoufang.open.adapter.PriceSourcePopupAdapter;
 import com.example.administrator.xiudoufang.open.adapter.SalesOrderAdapter;
+import com.example.administrator.xiudoufang.purchase.ui.PicPorchActivity;
 import com.example.administrator.xiudoufang.purchase.ui.ScanActivity;
 import com.example.administrator.xiudoufang.receipt.ui.CustomerListActivity;
 import com.tbruyelle.rxpermissions2.Permission;
@@ -380,27 +381,36 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
 
         @Override
         public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-            EditText etAmount = (EditText) adapter.getViewByPosition(position, R.id.et_amount);
-            TextView tvSums = (TextView) adapter.getViewByPosition(position, R.id.tv_sums);
-            int i = Integer.parseInt(etAmount.getText().toString());
-            switch (view.getId()) {
-                case R.id.tv_reduce:
-                    if (i > 1) {
-                        i--;
-                    }
-                    break;
-                case R.id.tv_add:
-                    i++;
-                    break;
+            if (view.getId() == R.id.iv_icon) {
+                ArrayList<String> list = new ArrayList<>();
+                for (SalesProductListBean.SalesProductBean.PiclistBean bean : mList.get(position).getPiclist()) {
+                    list.add(bean.getPic());
+                }
+                startActivity(new Intent(SalesOrderActivity.this, PicPorchActivity.class)
+                        .putStringArrayListExtra(PicPorchActivity.PIC_LIST, list));
+            } else {
+                EditText etAmount = (EditText) adapter.getViewByPosition(position, R.id.et_amount);
+                TextView tvSums = (TextView) adapter.getViewByPosition(position, R.id.tv_sums);
+                int i = Integer.parseInt(etAmount.getText().toString());
+                switch (view.getId()) {
+                    case R.id.tv_reduce:
+                        if (i > 1) {
+                            i--;
+                        }
+                        break;
+                    case R.id.tv_add:
+                        i++;
+                        break;
+                }
+                etAmount.setText(String.valueOf(i));
+                SalesProductListBean.SalesProductBean item = mList.get(position);
+                item.setCp_qty(String.valueOf(i));
+                double totalPrice = Double.parseDouble(item.getS_jiage2()) * Double.parseDouble(item.getZhekou()) * Double.parseDouble(mList.get(position).getCp_qty());
+                DecimalFormat mFormat = new DecimalFormat("0.00");
+                tvSums.setText(mFormat.format(totalPrice));
+                etAmount.setText(String.valueOf(i));
+                calculateAmountAndSums();
             }
-            etAmount.setText(String.valueOf(i));
-            SalesProductListBean.SalesProductBean item = mList.get(position);
-            item.setCp_qty(String.valueOf(i));
-            double totalPrice = Double.parseDouble(item.getS_jiage2()) * Double.parseDouble(item.getZhekou()) * Double.parseDouble(mList.get(position).getCp_qty());
-            DecimalFormat mFormat = new DecimalFormat("0.00");
-            tvSums.setText(mFormat.format(totalPrice));
-            etAmount.setText(String.valueOf(i));
-            calculateAmountAndSums();
         }
     }
 

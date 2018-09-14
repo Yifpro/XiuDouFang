@@ -22,10 +22,10 @@ import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.StockFilter;
 import com.example.administrator.xiudoufang.bean.StockListBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
+import com.example.administrator.xiudoufang.purchase.ui.PicPorchActivity;
 import com.example.administrator.xiudoufang.purchase.ui.ScanActivity;
 import com.example.administrator.xiudoufang.stock.adapter.StockListAdapter;
 import com.example.administrator.xiudoufang.stock.logic.StockLogic;
@@ -152,6 +152,7 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
         mAdapter = new StockListAdapter(R.layout.layout_list_item_stock, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
+        mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mList = new ArrayList<>();
@@ -270,6 +271,19 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
             intent.putExtra(PRODUCT_NO, mList.get(position).getCpid());
             intent.putExtra(UNITVALUE, mParams.get("unitvalue"));
             startActivity(intent);
+        }
+    }
+
+    private class InnerItemChildClickListener implements BaseQuickAdapter.OnItemChildClickListener {
+
+        @Override
+        public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            ArrayList<String> list = new ArrayList<>();
+            for (StockListBean.StockBean.PiclistBean bean : mList.get(position).getPiclist()) {
+                list.add(bean.getPic());
+            }
+            startActivity(new Intent(StockActivity.this, PicPorchActivity.class)
+                    .putStringArrayListExtra(PicPorchActivity.PIC_LIST, list));
         }
     }
 }

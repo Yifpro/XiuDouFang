@@ -33,6 +33,7 @@ import com.example.administrator.xiudoufang.product.decoration.ProductWeightDeco
 import com.example.administrator.xiudoufang.product.adapter.ProductInfoAdapter;
 import com.example.administrator.xiudoufang.product.adapter.ProductWeightAdapter;
 import com.example.administrator.xiudoufang.product.logic.ProductLogic;
+import com.example.administrator.xiudoufang.purchase.ui.PicPorchActivity;
 import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
@@ -77,6 +78,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
         mIvIcon = findViewById(R.id.iv_icon);
         mTvShow = findViewById(R.id.tv_show);
 
+        mIvIcon.setOnClickListener(this);
         mTvShow.setOnClickListener(this);
     }
 
@@ -216,6 +218,14 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.iv_icon:
+                ArrayList<String> list = new ArrayList<>();
+                for (ProductListBean.ChanpinpicBean.PiclistBean bean : mProductBean.getPiclist()) {
+                    list.add(bean.getPic());
+                }
+                startActivity(new Intent(ProductDetailsActivity.this, PicPorchActivity.class)
+                        .putStringArrayListExtra(PicPorchActivity.PIC_LIST, list));
+                break;
             case R.id.tv_show:
                 mIsShow = !mIsShow;
                 mTvShow.setText(mIsShow ? "拓展信息∧" : "拓展信息∨");

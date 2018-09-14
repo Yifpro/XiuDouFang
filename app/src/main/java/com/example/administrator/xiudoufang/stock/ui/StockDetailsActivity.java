@@ -1,11 +1,14 @@
 package com.example.administrator.xiudoufang.stock.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
@@ -15,6 +18,7 @@ import com.example.administrator.xiudoufang.bean.StockDetailsItem;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
+import com.example.administrator.xiudoufang.purchase.ui.PicPorchActivity;
 import com.example.administrator.xiudoufang.stock.adapter.StockDetailsAdapter;
 import com.example.administrator.xiudoufang.stock.decoration.StockDetailsDecoration;
 import com.example.administrator.xiudoufang.stock.logic.StockLogic;
@@ -35,6 +39,7 @@ public class StockDetailsActivity extends AppCompatActivity implements IActivity
     private StockLogic mLogic;
     private List<MultiItemEntity> mList;
     private StockDetailsAdapter mAdapter;
+    private StockDetailsBean mStockDetailsBean;
 
     @Override
     public int getLayoutId() {
@@ -51,8 +56,10 @@ public class StockDetailsActivity extends AppCompatActivity implements IActivity
     public void initData() {
         mLogic = new StockLogic();
         mAdapter = new StockDetailsAdapter(mList);
+        mAdapter.bindToRecyclerView(mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.addItemDecoration(new StockDetailsDecoration());
         mList = new ArrayList<>();
         LoadingViewDialog.getInstance().show(this);
@@ -72,19 +79,32 @@ public class StockDetailsActivity extends AppCompatActivity implements IActivity
             @Override
             public void onSuccess(Response<StockDetailsBean> response) {
                 LoadingViewDialog.getInstance().dismiss();
-                StockDetailsBean bean = response.body();
-                mList.add(new ImgBean(bean.getPics().get(0).getPic()));
-                mList.add(new StockDetailsItem("产品编号", bean.getStyleno()));
-                mList.add(new StockDetailsItem("产品名", bean.getStylename()));
-                mList.add(new StockDetailsItem("类别", bean.getClassname()));
-                mList.add(new StockDetailsItem("型号", bean.getXinghao()));
-                mList.add(new StockDetailsItem("条形码", bean.getTiaoxingma()));
-                mList.add(new StockDetailsItem("产品描述", bean.getDetail()));
-                mList.add(new StockDetailsItem("品牌", bean.getPinpai()));
-                mList.add(new StockDetailsItem("供应商", bean.getSuppstr()));
-                mList.addAll(bean.getDianinvproducts());
+                mStockDetailsBean = response.body();
+                mList.add(new ImgBean(mStockDetailsBean.getPics().get(0).getPic()));
+                mList.add(new StockDetailsItem("产品编号", mStockDetailsBean.getStyleno()));
+                mList.add(new StockDetailsItem("产品名", mStockDetailsBean.getStylename()));
+                mList.add(new StockDetailsItem("类别", mStockDetailsBean.getClassname()));
+                mList.add(new StockDetailsItem("型号", mStockDetailsBean.getXinghao()));
+                mList.add(new StockDetailsItem("条形码", mStockDetailsBean.getTiaoxingma()));
+                mList.add(new StockDetailsItem("产品描述", mStockDetailsBean.getDetail()));
+                mList.add(new StockDetailsItem("品牌", mStockDetailsBean.getPinpai()));
+                mList.add(new StockDetailsItem("供应商", mStockDetailsBean.getSuppstr()));
+                mList.addAll(mStockDetailsBean.getDianinvproducts());
                 mAdapter.setNewData(mList);
             }
         });
+    }
+
+    private class InnerItemClickListener implements com.chad.library.adapter.base.BaseQuickAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            ArrayList<String> list = new ArrayList<>();
+            for (StockDetailsBean.PicsBean bean : mStockDetailsBean.getPics()) {
+                list.add(bean.getPic());
+            }
+            startActivity(new Intent(StockDetailsActivity.this, PicPorchActivity.class)
+                    .putStringArrayListExtra(PicPorchActivity.PIC_LIST, list));
+        }
     }
 }

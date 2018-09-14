@@ -1,5 +1,6 @@
 package com.example.administrator.xiudoufang.check.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.CustomPopWindow;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
+import com.example.administrator.xiudoufang.purchase.ui.PicPorchActivity;
 import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
@@ -87,6 +89,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements IActivity
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
+        mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
         LoadingViewDialog.getInstance().show(this);
         loadOrderDetails();
     }
@@ -240,5 +243,18 @@ public class OrderDetailsActivity extends AppCompatActivity implements IActivity
                 break;
         }
         return String.valueOf(action);
+    }
+
+    private class InnerItemChildClickListener implements BaseQuickAdapter.OnItemChildClickListener {
+
+        @Override
+        public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            if (view.getId() == R.id.iv_icon) {
+                ArrayList<String> list = new ArrayList<>();
+                list.add(mList.get(position).getPic());
+                startActivity(new Intent(OrderDetailsActivity.this, PicPorchActivity.class)
+                        .putStringArrayListExtra(PicPorchActivity.PIC_LIST, list));
+            }
+        }
     }
 }

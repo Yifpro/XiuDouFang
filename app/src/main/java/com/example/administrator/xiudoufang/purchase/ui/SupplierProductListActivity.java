@@ -172,7 +172,7 @@ public class SupplierProductListActivity extends AppCompatActivity implements IA
                 loadProductList(true);
                 break;
             case R.id.fab_action:
-                mFabAction.setImageResource(mIsShowMenu ? R.mipmap.ic_close_white : R.mipmap.ic_menu_white);
+                mFabAction.setImageResource(mIsShowMenu ? R.mipmap.ic_close_circle_white : R.mipmap.ic_menu_white);
                 mIsShowMenu = !mIsShowMenu;
                 if (mIsShowMenu) {
                     mFabComplete.setVisibility(View.VISIBLE);

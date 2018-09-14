@@ -87,6 +87,7 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity android:name=".open.ui.ExtraActivity"/>
+        <activity android:name=".purchase.ui.PicPorchActivity" />
     </application>
 
 </manifest>

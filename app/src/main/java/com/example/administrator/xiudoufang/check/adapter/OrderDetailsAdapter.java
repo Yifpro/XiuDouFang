@@ -39,5 +39,7 @@ public class OrderDetailsAdapter extends BaseQuickAdapter<OrderDetailsBean.Order
         double amount = Double.valueOf(item.getCp_qty());
         helper.setText(R.id.tv_sum, String.format(mContext.getString(R.string.sum_format), mDecimalFormat.format(price * amount)));
         helper.setText(R.id.tv_distribution_amount, String.format(mContext.getString(R.string.ph_amt_format), item.getPh_qty()));
+
+        helper.addOnClickListener(R.id.iv_icon);
     }
 }

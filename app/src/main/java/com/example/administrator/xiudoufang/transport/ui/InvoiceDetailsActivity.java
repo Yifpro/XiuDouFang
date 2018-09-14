@@ -20,6 +20,7 @@ import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.purchase.ui.ImageSelectorDialog;
+import com.example.administrator.xiudoufang.purchase.ui.PicPorchActivity;
 import com.example.administrator.xiudoufang.transport.logic.InvoiceDetailsLogic;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -27,6 +28,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,11 +76,12 @@ public class InvoiceDetailsActivity extends AppCompatActivity implements IActivi
         mEtTransportNum = findViewById(R.id.et_transport_num);
         mTvClearTransportNum = findViewById(R.id.tv_clear_transport_num);
 
+        mIvIcon.setOnClickListener(this);
+        mEtTransportNum.setOnClickListener(this);
+        mTvClearTransportNum.setOnClickListener(this);
         findViewById(R.id.iv_clear).setOnClickListener(this);
         findViewById(R.id.tv_select_pic).setOnClickListener(this);
         findViewById(R.id.tv_confirm).setOnClickListener(this);
-        mEtTransportNum.setOnClickListener(this);
-        mTvClearTransportNum.setOnClickListener(this);
     }
 
     @Override
@@ -103,6 +106,12 @@ public class InvoiceDetailsActivity extends AppCompatActivity implements IActivi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.iv_icon:
+                ArrayList<String> list = new ArrayList<>();
+                list.add(mPicPath == null ? mInvoiceBean.getKuaidi_pic() : mPicPath);
+                startActivity(new Intent(InvoiceDetailsActivity.this, PicPorchActivity.class)
+                        .putStringArrayListExtra(PicPorchActivity.PIC_LIST, list));
+                break;
             case R.id.iv_clear:
                 mEtTransportNum.setText("");
                 break;

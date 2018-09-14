@@ -32,5 +32,7 @@ public class StockListAdapter extends BaseQuickAdapter<StockListBean.StockBean, 
         helper.setText(R.id.tv_free_num, item.getUsenum());
         helper.setText(R.id.tv_allocate_num, item.getAlcnum());
         helper.setText(R.id.tv_freedom_num, item.getUseunitnum() + item.getUnitname());
+
+        helper.addOnClickListener(R.id.iv_icon);
     }
 }

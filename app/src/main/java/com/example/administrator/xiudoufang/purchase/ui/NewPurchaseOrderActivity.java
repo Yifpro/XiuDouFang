@@ -572,27 +572,36 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
 
         @Override
         public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-            TextView tvAmount = (TextView) adapter.getViewByPosition(position, R.id.tv_amount);
-            TextView tvTotalPrice = (TextView) adapter.getViewByPosition(position, R.id.tv_total_price);
-            int i = Integer.parseInt(tvAmount.getText().toString());
-            switch (view.getId()) {
-                case R.id.tv_reduce:
-                    if (i > 1) {
-                        i--;
-                    }
-                    break;
-                case R.id.tv_add:
-                    i++;
-                    break;
+            if (view.getId() == R.id.iv_icon) {
+                ArrayList<String> list = new ArrayList<>();
+                for (ProductItem.PiclistBean bean : mList.get(position).getPiclist()) {
+                    list.add(bean.getPic());
+                }
+                startActivity(new Intent(NewPurchaseOrderActivity.this, PicPorchActivity.class)
+                        .putStringArrayListExtra(PicPorchActivity.PIC_LIST, list));
+            } else {
+                TextView tvAmount = (TextView) adapter.getViewByPosition(position, R.id.tv_amount);
+                TextView tvTotalPrice = (TextView) adapter.getViewByPosition(position, R.id.tv_total_price);
+                int i = Integer.parseInt(tvAmount.getText().toString());
+                switch (view.getId()) {
+                    case R.id.tv_reduce:
+                        if (i > 1) {
+                            i--;
+                        }
+                        break;
+                    case R.id.tv_add:
+                        i++;
+                        break;
+                }
+                tvAmount.setText(String.valueOf(i));
+                ProductItem item = mList.get(position);
+                item.setCp_qty(String.valueOf(i));
+                double totalPrice = Double.parseDouble(item.getS_jiage2()) * Double.parseDouble(mList.get(position).getCp_qty());
+                DecimalFormat mFormat = new DecimalFormat("0.00");
+                tvTotalPrice.setText(mFormat.format(totalPrice));
+                tvAmount.setText(String.valueOf(i));
+                caculateTotalPrice();
             }
-            tvAmount.setText(String.valueOf(i));
-            ProductItem item = mList.get(position);
-            item.setCp_qty(String.valueOf(i));
-            double totalPrice = Double.parseDouble(item.getS_jiage2()) * Double.parseDouble(mList.get(position).getCp_qty());
-            DecimalFormat mFormat = new DecimalFormat("0.00");
-            tvTotalPrice.setText(mFormat.format(totalPrice));
-            tvAmount.setText(String.valueOf(i));
-            caculateTotalPrice();
         }
     }
 

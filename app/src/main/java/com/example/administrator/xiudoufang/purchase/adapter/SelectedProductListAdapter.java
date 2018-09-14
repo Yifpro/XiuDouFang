@@ -63,6 +63,7 @@ public class SelectedProductListAdapter extends BaseItemDraggableAdapter<Product
             helper.getView(R.id.tv_receive_amount).setVisibility(View.GONE);
         }
 
+        helper.addOnClickListener(R.id.iv_icon);
         helper.addOnClickListener(R.id.tv_reduce);
         helper.addOnClickListener(R.id.tv_add);
     }

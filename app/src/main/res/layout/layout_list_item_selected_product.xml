@@ -81,6 +81,8 @@
             app:layout_constraintLeft_toRightOf="@id/tv_company_amount"
             tools:text="0.62"/>
 
+
+
         <TextView
             android:id="@+id/tv_unit_price"
             android:layout_width="wrap_content"
@@ -157,6 +159,15 @@
         </LinearLayout>
 
         <TextView
+            app:layout_constraintRight_toLeftOf="@id/tv_total_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="计:"
+            android:textColor="@color/black"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_total_price"/>
+
+        <TextView
             android:id="@+id/tv_total_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -166,7 +177,7 @@
             android:textSize="12dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/amount_layout"
-            tools:text="记:0.62"/>
+            tools:text="0.62"/>
 
         <TextView
             android:id="@+id/tv_receive_amount"
