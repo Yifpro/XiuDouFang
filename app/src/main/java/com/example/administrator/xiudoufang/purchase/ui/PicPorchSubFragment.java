@@ -1,6 +1,7 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 
 public class PicPorchSubFragment extends BaseFragment implements View.OnClickListener {
 
+    private ImageView mIvClose;
+
     public static PicPorchSubFragment newInstance(String photoUrl) {
         PicPorchSubFragment fragment = new PicPorchSubFragment();
         Bundle bundle = new Bundle();
@@ -32,10 +35,13 @@ public class PicPorchSubFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void initView(View view) {
+        mIvClose = view.findViewById(R.id.iv_close);
         ImageView ivIcon = view.findViewById(R.id.iv_icon);
-        view.findViewById(R.id.iv_close).setOnClickListener(this);
         String photoUrl = getArguments().getString("photo_url");
         GlideApp.with(getActivity()).load(photoUrl.contains("/") ? photoUrl : StringUtils.PIC_URL + photoUrl).error(R.mipmap.ic_error).into(ivIcon);
+
+        mIvClose.setOnClickListener(this);
+        view.findViewById(R.id.constraint_layout).setOnClickListener(this);
     }
 
     @Override
@@ -46,6 +52,9 @@ public class PicPorchSubFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.constraint_layout:
+                mIvClose.animate().alpha(mIvClose.getAlpha() == 1 ? 0 : 1).setDuration(400).start();
+                break;
             case R.id.iv_close:
                 getActivity().finish();
                 break;

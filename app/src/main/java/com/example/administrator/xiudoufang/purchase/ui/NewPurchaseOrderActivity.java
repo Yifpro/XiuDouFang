@@ -30,6 +30,7 @@ import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -185,8 +186,8 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int viewType) {
                 SwipeMenuItem item = new SwipeMenuItem(NewPurchaseOrderActivity.this);
                 item.setText("删除");
-                item.setTextSize(16);
-                item.setWidth(SizeUtils.dp2px(48));
+                item.setTextSize(14);
+                item.setWidth(SizeUtils.dp2px(60));
                 item.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
                 item.setBackgroundColor(Color.parseColor("#FF0000"));
                 item.setTextColor(Color.parseColor("#FFFFFF"));
