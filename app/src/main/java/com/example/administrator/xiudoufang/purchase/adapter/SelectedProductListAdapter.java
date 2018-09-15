@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.administrator.xiudoufang.R;
@@ -23,6 +23,8 @@ import java.util.List;
 
 public class SelectedProductListAdapter extends BaseItemDraggableAdapter<ProductItem, BaseViewHolder> {
 
+    private static final String PRICE_MODE = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO)).getString("poprice_mode");
+
     private String mStatus;
     private DecimalFormat mFormat = new DecimalFormat("0.00");
 
@@ -33,6 +35,11 @@ public class SelectedProductListAdapter extends BaseItemDraggableAdapter<Product
 
     @Override
     protected void convert(final BaseViewHolder helper, final ProductItem item) {
+        helper.getView(R.id.tv_single_price).setVisibility("0".equals(PRICE_MODE) || "2".equals(PRICE_MODE) ? View.VISIBLE : View.INVISIBLE);
+        helper.getView(R.id.tv_pricecode).setVisibility("1".equals(PRICE_MODE) || "2".equals(PRICE_MODE) ? View.VISIBLE : View.INVISIBLE);
+        helper.getView(R.id.tv_unit_price).setVisibility("0".equals(PRICE_MODE) || "2".equals(PRICE_MODE) ? View.VISIBLE : View.INVISIBLE);
+        helper.getView(R.id.tv_total_price).setVisibility("0".equals(PRICE_MODE) || "2".equals(PRICE_MODE) ? View.VISIBLE : View.INVISIBLE);
+
         GlideApp.with(mContext).load(StringUtils.PIC_URL + item.getPhotourl()).error(R.mipmap.ic_error).into((ImageView) helper.getView(R.id.iv_icon));
         helper.setText(R.id.tv_id, item.getStyleno());
         helper.setText(R.id.tv_name, item.getStylename());
