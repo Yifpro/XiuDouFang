@@ -31,8 +31,8 @@
     <string name="receipt_person">收款人</string>
     <string name="receipt_type">收款方式</string>
     <string name="payment">收付款</string>
-    <string name="format_receipt_amount">实收金额为：</string>
-    <string name="format_discount_amount">优惠金额为：</string>
+    <string name="format_receipt_amount">实收金额为：%s</string>
+    <string name="format_discount_amount">优惠金额为：%s</string>
     <!--产品-->
     <string name="already_set_img">是否有图片</string>
     <string name="no_name_or_class_name">编号、名称或类名</string>

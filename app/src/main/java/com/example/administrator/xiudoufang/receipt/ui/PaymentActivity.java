@@ -129,7 +129,6 @@ public class PaymentActivity extends AppCompatActivity implements IActivityBase,
     @Override
     public void initData() {
         mLogic = new CustomerListLogic();
-
         mSivSubject.setKey(StringUtils.getSpannableString("会计科目*", 4));
         mSivPayment.setKey(StringUtils.getSpannableString("收付款*", 3));
         mSivReceiptType.setKey(StringUtils.getSpannableString("收款方式*", 4));
