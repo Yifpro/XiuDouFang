@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -78,11 +80,16 @@ public class WebActivity extends AppCompatActivity implements IActivityBase, Vie
         mWebView.getSettings().setBuiltInZoomControls(true);
         mWebView.getSettings().setUseWideViewPort(true);
         mWebView.getSettings().setLoadWithOverviewMode(true);
-        mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         mWebView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
                 return true;
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                mWebView.loadUrl("javascript:(function(){var tables = document.getElementsByTagName('table'); for(var i = 0; i<tables.length; i++){ tables[i].style.width = '100%'; tables[i].style.height = 'auto'; }})()");
             }
         });
         mWebView.loadUrl(StringUtils.WEB_URL + getIntent().getStringExtra(URL) + "&userid=" + PreferencesUtils.getPreferences().getString(PreferencesUtils.USER_ID, ""));
