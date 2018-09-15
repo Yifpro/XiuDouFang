@@ -270,8 +270,6 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 mSupplier = supplier;
             }
         } else if (item != null) { //******** 返回选择的单个产品 ********
-            if (mList == null)
-                mList = new ArrayList<>();
             mList.add(item);
             mAdapter.setNewData(mList);
             mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
@@ -311,6 +309,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     public void initData() {
         mPurchaseLogic = new PurchaseLogic();
         mCustomerListLogic = new CustomerListLogic();
+        mList = new ArrayList<>()
         mAdapter = new SelectedProductListAdapter(R.layout.layout_list_item_selected_product, mList, mStatus);
         View footerView = View.inflate(this, R.layout.layout_list_footer_purchase_details, null);
         mAdapter.addFooterView(footerView);
@@ -335,10 +334,9 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             mImgPath = selectList.get(0).getCompressPath();
             GlideApp.with(this).load(mImgPath).into(mIvExtra);
             mIvClear.setVisibility(View.VISIBLE);
-        } else if (requestCode == RESULT_PRODUCT_LIST || requestCode == RESULT_FOR_SCAN_BAR_CODE && data != null) {
+        } else if ((requestCode == RESULT_PRODUCT_LIST || requestCode == RESULT_FOR_SCAN_BAR_CODE) && data != null) {
             //******** 返回选择或扫描的多个产品 ********
             ArrayList<ProductItem> items = data.getParcelableArrayListExtra(SELECTED_PRODUCT_LIST);
-            if (mList == null) mList = new ArrayList<>();
             mList.addAll(items);
             mAdapter.setNewData(mList);
             mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
@@ -347,6 +345,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         } else if (requestCode == RESULT_FOR_INFO_CHANGE && data != null) {
             ProductItem temp = data.getParcelableExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM);
             mList.remove(mPosition);
+            mAdapter.notifyItemChanged(mPosition);
             mList.add(mPosition, temp);
             mAdapter.notifyItemChanged(mPosition);
         }
@@ -538,7 +537,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                     mSivDiscountAmount.setValue(result.getString("youhuijine"));
                 if (!TextUtils.isEmpty(result.getString("fujian"))) //******** 附件 ********
                     GlideApp.with(PurchaseDetailsActivity.this).load(StringUtils.FILE_URL + result.getString("fujian")).error(R.mipmap.ic_error).into(mIvExtra);
-                mList = mPurchaseLogic.parsePurchaseDetailsJson(jsonObject); //******** 解析产品json ********
+                mList.addAll(mPurchaseLogic.parsePurchaseDetailsJson(jsonObject)); //******** 解析产品json ********
                 if (mList.size() == 0) { //******** 产品数组为0时，不可确认订单 ********
                     mTvBottomRight.setClickable(false);
                     mTvBottomRight.setBackgroundResource(R.drawable.rect_4_gray_888888);
@@ -705,7 +704,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int viewType) {
             SwipeMenuItem item = new SwipeMenuItem(PurchaseDetailsActivity.this);
             item.setText("删除");
-            item.setTextSize(16);
+            item.setTextSize(14);
             item.setWidth(SizeUtils.dp2px(48));
             item.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
             item.setBackgroundColor(Color.parseColor("#FF0000"));

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseFragment;
 import com.example.administrator.xiudoufang.base.GlideApp;
+import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 public class PicPorchSubFragment extends BaseFragment implements View.OnClickListener {
 
     private ImageView mIvClose;
+    private String mPhotoUrl;
 
     public static PicPorchSubFragment newInstance(String photoUrl) {
         PicPorchSubFragment fragment = new PicPorchSubFragment();
@@ -37,8 +39,8 @@ public class PicPorchSubFragment extends BaseFragment implements View.OnClickLis
     public void initView(View view) {
         mIvClose = view.findViewById(R.id.iv_close);
         ImageView ivIcon = view.findViewById(R.id.iv_icon);
-        String photoUrl = getArguments().getString("photo_url");
-        GlideApp.with(getActivity()).load(photoUrl.contains("/") ? photoUrl : StringUtils.PIC_URL + photoUrl).error(R.mipmap.ic_error).into(ivIcon);
+        mPhotoUrl = getArguments().getString("photo_url");
+        GlideApp.with(getActivity()).load(mPhotoUrl.contains("/") ? mPhotoUrl : StringUtils.PIC_URL + mPhotoUrl).error(R.mipmap.ic_error).into(ivIcon);
 
         mIvClose.setOnClickListener(this);
         view.findViewById(R.id.constraint_layout).setOnClickListener(this);
@@ -46,7 +48,12 @@ public class PicPorchSubFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void initData() {
+    }
 
+    @Override
+    protected void lazyLoad() {
+        super.lazyLoad();
+        mIvClose.animate().alpha(0).setDuration(800).start();
     }
 
     @Override

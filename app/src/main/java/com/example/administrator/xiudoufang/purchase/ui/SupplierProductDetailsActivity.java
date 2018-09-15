@@ -407,14 +407,17 @@ public class SupplierProductDetailsActivity extends AppCompatActivity implements
         mProductItem.setBz(mEtTip.getText().toString());
         int tag = getIntent().getIntExtra(TAG, 0);
         if (tag == ADD_PRODUCT_FOR_PURCHASE_DETAILS) {
+            LogUtils.e("go first");
             Intent intent = new Intent(SupplierProductDetailsActivity.this, PurchaseDetailsActivity.class);
             intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, mProductItem);
             startActivity(intent);
         } else if (tag == ADD_PRODUCT_FOR_NEW_ORDER) {
+            LogUtils.e("go second");
             Intent intent = new Intent(SupplierProductDetailsActivity.this, NewPurchaseOrderActivity.class);
             intent.putExtra(NewPurchaseOrderActivity.SELECTED_PRODUCT, mProductItem);
             startActivity(intent);
         } else {
+            LogUtils.e("go third");
             Intent intent = new Intent();
             intent.putExtra(SELECTED_PRODUCT_ITEM, mProductItem);
             setResult(Activity.RESULT_OK, intent);

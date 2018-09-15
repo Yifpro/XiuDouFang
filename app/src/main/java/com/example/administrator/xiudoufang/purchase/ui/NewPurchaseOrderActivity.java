@@ -295,7 +295,7 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             mPicPath = selectList.get(0).getCompressPath();
             GlideApp.with(this).load(mPicPath).into(mIvExtra);
             mIvClear.setVisibility(View.VISIBLE);
-        } else if (requestCode == RESULT_PRODUCT_LIST || requestCode == RESULT_FOR_SCAN_BAR_CODE && data != null) {
+        } else if ((requestCode == RESULT_PRODUCT_LIST || requestCode == RESULT_FOR_SCAN_BAR_CODE) && data != null) {
             //******** 返回选择或扫描的多个产品 ********
             ArrayList<ProductItem> items = data.getParcelableArrayListExtra(SELECTED_PRODUCT_LIST);
             if (mList == null) mList = new ArrayList<>();
