@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +39,7 @@ import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
+import com.example.administrator.xiudoufang.purchase.CustomLinearLayoutManager;
 import com.example.administrator.xiudoufang.purchase.adapter.SelectedProductListAdapter;
 import com.example.administrator.xiudoufang.purchase.logic.NewPurchaseOrderLogic;
 import com.example.administrator.xiudoufang.purchase.logic.PurchaseLogic;
@@ -271,7 +271,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             }
         } else if (item != null) { //******** 返回选择的单个产品 ********
             mList.add(item);
-            mAdapter.setNewData(mList);
+            mAdapter.notifyItemInserted(mList.size() - 1);
             mAdapter.getFooterLayout().setVisibility(View.VISIBLE);
             mTvBottomRight.setBackgroundResource(R.drawable.rect_4_blue);
             caculateTotalPrice();
@@ -299,6 +299,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                     int index = mList.indexOf(new ProductItem(bean.getCpid()));
                     int lishiIndex = mList.get(index).getLishijialist().indexOf(new ProductItem.LishijialistBean(bean.getUnit_bilv()));
                     mList.get(index).getLishijialist().get(lishiIndex).setPrice(bean.getPrice());
+                    mAdapter.setNewData(mList);
                 }
                 LoadingViewDialog.getInstance().dismiss();
             }
@@ -309,14 +310,14 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
     public void initData() {
         mPurchaseLogic = new PurchaseLogic();
         mCustomerListLogic = new CustomerListLogic();
-        mList = new ArrayList<>()
+        mList = new ArrayList<>();
         mAdapter = new SelectedProductListAdapter(R.layout.layout_list_item_selected_product, mList, mStatus);
         View footerView = View.inflate(this, R.layout.layout_list_footer_purchase_details, null);
         mAdapter.addFooterView(footerView);
         mRecyclerView.setSwipeMenuCreator(new InnerSwipeMenuCreator());
         mRecyclerView.setSwipeMenuItemClickListener(new InnerSwipeMenuItemClickListener());
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(new CustomLinearLayoutManager(this));
         mAdapter.getFooterLayout().setVisibility(View.GONE);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
@@ -345,9 +346,9 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         } else if (requestCode == RESULT_FOR_INFO_CHANGE && data != null) {
             ProductItem temp = data.getParcelableExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM);
             mList.remove(mPosition);
-            mAdapter.notifyItemChanged(mPosition);
+            mAdapter.notifyItemRemoved(mPosition);
             mList.add(mPosition, temp);
-            mAdapter.notifyItemChanged(mPosition);
+            mAdapter.notifyItemInserted(mPosition);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -673,7 +674,6 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
                 map.put("cp_qty", item.getCp_qty()); //******** 数量 ********
                 map.put("order_prc", item.getOrder_prc()); //******** 单品价格 ********
                 map.put("s_jiage2", item.getS_jiage2()); //******** 单位价格 ********
-                LogUtils.e("提交价格->"+item.getOrder_prc()+", "+item.getS_jiage2());
                 map.put("zengpin", item.getZengpin()); //******** 赠品 ********
                 map.put("bz", item.getBz()); //******** 备注 ********
                 map.put("huohao", item.getHuohao()); //******** 货号 ********
@@ -720,7 +720,7 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
             menuBridge.closeMenu();
             int adapterPosition = menuBridge.getAdapterPosition();
             mList.remove(adapterPosition);
-            mAdapter.notifyItemChanged(adapterPosition);
+            mAdapter.notifyItemRemoved(adapterPosition);
             caculateTotalPrice();
             if (mAdapter.getItemCount() == 1) {
                 mAdapter.getFooterLayout().setVisibility(View.GONE);

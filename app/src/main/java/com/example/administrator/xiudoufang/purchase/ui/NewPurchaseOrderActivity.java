@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -37,6 +36,7 @@ import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.common.widget.SearchInfoView;
+import com.example.administrator.xiudoufang.purchase.CustomLinearLayoutManager;
 import com.example.administrator.xiudoufang.purchase.adapter.SelectedProductListAdapter;
 import com.example.administrator.xiudoufang.purchase.logic.NewPurchaseOrderLogic;
 import com.example.administrator.xiudoufang.receipt.logic.CustomerListLogic;
@@ -181,38 +181,12 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         mNewPurchaseOrderLogic = new NewPurchaseOrderLogic();
         mCustomerListLogic = new CustomerListLogic();
         mAdapter = new SelectedProductListAdapter(R.layout.layout_list_item_selected_product, mList, "1");
-        SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
-            @Override
-            public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int viewType) {
-                SwipeMenuItem item = new SwipeMenuItem(NewPurchaseOrderActivity.this);
-                item.setText("删除");
-                item.setTextSize(14);
-                item.setWidth(SizeUtils.dp2px(60));
-                item.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-                item.setBackgroundColor(Color.parseColor("#FF0000"));
-                item.setTextColor(Color.parseColor("#FFFFFF"));
-                rightMenu.addMenuItem(item);
-            }
-        };
-        SwipeMenuItemClickListener swipeMenuItemClickListener = new SwipeMenuItemClickListener() {
-            @Override
-            public void onItemClick(SwipeMenuBridge menuBridge) {
-                menuBridge.closeMenu();
-                int adapterPosition = menuBridge.getAdapterPosition();
-                mList.remove(adapterPosition);
-                mAdapter.notifyItemChanged(adapterPosition);
-                caculateTotalPrice();
-                if (mAdapter.getItemCount() == 1) {
-                    mAdapter.getFooterLayout().setVisibility(View.GONE);
-                }
-            }
-        };
         View footerView = View.inflate(this, R.layout.layout_list_footer_purchase_details, null);
         mAdapter.addFooterView(footerView);
-        mRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
-        mRecyclerView.setSwipeMenuItemClickListener(swipeMenuItemClickListener);
+        mRecyclerView.setSwipeMenuCreator(new InnerSwipeMenuCreator());
+        mRecyclerView.setSwipeMenuItemClickListener(new InnerSwipeMenuItemClickListener());
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(new CustomLinearLayoutManager(this));
         mAdapter.getFooterLayout().setVisibility(View.GONE);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
@@ -306,8 +280,9 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         } else if (requestCode == RESULT_FOR_INFO_CHANGE && data != null) {
             ProductItem temp = data.getParcelableExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM);
             mList.remove(mPosition);
+            mAdapter.notifyItemRemoved(mPosition);
             mList.add(mPosition, temp);
-            mAdapter.notifyItemChanged(mPosition);
+            mAdapter.notifyItemInserted(mPosition);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -615,6 +590,37 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
             intent.putExtra(SupplierProductDetailsActivity.SELECTED_PRODUCT_ITEM, mList.get(position));
             startActivityForResult(intent, RESULT_FOR_INFO_CHANGE);
             mPosition = position;
+        }
+    }
+
+
+    private class InnerSwipeMenuCreator implements SwipeMenuCreator {
+
+        @Override
+        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu rightMenu, int viewType) {
+            SwipeMenuItem item = new SwipeMenuItem(NewPurchaseOrderActivity.this);
+            item.setText("删除");
+            item.setTextSize(14);
+            item.setWidth(SizeUtils.dp2px(60));
+            item.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+            item.setBackgroundColor(Color.parseColor("#FF0000"));
+            item.setTextColor(Color.parseColor("#FFFFFF"));
+            rightMenu.addMenuItem(item);
+        }
+    }
+
+    private class InnerSwipeMenuItemClickListener implements SwipeMenuItemClickListener {
+
+        @Override
+        public void onItemClick(SwipeMenuBridge menuBridge) {
+            menuBridge.closeMenu();
+            int adapterPosition = menuBridge.getAdapterPosition();
+            mList.remove(adapterPosition);
+            mAdapter.notifyItemRemoved(adapterPosition);
+            caculateTotalPrice();
+            if (mAdapter.getItemCount() == 1) {
+                mAdapter.getFooterLayout().setVisibility(View.GONE);
+            }
         }
     }
 }
