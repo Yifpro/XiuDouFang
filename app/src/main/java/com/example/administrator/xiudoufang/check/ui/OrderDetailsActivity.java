@@ -195,7 +195,10 @@ public class OrderDetailsActivity extends AppCompatActivity implements IActivity
 
         @Override
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
+            ArrayList<String> list = new ArrayList<>();
+            list.add(mList.get(position).getBz());
+            list.add(mList.get(position).getHuohao());
+            TipDialog.newInstance(list).show(getSupportFragmentManager(), "TipDialog");
         }
     }
 
