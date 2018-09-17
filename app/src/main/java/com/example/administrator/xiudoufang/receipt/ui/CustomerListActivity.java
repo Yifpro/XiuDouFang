@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseTextWatcher;
@@ -100,6 +101,7 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
         mRefreshLayout.setEnableLoadMoreWhenContentNotFull(false);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addOnScrollListener(new InnerScrollListener());
         mList = new ArrayList<>();
         LoadingViewDialog.getInstance().show(this);
         loadCustomerList(true);
@@ -265,6 +267,18 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
                     loadCustomerList(false);
                 }
             }, 2000);
+        }
+    }
+
+    private class InnerScrollListener extends RecyclerView.OnScrollListener {
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                Glide.with(CustomerListActivity.this).resumeRequests();
+            }else {
+                Glide.with(CustomerListActivity.this).pauseRequests();
+            }
         }
     }
 }

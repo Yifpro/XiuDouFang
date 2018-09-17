@@ -15,6 +15,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.BaseTextWatcher;
@@ -155,6 +156,7 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addOnScrollListener(new InnerScrollListener());
         mList = new ArrayList<>();
         LoadingViewDialog.getInstance().show(this);
         initParams();
@@ -284,6 +286,18 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
             }
             startActivity(new Intent(StockActivity.this, PicPorchActivity.class)
                     .putStringArrayListExtra(PicPorchActivity.PIC_LIST, list));
+        }
+    }
+
+    private class InnerScrollListener extends RecyclerView.OnScrollListener {
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                Glide.with(StockActivity.this).resumeRequests();
+            }else {
+                Glide.with(StockActivity.this).pauseRequests();
+            }
         }
     }
 }

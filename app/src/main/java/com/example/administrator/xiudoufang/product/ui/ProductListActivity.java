@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.base.IActivityBase;
@@ -133,6 +134,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
         mRefreshLayout.setEnableLoadMoreWhenContentNotFull(false);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+        mRecyclerView.addOnScrollListener(new InnerScrollListener());
         mList = new ArrayList<>();
         LoadingViewDialog.getInstance().show(this);
         initParams();
@@ -247,6 +249,18 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
                     loadProductList(false);
                 }
             }, 2000);
+        }
+    }
+
+    private class InnerScrollListener extends RecyclerView.OnScrollListener {
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                Glide.with(ProductListActivity.this).resumeRequests();
+            }else {
+                Glide.with(ProductListActivity.this).pauseRequests();
+            }
         }
     }
 }

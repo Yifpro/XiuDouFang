@@ -159,6 +159,7 @@ public class WebActivity extends AppCompatActivity implements IActivityBase, Vie
         } catch (IOException e) {
             e.printStackTrace();
         }
+        ToastUtils.show(this, "保存成功");
         sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
 //        MediaScanner mediaScanner = new MediaScanner(this);
 //        mediaScanner.scanFile(file, "image/jpeg");
