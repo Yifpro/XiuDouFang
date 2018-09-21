@@ -185,7 +185,7 @@ public class XiuDouFangApplication extends Application {
     private void setToolBar(final Activity activity) {
         Toolbar toolbar = activity.findViewById(R.id.tool_bar);
         if (toolbar != null && ((AppCompatActivity) activity).getSupportActionBar() == null) {
-            TextView tvTitle = activity.findViewById(R.id.tv_title);
+            toolbar.setTitle("");
             ((TextView) activity.findViewById(R.id.tv_title)).setText(activity.getTitle());
             ((AppCompatActivity) activity).setSupportActionBar(toolbar);
             ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
