@@ -126,7 +126,7 @@ public class ProductListActivity extends AppCompatActivity implements IActivityB
     @Override
     public void initData() {
         mLogic = new ProductLogic();
-        mAdapter = new ProductListAdapter(R.layout.layout_list_item_product, mList);
+        mAdapter = new ProductListAdapter(R.layout.item_product, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mRefreshLayout.setOnRefreshListener(new InnerRefreshListener());

@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
-import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.receipt.adapter.SubjectSelectorAdapter;
 
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public class SubjectSelectorDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_subject_selector, container);
         mRecyclerView = view.findViewById(R.id.recycler_view);
         list = getArguments().getParcelableArrayList("data");
-        mAdapter = new SubjectSelectorAdapter(R.layout.layout_list_item_subject_selector, list);
+        mAdapter = new SubjectSelectorAdapter(R.layout.item_subject_selector, list);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setAdapter(mAdapter);

@@ -91,7 +91,7 @@ public class ProductEditActivity extends AppCompatActivity implements IActivityB
             mList.add(new PicBean(s, false));
         }
         mList.add(new PicBean(R.mipmap.ic_extra_place, true));
-        mAdapter = new ProductEditAdapter(R.layout.layout_list_item_product_edit, mList);
+        mAdapter = new ProductEditAdapter(R.layout.item_product_edit, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());

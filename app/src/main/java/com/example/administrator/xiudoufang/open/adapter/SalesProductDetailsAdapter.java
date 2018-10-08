@@ -46,11 +46,11 @@ public class SalesProductDetailsAdapter extends BaseMultiItemQuickAdapter<MultiI
 
     public SalesProductDetailsAdapter(List<MultiItemEntity> data) {
         super(data);
-        addItemType(TYPE_IMG, R.layout.layout_list_item_sales_product_details_0);
-        addItemType(TYPE_FIRST, R.layout.layout_list_item_sales_product_details_1);
-        addItemType(TYPE_SECOND, R.layout.layout_list_item_sales_product_details_2);
-        addItemType(TYPE_THIRD, R.layout.layout_list_item_sales_product_details_3);
-        addItemType(TYPE_FOUTH, R.layout.layout_list_item_sales_product_details_4);
+        addItemType(TYPE_IMG, R.layout.item_sales_product_details_0);
+        addItemType(TYPE_FIRST, R.layout.item_sales_product_details_1);
+        addItemType(TYPE_SECOND, R.layout.item_sales_product_details_2);
+        addItemType(TYPE_THIRD, R.layout.item_sales_product_details_3);
+        addItemType(TYPE_FOUTH, R.layout.item_sales_product_details_4);
     }
 
     @Override

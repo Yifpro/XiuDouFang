@@ -100,7 +100,7 @@ public class SupplierProductListActivity extends AppCompatActivity implements IA
         mRefreshLayout.setEnableRefresh(false);
         mRefreshLayout.setOnLoadMoreListener(new InnerLoadMoreListener());
         mRefreshLayout.setEnableLoadMoreWhenContentNotFull(false);
-        mAdapter = new ProductListAdapter(R.layout.layout_list_item_product_list, mList);
+        mAdapter = new ProductListAdapter(R.layout.item_product_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
         mAdapter.setOnItemClickListener(new InnerItemClickListener());

@@ -84,7 +84,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements IActivity
     public void initData() {
         mOrderBean = getIntent().getParcelableExtra(OrderListSubFragment.SELECTED_ITEM);
         mLogic = new OrderListLogic();
-        mAdapter = new OrderDetailsAdapter(R.layout.layout_list_item_order_details, mList);
+        mAdapter = new OrderDetailsAdapter(R.layout.item_order_details, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -132,7 +132,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements IActivity
                 list.add("取消完成");
                 mStatus = 3;
             }
-            PopupOperateAdapter adapter = new PopupOperateAdapter(R.layout.layout_list_item_popup, list);
+            PopupOperateAdapter adapter = new PopupOperateAdapter(R.layout.item_popup, list);
             adapter.bindToRecyclerView(recyclerView);
             adapter.setOnItemClickListener(new InnerPopupWindowItemClickListener());
             recyclerView.setAdapter(adapter);

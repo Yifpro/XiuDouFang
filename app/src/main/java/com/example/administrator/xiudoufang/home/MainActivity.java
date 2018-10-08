@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements IActivityBase {
         pairs.add(new IntegerStringPair(R.mipmap.ic_purchase, "采购"));
         pairs.add(new IntegerStringPair(R.mipmap.ic_setting, "设置"));
         pairs.add(new IntegerStringPair(0, ""));
-        MainAdapter adapter = new MainAdapter(R.layout.layout_list_item_main, pairs);
+        MainAdapter adapter = new MainAdapter(R.layout.item_main, pairs);
         adapter.bindToRecyclerView(mRecyclerView);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override

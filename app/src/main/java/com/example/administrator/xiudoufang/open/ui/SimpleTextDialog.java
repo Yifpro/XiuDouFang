@@ -43,7 +43,7 @@ public class SimpleTextDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_transfer_purchase_selector, container);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         final ArrayList<StringPair> list = getArguments().getParcelableArrayList("list");
-        SimpleTextAdapter adapter = new SimpleTextAdapter(R.layout.layout_list_item_transfer_purchase, list);
+        SimpleTextAdapter adapter = new SimpleTextAdapter(R.layout.item_transfer_purchase, list);
         adapter.bindToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

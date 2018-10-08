@@ -12,7 +12,7 @@
 
         <include layout="@layout/layout_toolbar"/>
 
-        <include layout="@layout/include_filter_bar"/>
+        <include layout="@layout/layout_filter_bar"/>
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/refresh_layout"

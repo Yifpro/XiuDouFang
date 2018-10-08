@@ -70,7 +70,7 @@ public class AreaListActivity extends AppCompatActivity implements IActivityBase
     public void initData() {
         JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
         mList = JSONObject.parseArray(jsonObject.getJSONArray("quyu").toJSONString(), QuYuBean.class);
-        mAdapter = new AreaListAdapter(R.layout.layout_list_item_are_list, mList);
+        mAdapter = new AreaListAdapter(R.layout.item_are_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setAdapter(mAdapter);

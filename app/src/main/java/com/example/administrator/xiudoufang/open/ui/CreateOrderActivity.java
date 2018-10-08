@@ -29,7 +29,6 @@ import com.example.administrator.xiudoufang.bean.OtherSetting;
 import com.example.administrator.xiudoufang.bean.SalesProductListBean;
 import com.example.administrator.xiudoufang.bean.StringPair;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -51,9 +50,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Created by Administrator on 2018/9/4
@@ -173,7 +170,7 @@ public class CreateOrderActivity extends AppCompatActivity implements IActivityB
         mTvDebt.setText(mCustomerBean.getDebt());
         mTvCreateOrderDate.setText(StringUtils.getCurrentTime());
         mTvDeliveryDate.setText(StringUtils.getCurrentTime());
-        mAdapter = new SalesOrderAdapter(R.layout.layout_list_item_sales_order, mList);
+        mAdapter = new SalesOrderAdapter(R.layout.item_sales_order, mList);
         SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
             @Override
             public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int viewType) {

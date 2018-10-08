@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2"
+        tools:layout_editor_absoluteX="72dp"
+        tools:layout_editor_absoluteY="0dp"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4"
+        tools:layout_editor_absoluteX="144dp"
+        tools:layout_editor_absoluteY="0dp"/>
+
+    <TextView
+        android:id="@+id/tv_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/gray_888888"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@+id/line"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_1"
+        app:layout_constraintRight_toLeftOf="@+id/guideline_1"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="单号"/>
+
+
+    <LinearLayout
+        android:id="@+id/segment_layout"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_2"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="144dp">
+
+        <TextView
+            android:id="@+id/tv_left_segment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_left_segment_selector"
+            android:gravity="center"
+            android:textColor="@drawable/white_blue_selected_selector"
+            android:textSize="12dp"/>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"/>
+
+        <TextView
+            android:id="@+id/tv_right_segment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_right_segment_selector"
+            android:gravity="center"
+            android:textColor="@drawable/white_blue_selected_selector"
+            android:textSize="12dp"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:cursorVisible="false"
+        android:textCursorDrawable="@drawable/text_cursor_shape"
+        android:textSize="14dp"
+        android:theme="@style/SearchInfoEditText"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_2"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="252dp"/>
+
+    <RelativeLayout
+        android:id="@+id/relative_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_2"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/iv_next"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:background="@mipmap/ic_next"/>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@color/gray_dedfe0"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</android.support.constraint.ConstraintLayout>

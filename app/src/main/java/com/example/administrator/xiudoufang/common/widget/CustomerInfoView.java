@@ -33,7 +33,7 @@ public class CustomerInfoView extends LinearLayout {
 
     public CustomerInfoView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        inflate(context, R.layout.layout_customer_info_view, this);
+        inflate(context, R.layout.view_customer_info, this);
 
         ImageView ivNext = findViewById(R.id.iv_next);
         mTvKey = findViewById(R.id.tv_key);

@@ -38,7 +38,7 @@ public class SingleLineTextDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_transfer_purchase_selector, container);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         ArrayList<String> items = new ArrayList<>(getArguments().getStringArrayList("list"));
-        SingleLineTextAdapter adapter = new SingleLineTextAdapter(R.layout.layout_list_item_transfer_purchase, items);
+        SingleLineTextAdapter adapter = new SingleLineTextAdapter(R.layout.item_transfer_purchase, items);
         adapter.bindToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

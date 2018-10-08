@@ -26,9 +26,9 @@ public class StockDetailsAdapter extends BaseMultiItemQuickAdapter<MultiItemEnti
 
     public StockDetailsAdapter(List<MultiItemEntity> data) {
         super(data);
-        addItemType(TYPE_LEVEL_0, R.layout.layout_list_item_stock_details_level_0);
-        addItemType(TYPE_LEVEL_1, R.layout.layout_list_item_stock_details_level_1);
-        addItemType(TYPE_LEVEL_2, R.layout.layout_list_item_stock_details_level_2);
+        addItemType(TYPE_LEVEL_0, R.layout.item_stock_details_level_0);
+        addItemType(TYPE_LEVEL_1, R.layout.item_stock_details_level_1);
+        addItemType(TYPE_LEVEL_2, R.layout.item_stock_details_level_2);
 
     }
 

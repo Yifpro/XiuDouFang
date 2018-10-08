@@ -39,7 +39,7 @@ public class OrderQueryDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_transfer_purchase_selector, container);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         ArrayList<OrderQueryBean> items = getArguments().getParcelableArrayList("list");
-        OrderQueryAdapter adapter = new OrderQueryAdapter(R.layout.layout_list_item_transfer_purchase, items);
+        OrderQueryAdapter adapter = new OrderQueryAdapter(R.layout.item_transfer_purchase, items);
         adapter.bindToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

@@ -45,7 +45,7 @@ public class ShopListActivity extends AppCompatActivity implements IActivityBase
     public void initData() {
         mList = getIntent().getParcelableArrayListExtra(SettingActivity.STORE_LIST);
         mIndex = getIntent().getIntExtra(SettingActivity.SELECTED_INDEX, 0);
-        StoreSwitchAdapter adapter = new StoreSwitchAdapter(R.layout.layout_list_item_store_switch, mList);
+        StoreSwitchAdapter adapter = new StoreSwitchAdapter(R.layout.item_store_switch, mList);
         adapter.bindToRecyclerView(mRecyclerView);
         adapter.setOnItemClickListener(new InnerItemClickListener());
         mRecyclerView.setItemAnimator(null);

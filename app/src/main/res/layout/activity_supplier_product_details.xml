@@ -226,7 +226,7 @@
                 android:textCursorDrawable="@drawable/text_cursor_shape"
                 android:textSize="14dp"/>
 
-            <include layout="@layout/include_bottom_selection" />
+            <include layout="@layout/layout_bottom_selection" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

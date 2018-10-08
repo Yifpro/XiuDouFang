@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -85,7 +84,7 @@ public class OrderListSubFragment extends BaseFragment {
         mParams.put("dingdanleixing", filter.getOrderType());
         mParams.put("huoyunleixing", "无".equals(filter.getTransportType()) ? "" : filter.getTransportType());
         mParams.put("daifa", filter.getProxyOrder());
-        mAdapter = new OrderListAdapter(R.layout.layout_list_item_purchase_sub, mList);
+        mAdapter = new OrderListAdapter(R.layout.item_purchase_sub, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
@@ -100,7 +99,7 @@ public class OrderListSubFragment extends BaseFragment {
         mRefreshLayout.setOnRefreshListener(new InnerRefreshListener());
         mRefreshLayout.setOnLoadMoreListener(new InnerLoadMoreListener());
         mRefreshLayout.setEnableLoadMoreWhenContentNotFull(false);
-        mAdapter = new OrderListAdapter(R.layout.layout_list_item_purchase_sub, mList);
+        mAdapter = new OrderListAdapter(R.layout.item_purchase_sub, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());

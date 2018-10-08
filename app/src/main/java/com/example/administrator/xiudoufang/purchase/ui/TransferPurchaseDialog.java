@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.R;
@@ -39,7 +38,7 @@ public class TransferPurchaseDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_transfer_purchase_selector, container);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         ArrayList<String> items = new ArrayList<>(getArguments().getStringArrayList("list"));
-        SingleLineTextAdapter adapter = new SingleLineTextAdapter(R.layout.layout_list_item_transfer_purchase, items);
+        SingleLineTextAdapter adapter = new SingleLineTextAdapter(R.layout.item_transfer_purchase, items);
         adapter.bindToRecyclerView(recyclerView);
         adapter.setOnItemClickListener(new InnerItemClickListener());
         recyclerView.setAdapter(adapter);

@@ -6,7 +6,7 @@
 
     <include layout="@layout/layout_toolbar"/>
 
-    <include layout="@layout/include_filter_bar" />
+    <include layout="@layout/layout_filter_bar" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -50,6 +50,6 @@
                 android:background="@color/gray_cccccc"/>
         </RelativeLayout>
 
-        <include layout="@layout/include_bottom_selection"/>
+        <include layout="@layout/layout_bottom_selection"/>
     </LinearLayout>
 </LinearLayout>

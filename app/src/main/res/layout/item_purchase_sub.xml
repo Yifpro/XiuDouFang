@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp">
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="21dp"
+        android:layout_height="21dp"
+        tools:src="@mipmap/ic_launcher"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_date"
+        app:layout_constraintTop_toTopOf="@+id/tv_supplier"
+        tools:layout_editor_absoluteX="0dp"/>
+
+    <TextView
+        android:id="@+id/tv_supplier"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toRightOf="@+id/iv_icon"
+        tools:layout_editor_absoluteY="0dp"
+        tools:text="i'm name"/>
+
+    <TextView
+        android:id="@+id/tv_order_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toRightOf="@+id/iv_icon"
+        app:layout_constraintTop_toBottomOf="@+id/tv_supplier"
+        tools:text="0001"/>
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toRightOf="@+id/iv_icon"
+        app:layout_constraintTop_toBottomOf="@+id/tv_order_num"
+        tools:text="2018/11/15"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_order_num"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="莉莉"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@color/gray_dedfe0"
+        app:layout_constraintTop_toBottomOf="@+id/tv_bottom_right"/>
+
+    <TextView
+        android:id="@+id/tv_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_date"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="产品总汇"/>
+
+    <TextView
+        android:id="@+id/tv_bottom_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/rect_4_blue_6_pt_pb"
+        android:paddingBottom="2dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="2dp"
+        android:text="@string/confirm_order"
+        android:textColor="@color/white"
+        android:textSize="14dp"
+        app:layout_constraintRight_toLeftOf="@+id/tv_bottom_right"
+        app:layout_constraintTop_toBottomOf="@+id/tv_type"/>
+
+    <TextView
+        android:id="@+id/tv_bottom_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/rect_4_blue_6_pt_pb"
+        android:paddingBottom="2dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="2dp"
+        android:text="@string/confirm_order"
+        android:textColor="@color/white"
+        android:textSize="14dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_type"/>
+</android.support.constraint.ConstraintLayout>

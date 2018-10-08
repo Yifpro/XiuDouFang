@@ -17,7 +17,6 @@ import com.example.administrator.xiudoufang.base.IActivityBase;
 import com.example.administrator.xiudoufang.bean.LoginStore;
 import com.example.administrator.xiudoufang.bean.StringPair;
 import com.example.administrator.xiudoufang.common.utils.CacheDataManager;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.utils.ToastUtils;
@@ -89,7 +88,7 @@ public class SettingActivity extends AppCompatActivity implements IActivityBase 
         mList.add(new StringPair("当前店", mLoginStores.get(mIndex).getName()).setShowNext(true).setShowLine(true));
         mList.add(new StringPair("清除缓存", CacheDataManager.getTotalCacheSize(this)).setShowNext(true));
         mList.add(new StringPair("连续扫描模式", "").setToogleButton(true));
-        mAdapter = new SettingAdapter(R.layout.layout_list_item_setting, mList);
+        mAdapter = new SettingAdapter(R.layout.item_setting, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnCheckedChangeListener(new InnerCheckChangeListener());
         mAdapter.setOnItemClickListener(new InnerItemClickListener());

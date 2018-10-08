@@ -26,7 +26,7 @@
 
             <include layout="@layout/layout_supplier_info_suf"/>
 
-            <include layout="@layout/include_bottom_selection"/>
+            <include layout="@layout/layout_bottom_selection"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

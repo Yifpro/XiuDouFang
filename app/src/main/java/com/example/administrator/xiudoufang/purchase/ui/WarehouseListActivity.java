@@ -56,7 +56,7 @@ public class WarehouseListActivity extends AppCompatActivity implements IActivit
     @Override
     public void initData() {
         mLogic = new NewPurchaseOrderLogic();
-        mAdapter = new WarehouseListAdapter(R.layout.layout_list_item_warehouse_list, mList);
+        mAdapter = new WarehouseListAdapter(R.layout.item_warehouse_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

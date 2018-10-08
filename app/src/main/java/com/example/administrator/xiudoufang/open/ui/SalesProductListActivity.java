@@ -105,7 +105,7 @@ public class SalesProductListActivity extends AppCompatActivity implements IActi
         mRefreshLayout.setEnableRefresh(false);
         mRefreshLayout.setOnLoadMoreListener(new InnerLoadMoreListener());
         mRefreshLayout.setEnableLoadMoreWhenContentNotFull(false);
-        mAdapter = new SalesProductListAdapter(R.layout.layout_list_item_product_list, mList);
+        mAdapter = new SalesProductListAdapter(R.layout.item_product_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
         mAdapter.setOnItemClickListener(new InnerItemClickListener());

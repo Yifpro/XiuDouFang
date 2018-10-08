@@ -311,8 +311,8 @@ public class PurchaseDetailsActivity extends AppCompatActivity implements IActiv
         mPurchaseLogic = new PurchaseLogic();
         mCustomerListLogic = new CustomerListLogic();
         mList = new ArrayList<>();
-        mAdapter = new SelectedProductListAdapter(R.layout.layout_list_item_selected_product, mList, mStatus);
-        View footerView = View.inflate(this, R.layout.layout_list_footer_purchase_details, null);
+        mAdapter = new SelectedProductListAdapter(R.layout.item_selected_product, mList, mStatus);
+        View footerView = View.inflate(this, R.layout.footer_purchase_details, null);
         mAdapter.addFooterView(footerView);
         mRecyclerView.setSwipeMenuCreator(new InnerSwipeMenuCreator());
         mRecyclerView.setSwipeMenuItemClickListener(new InnerSwipeMenuItemClickListener());

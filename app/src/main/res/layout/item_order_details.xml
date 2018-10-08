@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dp">
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        tools:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/black"
+        android:textSize="13dp"
+        app:layout_constraintLeft_toRightOf="@id/iv_icon"
+        tools:text="麦秆"/>
+
+    <TextView
+        android:id="@+id/tv_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:textSize="13dp"
+        app:layout_constraintLeft_toRightOf="@id/iv_icon"
+        app:layout_constraintTop_toBottomOf="@id/tv_name"
+        tools:text="001"/>
+
+    <TextView
+        android:id="@+id/tv_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:textSize="13dp"
+        app:layout_constraintLeft_toRightOf="@id/iv_icon"
+        app:layout_constraintTop_toBottomOf="@id/tv_id"
+        tools:text="1个/个"/>
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:textSize="13dp"
+        app:layout_constraintLeft_toRightOf="@id/iv_icon"
+        app:layout_constraintTop_toBottomOf="@id/tv_unit"
+        tools:text="已关闭"/>
+
+    <TextView
+        android:id="@+id/tv_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="13dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_name"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="麦秆"/>
+
+    <TextView
+        android:id="@+id/tv_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:textSize="13dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_id"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="001"/>
+
+    <TextView
+        android:id="@+id/tv_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:textSize="13dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_unit"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="1个/个"/>
+
+    <TextView
+        android:id="@+id/tv_distribution_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:textSize="13dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_status"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="已关闭"/>
+</android.support.constraint.ConstraintLayout>

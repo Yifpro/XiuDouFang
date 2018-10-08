@@ -90,7 +90,7 @@ public class InvoiceListActivity extends AppCompatActivity implements IActivityB
     @Override
     public void initData() {
         mLogic = new InvoiceListLogic();
-        mAdapter = new InvoiceListAdapter(R.layout.layout_list_item_invoice_list, mList);
+        mAdapter = new InvoiceListAdapter(R.layout.item_invoice_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mRefreshLayout.setOnRefreshListener(new InnerRefreshListener());

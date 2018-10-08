@@ -33,8 +33,8 @@ public class ConfirmOrderInfoAdapter extends BaseMultiItemQuickAdapter<MultiItem
     public ConfirmOrderInfoAdapter(@Nullable List<MultiItemEntity> data) {
         super(data);
         this.data = data;
-        addItemType(TYPE_TEXT, R.layout.layout_list_item_confirm_order_info_1);
-        addItemType(TYPE_EDIT, R.layout.layout_list_item_confirm_order_info_2);
+        addItemType(TYPE_TEXT, R.layout.item_confirm_order_info_1);
+        addItemType(TYPE_EDIT, R.layout.item_confirm_order_info_2);
     }
 
     @Override

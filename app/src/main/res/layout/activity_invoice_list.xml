@@ -7,7 +7,7 @@
 
     <include layout="@layout/layout_toolbar"/>
 
-    <include layout="@layout/layout_list_header_invoice_list" />
+    <include layout="@layout/header_invoice_list" />
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/refresh_layout"

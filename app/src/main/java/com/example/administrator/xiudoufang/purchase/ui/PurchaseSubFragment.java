@@ -75,7 +75,7 @@ public class PurchaseSubFragment extends BaseFragment implements OnEventListener
         for (Map.Entry<String, String> entry : params.entrySet()) {
             mPurchaseListParams.put(entry.getKey(), entry.getValue());
         }
-        mAdapter = new PurchaseSubAdapter(R.layout.layout_list_item_purchase_sub, mList);
+        mAdapter = new PurchaseSubAdapter(R.layout.item_purchase_sub, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());
@@ -101,7 +101,7 @@ public class PurchaseSubFragment extends BaseFragment implements OnEventListener
         mRefreshLayout.setOnRefreshListener(new InnerRefreshListener());
         mRefreshLayout.setOnLoadMoreListener(new InnerLoadMoreListener());
         mRefreshLayout.setEnableLoadMoreWhenContentNotFull(false);
-        mAdapter = new PurchaseSubAdapter(R.layout.layout_list_item_purchase_sub, mList);
+        mAdapter = new PurchaseSubAdapter(R.layout.item_purchase_sub, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());

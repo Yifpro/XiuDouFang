@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +61,7 @@ public class LoadingViewDialog extends android.support.v4.app.DialogFragment {
         getDialog().setCanceledOnTouchOutside(false);
 
 
-        View view = inflater.inflate(R.layout.layout_loading_view, null);
+        View view = inflater.inflate(R.layout.view_loading, null);
         mTvTitle = view.findViewById(R.id.tv_title);
         mTvTitle.setText(mTitle);
         return view;

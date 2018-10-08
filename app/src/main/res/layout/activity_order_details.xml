@@ -6,11 +6,11 @@
     android:orientation="vertical">
 
     <include layout="@layout/layout_toolbar" />
-    <include layout="@layout/layout_list_header_order_details" />
+    <include layout="@layout/header_order_details" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-    <include layout="@layout/layout_list_footer_order_details" />
+    <include layout="@layout/footer_order_details" />
 </LinearLayout>

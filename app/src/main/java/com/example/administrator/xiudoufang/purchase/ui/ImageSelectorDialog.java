@@ -39,7 +39,7 @@ public class ImageSelectorDialog extends DialogFragment {
         serverItems.add("拍照");
         serverItems.add("相册");
         serverItems.add("取消");
-        ExtraSelectorAdapter adapter = new ExtraSelectorAdapter(R.layout.layout_list_item_extra_selector, serverItems);
+        ExtraSelectorAdapter adapter = new ExtraSelectorAdapter(R.layout.item_extra_selector, serverItems);
         adapter.bindToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

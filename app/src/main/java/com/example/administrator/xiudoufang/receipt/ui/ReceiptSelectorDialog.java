@@ -34,7 +34,7 @@ public class ReceiptSelectorDialog extends DialogFragment {
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         JSONObject jsonObject = JSONObject.parseObject(StringUtils.readInfoForFile(StringUtils.LOGIN_INFO));
         final List<PayBean> list = JSONObject.parseArray(jsonObject.getJSONArray("pay").toJSONString(), PayBean.class);
-        ReceiptSelectorAdapter adapter = new ReceiptSelectorAdapter(R.layout.layout_list_item_receipt_selector, list);
+        ReceiptSelectorAdapter adapter = new ReceiptSelectorAdapter(R.layout.item_receipt_selector, list);
         adapter.bindToRecyclerView(recyclerView);
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override

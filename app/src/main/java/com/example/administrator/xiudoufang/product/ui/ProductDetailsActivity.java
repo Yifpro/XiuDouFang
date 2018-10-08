@@ -21,7 +21,6 @@ import com.example.administrator.xiudoufang.bean.ProductDetailsBean;
 import com.example.administrator.xiudoufang.bean.ProductListBean;
 import com.example.administrator.xiudoufang.bean.ProductWeightBean;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
@@ -126,7 +125,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
             infoList.add(infoKey[i]);
             infoList.add(infoValue[i]);
         }
-        ProductInfoAdapter infoAdapter = new ProductInfoAdapter(R.layout.layout_list_item_product_base_info, infoList);
+        ProductInfoAdapter infoAdapter = new ProductInfoAdapter(R.layout.item_product_base_info, infoList);
         mRvBaseInfo.setAdapter(infoAdapter);
         mRvBaseInfo.setLayoutManager(new GridLayoutManager(this, 2));
         mRvBaseInfo.addItemDecoration(new ProductInfoDecoration());
@@ -148,22 +147,22 @@ public class ProductDetailsActivity extends AppCompatActivity implements IActivi
                 weightList.get(i).getSubItem().add(temp.get(i));
             }
         }
-        ProductWeightAdapter weightAdapter = new ProductWeightAdapter(R.layout.layout_list_item_product_weight, weightList);
+        ProductWeightAdapter weightAdapter = new ProductWeightAdapter(R.layout.item_product_weight, weightList);
         mRvWeight.setAdapter(weightAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRvWeight.setLayoutManager(layoutManager);
         mRvWeight.addItemDecoration(new ProductWeightDecoration());
         //******** 供应商列表 ********
-        mSuppilerAdapter = new ProductSupplierAdapter(R.layout.layout_list_item_product_supplier, null);
-        View suppilerHeader = View.inflate(this, R.layout.layout_list_header_product_supplier, null);
+        mSuppilerAdapter = new ProductSupplierAdapter(R.layout.item_product_supplier, null);
+        View suppilerHeader = View.inflate(this, R.layout.header_product_supplier, null);
         mSuppilerAdapter.addHeaderView(suppilerHeader);
         mRvSupplier.setAdapter(mSuppilerAdapter);
         mRvSupplier.setLayoutManager(new LinearLayoutManager(this));
         mRvSupplier.addItemDecoration(new ProductSupplierDecoration());
         //******** 价格列表 ********
-        mLevelPriceAdapter = new ProductLevelPriceAdapter(R.layout.layout_list_item_product_level_price, null);
-        View levelPriceHeader = View.inflate(this, R.layout.layout_list_header_product_level_price, null);
+        mLevelPriceAdapter = new ProductLevelPriceAdapter(R.layout.item_product_level_price, null);
+        View levelPriceHeader = View.inflate(this, R.layout.header_product_level_price, null);
         mLevelPriceAdapter.addHeaderView(levelPriceHeader);
         mRvLevelPrice.setAdapter(mLevelPriceAdapter);
         mRvLevelPrice.setLayoutManager(new LinearLayoutManager(this));

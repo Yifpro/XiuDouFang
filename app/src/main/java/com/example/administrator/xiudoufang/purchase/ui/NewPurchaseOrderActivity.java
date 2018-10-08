@@ -29,7 +29,6 @@ import com.example.administrator.xiudoufang.bean.ProductItem;
 import com.example.administrator.xiudoufang.bean.SubjectListBean;
 import com.example.administrator.xiudoufang.bean.Supplier;
 import com.example.administrator.xiudoufang.common.callback.JsonCallback;
-import com.example.administrator.xiudoufang.common.utils.LogUtils;
 import com.example.administrator.xiudoufang.common.utils.PreferencesUtils;
 import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.common.utils.StringUtils;
@@ -180,8 +179,8 @@ public class NewPurchaseOrderActivity extends AppCompatActivity implements IActi
         ((Toolbar) findViewById(R.id.tool_bar)).setNavigationOnClickListener(new NavigationClickListener());
         mNewPurchaseOrderLogic = new NewPurchaseOrderLogic();
         mCustomerListLogic = new CustomerListLogic();
-        mAdapter = new SelectedProductListAdapter(R.layout.layout_list_item_selected_product, mList, "1");
-        View footerView = View.inflate(this, R.layout.layout_list_footer_purchase_details, null);
+        mAdapter = new SelectedProductListAdapter(R.layout.item_selected_product, mList, "1");
+        View footerView = View.inflate(this, R.layout.footer_purchase_details, null);
         mAdapter.addFooterView(footerView);
         mRecyclerView.setSwipeMenuCreator(new InnerSwipeMenuCreator());
         mRecyclerView.setSwipeMenuItemClickListener(new InnerSwipeMenuItemClickListener());

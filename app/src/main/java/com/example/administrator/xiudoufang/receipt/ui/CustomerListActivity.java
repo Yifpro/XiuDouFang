@@ -93,7 +93,7 @@ public class CustomerListActivity extends AppCompatActivity implements IActivity
     @Override
     public void initData() {
         mLogic = new CustomerListLogic();
-        mAdapter = new CustomerListAdapter(R.layout.layout_list_item_customer_list, mList);
+        mAdapter = new CustomerListAdapter(R.layout.item_customer_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mRefreshLayout.setOnRefreshListener(new InnerRefreshListener());

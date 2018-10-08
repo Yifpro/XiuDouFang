@@ -61,7 +61,7 @@ public class OrderInfoDialog extends DialogFragment implements View.OnClickListe
         list.add(new StringPair("货运类型", mOrderInfoBean.getHuoyunleixing(), true));
         list.add(new StringPair("备注", mOrderInfoBean.getFujia_memo(), false));
         list.add(new StringPair("物流", mOrderInfoBean.getKuaidiname(), false));
-        OrderInfoAdapter adapter = new OrderInfoAdapter(R.layout.layout_list_item_order_info, list);
+        OrderInfoAdapter adapter = new OrderInfoAdapter(R.layout.item_order_info, list);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         view.findViewById(R.id.iv_close).setOnClickListener(this);

@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.administrator.xiudoufang.bean.ServerItem;
 import com.example.administrator.xiudoufang.R;
-import com.example.administrator.xiudoufang.common.utils.SizeUtils;
 import com.example.administrator.xiudoufang.login.adapter.ServerSelectorAdapter;
 
 import java.util.ArrayList;
@@ -32,10 +31,10 @@ public class SelectServerDialog extends DialogFragment {
         serverItems.add(new ServerItem(0, R.drawable.gray_white_pressed_selector, "雅秀"));
         serverItems.add(new ServerItem(0, R.drawable.gray_white_pressed_selector, "新之款"));
         serverItems.add(new ServerItem(R.color.bg_item_cancel_text_color_selector, R.drawable.gray_white_pressed_selector, "自动"));
-        ServerSelectorAdapter adapter = new ServerSelectorAdapter(R.layout.layout_list_item_server_selector, serverItems);
+        ServerSelectorAdapter adapter = new ServerSelectorAdapter(R.layout.item_server_selector, serverItems);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         adapter.bindToRecyclerView(recyclerView);
-        View header = View.inflate(getActivity(), R.layout.layout_list_header_single_text, null);
+        View header = View.inflate(getActivity(), R.layout.header_single_text, null);
         TextView tvHeader = header.findViewById(R.id.tv);
         tvHeader.setTextSize(16);
         tvHeader.setText(R.string.select_server);

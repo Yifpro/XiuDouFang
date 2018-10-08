@@ -62,10 +62,10 @@ public class OtherSettingAdapter extends BaseMultiItemQuickAdapter<MultiItemEnti
     public OtherSettingAdapter(List<MultiItemEntity> data) {
         super(data);
         this.data = data;
-        addItemType(TYPE_FIRST, R.layout.layout_list_item_other_setting_1);
-        addItemType(TYPE_SECOND, R.layout.layout_list_item_other_setting_2);
-        addItemType(TYPE_THIRD, R.layout.layout_list_item_other_setting_3);
-        addItemType(TYPE_FOUTH, R.layout.layout_list_item_other_setting_4);
+        addItemType(TYPE_FIRST, R.layout.item_other_setting_1);
+        addItemType(TYPE_SECOND, R.layout.item_other_setting_2);
+        addItemType(TYPE_THIRD, R.layout.item_other_setting_3);
+        addItemType(TYPE_FOUTH, R.layout.item_other_setting_4);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class OtherSettingAdapter extends BaseMultiItemQuickAdapter<MultiItemEnti
             helper.setText(R.id.tv_title, item_1.getTitle());
             RecyclerView recyclerView = helper.getView(R.id.recycler_view);
             final List<OtherSettingItem> list = item_1.getList();
-            OtherSettingItemAdapter adapter = new OtherSettingItemAdapter(R.layout.layout_list_item_other_setting_item, list);
+            OtherSettingItemAdapter adapter = new OtherSettingItemAdapter(R.layout.item_other_setting_item, list);
             adapter.bindToRecyclerView(recyclerView);
             adapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override

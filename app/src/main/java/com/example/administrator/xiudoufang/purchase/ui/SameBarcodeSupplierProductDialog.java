@@ -60,7 +60,7 @@ public class SameBarcodeSupplierProductDialog extends DialogFragment implements 
         mFabComplete = view.findViewById(R.id.fab_complete);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         mList = getArguments().getParcelableArrayList("list");
-        mAdapter = new ProductListAdapter(R.layout.layout_list_item_product_list, mList);
+        mAdapter = new ProductListAdapter(R.layout.item_product_list, mList);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());

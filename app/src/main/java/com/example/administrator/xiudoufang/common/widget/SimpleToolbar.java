@@ -23,7 +23,7 @@ public class SimpleToolbar extends LinearLayout {
 
     public SimpleToolbar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        inflate(context, R.layout.layout_simple_toolbar, this);
+        inflate(context, R.layout.view_simple_toolbar, this);
         mTitle = findViewById(R.id.tv_toolbar_title);
         mLeftIcon = findViewById(R.id.iv_toolbar_left_icon);
         mRightIcon = findViewById(R.id.iv_toolbar_right_icon);

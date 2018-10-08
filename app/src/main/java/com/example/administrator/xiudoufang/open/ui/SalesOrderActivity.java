@@ -169,7 +169,7 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
 
     @Override
     public void initData() {
-        mAdapter = new SalesOrderAdapter(R.layout.layout_list_item_sales_order, mList);
+        mAdapter = new SalesOrderAdapter(R.layout.item_sales_order, mList);
         SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
             @Override
             public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int viewType) {
@@ -232,7 +232,7 @@ public class SalesOrderActivity extends AppCompatActivity implements IActivityBa
                     ArrayList<String> list = new ArrayList<>();
                     final String[] arr = {"手动", "等级", "批发", "参考", "历史"};
                     Collections.addAll(list, arr);
-                    PriceSourcePopupAdapter adapter = new PriceSourcePopupAdapter(R.layout.layout_list_item_price_source_popup, list);
+                    PriceSourcePopupAdapter adapter = new PriceSourcePopupAdapter(R.layout.item_price_source_popup, list);
                     adapter.bindToRecyclerView(priceSourceRecyclerView);
                     priceSourceRecyclerView.setAdapter(adapter);
                     priceSourceRecyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -1,8 +1,6 @@
 package com.example.administrator.xiudoufang.purchase.ui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,8 +27,6 @@ import com.example.administrator.xiudoufang.common.utils.SoftKeyBoardListener;
 import com.example.administrator.xiudoufang.common.widget.LoadingViewDialog;
 import com.example.administrator.xiudoufang.purchase.adapter.SupplierListAdapter;
 import com.example.administrator.xiudoufang.purchase.logic.NewPurchaseOrderLogic;
-import com.example.administrator.xiudoufang.receipt.ui.CustomerListActivity;
-import com.example.administrator.xiudoufang.receipt.ui.PaymentActivity;
 import com.lzy.okgo.model.Response;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -90,7 +86,7 @@ public class SupplierListActivity extends AppCompatActivity implements IActivity
     @Override
     public void initData() {
         mLogic = new NewPurchaseOrderLogic();
-        mAdapter = new SupplierListAdapter(R.layout.layout_list_item_supplier_list, mList);
+        mAdapter = new SupplierListAdapter(R.layout.item_supplier_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mRefreshLayout.setOnRefreshListener(new InnerRefreshListener());

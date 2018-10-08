@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
-import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -41,7 +40,7 @@ public class SearchInfoView extends LinearLayout {
 
     public SearchInfoView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        inflate(context, R.layout.layout_search_info_view, this);
+        inflate(context, R.layout.view_search_info, this);
         mTvKey = findViewById(R.id.tv_key);
         mTvValue = findViewById(R.id.tv_value);
         mRelativeLayout = findViewById(R.id.relative_layout);

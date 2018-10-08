@@ -87,7 +87,7 @@ public class TypeListActivity extends AppCompatActivity implements IActivityBase
     @Override
     public void initData() {
         mLogic = new StockLogic();
-        mAdapter = new TypeListAdapter(R.layout.layout_list_item_warehouse_list, mList);
+        mAdapter = new TypeListAdapter(R.layout.item_warehouse_list, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemChildClickListener(new InnerItemChildListener());
         mRecyclerView.setAdapter(mAdapter);

@@ -150,7 +150,7 @@ public class StockActivity extends AppCompatActivity implements IActivityBase, V
     @Override
     public void initData() {
         mLogic = new StockLogic();
-        mAdapter = new StockListAdapter(R.layout.layout_list_item_stock, mList);
+        mAdapter = new StockListAdapter(R.layout.item_stock, mList);
         mAdapter.bindToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener(new InnerItemClickListener());
         mAdapter.setOnItemChildClickListener(new InnerItemChildClickListener());

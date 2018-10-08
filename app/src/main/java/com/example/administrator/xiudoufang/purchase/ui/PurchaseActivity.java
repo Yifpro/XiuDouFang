@@ -73,8 +73,8 @@ public class PurchaseActivity extends AppCompatActivity implements IActivityBase
         for (int i = 0; i < titles.length; i++) {
             mTabs.add(new DrawerItem(titles[i], i == 0));
         }
-        PurchaseTabAdapter adapter = new PurchaseTabAdapter(R.layout.layout_list_item_purchase_tab, mTabs);
-        View header = View.inflate(this, R.layout.layout_list_header_single_text, null);
+        PurchaseTabAdapter adapter = new PurchaseTabAdapter(R.layout.item_purchase_tab, mTabs);
+        View header = View.inflate(this, R.layout.header_single_text, null);
         TextView tvHeader = header.findViewById(R.id.tv);
         tvHeader.setHeight(SizeUtils.dp2px(72));
         tvHeader.setTextSize(22);
